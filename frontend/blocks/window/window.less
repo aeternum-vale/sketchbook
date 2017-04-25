@@ -1,0 +1,44 @@
+.window {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+
+	width: @window-width;
+	height: @window-height;
+	min-width: @window-width;
+	min-height: @window-height;
+
+	border-radius: @border-radius + @border-width;
+
+	background-color: #000;
+	border: solid #000 @border-width;
+
+	&__header {
+		padding: @header-padding;
+
+		border-radius: @border-radius;
+		background-color: #4b4848;
+		background-image: linear-gradient(to top, #172531 42%, #2a3b48 45%, #2a3b48 62%, #2a3b48 65%, #5f798c);
+		margin-bottom: @border-width;
+
+		color: #fff;
+		font-size: @header-font-size;
+		line-height:  @header-font-size;
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		height: @content-height;
+		background-color: #1c1618;
+		border-radius: @border-radius;
+		box-shadow: inset 0 0 7px 1px rgba(56,44,48,.66);
+	}
+
+	&__textbox {
+		margin-top: 20px
+	}
+}
+

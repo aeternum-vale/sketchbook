@@ -1,0 +1,34 @@
+{
+  "name": "sketchbook",
+  "version": "1.0.0",
+  "description": "a simple social network for artists",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aeternum-vale/sketchbook.git"
+  },
+  "author": "Arthur Dedyulya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aeternum-vale/sketchbook/issues"
+  },
+  "homepage": "https://github.com/aeternum-vale/sketchbook#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "express-handlebars": "^3.0.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.0",
+    "extract-text-webpack-plugin": "1.x",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "style-loader": "^0.16.1",
+    "webpack": "^1.15.0",
+    "autoprefixer-loader": "*",
+    "babel-core": "^5.8.38",
+    "babel-loader": "^5.4.2"
+  }
+}

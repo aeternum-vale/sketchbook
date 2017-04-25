@@ -1,0 +1,114 @@
+:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial;
+  background-color: #222;
+}
+.authorization-page {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.window {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  box-sizing: border-box;
+  width: 400px;
+  height: 520px;
+  min-width: 400px;
+  min-height: 520px;
+  border-radius: 8px;
+  background-color: #000;
+  border: solid #000 2px;
+}
+.window__header {
+  padding: 28px;
+  border-radius: 6px;
+  background-color: #4b4848;
+  background-image: linear-gradient(to top, #172531 42%, #2a3b48 45%, #2a3b48 62%, #2a3b48 65%, #5f798c);
+  margin-bottom: 2px;
+  color: #fff;
+  font-size: 24px;
+  line-height: 24px;
+}
+.window__content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 438px;
+  background-color: #1c1618;
+  border-radius: 6px;
+  box-shadow: inset 0 0 7px 1px rgba(56, 44, 48, 0.66);
+}
+.window__textbox {
+  margin-top: 20px;
+}
+.textbox {
+  position: absolute;
+}
+.textbox::before {
+  display: block;
+  position: absolute;
+  content: "";
+  margin-top: 26px;
+  width: 334px;
+  height: 58px;
+  top: -4px;
+  left: -4px;
+  border-radius: 8px;
+  background-image: linear-gradient(to top, #41474a, #bfd2da);
+}
+.textbox__field {
+  position: relative;
+  width: 326px;
+  height: 50px;
+  margin-top: 8px;
+  box-sizing: border-box;
+  border-width: 0px;
+  border-radius: 8px;
+  background-color: #9eadb4;
+  box-shadow: inset 0 6px 13px rgba(0, 0, 0, 0.61);
+  font-size: 18px;
+  padding-left: 8px;
+}
+.textbox__caption {
+  display: block;
+  position: relative;
+  padding-left: 8px;
+  font-size: 18px;
+  line-height: 18px;
+  color: #fff;
+}

@@ -1,0 +1,41 @@
+.textbox {
+
+	position: absolute;
+
+	&::before {
+		display: block;
+		position: absolute;
+		content: "";
+		margin-top: @content-font-size + @textbox-caption-gap;
+	 	width: @field-width + @field-border * 2;
+	 	height: @field-height + @field-border * 2;
+		top: -@field-border;
+		left: -@field-border;
+		border-radius: @field-border-radius;
+		background-image: linear-gradient(to top, #41474a, #bfd2da);
+	}
+
+	&__field {
+		position: relative;
+		width: @field-width;
+		height: @field-height;
+		margin-top: @textbox-caption-gap;
+		box-sizing: border-box;
+		border-width: 0px;
+		border-radius: @field-border-radius;
+		background-color: #9eadb4;
+		box-shadow: inset 0 6px 13px rgba(0,0,0,.61);
+		font-size: @content-font-size;
+
+		padding-left: @field-border-radius;
+	}
+
+	&__caption {
+		display: block;
+		position: relative;
+		padding-left: @field-border-radius;
+		font-size: @content-font-size;
+		line-height: @content-font-size;
+		color: #fff;
+	}
+}
