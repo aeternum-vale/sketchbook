@@ -2,17 +2,23 @@
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
+const path = require('path');
 var ExtractTextPlugin = require ('extract-text-webpack-plugin');
 
 
 module.exports = {
-  entry:  "./frontend/js/script.js",
-  output: {
-    path: __dirname + '/public',
-    filename: "bundle.js"
+  context: path.resolve(__dirname, 'frontend', 'pages'),
+
+  entry:  {
+    authorization: './authorization/script'
   },
 
-  watch: true,//NODE_ENV == 'development',
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: "[name].js"
+  },
+
+  watch: NODE_ENV == 'development',
 
   // watchOptions: {
   //   aggregateTimeout: 100
@@ -50,16 +56,25 @@ module.exports = {
     },
 
     {
-      test:   /\.less$/,
-      loader: ExtractTextPlugin.extract('style-loader','css-loader') + "!autoprefixer-loader!less",
-      exclude: [/node_modules/, /public/]
+        test: /\.css$/,
+        loader: "style!css!autoprefixer",
+        exclude: [/node_modules/, /public/]
+    },
+
+    {
+        test:   /\.less$/,
+        loader: ExtractTextPlugin.extract('style-loader','css-loader') + "!autoprefixer-loader!less",
+        //loader: "style!css!autoprefixer!less",
+        exclude: [/node_modules/, /public/]
     }]
 
   },
 
-  plugins: [
-    new ExtractTextPlugin('bundle.css')
-  ]
+
+
+   plugins: [
+     new ExtractTextPlugin('[name].css')
+   ]
 
 };
 
