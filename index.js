@@ -17,7 +17,8 @@ app.get('/', function(req, res){
 	res.render('home');
 });
 
-app.get('/authorization', function(req, res){
+
+app.get('/authorization', function(req, res) {
 	res.render('authorization', { page: 'authorization'});
 });
 

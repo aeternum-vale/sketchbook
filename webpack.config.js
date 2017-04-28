@@ -20,11 +20,11 @@ module.exports = {
 
   watch: NODE_ENV == 'development',
 
-  // watchOptions: {
-  //   aggregateTimeout: 100
-  // },
+  watchOptions: {
+    aggregateTimeout: 100
+  },
 
-  //devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
+  devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
 
   plugins: [
     new webpack.DefinePlugin({
@@ -43,7 +43,6 @@ module.exports = {
     moduleTemplates:    ['*-loader', '*'],
     extensions:         ['', '.js']
   },
-
 
   module: {
 
@@ -69,8 +68,6 @@ module.exports = {
     }]
 
   },
-
-
 
    plugins: [
      new ExtractTextPlugin('[name].css')

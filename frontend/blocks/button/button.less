@@ -1,0 +1,31 @@
+@button-width: 334px;
+@button-height: 58px;
+@button-border-radius: 8px;
+@button-text-size-percentage: 0.55;
+
+.button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+
+	width: @button-width;
+	height: @button-height;
+	border-radius: @button-border-radius;
+	background-color: #e38d06;
+	background-image: linear-gradient(to top, #e38d06, #f3ca2c);
+	box-shadow: inset 0px 4px 6px -3px rgba(255, 255, 255, 0.75), inset 0px -4px 6px -3px rgba(0, 0, 0, 0.75);
+	cursor: pointer;
+
+	font-size: @button-height * @button-text-size-percentage;
+	line-height: @button-height * @button-text-size-percentage;
+	color: #694f06;
+	text-shadow: 0 1px rgba(244,221,135,.75);
+	font-weight: bold;
+
+	&:active {
+		padding-top: @button-height / 14.5;
+		box-shadow: inset 0px 4px 6px -3px rgba(0, 0, 0, 0.75), inset 0px -4px 6px -3px rgba(255, 255, 255, 0.75);
+	}
+}
+

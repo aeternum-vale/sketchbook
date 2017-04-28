@@ -1,3 +1,12 @@
+@window-width: 400px;
+@window-height: 520px;
+@header-height: 80px;
+@border-radius: 6px;
+@border-width: 2px;
+
+@header-padding: @header-height/2 - @large-font-size/2;
+@content-height: @window-height - @header-height - @border-width;
+
 .window {
 
 	display: flex;
@@ -20,14 +29,15 @@
 		margin-bottom: @border-width;
 
 		color: #fff;
-		font-size: @header-font-size;
-		line-height:  @header-font-size;
+		font-size: @large-font-size;
+		line-height:  @large-font-size;
 	}
 
 	&__content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
 
 		height: @content-height;
 		background-color: #1c1618;
@@ -35,8 +45,20 @@
 		box-shadow: inset 0 0 7px 1px rgba(56,44,48,.66);
 	}
 
+	&__textbox:first-child {
+		margin-top: 0px;
+	}
+
 	&__textbox {
-		margin-top: 20px
+		margin-top: 10px;
+	}
+
+	&__button {
+		margin-top: 40px;
+	}
+
+	&__message {
+		margin-top: 20px;
 	}
 }
 
