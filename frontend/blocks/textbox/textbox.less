@@ -5,20 +5,25 @@
 @textbox-caption-gap: 10px;
 
 .textbox {
-
 	position: relative;
+
 	margin-bottom: @field-border;
 
 	&::before {
+		content: "";
+
 		display: block;
 		position: absolute;
-		content: "";
-		margin-top: @medium-font-size + @textbox-caption-gap;
-	 	width: @field-width + @field-border * 2;
-	 	height: @field-height + @field-border * 2;
 		top: -@field-border;
 		left: -@field-border;
+		
+	 	width: @field-width + @field-border * 2;
+	 	height: @field-height + @field-border * 2;
+
+		margin-top: @medium-font-size + @textbox-caption-gap;
+
 		border-radius: @field-border-radius;
+
 		background-image: linear-gradient(to top, #41474a, #bfd2da);
 	}
 
@@ -26,23 +31,38 @@
 		position: relative;
 		width: @field-width;
 		height: @field-height;
-		margin-top: @textbox-caption-gap;
+
 		box-sizing: border-box;
+		margin-top: @textbox-caption-gap;
+		padding-left: @field-border-radius;
+
 		border-width: 0px;
 		border-radius: @field-border-radius;
+
 		background-color: #9eadb4;
 		box-shadow: inset 0 6px 13px rgba(0,0,0,.61);
-		font-size: @medium-font-size;
+		font-size: @large-font-size;
+	}
 
+	&__info {
+		position: relative;
+		height: @medium-font-size;
 		padding-left: @field-border-radius;
 	}
 
 	&__caption {
-		display: block;
-		position: relative;
-		padding-left: @field-border-radius;
 		font-size: @medium-font-size;
 		line-height: @medium-font-size;
 		color: #fff;
+	}
+
+	&__error {
+		font-size: @small-font-size;
+		line-height: @small-font-size;
+		color: #f00;
+	}
+
+	&_focus::before {
+		background-image: linear-gradient(to top, #0e78ac, #76d2ff);
 	}
 }

@@ -1,3 +1,6 @@
+@import "../textbox/textbox.less";
+@import "../button/button.less";
+
 @window-width: 400px;
 @window-height: 520px;
 @header-height: 80px;
@@ -8,29 +11,32 @@
 @content-height: @window-height - @header-height - @border-width;
 
 .window {
-
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
+
 	width: @window-width;
 	height: @window-height;
 	min-width: @window-width;
 	min-height: @window-height;
-	border-radius: @border-radius + @border-width;
-	background-color: #000;
-	border: solid #000 @border-width;
 
+	border: solid #000 @border-width;
+	border-radius: @border-radius + @border-width;
+
+	background-color: #000;
+	
 	&__header {
+		margin-bottom: @border-width;
 		padding: @header-padding;
 
 		border-radius: @border-radius;
+
 		background-color: #4b4848;
 		background-image: linear-gradient(to top, #172531 42%, #2a3b48 45%, #2a3b48 62%, #2a3b48 65%, #5f798c);
-		margin-bottom: @border-width;
-
-		color: #fff;
+		
 		font-size: @large-font-size;
 		line-height:  @large-font-size;
+		color: #fff;
 	}
 
 	&__content {
@@ -40,17 +46,19 @@
 		justify-content: center;
 
 		height: @content-height;
-		background-color: #1c1618;
+		
 		border-radius: @border-radius;
-		box-shadow: inset 0 0 7px 1px rgba(56,44,48,.66);
-	}
 
-	&__textbox:first-child {
-		margin-top: 0px;
+		background-color: #1c1618;
+		box-shadow: inset 0 0 7px 1px rgba(56,44,48,.66);
 	}
 
 	&__textbox {
 		margin-top: 10px;
+	}
+
+	&__textbox:first-child {
+		margin-top: 0px;
 	}
 
 	&__button {
