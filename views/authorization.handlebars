@@ -4,20 +4,12 @@
 			signing up
 		</div>
 		<div class="window__content">
-			<div class="textbox window__textbox">
-				<span class="textbox__caption">username</span>
-				<input type="text" class="textbox__field" />
-			</div>
-			<div class="textbox window__textbox">
-				<span class="textbox__caption">e-mail</span>
-				<input type="text" class="textbox__field" />
-			</div>
-			<div class="textbox window__textbox">
-				<span class="textbox__caption">password</span>
-				<input type="text" class="textbox__field" />
-			</div>
-			<div class="button window__button">join</div>
-			<div class="window__message">Already have an account? Log in</div>
+			{{> textbox caption="username" mix="window__textbox"}}
+			{{> textbox caption="e-mail" mix="window__textbox"}}
+			{{> textbox caption="password" mix="window__textbox"}}
+
+			{{> button caption="join" mix="window__button"}}
+			<span class="window__message">Already have an account? Log in</span>
 		</div>
 	</div>
 </div>

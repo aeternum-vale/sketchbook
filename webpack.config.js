@@ -3,13 +3,12 @@
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
 const path = require('path');
-var ExtractTextPlugin = require ('extract-text-webpack-plugin');
-
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'frontend', 'pages'),
 
-  entry:  {
+  entry: {
     authorization: './authorization/script'
   },
 
@@ -29,62 +28,55 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify(NODE_ENV),
-      LANG:     JSON.stringify('en')
+      LANG: JSON.stringify('en')
     })
   ],
 
   resolve: {
     modulesDirectories: ['node_modules'],
-    extensions:         ['', '.js']
+    extensions: ['', '.js']
   },
 
   resolveLoader: {
     modulesDirectories: ['node_modules'],
-    moduleTemplates:    ['*-loader', '*'],
-    extensions:         ['', '.js']
+    moduleTemplates: ['*-loader', '*'],
+    extensions: ['', '.js']
   },
 
   module: {
-
-    loaders: [
-
-    {
-        test: /\.js$/,
-        loader: "babel",
-        exclude: [/node_modules/, /public/] 
-    },
-
-    {
-        test: /\.css$/,
-        loader: "style!css!autoprefixer",
-        exclude: [/node_modules/, /public/]
-    },
-
-    {
-        test:   /\.less$/,
-        loader: ExtractTextPlugin.extract('style-loader','css-loader') + "!autoprefixer-loader!less",
-        //loader: "style!css!autoprefixer!less",
-        exclude: [/node_modules/, /public/]
+    loaders: [{
+      test: /\.js$/,
+      loader: "babel",
+      exclude: [/node_modules/, /public/]
+    }, {
+      test: /\.css$/,
+      loader: "style!css!autoprefixer",
+      exclude: [/node_modules/, /public/]
+    }, {
+      test: /\.less$/,
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!less'),
+      exclude: [/node_modules/, /public/]
+    }, {
+      test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
+      loader: 'file?name=[path][name].[ext]&limit=4096'
     }]
-
   },
 
-   plugins: [
-     new ExtractTextPlugin('[name].css')
-   ]
+  plugins: [
+    new ExtractTextPlugin('[name].css')
+  ]
 
 };
 
-
 if (NODE_ENV == 'production') {
   module.exports.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          // don't show unreachable variables etc
-          warnings:     false,
-          drop_console: true,
-          unsafe:       true
-        }
-      })
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        // don't show unreachable variables etc
+        warnings: false,
+        drop_console: true,
+        unsafe: true
+      }
+    })
   );
 }
