@@ -13,6 +13,9 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
+app.use(require('body-parser').urlencoded({
+	extended: true
+}));
 
 app.get('/', function(req, res) {
 	res.render('home');
@@ -22,6 +25,11 @@ app.get('/authorization', function(req, res) {
 	res.render('authorization', {
 		page: 'authorization'
 	});
+});
+
+app.post('/submit', function(req, res) {
+	console.log(req.body);
+	res.send('thanks');
 });
 
 app.use(function(req, res) {

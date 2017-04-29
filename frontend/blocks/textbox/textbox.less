@@ -24,7 +24,10 @@
 
 		border-radius: @field-border-radius;
 
-		background-image: linear-gradient(to top, #41474a, #bfd2da);
+		background-color: #bfd2da;
+		background-image: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
+		transition: background-color .5s;
+
 	}
 
 	&__field {
@@ -63,6 +66,7 @@
 	}
 
 	&_focus::before {
-		background-image: linear-gradient(to top, #0e78ac, #76d2ff);
+		background-color: #76d2ff;
+		//background-image: linear-gradient(to top, #0e78ac, #76d2ff);
 	}
 }
