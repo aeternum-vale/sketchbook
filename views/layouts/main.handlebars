@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>{{page}}</title>
-	<link rel="stylesheet" href="/{{page}}.css">
-	<script defer src="/{{page}}.js"></script>
+	{{#if page}}
+		<title>{{page}}</title>
+		<link rel="stylesheet" href="/{{page}}.css">
+		<script defer src="/{{page}}.js"></script>
+	{{/if}}
 </head>
 <body>
 	{{{body}}}

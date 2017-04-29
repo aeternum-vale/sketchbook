@@ -3,14 +3,12 @@
 		<div class="window__header">
 			signing up
 		</div>
-		<div class="window__content">
-				{{> textbox id="username" caption="username" parent="window"}}
-				{{> textbox id="email" caption="e-mail" type="email" parent="window"}}
-				{{> textbox id="password" caption="password" type="password" parent="window"}}
-
-				{{> button caption="join" parent="window" id="join"}}
+		<form class="window__content" action="/submit" method="POST" name="auth" role="form">
+			{{> textbox name="username" caption="username" parent="window"}}
+			{{> textbox name="email" caption="e-mail" parent="window"}}
+			{{> textbox name="password" caption="password" type="password" parent="window"}}
+			{{> button caption="join" parent="window" id="join"}}
 			<span class="window__message">Already have an account? <a href="/">Log in</a></span>
-
-		</div>
+		</form>
 	</div>
 </div>
