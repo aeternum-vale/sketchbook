@@ -2,28 +2,38 @@
 @import "../button/button.less";
 
 @window-width: 400px;
-@window-height: 520px;
-@header-height: 80px;
+//@window-height: 620px;
+@header-height: 70px;
 @border-radius: 6px;
 @border-width: 2px;
 
 @header-padding: @header-height/2 - @large-font-size/2;
-@content-height: @window-height - @header-height - @border-width;
+//@content-height: @window-height - @header-height - @border-width;
+
+@content-vertical-padding: 20px;
 
 .window {
 	display: flex;
 	flex-direction: column;
+	position: absolute;
+
 	box-sizing: border-box;
 
 	width: @window-width;
-	height: @window-height;
+	//height: @window-height;
 	min-width: @window-width;
-	min-height: @window-height;
+	//min-height: @window-height;
 
 	border: solid #000 @border-width;
 	border-radius: @border-radius + @border-width;
 
 	background-color: #000;
+
+	&_invisible {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	
 	&__header {
 		margin-bottom: @border-width;
@@ -45,7 +55,8 @@
 		align-items: center;
 		justify-content: center;
 
-		height: @content-height;
+		//height: @content-height;
+		padding: @content-vertical-padding 0;
 		
 		border-radius: @border-radius;
 
@@ -68,5 +79,8 @@
 	&__message {
 		margin-top: 20px;
 	}
+
+	
+
 }
 
