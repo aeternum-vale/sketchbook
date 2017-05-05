@@ -4,7 +4,8 @@
   "description": "a simple social network for artists",
   "main": "index.js",
   "scripts": {
-    "sb": "start.bat"
+    "start": "start.bat",
+    "sb": "supervisor --watch app.js app.js"
   },
   "repository": {
     "type": "git",
@@ -19,9 +20,11 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "body-parser": "^1.17.1",
+    "co": "^4.6.0",
+    "crypto": "0.0.3",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
-    "mongoose": "^3.8.40",
+    "mongoose": "^4.9.7",
     "nconf": "^0.8.4"
   },
   "devDependencies": {

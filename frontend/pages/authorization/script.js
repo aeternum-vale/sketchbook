@@ -2,10 +2,12 @@
 
 import './style.less';
 
+let checkUserData = require(BASE + 'libs/checkUserData');
+
 let joinPropsCheck = {
   'username': {
     re: {
-      value: /^[A-Z0-9_-]+$/i,
+      value: /^[A-Z0-9_]+$/i,
       msg: 'must only contain alphanumeric symbols'
     },
     min: 4,
@@ -36,6 +38,7 @@ let joinPropsCheck = {
     extra: true
   }
 };
+
 
 let loginRef = document.getElementById('login-ref');
 let joinRef = document.getElementById('join-ref');
@@ -96,6 +99,14 @@ joinForm.onsubmit = function(e) {
 
   e.preventDefault();
 
+
+  alert(JSON.stringify(checkUserData({
+    'username': joinForm['username'].value,
+    'email': joinForm['email'].value,
+    'password': joinForm['password'].value,
+    'password-again': joinForm['password-again'].value
+  })));
+
   let err = false;
   let body = '';
 
@@ -145,15 +156,16 @@ joinForm.onsubmit = function(e) {
     // status, statusText
     // responseText, responseXML (при content-type: text/xml)
     if (this.status != 200) {
-      alert('ошибка: ' + (this.status ? this.statusText :
-        'запрос не удался'));
+      alert("Error sending request.");
       return;
     }
 
     let response = JSON.parse(this.responseText);
     if (response.success)
       window.location = response.url;
-
+    else
+    if (response.error)
+      alert("Error on server side. Please retry later.")
   };
 
   if (!err)

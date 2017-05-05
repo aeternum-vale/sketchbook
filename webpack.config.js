@@ -14,7 +14,8 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: "[name].js"
+    filename: "[name].js",
+    library: 'library'
   },
 
   watch: NODE_ENV == 'development',
@@ -25,12 +26,7 @@ module.exports = {
 
   devtool: NODE_ENV == 'development' ? "cheap-inline-module-source-map" : null,
 
-  plugins: [
-    new webpack.DefinePlugin({
-      NODE_ENV: JSON.stringify(NODE_ENV),
-      LANG: JSON.stringify('en')
-    })
-  ],
+  
 
   resolve: {
     modulesDirectories: ['node_modules'],
@@ -63,7 +59,12 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('[name].css')
+    new ExtractTextPlugin('[name].css'),
+    new webpack.DefinePlugin({
+      NODE_ENV: JSON.stringify(NODE_ENV),
+      LANG: JSON.stringify('en'),
+      BASE: JSON.stringify(__dirname + '/')
+    })
   ]
 
 };
