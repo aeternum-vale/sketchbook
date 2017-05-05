@@ -14,8 +14,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'public'),
-    filename: "[name].js",
-    library: 'library'
+    filename: "[name].js"
   },
 
   watch: NODE_ENV == 'development',

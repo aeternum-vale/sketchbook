@@ -28,8 +28,7 @@ let props = {
   },
 
   'password-again': {
-    name: "this",
-    extra: true
+    name: 'this'
   }
 };
 
@@ -65,8 +64,9 @@ function checkUserData(values) {
   }
 
   if (!result.errors['password-again'] && values['password'] !== values['password-again'])
-    result.errors.push(getErrorObject('password-again', "passwords don't match"));
+    result.errors['password-again'] = "passwords don't match";
 
+  console.log(Object.keys(result.errors).length);
   if (Object.keys(result.errors).length)
     return result;
   else
