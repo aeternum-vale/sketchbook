@@ -1,7 +1,7 @@
 let props = {
   'username': {
     re: {
-      value: /^[A-Z0-9_-]+$/i,
+      value: /^[A-Z0-9_]+$/i,
       message: 'must only contain alphanumeric symbols'
     },
     min: 4,
@@ -35,39 +35,47 @@ let props = {
 
 function checkUserData(values) {
 
+  let getErrorObject = (property, message) => {
+    return {
+      property,
+      message
+    };
+  };
+
   let result = {
     success: false,
-    errors: {}
+    errors: []
   };
 
   for (let key in values) {
+
     let propValue = values[key];
     let fieldCaption = props[key].name || key;
 
     if (propValue.length === 0) {
-      result.errors[key] = `${fieldCaption} field can't be empty`;
+      result.errors.push(getErrorObject(key, `${fieldCaption} field can't be empty`));
       continue;
     }
 
     if (props[key].min && propValue.length < props[key].min) {
-      result.errors[key] = `${fieldCaption} must be greater than ${props[key].min - 1} symbols`;
+      result.errors.push(getErrorObject(key, `${fieldCaption} must be greater than ${props[key].min - 1} symbols`));
       continue;
     }
 
     if (props[key].max && propValue.length > props[key].max) {
-      result.errors[key] = `${fieldCaption} must be lower than ${props[key].max + 1} symbols`;
+      result.errors.push(getErrorObject(key, `${fieldCaption} must be lower than ${props[key].max + 1} symbols`));
       continue;
     }
 
     if (props[key].re && !props[key].re.value.test(propValue))
-      result.errors[key] = props[key].re.message;
+      result.errors.push(getErrorObject(key, props[key].re.message));
+
   }
 
-  if (!result.errors['password-again'] && values['password'] !== values['password-again'])
-    result.errors['password-again'] = "passwords don't match";
+  if (values['password-again'] && !result.errors['password-again'] && values['password'] !== values['password-again'])
+    result.errors.push(getErrorObject('password-again', "passwords don't match"));
 
-  console.log(Object.keys(result.errors).length);
-  if (Object.keys(result.errors).length)
+  if (result.errors.length)
     return result;
   else
     return {

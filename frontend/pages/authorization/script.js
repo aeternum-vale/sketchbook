@@ -71,6 +71,12 @@ loginForm.onsubmit = function(e) {
 
 
 joinForm.onsubmit = function(e) {
+
+  let setPropertyError = (property, message) => {
+    getJoinErrorTextBox(property).textContent = message;
+  }
+
+
   e.preventDefault();
 
   let options = {};
@@ -83,8 +89,8 @@ joinForm.onsubmit = function(e) {
   let body = '';
 
   if (!result.success)
-    for (let key in result.errors)
-      getJoinErrorTextBox(key).textContent = result.errors[key];
+    for (let i = 0; i < result.errors.length; i++)
+      setPropertyError(result.errors[i].property, result.errors[i].message);
   else
     fields.forEach(item => {
       if (!item.extra)
@@ -109,9 +115,11 @@ joinForm.onsubmit = function(e) {
     let response = JSON.parse(this.responseText);
     if (response.success)
       window.location = response.url;
-    else
-    if (response.error)
-      alert("Error on server side. Please retry later.")
+    else {
+      if (response.property)
+        setPropertyError(response.property, response.message);
+    }
+
   };
 
   if (result.success)

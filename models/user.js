@@ -42,6 +42,8 @@ var userSchema = new Schema({
 	subscribes: [Schema.Types.ObjectId],
 	images: [Schema.Types.ObjectId]
 
+}, {
+	autoIndex: false
 });
 
 userSchema.methods.encryptPassword = function(password) {
@@ -63,4 +65,10 @@ userSchema.methods.checkPassword = function(password) {
 }
 
 var User = mongoose.model('User', userSchema);
+User.ensureIndexes().then(() => {
+	User.indexesEnsured = true;
+}).catch((err) => {
+	throw err;
+});
+
 module.exports = User;
