@@ -3,24 +3,24 @@
 		<div class="window__header">
 			signing up
 		</div>
-		<form class="window__content" action="/join" method="POST" name="join" role="form">
+		<form class="panel window__panel" action="/join" method="POST" name="join" role="form">
 			{{> textbox name="username" caption="username" parent="window"}}
 			{{> textbox name="email" caption="e-mail" parent="window"}}
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
 			{{> textbox name="password-again" caption="password again" type="password" parent="window"}}
 			{{> button caption="join" parent="window" id="join"}}
-			<span id="login-ref" class="window__message">Already have an account? <a>Log in</a></span>
+			<span id="login-ref" class="window__message">Already have an account? <a class="ref">Log in</a></span>
 		</form>
 	</div>
 	<div class="window">
 		<div class="window__header">
 			logging in
 		</div>
-		<form class="window__content" action="/login" method="POST" name="login" role="form">
+		<form class="panel window__panel" action="/login" method="POST" name="login" role="form">
 			{{> textbox name="username" caption="username" parent="window"}}
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
 			{{> button caption="login" parent="window" id="login"}}
-			<span id="join-ref" class="window__message">Don’t have an account? <a>Sign up</a></span>
+			<span id="join-ref" class="window__message">Don’t have an account? <a class="ref">Sign up</span></a></span>
 		</form>
 	</div>
 </div>

@@ -118,6 +118,8 @@ joinForm.onsubmit = function(e) {
     else {
       if (response.property)
         setPropertyError(response.property, response.message);
+      else
+        alert('Server error. Please retry later.')
     }
 
   };

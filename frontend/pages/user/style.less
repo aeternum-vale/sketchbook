@@ -1,0 +1,128 @@
+@import "../../style/global.less";
+@import "../../blocks/header/header.less";
+@import "../../blocks/panel/panel.less";
+@import "../../blocks/button/button.less";
+
+
+@avatar-size: 245px;
+@avatar-border-size: 8px;
+@username-offset: 10px;
+@username-font-size: @large-font-size;
+@info-panel-height: @avatar-size + @avatar-border-size * 2 + @username-font-size + @username-offset + @global-content-padding * 2;
+
+@link-list-switch-size: 42px;
+@link-list-switch-offset: 10px;
+
+@description-wrapper-height: @avatar-size + @avatar-border-size * 2 + @username-font-size + @username-offset;
+@description-height: @description-wrapper-height - @link-list-switch-size - @link-list-switch-offset;
+
+@stat-number-font-size: 30px;
+@stat-caption-font-size: 12px;
+
+
+.pseudo-header {
+	position: relative;
+	width: 100%;
+	height: @header-height;
+}
+
+.info-panel {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+	height: @info-panel-height;
+
+	&__wrapper {
+		.screen-wrapper();
+	}
+}
+
+.person {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-shrink: 0;
+	margin-right: @global-content-padding;
+
+	&__avatar {
+		width: @avatar-size;
+		height: @avatar-size;
+		border-radius: @avatar-border-size;
+		border: solid @avatar-border-size @global-main-color;
+		background-color: #fff;
+	}
+
+	&__username {
+		margin-top: @username-offset;
+		font-size: @large-font-size;
+		line-height: @large-font-size;
+	}
+}
+
+.description {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+
+	max-height: @description-wrapper-height;
+	overflow: hidden;
+
+	&__text {
+		max-height: @description-height;
+		overflow: hidden;
+
+		font-size: @large-font-size;
+		text-align: right;
+	}
+
+	&__link-list-switch {
+		width: 42px;
+		height: 42px;
+		margin-top: 10px;
+		border-radius: 50%;
+
+		background-color: #fff;
+	}
+}
+
+.extra-header {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&__wrapper {
+		.screen-wrapper();
+		justify-content: space-between;
+	}
+
+	&__button {
+		.button(100px, 30px);
+	}
+}
+
+.stat-list {
+	display: flex;
+}
+
+.stat {
+	display: flex;
+	align-items: flex-start;
+	margin-right: 20px;
+
+	&__number {
+		margin-right: 5px;
+		font-size: @stat-number-font-size;
+		line-height: @stat-number-font-size;
+		font-weight: bold;
+	}
+
+	&__caption {
+		font-size: @stat-caption-font-size;
+		line-height: @stat-caption-font-size;
+	}
+}
+

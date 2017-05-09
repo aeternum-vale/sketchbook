@@ -1,16 +1,16 @@
 @import "../textbox/textbox.less";
 @import "../button/button.less";
+@import "../panel/panel.less";
 
 @window-width: 400px;
 //@window-height: 620px;
-@header-height: 70px;
-@border-radius: 6px;
-@border-width: 2px;
+@window-header-height: 70px;
+@window-border-radius: 6px;
+@window-border-width: 2px;
 
-@header-padding: @header-height/2 - @large-font-size/2;
-//@content-height: @window-height - @header-height - @border-width;
+@window-header-padding: @window-header-height/2 - @large-font-size/2;
 
-@content-vertical-padding: 20px;
+@window-panel-vertical-padding: 20px;
 
 .window {
 	display: flex;
@@ -24,8 +24,8 @@
 	min-width: @window-width;
 	//min-height: @window-height;
 
-	border: solid #000 @border-width;
-	border-radius: @border-radius + @border-width;
+	border: solid #000 @window-border-width;
+	border-radius: @window-border-radius + @window-border-width;
 
 	background-color: #000;
 
@@ -36,10 +36,10 @@
 
 	
 	&__header {
-		margin-bottom: @border-width;
-		padding: @header-padding;
+		margin-bottom: @window-border-width;
+		padding: @window-header-padding;
 
-		border-radius: @border-radius;
+		border-radius: @window-border-radius;
 
 		background-color: #4b4848;
 		background-image: linear-gradient(to top, #172531 42%, #2a3b48 45%, #2a3b48 62%, #2a3b48 65%, #5f798c);
@@ -49,19 +49,15 @@
 		color: #fff;
 	}
 
-	&__content {
+	&__panel {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 
-		//height: @content-height;
-		padding: @content-vertical-padding 0;
+		padding: @window-panel-vertical-padding 0;
 		
-		border-radius: @border-radius;
-
-		background-color: #1c1618;
-		box-shadow: inset 0 0 7px 1px rgba(56,44,48,.66);
+		border-radius: @window-border-radius;
 	}
 
 	&__textbox {
@@ -74,13 +70,13 @@
 
 	&__button {
 		margin-top: 40px;
+
+		.button(334px, 58px);
 	}
 
 	&__message {
 		margin-top: 20px;
 	}
-
-	
 
 }
 

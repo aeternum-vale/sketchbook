@@ -44,7 +44,12 @@ function userProfileRequestListener(req, res, next) {
 		});
 
 	}).then(result => {
-		res.json(userViewModel(result));
+		res.locals = userViewModel(result);
+
+
+		res.render('user', {
+			page: 'user'
+		});
 	}).catch(err => {
 		next(new HttpError(404, 'this user doesn\'t exist'));
 	});
@@ -100,6 +105,10 @@ function joinRequestListener(req, res, next) {
 					success: false,
 					property: err.property,
 					message: err.message
+				});
+			else
+				res.json({
+					success: false
 				});
 		});
 	} else

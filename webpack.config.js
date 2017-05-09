@@ -9,7 +9,8 @@ module.exports = {
   context: path.resolve(__dirname, 'frontend', 'pages'),
 
   entry: {
-    authorization: './authorization/script'
+    authorization: './authorization/script',
+    user: './user/script'
   },
 
   output: {
@@ -53,7 +54,8 @@ module.exports = {
       exclude: [/node_modules/, /public/]
     }, {
       test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
-      loader: 'file?name=[path][name].[ext]&limit=4096'
+      loader: 'file?limit=4096'
+      //loader: 'file?name=[path][name].[ext]&limit=4096'
     }]
   },
 
