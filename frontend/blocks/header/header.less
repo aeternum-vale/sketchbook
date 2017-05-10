@@ -1,3 +1,5 @@
+
+
 @header-height: 42px;
 
 .header {
@@ -9,13 +11,18 @@
 	top: 0;
 	width: 100%;
 	height: @header-height;
-	z-index: 1;
+	z-index: 10;
 	background-color: #2a3b48;
 	background-image: linear-gradient(to top, #172531 42%, #2a3b48 45%, #2a3b48 62%, #2a3b48 65%, #5f798c);
 
 
 	&__wrapper {
 		.screen-wrapper();
+		justify-content: space-between;
+		align-items: center;
+
+		height: 100%;
+		//height: @header-height;
 	}
 
 	&__logo {
