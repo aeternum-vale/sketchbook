@@ -1,11 +1,13 @@
 let User = require('models/user');
 let userViewModel = require('viewModels/user');
-
 let co = require('co');
 let checkUserData = require('libs/checkUserData');
 let PropertyError = require('error').PropertyError;
 let duplicatingUniquePropertyError = require('error').duplicatingUniquePropertyError;
+let LoginError = require('error').LoginError;
 let HttpError = require('error').HttpError;
+let config = require('config');
+let debug = require('debug')('app:user');
 
 function usersListRequestListener(req, res, next) {
 
@@ -25,7 +27,6 @@ function usersListRequestListener(req, res, next) {
 	}).catch(err => {
 		return next(err);
 	});
-
 }
 
 function userProfileRequestListener(req, res, next) {
@@ -34,29 +35,38 @@ function userProfileRequestListener(req, res, next) {
 		if (!User.indexesEnsured)
 			yield User.ensureIndexes();
 
-		return new Promise((resolve, reject) => {
-			User.findOne({
-				username: req.params.username
-			}, function(err, user) {
-				if (err) reject(err);
-				resolve(user);
-			});
-		});
+		let loggedUser;
+		if (req.session.userId)
+			loggedUser = yield User.findById(req.session.userId).exec();
+
+		let pageUser = yield User.findOne({
+			username: req.params.username
+		}).populate('images').exec();
+
+		if (!pageUser)
+			throw new HttpError(404, 'this user doesn\'t exist');
+
+		return {
+			loggedUser,
+			pageUser
+		};
+
 
 	}).then(result => {
-		res.locals = userViewModel(result);
+		res.locals = result;
 
+		if (result.loggedUser && result.pageUser)
+			res.locals.ownPage = (result.loggedUser._id.toString() === result.pageUser._id.toString());
+		res.locals.page = 'user';
 
-		res.render('user', {
-			page: 'user'
-		});
+		res.render('user');
 	}).catch(err => {
-		next(new HttpError(404, 'this user doesn\'t exist'));
+		next(err);
 	});
 }
 
 function joinRequestListener(req, res, next) {
-	console.log(req.body);
+	debug('recieved registration request: %o', req.body);
 
 	if (req.xhr || req.accepts('json,html') === 'json') {
 		co(function*() {
@@ -69,7 +79,7 @@ function joinRequestListener(req, res, next) {
 
 			let result = checkUserData(userData);
 
-			console.log(result);
+			debug('data validation completed: %o', result);
 
 			if (result.success) {
 				if (!User.indexesEnsured)
@@ -78,27 +88,31 @@ function joinRequestListener(req, res, next) {
 				let oldUser = yield User.findOne({
 					username: userData.username
 				}).exec();
-				if (oldUser) throw new duplicatingUniquePropertyError('username', 'this username is already taken');
+				if (oldUser) throw new DuplicatingUniquePropertyError('username', 'this username is already taken');
 
 				oldUser = yield User.findOne({
 					email: userData.email
 				}).exec();
-				if (oldUser) throw new duplicatingUniquePropertyError('email', 'this e-mail is already registered');
+				if (oldUser) throw new DuplicatingUniquePropertyError('email', 'this e-mail is already registered');
 
 				let newUser = new User(userData).save();
 
 				return newUser;
+
 			} else {
 				throw new PropertyError(result.errors[0].property, result.errors[0].message);
 			}
 
-		}).then(() => {
+		}).then((user) => {
+			debug('registration is successful. User id: %s', user._id);
+			req.session.userId = user._id;
+
 			res.json({
 				success: true,
 				url: '/'
 			});
 		}).catch(err => {
-			console.log(err);
+			debug(err);
 
 			if (err instanceof PropertyError)
 				res.json({
@@ -115,8 +129,65 @@ function joinRequestListener(req, res, next) {
 		res.redirect(303, '/');
 }
 
+function loginRequestListener(req, res, next) {
+	debug('recieved login request: %o', req.body);
+	let loginUser = req.body;
+
+	if (req.xhr || req.accepts('json,html') === 'json') {
+		co(function*() {
+
+			if (!User.indexesEnsured)
+				yield User.ensureIndexes();
+
+			user = yield User.findOne({
+				username: loginUser.username
+			}).exec();
+
+			if (!user) throw new LoginError('no such user');
+
+			if (!user.checkPassword(loginUser.password)) throw new LoginError('invalid password');
+
+			return user;
+
+
+		}).then((user) => {
+			debug('login is successful. User id: %s', user._id);
+			req.session.userId = user._id;
+
+			res.json({
+				success: true,
+				url: '/'
+			});
+		}).catch(err => {
+			debug(err);
+
+			if (err instanceof LoginError)
+				res.json({
+					success: false,
+					message: 'Invalid login data'
+				});
+			else
+				res.json({
+					success: false
+				});
+		});
+	} else
+		res.redirect(303, '/');
+}
+
+function logoutRequestListener(req, res, next) {
+	if (req.session.userId)
+		delete req.session.userId;
+
+	res.clearCookie(config.get('cookie:session:key'));
+
+	res.redirect(303, '/');
+}
+
 exports.registerRoutes = function(app) {
 	app.post('/join', joinRequestListener);
+	app.post('/login', loginRequestListener);
+	app.get('/logout', logoutRequestListener);
 	app.get('/users', usersListRequestListener);
 	app.get('/user/:username', userProfileRequestListener);
 };

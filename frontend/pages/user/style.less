@@ -89,24 +89,36 @@
 	}
 
 	&__link-list-switch {
-		position: relative;
-		width: 42px;
-		height: 42px;
 		margin-top: 10px;
-		border-radius: 50%;
+	}
 
-		background-color: #fff;
+}
 
-		&_active {
-			background-color: @dropdown-main-color;
-		}
+.link-list-switch {
+	position: relative;
+	width: 42px;
+	height: 42px;
+	
+	border-radius: 50%;
+
+	cursor: pointer;
+	background-image: url('images/link-list-switch.png');
+
+	&_active {
+		background-image: url('images/link-list-switch-active.png');
 	}
 
 	&__dropdown {
 		top: 42px;
 		right: 42px;
 	}
+
+	&_active &__dropdown {
+		visibility: visible;
+	}
+
 }
+
 
 .extra-header {
 	position: relative;
@@ -183,7 +195,13 @@
 	
 	border: solid 1px #000;
 	background-color: #fff;
+	background-size: cover;
+	background-position: center;
+
+
 	cursor: pointer;
+
+
 
 	&:hover {
 		border: solid 6px @global-main-color;
@@ -217,4 +235,8 @@
 		line-height: 14px;
 	}
 
+}
+
+.upload-form {
+	display: none;
 }

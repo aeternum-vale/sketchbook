@@ -17,6 +17,14 @@ util.inherits(CustomError, Error);
 CustomError.prototype.constructor = CustomError;
 
 
+function LoginError(message) {
+	CustomError.call(this, message);
+	this.name = "LoginError";
+}
+util.inherits(LoginError, CustomError);
+LoginError.prototype.constructor = LoginError;
+
+
 function PropertyError(property, message) {
 	CustomError.call(this, message);
 	this.name = "PropertyError";
@@ -26,12 +34,12 @@ util.inherits(PropertyError, CustomError);
 PropertyError.prototype.constructor = PropertyError;
 
 
-function duplicatingUniquePropertyError(property, message) {
+function DuplicatingUniquePropertyError(property, message) {
 	PropertyError.call(this, property, message);
-	this.name = "duplicatingUniquePropertyError";
+	this.name = "DuplicatingUniquePropertyError";
 }
-util.inherits(duplicatingUniquePropertyError, PropertyError);
-duplicatingUniquePropertyError.prototype.constructor = duplicatingUniquePropertyError;
+util.inherits(DuplicatingUniquePropertyError, PropertyError);
+DuplicatingUniquePropertyError.prototype.constructor = DuplicatingUniquePropertyError;
 
 
 function HttpError(status, message) {
@@ -48,5 +56,6 @@ HttpError.prototype.constructor = HttpError;
 module.exports = {
 	HttpError,
 	PropertyError,
-	duplicatingUniquePropertyError
+	DuplicatingUniquePropertyError,
+	LoginError
 };

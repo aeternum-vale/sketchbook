@@ -1,8 +1,8 @@
-var crypto = require('crypto');
-var mongoose = require('libs/mongoose');
-var Schema = mongoose.Schema;
+let crypto = require('crypto');
+let mongoose = require('libs/mongoose');
+let Schema = mongoose.Schema;
 
-var userSchema = new Schema({
+let userSchema = new Schema({
 	username: {
 		type: String,
 		unique: true,
@@ -26,21 +26,49 @@ var userSchema = new Schema({
 	},
 
 	name: String,
+	
 	surname: String,
-	age: Number,
-	country: Schema.Types.ObjectId,
+
+	age: {
+		type: Number,
+		default: 0
+	},
+
+	country: {
+		type: Schema.Types.ObjectId,
+		ref: 'Country'
+	},
+
 	city: String,
 
 	description: String,
+
 	created: {
 		type: Date,
 		default: Date.now
 	},
+
 	avatarPath: String,
-	subscribersCount: Number,
-	links: [Schema.Types.ObjectId],
-	subscribes: [Schema.Types.ObjectId],
-	images: [Schema.Types.ObjectId]
+
+	subscribersCount: {
+		type: Number,
+		default: 0
+	},
+
+	links: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Link'
+	}],
+
+	subscribes: [{
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	}],
+
+	images: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Image'
+	}]
 
 }, {
 	autoIndex: false
@@ -64,7 +92,7 @@ userSchema.methods.checkPassword = function(password) {
 	return this.encryptPassword(password) === this.hashedPassword;
 }
 
-var User = mongoose.model('User', userSchema);
+let User = mongoose.model('User', userSchema);
 User.ensureIndexes().then(() => {
 	User.indexesEnsured = true;
 }).catch((err) => {

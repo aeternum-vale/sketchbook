@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "start.bat",
-    "sb": "supervisor --watch app.js app.js"
+    "sb": "set DEBUG=*& supervisor --watch app.js,controllers/,models/,config/,libs/,middleware/ app.js"
   },
   "repository": {
     "type": "git",
@@ -21,23 +21,30 @@
     "app-module-path": "^2.2.0",
     "body-parser": "^1.17.1",
     "co": "^4.6.0",
+    "connect": "^2.30.2",
+    "cookie-parser": "^1.4.3",
     "crypto": "0.0.3",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.2",
+    "formidable": "^1.1.1",
+    "jimp": "^0.2.27",
     "mongoose": "^4.9.7",
-    "nconf": "^0.8.4"
+    "nconf": "^0.8.4",
+    "session-mongoose": "^0.5.2"
   },
   "devDependencies": {
-    "webpack": "^1.15.0",
     "autoprefixer-loader": "*",
     "babel-core": "^5.8.38",
     "babel-loader": "^5.4.2",
     "css-loader": "^0.28.0",
+    "debug": "^2.6.6",
     "extract-text-webpack-plugin": "1.x",
     "file-loader": "^0.11.1",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "style-loader": "^0.16.1",
-    "url-loader": "^0.5.8"
+    "url-loader": "^0.5.8",
+    "webpack": "^1.15.0"
   }
 }

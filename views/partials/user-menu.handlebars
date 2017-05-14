@@ -1,12 +1,17 @@
-<div class="user-menu user-menu_active">
-	<div class="user-menu__username">aeternum-vale</div>
-	<div class="user-menu__avatar"></div>
-	<div class="user-menu__arrow"></div>
+{{#if loggedUser}}
+	<div class="user-menu">
+		<div class="user-menu__username">{{loggedUser.username}}</div>
+		<div class="user-menu__avatar"></div>
+		<div class="user-menu__arrow"></div>
 
-	<div class="dropdown user-menu__dropdown dropdown_active">
-		{{> dropdown-item caption="view profile"}}
-		{{> dropdown-item caption="upload"}}
-		{{> dropdown-item caption="settings"}}
-		{{> dropdown-item caption="logout"}}
-	</div>
-</div>
+		<div class="dropdown user-menu__dropdown">
+			{{> dropdown-item caption="view profile" link="/user/" linkValue=loggedUser.username }}
+			{{> dropdown-item caption="upload" link="/upload" }}
+			{{> dropdown-item caption="settings" link="/settings" }}
+			{{> dropdown-item caption="logout" link="/logout" }}
+		</div>
+	</div>	
+{{else}}
+	<a href="/authorization" class="user-menu user-menu_unlogged">log in</a>	
+{{/if}}
+

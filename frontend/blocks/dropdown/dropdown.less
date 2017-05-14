@@ -46,6 +46,7 @@
 
 	font-size: 16px;
 	line-height: 16px;
+	white-space: nowrap;
 
 	&:hover {
 		background-image: linear-gradient(to top, #2c78aa, #90d2fd);
@@ -54,6 +55,10 @@
 
 	&:hover &__icon {
 		background-color: #000;
+	}
+
+	&:hover &__text {
+		color: #000;
 	}
 
 	&__icon {
@@ -67,7 +72,9 @@
 	}
 
 	&__text {
-		
+		display: block;
+		text-decoration: none;
+		color: @dropdown-main-color;
 	}
 
 }

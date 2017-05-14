@@ -4,13 +4,13 @@
 	<div class="info-panel__wrapper">
 		<div class="person info-panel__person">
 			<div class="person__avatar"></div>
-			<div class="person__username">{{username}}</div>
+			<div class="person__username">{{pageUser.username}}</div>
 		</div>
 		<div class="description">
 			<div class="description__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis illo dignissimos, fugiat accusamus beatae at, eius excepturi tenetur. Quasi ipsa quidem adipisci nostrum voluptatibus tempore voluptates iste. Provident, nulla, pariatur!
 			</div>
-			<div class="description__link-list-switch">
-				<ul class="dropdown description__dropdown dropdown_active">
+			<div class="link-list-switch description__link-list-switch">
+				<ul class="dropdown link-list-switch__dropdown">
 					{{> dropdown-item caption="instagram" icon="true"}}
 					{{> dropdown-item caption="deviantart" icon="true"}}
 					{{> dropdown-item caption="facebook" icon="true"}}
@@ -23,27 +23,26 @@
 <div class="header extra-header">
 	<div class="extra-header__wrapper">
 		<div class="stat-list">
-			{{> stat number="345" property="subscribers"}}
-			{{> stat number="31" property="publications"}}
+			{{> stat number=pageUser.subscribersCount property="subscribers"}}
+			{{> stat number=pageUser.images.length property="publications"}}
 		</div>
-		{{> button caption="subscribe" parent="extra-header"}}
 
+		{{#if ownPage}}
+			{{> button caption="upload" parent="extra-header" id="upload-button"}}
+{{!-- 			<form name="upload-form" class="upload-form" action="/upload" role="form" enctype="multipart/form-data" method="POST">
+				<input type="file" accept="image/*" name="photo">
+			</form> --}}
+		{{else}}
+			{{> button caption="subscribe" parent="extra-header"}}
+		{{/if}}
 	</div>
 </div>
 <div class="gallery">
 	<div class="gallery__wrapper">
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
-		{{> image-preview comments="12" likes="134"}}
+		{{#each pageUser.images}}
+			{{> image-preview comments=comments.length likes=likes.length url=_id}}
+		{{/each}}
+
 	</div>
 </div>
 {{> footer}}
-

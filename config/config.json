@@ -12,5 +12,18 @@
 				}
 			}
 		}
+	},
+
+	"cookie": {
+		"options": {
+			"signed": true,
+			"httpOnly": true
+		},
+		"secret": "/L/c8%*[Mo]-n(#R*G}4U7g33P-a4J*",
+		"session": {
+			"key": "session_id"
+		}
 	}
+
+
 }
