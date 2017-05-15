@@ -26,6 +26,38 @@ linkListSwitch.onclick = function(e) {
 
 if (isLogged) {
 
+	let uploadInput = document.createElement('input');
+	uploadInput.type = "file";
+	uploadInput.accept = "image/*";
+
+	let filePicker = document.getElementsByClassName('file-picker')[0];
+	let fpButton = filePicker.querySelector('.file-picker__button');
+	let fpFileName = filePicker.querySelector('.file-picker__filename');
+
+	let uploadWindowCaller = document.getElementById('upload-button');
+	let uploadButton = document.getElementById('upload');
+
+
+	fpButton.onclick = function(e) {
+		uploadInput.click();
+	};
+
+	uploadInput.onchange = function(e) {
+		fpFileName.textContent = this.value;
+	};
+
+
+	uploadButton.click = function(e) {
+		if (uploadInput.value) {
+			let file = uploadInput.files[0];
+			if (file) {
+				upload(file);
+			}
+		}
+	};
+
+
+
 	function upload(file) {
 
 		var xhr = new XMLHttpRequest();
@@ -58,27 +90,10 @@ if (isLogged) {
 
 
 
-	let uploadInput = document.createElement('input');
-	uploadInput.type = "file";
-	uploadInput.accept = "image/*";
-
-
-	let uploadButton = document.getElementById('upload-button');
-
-
 	uploadButton.onclick = function(e) {
 
 		return false;
 
-		uploadInput.onchange = function(e) {
-			if (uploadInput.value) {
-				let file = uploadInput.files[0];
-				if (file) {
-					upload(file);
-				}
-			}
-		}
 
-		uploadInput.click();
 	};
 }

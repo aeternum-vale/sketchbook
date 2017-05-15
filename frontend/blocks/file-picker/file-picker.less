@@ -1,0 +1,22 @@
+@import "../button/button.less";
+
+.file-picker {
+
+	position: relative;
+	display: flex;
+	align-items: center;
+
+
+	&__button {
+		.button(100px, 30px);
+		margin-left: 10px;
+	}
+
+	&__filename {
+		white-space: nowrap; 
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 150px;
+
+	}
+}

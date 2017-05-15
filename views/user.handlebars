@@ -61,11 +61,16 @@
 </div>
 
 <div class="upload-window-wrapper">
-	<div class="window upload-window">
+	<div class="window upload-window upload-window-wrapper__window">
 		<div class="window__header">
 			image uploading
 		</div>
+		
 		<form class="panel window__panel" action="/upload" method="POST" name="upload" role="form">
+			{{> file-picker}}
+
+			<textarea class="window__textarea" id="upoad_description" placeholder="description goes here..."></textarea>
+
 			{{> button caption="upload" parent="window" id="upload"}}
 		</form>
 	</div>

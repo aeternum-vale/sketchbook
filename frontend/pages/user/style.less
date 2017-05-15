@@ -8,6 +8,7 @@
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/window/window.less";
+@import "../../blocks/file-picker/file-picker.less";
 
 @avatar-size: 245px;
 @avatar-border-size: 8px;
@@ -265,9 +266,20 @@
 	z-index: 16;
 
 	&__window {
-		position: fixed;
+		
 	}
 }
 
+.upload-window {
+	position: fixed;
 
+	& .window__panel {
+		height: 260px;
+		justify-content: space-around;
+		padding: 0;
+	}
 
+	& .window__button {
+		margin: 0;
+	}
+}
