@@ -1,10 +1,19 @@
 let Jimp = require('jimp');
 let debug = require('debug')('app:imageManipulation');
 
-function resize(path, postfix, width, height) {
+function resize(path, postfix, size) {
+
 	return Jimp.read(path).then((image) => {
-		image.resize(width, height) // resize
-			.write(path + postfix + '.png'); // save
+
+		if (image.bitmap.width > image.bitmap.height) {
+			image.resize(Jimp.AUTO, size);
+			image.crop(image.bitmap.width / 2 - size / 2, 0, size, size);
+		} else {
+			image.resize(size, Jimp.AUTO);
+			image.crop(0, image.bitmap.height / 2 - size / 2, size, size);
+		}
+
+		image.write(path + postfix); // save
 	}).catch((err) => {
 		throw err;
 	});

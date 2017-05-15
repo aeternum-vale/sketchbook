@@ -25,7 +25,7 @@ function usersListRequestListener(req, res, next) {
 	}).then(result => {
 		res.json(result);
 	}).catch(err => {
-		return next(err);
+		next(err);
 	});
 }
 
@@ -59,6 +59,13 @@ function userProfileRequestListener(req, res, next) {
 			res.locals.ownPage = (result.loggedUser._id.toString() === result.pageUser._id.toString());
 		res.locals.page = 'user';
 
+
+
+		res.locals.imagePrefix = config.get('userdata:image:prefix');
+		res.locals.imagePostfix = config.get('userdata:image:postfix');
+		res.locals.previewPostfix = config.get('userdata:imagePreview:postfix');
+
+		debug(res.locals);
 		res.render('user');
 	}).catch(err => {
 		next(err);
@@ -112,7 +119,6 @@ function joinRequestListener(req, res, next) {
 				url: '/'
 			});
 		}).catch(err => {
-			debug(err);
 
 			if (err instanceof PropertyError)
 				res.json({
@@ -121,9 +127,7 @@ function joinRequestListener(req, res, next) {
 					message: err.message
 				});
 			else
-				res.json({
-					success: false
-				});
+				next(err);
 		});
 	} else
 		res.redirect(303, '/');
@@ -159,7 +163,6 @@ function loginRequestListener(req, res, next) {
 				url: '/'
 			});
 		}).catch(err => {
-			debug(err);
 
 			if (err instanceof LoginError)
 				res.json({
@@ -167,9 +170,7 @@ function loginRequestListener(req, res, next) {
 					message: 'Invalid login data'
 				});
 			else
-				res.json({
-					success: false
-				});
+				next(err);
 		});
 	} else
 		res.redirect(303, '/');
@@ -180,7 +181,6 @@ function logoutRequestListener(req, res, next) {
 		delete req.session.userId;
 
 	res.clearCookie(config.get('cookie:session:key'));
-
 	res.redirect(303, '/');
 }
 

@@ -12,7 +12,7 @@ let imageManipulation = require('libs/imageManipulation');
 
 let form = new formidable.IncomingForm();
 
-let uploadDir = path.resolve('./userdata'); //path.join(__dirname, 'userdata');
+let uploadDir = path.resolve(config.get('userdata:dir')); //path.join(__dirname, 'userdata');
 
 form.uploadDir = uploadDir;
 
@@ -22,36 +22,41 @@ function uploadImageListRequestListener(req, res, next) {
 	let userId;
 	if (req.session.userId)
 		userId = req.session.userId;
-	else {
-		res.json({
-			success: false
-		});
-		return;
-	}
+	else
+		next(401);
+
+	if (!req.xhr) 
+		next(500);
 
 	co(function*() {
 
 		if (!Image.indexesEnsured)
 			yield Image.ensureIndexes();
 
-		let newImage = yield new Image({
-			author: userId
-		}).save();
 
 		let files = yield new Promise((resolve, reject) => {
 			form.parse(req, function(err, fields, files) {
-				if (err) reject(new HttpError(303));
+				if (err) reject(303);
 				resolve(files);
 				debug(files);
 			});
 		});
 
-		let user = yield User.findById(userId).exec();
+		let newImage = yield new Image({
+			author: userId
+		}).save();
 
-		user.images.push(newImage);
-		yield user.save();
+		
 
-		let imagePath = path.join(uploadDir, newImage._id.toString());
+		// let user = yield User.findById(userId).exec();
+		// user.images.push(newImage);
+		// yield user.save();
+
+		let imagePath = path.join(uploadDir,
+			`${config.get('userdata:image:prefix')}${
+				newImage._id.toString()
+			}${config.get('userdata:image:postfix')}`);
+
 		yield new Promise((resolve, reject) => {
 			fs.rename(files.image.path, imagePath, function(err) {
 				if (err) reject(err);
@@ -59,59 +64,30 @@ function uploadImageListRequestListener(req, res, next) {
 			});
 		});
 
-		yield imageManipulation.resize(imagePath, '_preview', 300, 300);
+		yield imageManipulation.resize(imagePath, config.get('userdata:imagePreview:postfix'), 300);
 
 	}).then((result) => {
-		debug('ok');
 		res.json({
 			success: true
 		});
 	}).catch(err => {
-		debug(err);
-		res.json({
-			success: false
-		});
+		next(err);
 	});
 
-	/*	req.setEncoding('binary');
-
-		let length = 0;
-		let data = '';
-
-		req.on('data', function(chunk) {
-
-
-			debug(typeof chunk);
-
-			length += chunk.length;
-			data += chunk.toString('binary');
-			//ws.write(data);
-			if (length > 50 * 1024 * 1024) {
-				next(new HttpError(413, 'Too big image size'));
-			}
-
-		}).on('end', function() {
-
-			fs.writeFile('D:/image.jpg', data, {
-				encoding: 'binary'
-			}, (err) => {
-				if (err) throw err;
-				debug('The file has been saved!');
-
-				res.send({
-					success: true
-				});
-			});
-
-		});*/
 }
 
 
 function imageListRequestListener(req, res, next) {
 	co(function*() {
 
+
+
 		if (!Image.indexesEnsured)
 			yield Image.ensureIndexes();
+
+		// let delImg = yield Image.findById("5919924d1dfac21d689d964d").exec();
+		// if (delImg)
+		// 	yield delImg.remove();
 
 		return new Promise((resolve, reject) => {
 			Image.find({}, function(err, images) {
@@ -122,7 +98,7 @@ function imageListRequestListener(req, res, next) {
 	}).then(result => {
 		res.json(result);
 	}).catch(err => {
-		return next(err);
+		next(err);
 	});
 }
 

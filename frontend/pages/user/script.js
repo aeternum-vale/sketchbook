@@ -68,6 +68,8 @@ if (isLogged) {
 
 	uploadButton.onclick = function(e) {
 
+		return false;
+
 		uploadInput.onchange = function(e) {
 			if (uploadInput.value) {
 				let file = uploadInput.files[0];

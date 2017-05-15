@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "start.bat",
-    "sb": "set DEBUG=*& supervisor --watch app.js,controllers/,models/,config/,libs/,middleware/ app.js"
+    "sb": "set DEBUG=app*& supervisor -w \"app.js,controllers/,models/,config/,libs/,middleware/\" -n error app.js"
   },
   "repository": {
     "type": "git",

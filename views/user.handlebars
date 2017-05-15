@@ -23,7 +23,8 @@
 <div class="header extra-header">
 	<div class="extra-header__wrapper">
 		<div class="stat-list">
-			{{> stat number=pageUser.subscribersCount property="subscribers"}}
+			{{> stat number=pageUser.subscribers.length property="subscribers"}}
+			{{> stat number=pageUser.subscriptions.length property="subscriptions"}}
 			{{> stat number=pageUser.images.length property="publications"}}
 		</div>
 
@@ -39,10 +40,34 @@
 </div>
 <div class="gallery">
 	<div class="gallery__wrapper">
+		
 		{{#each pageUser.images}}
-			{{> image-preview comments=comments.length likes=likes.length url=_id}}
+
+			{{> image-preview 
+				comments=comments.length
+				likes=likes.length
+				url=_id
+				prefix=../imagePrefix
+				postfix=../imagePostfix
+				previewPostfix=../previewPostfix
+			}}
 		{{/each}}
 
 	</div>
 </div>
 {{> footer}}
+
+<div class="backdrop">
+</div>
+
+<div class="upload-window-wrapper">
+	<div class="window upload-window">
+		<div class="window__header">
+			image uploading
+		</div>
+		<form class="panel window__panel" action="/upload" method="POST" name="upload" role="form">
+			{{> button caption="upload" parent="window" id="upload"}}
+		</form>
+	</div>
+</div>
+

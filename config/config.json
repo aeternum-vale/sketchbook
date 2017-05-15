@@ -23,6 +23,20 @@
 		"session": {
 			"key": "session_id"
 		}
+	},
+
+	"userdata": {
+		"dir": "./userdata",
+
+		"image": {
+			"prefix": "image",
+			"postfix": ""
+		},
+
+		"imagePreview": {
+			"postfix": "_preview.png"
+		}
+
 	}
 
 

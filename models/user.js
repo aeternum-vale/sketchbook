@@ -50,17 +50,17 @@ let userSchema = new Schema({
 
 	avatarPath: String,
 
-	subscribersCount: {
-		type: Number,
-		default: 0
-	},
-
 	links: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Link'
 	}],
 
-	subscribes: [{
+	subscribers: [{
+		type: Schema.Types.ObjectId,
+		ref: 'User'
+	}],
+
+	subscriptions: [{
 		type: Schema.Types.ObjectId,
 		ref: 'User'
 	}],

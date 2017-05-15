@@ -1,12 +1,13 @@
 @import "../../style/global.less";
 
 
-@import "@{path-to-blocks}header/header.less";
-@import "@{path-to-blocks}panel/panel.less";
-@import "@{path-to-blocks}button/button.less";
-@import "@{path-to-blocks}dropdown/dropdown.less";
-@import "@{path-to-blocks}footer/footer.less";
-@import "@{path-to-blocks}user-menu/user-menu.less";
+@import "../../blocks/header/header.less";
+@import "../../blocks/panel/panel.less";
+@import "../../blocks/button/button.less";
+@import "../../blocks/dropdown/dropdown.less";
+@import "../../blocks/footer/footer.less";
+@import "../../blocks/user-menu/user-menu.less";
+@import "../../blocks/window/window.less";
 
 @avatar-size: 245px;
 @avatar-border-size: 8px;
@@ -237,6 +238,36 @@
 
 }
 
-.upload-form {
-	display: none;
+.backdrop {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	background-color: #000;
+	opacity: .6;
+	z-index: 15;
 }
+
+
+.upload-window-wrapper {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	z-index: 16;
+
+	&__window {
+		position: fixed;
+	}
+}
+
+
+
