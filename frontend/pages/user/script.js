@@ -26,7 +26,7 @@ linkListSwitch.onclick = function(e) {
 
 if (isLogged) {
 
-	let uploadInput = document.createElement('input');
+/*	let uploadInput = document.createElement('input');
 	uploadInput.type = "file";
 	uploadInput.accept = "image/*";
 
@@ -54,7 +54,7 @@ if (isLogged) {
 				upload(file);
 			}
 		}
-	};
+	};*/
 
 
 
@@ -89,11 +89,11 @@ if (isLogged) {
 	}
 
 
-
+/*
 	uploadButton.onclick = function(e) {
 
 		return false;
 
 
-	};
+	};*/
 }

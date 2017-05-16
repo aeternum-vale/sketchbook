@@ -1,6 +1,6 @@
-<button type="submit" id="{{id}}" 
+<button  {{#if submit}}type="submit"{{/if}} id="{{id}}" 
 {{#if parent}}
-	class="{{parent}}__button">
+	class="button {{parent}}__button">
 {{else}}
 	class="button">
 {{/if}}
