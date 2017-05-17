@@ -7,7 +7,7 @@ let fs = require('fs');
 let config = require('config');
 let path = require('path');
 
-let debug = require('debug')('app:models-image');
+let debug = require('debug')('app:image:model');
 
 
 

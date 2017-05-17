@@ -54,7 +54,7 @@ module.exports = {
       exclude: [/node_modules/, /public/]
     }, {
       test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
-      loader: 'url?limit=6200'
+      loader: 'url?limit=4096'
       //loader: 'file?name=[path][name].[ext]&limit=4096'
     }]
   },
@@ -64,7 +64,8 @@ module.exports = {
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify(NODE_ENV),
       LANG: JSON.stringify('en'),
-      BASE: JSON.stringify(__dirname + '/')
+      BASE: JSON.stringify(__dirname + '/'),
+      BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/')
     })
   ]
 

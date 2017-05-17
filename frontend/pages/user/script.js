@@ -2,18 +2,14 @@
 
 import './style.less';
 
-let isLogged = false;
-
-
 
 let userMenu = document.getElementsByClassName('user-menu')[0];
 let linkListSwitch = document.getElementsByClassName('link-list-switch')[0];
 
-if (!userMenu.classList.contains('user-menu_unlogged'))
-	isLogged = true;
+//if (!userMenu.classList.contains('user-menu_unlogged'))
+//	isLogged = true;
 
 userMenu.onclick = function(e) {
-
 	if (isLogged)
 		this.classList.toggle('user-menu_active');
 };
@@ -26,74 +22,92 @@ linkListSwitch.onclick = function(e) {
 
 if (isLogged) {
 
-/*	let uploadInput = document.createElement('input');
-	uploadInput.type = "file";
-	uploadInput.accept = "image/*";
+	let FilePicker = require(BLOCKS + 'file-picker');
+	let uploadImageFilePicker = new FilePicker('uploadImageFilePicker');
 
-	let filePicker = document.getElementsByClassName('file-picker')[0];
-	let fpButton = filePicker.querySelector('.file-picker__button');
-	let fpFileName = filePicker.querySelector('.file-picker__filename');
+	let uploadWindowCaller = document.getElementById('upload-window-caller');
+	let uploadButton = document.getElementById('upload-button');
 
-	let uploadWindowCaller = document.getElementById('upload-button');
-	let uploadButton = document.getElementById('upload');
+	let imageDescription = document.getElementById('upload_description');
+
+	let backdrop = document.getElementsByClassName('backdrop')[0];
+	let uploadWindowWrapper = document.getElementsByClassName('upload-window-wrapper')[0];
 
 
-	fpButton.onclick = function(e) {
-		uploadInput.click();
+	let galleryWrapper = document.getElementsByClassName('gallery__wrapper')[0];
+	let imagePreviewGhost = document.getElementsByClassName('image-preview')[0];
+
+
+	uploadButton.onclick = function(e) {
+		let file = uploadImageFilePicker.getFile();
+		if (file)
+			uploadImage(file, imageDescription.value);
 	};
 
-	uploadInput.onchange = function(e) {
-		fpFileName.textContent = this.value;
-	};
-
-
-	uploadButton.click = function(e) {
-		if (uploadInput.value) {
-			let file = uploadInput.files[0];
-			if (file) {
-				upload(file);
-			}
-		}
-	};*/
-
-
-
-	function upload(file) {
+	function uploadImage(file, description) {
 
 		var xhr = new XMLHttpRequest();
-
 		xhr.upload.onprogress = function(event) {
 			console.log(event.loaded + ' / ' + event.total);
 		}
 
 		xhr.onload = xhr.onerror = function() {
 			if (this.status == 200) {
-				console.log(xhr.responseText);
-			} else {
+				closeUploadDialog();
+
+				let response = JSON.parse(this.responseText);
+				if (response.success) {
+					console.log(response);
+					insertNewImagePreview(response.path);
+				}
+
+			} else
 				console.log("error " + this.status);
-			}
 		};
 
 		xhr.open("POST", "/upload", true);
-		//xhr.setRequestHeader('Content-Type', 'image/jpeg');
-		//xhr.setRequestHeader('Content-Disposition','form-data; name="myfile"; filename="pic.jpg"');
-		//xhr.setRequestHeader("Content-Type","application/octet-stream");
-		//xhr.responseType = 'arraybuffer';
+
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		//xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+
 		var formData = new FormData();
 		formData.append("image", file);
+		formData.append("description", description);
+
 		xhr.send(formData);
-
-
-		//xhr.send(file);
 
 	}
 
+	function openUploadDialog() {
+		backdrop.classList.remove('backdrop_invisible');
+		uploadWindowWrapper.classList.remove('upload-window-wrapper_invisible');
+	}
 
-/*
-	uploadButton.onclick = function(e) {
+	function closeUploadDialog() {
+		backdrop.classList.add('backdrop_invisible');
+		uploadWindowWrapper.classList.add('upload-window-wrapper_invisible');
+	}
 
-		return false;
+	uploadWindowCaller.onclick = function(e) {
+		openUploadDialog();
+	};
+
+	uploadWindowWrapper.onmousedown = function(e) {
+		//e.preventDefault();
+	}
+
+	uploadWindowWrapper.onclick = function(e) {
+		if (e.target !== uploadWindowWrapper) return;
+		closeUploadDialog();
+	}
 
 
-	};*/
+	function insertNewImagePreview(path) {
+		let newImagePreview = imagePreviewGhost.cloneNode(true);
+		newImagePreview.classList.remove('image-preview_ghost');
+		newImagePreview.style.backgroundImage = `url('/${path}')`;
+
+		galleryWrapper.appendChild(newImagePreview);
+	}
+
 }

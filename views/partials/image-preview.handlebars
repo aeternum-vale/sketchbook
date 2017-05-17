@@ -1,4 +1,8 @@
-<div class="image-preview gallery__image-preview" style="background-image: url('/{{prefix}}{{url}}{{postfix}}{{previewPostfix}}')">
+{{#unless ghost}}
+	<div class="image-preview gallery__image-preview" style="background-image: url('/{{prefix}}{{url}}{{postfix}}{{previewPostfix}}')">
+{{else}}
+	<div class="image-preview gallery__image-preview image-preview_ghost">
+{{/unless}}
 	<div class="image-preview__info-board">
 		<span class="image-preview__text">{{comments}} comments {{likes}} likes</span>
 	</div>

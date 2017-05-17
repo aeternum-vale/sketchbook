@@ -11,16 +11,20 @@
 	&__button {
 		.button(@medium-font-size);
 		margin-left: 10px;
+		flex-shrink: 0;
 	}
 
 	&__filename {
 
 		white-space: nowrap; 
 		overflow: hidden;
-		text-overflow: ellipsis;
-		max-width: 200px;
 
 		font-size: @medium-font-size;
 
+	}
+
+	&__input {
+		display: none;
+		visibility: hidden;
 	}
 }

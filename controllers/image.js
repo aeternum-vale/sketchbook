@@ -2,31 +2,23 @@ let Image = require('models/image');
 let User = require('models/User');
 let co = require('co');
 let config = require('config');
-let debug = require('debug')('app:image');
+let debug = require('debug')('app:image:controller');
 let HttpError = require('error').HttpError;
 let fs = require('fs');
 let http = require('http');
 let formidable = require('formidable');
 let path = require('path');
 let imageManipulation = require('libs/imageManipulation');
+let isAuth = require('middleware/isAuth');
 
 let form = new formidable.IncomingForm();
-
-let uploadDir = path.resolve(config.get('userdata:dir')); //path.join(__dirname, 'userdata');
-
+let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
 function uploadImageListRequestListener(req, res, next) {
 	debug('The file is ready to be uploaded');
 
-	let userId;
-	if (req.session.userId)
-		userId = req.session.userId;
-	else
-		next(401);
-
-	if (!req.xhr) 
-		next(500);
+	if (!req.xhr) next();
 
 	co(function*() {
 
@@ -34,41 +26,45 @@ function uploadImageListRequestListener(req, res, next) {
 			yield Image.ensureIndexes();
 
 
-		let files = yield new Promise((resolve, reject) => {
+		let formData = yield new Promise((resolve, reject) => {
 			form.parse(req, function(err, fields, files) {
 				if (err) reject(303);
-				resolve(files);
-				debug(files);
+
+				resolve({
+					files,
+					fields
+				});
+
 			});
 		});
 
+		debug(formData);
+
 		let newImage = yield new Image({
-			author: userId
+			author: req.session.userId,
+			description: formData.fields.description
 		}).save();
 
-		
-
-		// let user = yield User.findById(userId).exec();
-		// user.images.push(newImage);
-		// yield user.save();
-
-		let imagePath = path.join(uploadDir,
-			`${config.get('userdata:image:prefix')}${
-				newImage._id.toString()
-			}${config.get('userdata:image:postfix')}`);
+		let imageFile = `${config.get('userdata:image:prefix')}${
+			newImage._id.toString()
+			}${config.get('userdata:image:postfix')}`;
+		let imagePath = path.join(uploadDir, imageFile);
 
 		yield new Promise((resolve, reject) => {
-			fs.rename(files.image.path, imagePath, function(err) {
+			fs.rename(formData.files.image.path, imagePath, function(err) {
 				if (err) reject(err);
 				resolve();
 			});
 		});
 
 		yield imageManipulation.resize(imagePath, config.get('userdata:imagePreview:postfix'), 300);
+		return imageFile + config.get('userdata:imagePreview:postfix');
 
-	}).then((result) => {
+	}).then((imageFile) => {
+		debug('added new image');
 		res.json({
-			success: true
+			success: true,
+			path: imageFile
 		});
 	}).catch(err => {
 		next(err);
@@ -103,6 +99,6 @@ function imageListRequestListener(req, res, next) {
 }
 
 exports.registerRoutes = function(app) {
-	app.post('/upload', uploadImageListRequestListener);
+	app.post('/upload', isAuth, uploadImageListRequestListener);
 	app.get('/images', imageListRequestListener);
 };

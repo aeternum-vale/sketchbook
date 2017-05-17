@@ -1,3 +1,5 @@
+{{> is-logged-script}}
+
 {{> header}}
 <div class="pseudo-header"></div>
 <div class="panel info-panel">
@@ -29,10 +31,7 @@
 		</div>
 
 		{{#if ownPage}}
-			{{> button caption="upload" parent="extra-header" id="upload-button"}}
-{{!-- 			<form name="upload-form" class="upload-form" action="/upload" role="form" enctype="multipart/form-data" method="POST">
-				<input type="file" accept="image/*" name="photo">
-			</form> --}}
+			{{> button caption="upload image" parent="extra-header" id="upload-window-caller"}}
 		{{else}}
 			{{> button caption="subscribe" parent="extra-header"}}
 		{{/if}}
@@ -40,39 +39,43 @@
 </div>
 <div class="gallery">
 	<div class="gallery__wrapper">
-		
-		{{#each pageUser.images}}
-
+		{{#if pageUser.images}}
+			{{#each pageUser.images}}
+				{{> image-preview 
+					comments=comments.length
+					likes=likes.length
+					url=_id
+					prefix=../imagePrefix
+					postfix=../imagePostfix
+					previewPostfix=../previewPostfix
+				}}
+			{{/each}}
+		{{else}}
 			{{> image-preview 
-				comments=comments.length
-				likes=likes.length
-				url=_id
-				prefix=../imagePrefix
-				postfix=../imagePostfix
-				previewPostfix=../previewPostfix
+				ghost=true
+				comments='0'
+				likes='0'
 			}}
-		{{/each}}
-
+		{{/if}}
 	</div>
 </div>
 {{> footer}}
 
-<div class="backdrop">
-</div>
+<div class="backdrop backdrop_invisible"></div>
 
-<div class="upload-window-wrapper">
+<div class="upload-window-wrapper upload-window-wrapper_invisible">
 	<div class="window upload-window upload-window-wrapper__window">
 		<div class="window__header">
 			image uploading
 		</div>
 		
-		<form class="panel window__panel" action="/upload" method="POST" name="upload" role="form">
-			{{> file-picker}}
+		<div class="panel window__panel">
+			{{> file-picker id="uploadImageFilePicker"}}
 
-			<textarea class="window__textarea" id="upoad_description" placeholder="description goes here..."></textarea>
+			<textarea class="window__textarea" id="upload_description" placeholder="description goes here…"></textarea>
 
-			{{> button caption="upload" parent="window" id="upload"}}
-		</form>
+			{{> button caption="upload" parent="window" id="upload-button"}}
+		</div>
 	</div>
 </div>
 

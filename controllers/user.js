@@ -7,7 +7,7 @@ let duplicatingUniquePropertyError = require('error').duplicatingUniquePropertyE
 let LoginError = require('error').LoginError;
 let HttpError = require('error').HttpError;
 let config = require('config');
-let debug = require('debug')('app:user');
+let debug = require('debug')('app:user:controller');
 
 function usersListRequestListener(req, res, next) {
 
@@ -65,7 +65,6 @@ function userProfileRequestListener(req, res, next) {
 		res.locals.imagePostfix = config.get('userdata:image:postfix');
 		res.locals.previewPostfix = config.get('userdata:imagePreview:postfix');
 
-		debug(res.locals);
 		res.render('user');
 	}).catch(err => {
 		next(err);

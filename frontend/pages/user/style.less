@@ -136,7 +136,8 @@
 
 	&__button {
 		.button(16px);
-		width: 120px;
+		padding-left: 20px;
+		padding-right: 20px;
 	}
 }
 
@@ -170,6 +171,7 @@
 	display: flex;
 	justify-content: center;
 
+
 	width: 100%;
 
 	margin: @gallery-ver-margin 0;
@@ -178,7 +180,6 @@
 		.screen-wrapper();
 
 		position: relative;
-		
 		flex-flow: row wrap;
 		justify-content: space-around;
 	}
@@ -238,6 +239,11 @@
 		line-height: 14px;
 	}
 
+	&_ghost {
+		display: none;
+		visibility: hidden;
+	}
+
 }
 
 .backdrop {
@@ -247,9 +253,15 @@
 	left: 0;
 	right: 0;
 
+
+	visibility: visible;
 	background-color: #000;
 	opacity: .6;
 	z-index: 15;
+
+	&_invisible {
+		visibility: hidden;
+	}
 }
 
 
@@ -265,9 +277,15 @@
 	justify-content: center;
 
 	z-index: 16;
+	visibility: visible;
+
 
 	&__window {
 		
+	}
+
+	&_invisible {
+		visibility: hidden;
 	}
 }
 
