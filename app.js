@@ -42,8 +42,8 @@ app.use(require('middleware/sendHttpError'));
 
 app.get('/', function(req, res) {
 
-	
-	
+
+
 	res.render('home');
 });
 
@@ -69,16 +69,14 @@ app.use(function(err, req, res, next) {
 	if (err instanceof HttpError)
 		res.sendHttpError(err);
 	else {
-		if (config.get('env') == 'development') {
-			//express.errorHandler()(err, req, res, next);
-			debug(err);
-		} else {
-			//log.error(err);
-			debug(err);
-			err = new HttpError(500);
-			res.sendHttpError(err);
-		}
+		//if (config.get('env') == 'development') {
+		//express.errorHandler()(err, req, res, next);
+
+		debug(err);
+		err = new HttpError(500);
+		res.sendHttpError(err);
 	}
+
 
 });
 

@@ -37,6 +37,9 @@ if (isLogged) {
 	let galleryWrapper = document.getElementsByClassName('gallery__wrapper')[0];
 	let imagePreviewGhost = document.getElementsByClassName('image-preview')[0];
 
+	let uploadErrorMessage = uploadWindowWrapper.querySelector('.window__error-message');
+	let publicationNumber = document.getElementById('publication-number');
+
 
 	uploadButton.onclick = function(e) {
 		let file = uploadImageFilePicker.getFile();
@@ -47,20 +50,19 @@ if (isLogged) {
 	function uploadImage(file, description) {
 
 		var xhr = new XMLHttpRequest();
-		xhr.upload.onprogress = function(event) {
+		xhr.upload.onprogress = event => {
 			console.log(event.loaded + ' / ' + event.total);
-		}
+		};
 
 		xhr.onload = xhr.onerror = function() {
 			if (this.status == 200) {
-				closeUploadDialog();
-
 				let response = JSON.parse(this.responseText);
+				console.log(response);
 				if (response.success) {
-					console.log(response);
 					insertNewImagePreview(response.path);
-				}
-
+					closeUploadDialog();
+				} else if (response.message)
+					uploadErrorMessage.textContent = response.message;
 			} else
 				console.log("error " + this.status);
 		};
@@ -79,6 +81,7 @@ if (isLogged) {
 	}
 
 	function openUploadDialog() {
+		clearUploadDialog();
 		backdrop.classList.remove('backdrop_invisible');
 		uploadWindowWrapper.classList.remove('upload-window-wrapper_invisible');
 	}
@@ -86,6 +89,12 @@ if (isLogged) {
 	function closeUploadDialog() {
 		backdrop.classList.add('backdrop_invisible');
 		uploadWindowWrapper.classList.add('upload-window-wrapper_invisible');
+	}
+
+	function clearUploadDialog() {
+		uploadImageFilePicker.clear();
+		imageDescription.value = '';
+		uploadErrorMessage.textContent = '';
 	}
 
 	uploadWindowCaller.onclick = function(e) {
@@ -108,6 +117,10 @@ if (isLogged) {
 		newImagePreview.style.backgroundImage = `url('/${path}')`;
 
 		galleryWrapper.appendChild(newImagePreview);
+
+		publicationNumber.textContent = +publicationNumber.textContent + 1;
 	}
+
+
 
 }

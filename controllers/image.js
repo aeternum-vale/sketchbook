@@ -10,10 +10,14 @@ let formidable = require('formidable');
 let path = require('path');
 let imageManipulation = require('libs/imageManipulation');
 let isAuth = require('middleware/isAuth');
+let imagePaths = require('libs/imagePaths');
+let InvalidImage = require('error').InvalidImage;
 
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
+
+
 
 function uploadImageListRequestListener(req, res, next) {
 	debug('The file is ready to be uploaded');
@@ -40,34 +44,62 @@ function uploadImageListRequestListener(req, res, next) {
 
 		debug(formData);
 
-		let newImage = yield new Image({
-			author: req.session.userId,
-			description: formData.fields.description
-		}).save();
+		let formPath = formData.files.image.path;
+		let tempImagePath = `${formPath}.${config.get('userdata:image:ext')}`;
+		let tempImagePreviewPath = `${formPath}${config.get('userdata:preview:postfix')}.${config.get('userdata:preview:ext')}`;
 
-		let imageFile = `${config.get('userdata:image:prefix')}${
-			newImage._id.toString()
-			}${config.get('userdata:image:postfix')}`;
-		let imagePath = path.join(uploadDir, imageFile);
+		yield imageManipulation.copy(formPath, tempImagePath);
 
 		yield new Promise((resolve, reject) => {
-			fs.rename(formData.files.image.path, imagePath, function(err) {
+			fs.unlink(formPath, function(err) {
 				if (err) reject(err);
 				resolve();
 			});
 		});
 
-		yield imageManipulation.resize(imagePath, config.get('userdata:imagePreview:postfix'), 300);
-		return imageFile + config.get('userdata:imagePreview:postfix');
+		yield imageManipulation.resize(tempImagePath, tempImagePreviewPath, config.get('userdata:preview:size'));
 
-	}).then((imageFile) => {
+		let newImage = yield new Image({
+			author: req.session.userId,
+			description: formData.fields.description
+		}).save();
+
+		let imageFileName = imagePaths.getImageFileNameByStringId(newImage._id.toString());
+		let imagePreviewFileName = imagePaths.getImagePreviewFileNameByStringId(newImage._id.toString());
+		let imagePath = path.join(uploadDir, imageFileName);
+		let imagePreviewPath = path.join(uploadDir, imagePreviewFileName);
+
+		yield new Promise((resolve, reject) => {
+			fs.rename(tempImagePath, imagePath, function(err) {
+				if (err) reject(err);
+				resolve();
+			});
+		});
+
+		yield new Promise((resolve, reject) => {
+			fs.rename(tempImagePreviewPath, imagePreviewPath, function(err) {
+				if (err) reject(err);
+				resolve();
+			});
+		});
+
+		return imagePreviewFileName;
+
+	}).then(imageFile => {
 		debug('added new image');
 		res.json({
 			success: true,
 			path: imageFile
 		});
 	}).catch(err => {
-		next(err);
+		if (err instanceof InvalidImage) {
+			debug('Invalid image');
+			res.json({
+				success: false,
+				message: err.message
+			});
+		} else
+			next(err);
 	});
 
 }
@@ -75,8 +107,6 @@ function uploadImageListRequestListener(req, res, next) {
 
 function imageListRequestListener(req, res, next) {
 	co(function*() {
-
-
 
 		if (!Image.indexesEnsured)
 			yield Image.ensureIndexes();

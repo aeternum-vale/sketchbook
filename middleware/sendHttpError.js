@@ -1,3 +1,5 @@
+let debug = require('debug')('app:middleware');
+
 module.exports = function(req, res, next) {
 
 	res.sendHttpError = function(error) {

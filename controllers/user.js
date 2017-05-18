@@ -8,6 +8,7 @@ let LoginError = require('error').LoginError;
 let HttpError = require('error').HttpError;
 let config = require('config');
 let debug = require('debug')('app:user:controller');
+let imagePaths = require('libs/imagePaths');
 
 function usersListRequestListener(req, res, next) {
 
@@ -60,10 +61,10 @@ function userProfileRequestListener(req, res, next) {
 		res.locals.page = 'user';
 
 
+		res.locals.pageUser.images.forEach(item => {
+			item.previewUrl = imagePaths.getImagePreviewFileNameByStringId(item._id);
+		});
 
-		res.locals.imagePrefix = config.get('userdata:image:prefix');
-		res.locals.imagePostfix = config.get('userdata:image:postfix');
-		res.locals.previewPostfix = config.get('userdata:imagePreview:postfix');
 
 		res.render('user');
 	}).catch(err => {

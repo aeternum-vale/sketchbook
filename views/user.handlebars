@@ -27,7 +27,7 @@
 		<div class="stat-list">
 			{{> stat number=pageUser.subscribers.length property="subscribers"}}
 			{{> stat number=pageUser.subscriptions.length property="subscriptions"}}
-			{{> stat number=pageUser.images.length property="publications"}}
+			{{> stat number=pageUser.images.length property="publications" id="publication-number"}}
 		</div>
 
 		{{#if ownPage}}
@@ -44,10 +44,7 @@
 				{{> image-preview 
 					comments=comments.length
 					likes=likes.length
-					url=_id
-					prefix=../imagePrefix
-					postfix=../imagePostfix
-					previewPostfix=../previewPostfix
+					url=previewUrl
 				}}
 			{{/each}}
 		{{else}}
@@ -74,6 +71,7 @@
 
 			<textarea class="window__textarea" id="upload_description" placeholder="description goes here…"></textarea>
 
+			<span class="window__error-message"></span>
 			{{> button caption="upload" parent="window" id="upload-button"}}
 		</div>
 	</div>

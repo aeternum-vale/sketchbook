@@ -29,15 +29,17 @@
 		"dir": "./userdata",
 
 		"image": {
-			"prefix": "image",
-			"postfix": ""
+			"ext": "jpg",
+			"prefix": "image"
+
 		},
 
-		"imagePreview": {
-			"postfix": "_preview.png"
+		"preview": {
+			"ext": "jpg",
+			"postfix": "_preview",
+			"size": 300
 		}
 
 	}
-
 
 }

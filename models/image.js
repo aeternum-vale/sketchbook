@@ -8,6 +8,8 @@ let config = require('config');
 let path = require('path');
 
 let debug = require('debug')('app:image:model');
+let imagePaths = require('libs/imagePaths');
+
 
 
 
@@ -73,14 +75,14 @@ imageSchema.post('remove', function(doc) {
 			}
 		}).exec();
 
+		let imageFileName = imagePaths.getImageFileNameByStringId(doc._id.toString());
+		let imagePreviewFileName = imagePaths.getImagePreviewFileNameByStringId(doc._id.toString());
+		let imagePath = path.join(config.get('userdata:dir'), imageFileName);
+		let imagePreviewPath = path.join(config.get('userdata:dir'), imagePreviewFileName);
 
-		let imgPath = path.join(path.resolve(config.get('userdata:dir')),
-			`${config.get('userdata:image:prefix')}${
-				doc._id.toString()
-			}${config.get('userdata:image:postfix')}`);
 
 		let hasImage = new Promise((resolve, reject) => {
-			fs.stat(imgPath, (err) => {
+			fs.stat(imagePath, (err) => {
 				if (err) reject(err);
 				resolve(true);
 			});
@@ -88,16 +90,14 @@ imageSchema.post('remove', function(doc) {
 
 		if (hasImage)
 			yield new Promise((resolve, reject) => {
-				fs.unlink(imgPath, (err) => {
+				fs.unlink(imagePath, (err) => {
 					if (err) reject(err);
 					resolve();
 				});
 			});
 
-		let previewPath = imgPath + config.get('userdata:imagePreview:postfix');
-
 		let hasPreview = new Promise((resolve, reject) => {
-			fs.stat(previewPath, (err) => {
+			fs.stat(imagePreviewPath, (err) => {
 				if (err) reject(err);
 				resolve(true);
 			});
@@ -105,7 +105,7 @@ imageSchema.post('remove', function(doc) {
 
 		if (hasPreview)
 			yield new Promise((resolve, reject) => {
-				fs.unlink(previewPath, (err) => {
+				fs.unlink(imagePreviewPath, (err) => {
 					if (err) reject(err);
 					resolve();
 				});

@@ -53,9 +53,19 @@ util.inherits(HttpError, CustomError);
 HttpError.prototype.constructor = HttpError;
 
 
+function InvalidImage(error, message) {
+	CustomError.call(this, message || "Invalid Image")
+	this.name = "InvalidImage";
+	this.error = error;
+}
+util.inherits(InvalidImage, CustomError);
+InvalidImage.prototype.constructor = InvalidImage;
+
+
 module.exports = {
 	HttpError,
 	PropertyError,
 	DuplicatingUniquePropertyError,
-	LoginError
+	LoginError,
+	InvalidImage
 };

@@ -41,4 +41,8 @@ module.exports = function(id, fileNameLength) {
 		return uploadInput.files[0];
 	};
 
+	this.clear = function() {
+		fpFileName.textContent = DEFAULT_VALUE;
+	}
+
 };
