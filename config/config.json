@@ -30,8 +30,9 @@
 
 		"image": {
 			"ext": "jpg",
-			"prefix": "image"
-
+			"prefix": "image",
+			"minWidth": 300,
+			"minHeight": 300
 		},
 
 		"preview": {

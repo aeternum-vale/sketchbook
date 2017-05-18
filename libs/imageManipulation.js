@@ -7,6 +7,7 @@ function resize(path, newPath, size) {
 	return Jimp.read(path).then(image => {
 		return new Promise((resolve, reject) => {
 
+
 			if (image.bitmap.width > image.bitmap.height) {
 				image.resize(Jimp.AUTO, size);
 				image.crop(image.bitmap.width / 2 - size / 2, 0, size, size);
@@ -25,20 +26,30 @@ function resize(path, newPath, size) {
 
 		});
 	}).catch(err => {
-		throw new InvalidImage(err);
+		if (err instanceof InvalidImage)
+			throw err;
+		else
+			throw new InvalidImage();
 	});
 }
 
-function copy(path, newPath) {
+function copy(path, newPath, mw, mh) {
 	return Jimp.read(path).then(image => {
 		return new Promise((resolve, reject) => {
+
+			if (mw && mh && (image.bitmap.width < mw || image.bitmap.height < mh))
+				throw new InvalidImage(`Image must be at least ${mw}px width and ${mh}px height`);
+
 			image.write(newPath, err => {
 				if (err) reject(err);
 				resolve();
 			});
 		})
 	}).catch(err => {
-		throw new InvalidImage(err);
+		if (err instanceof InvalidImage)
+			throw err;
+		else
+			throw new InvalidImage();
 	});;
 }
 

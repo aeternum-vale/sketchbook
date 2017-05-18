@@ -46,9 +46,12 @@ function uploadImageListRequestListener(req, res, next) {
 
 		let formPath = formData.files.image.path;
 		let tempImagePath = `${formPath}.${config.get('userdata:image:ext')}`;
-		let tempImagePreviewPath = `${formPath}${config.get('userdata:preview:postfix')}.${config.get('userdata:preview:ext')}`;
+		let tempImagePreviewPath = `${formPath}${
+			config.get('userdata:preview:postfix')
+			}.${config.get('userdata:preview:ext')}`;
 
-		yield imageManipulation.copy(formPath, tempImagePath);
+		yield imageManipulation.copy(formPath, tempImagePath,
+			config.get('userdata:image:minWidth'), config.get('userdata:image:minHeight'));
 
 		yield new Promise((resolve, reject) => {
 			fs.unlink(formPath, function(err) {
@@ -57,15 +60,18 @@ function uploadImageListRequestListener(req, res, next) {
 			});
 		});
 
-		yield imageManipulation.resize(tempImagePath, tempImagePreviewPath, config.get('userdata:preview:size'));
+		yield imageManipulation.resize(tempImagePath,
+			tempImagePreviewPath, config.get('userdata:preview:size'));
 
 		let newImage = yield new Image({
 			author: req.session.userId,
 			description: formData.fields.description
 		}).save();
 
-		let imageFileName = imagePaths.getImageFileNameByStringId(newImage._id.toString());
-		let imagePreviewFileName = imagePaths.getImagePreviewFileNameByStringId(newImage._id.toString());
+		let imageFileName = imagePaths
+			.getImageFileNameByStringId(newImage._id.toString());
+		let imagePreviewFileName = imagePaths
+			.getImagePreviewFileNameByStringId(newImage._id.toString());
 		let imagePath = path.join(uploadDir, imageFileName);
 		let imagePreviewPath = path.join(uploadDir, imagePreviewFileName);
 
