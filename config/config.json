@@ -40,7 +40,11 @@
 			"postfix": "_preview",
 			"size": 300
 		}
+	},
 
+	"image": {
+		"relativeTimeLimitDays": 3
 	}
+
 
 }

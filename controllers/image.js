@@ -9,19 +9,55 @@ let http = require('http');
 let formidable = require('formidable');
 let path = require('path');
 let imageManipulation = require('libs/imageManipulation');
-let isAuth = require('middleware/isAuth');
 let imagePaths = require('libs/imagePaths');
+let isAuth = require('middleware/isAuth');
+let addLoggedUser = require('middleware/addLoggedUser');
 let InvalidImage = require('error').InvalidImage;
+let moment = require('moment');
 
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {
-	//req.params.username
+	//req.params.id
 
-	res.locals.page = 'image';
-	res.render('image');
+	co(function*() {
+
+		if (!Image.indexesEnsured)
+			yield Image.ensureIndexes();
+
+		let image = yield Image.findById(req.params.id).exec();
+		let author = yield User.findById(image.author).exec();
+
+
+		return {
+			image,
+			author
+		};
+
+	}).then(result => {
+
+		let created = moment(result.image.created);
+		let daysPassed = moment().diff(created, 'days', true);
+
+		let createDateStr;
+		if (daysPassed >= config.get('image:relativeTimeLimitDays'))
+			createDateStr = created.format("MMM Do YY");
+		else
+			createDateStr = created.fromNow();
+
+		res.locals.image = result.image;
+		res.locals.author = result.author;
+		res.locals.image.createDateStr = createDateStr;
+		res.locals.page = 'image';
+		res.render('image');
+	}).catch(err => {
+		next(err);
+	});
+
+
+
 }
 
 function uploadImageListRequestListener(req, res, next) {
@@ -142,5 +178,5 @@ function imageListRequestListener(req, res, next) {
 exports.registerRoutes = function(app) {
 	app.post('/upload', isAuth, uploadImageListRequestListener);
 	app.get('/images', imageListRequestListener);
-	app.get('/image/:id', imageRequestListener);
+	app.get('/image/:id', addLoggedUser, imageRequestListener);
 };

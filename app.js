@@ -57,6 +57,7 @@ app.get('/authorization', function(req, res) {
 require('controllers/user').registerRoutes(app);
 require('controllers/image').registerRoutes(app);
 
+
 app.use(function(req, res, next) {
 	next(404);
 });

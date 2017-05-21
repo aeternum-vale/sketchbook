@@ -12,13 +12,20 @@ html, body {
 	background-color: #222;
 	font-family: Arial;
 	font-size: @medium-font-size;
-	color: #fff;
+	color: @global-text-color;
 
 }
 
 button {
 	border-width: 0px;
 }
+
+a:active,
+a:visited,
+a:hover {
+	color: @global-text-color;
+}
+
 
 
 .ref {
@@ -29,14 +36,14 @@ button {
 	transition: color .3s ease;
 
 	&:hover {
-		color: #fff;
+		color: @global-text-color;
 	}
 
 	&::before {
 		content: "";
 		display: block;
 		position: absolute;
-    	transition: all .3s ease;
+		transition: all .3s ease;
 		left: 0;
 		bottom: -2px;
 		width: 100%;
@@ -47,11 +54,7 @@ button {
 
 	&:hover::before {
 		transform:  scaleX(1);
-		background-color: #fff;
+		background-color: @global-text-color;
 	}
 	
 }
-
-
-
-

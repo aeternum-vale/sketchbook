@@ -1,9 +1,11 @@
-{{#unless ghost}}
-	<div class="image-preview gallery__image-preview" style="background-image: url('/{{url}}')">
-{{else}}
-	<div class="image-preview gallery__image-preview image-preview_ghost">
-{{/unless}}
-	<div class="image-preview__info-board">
-		<span class="image-preview__text">{{comments}} comments {{likes}} likes</span>
+<a href="/image/{{imageId}}">
+	{{#unless ghost}}
+		<div class="image-preview gallery__image-preview" style="background-image: url('/{{previewUrl}}')">
+	{{else}}
+		<div class="image-preview gallery__image-preview image-preview_ghost">
+	{{/unless}}
+		<div class="image-preview__info-board">
+			<span class="image-preview__text">{{comments}} comments {{likes}} likes</span>
+		</div>
 	</div>
-</div>
+</a>
