@@ -1,4 +1,5 @@
 let mongoose = require('libs/mongoose');
+let autoIncrement = require('mongoose-auto-increment');
 let Schema = mongoose.Schema;
 
 let User = require('models/user');
@@ -43,6 +44,9 @@ let imageSchema = new Schema({
 }, {
 	autoIndex: false
 });
+
+
+imageSchema.plugin(autoIncrement.plugin, 'Image');
 
 imageSchema.post('save', function(doc) {
 	debug('trying to change user\'s images');

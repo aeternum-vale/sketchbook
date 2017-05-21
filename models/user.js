@@ -66,7 +66,7 @@ let userSchema = new Schema({
 	}],
 
 	images: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'Image'
 	}]
 

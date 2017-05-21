@@ -1,0 +1,29 @@
+@page-header-height: 42px;
+
+.page-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: @page-header-height;
+	z-index: 10;
+
+	&__wrapper {
+		.screen-wrapper();
+		justify-content: space-between;
+		align-items: center;
+
+		height: 100%;
+		//height: @header-height;
+	}
+
+	&__logo {
+		width: 271px;
+		height: 28px;
+		background-image: url('logo.png');
+	}
+
+}

@@ -1,6 +1,6 @@
 {{> is-logged-script}}
 
-{{> header}}
+{{> page-header}}
 <div class="pseudo-header"></div>
 <div class="panel info-panel">
 	<div class="info-panel__wrapper">
@@ -22,7 +22,7 @@
 		</div>
 	</div>
 </div>
-<div class="header extra-header">
+<div class="header page-header extra-header">
 	<div class="extra-header__wrapper">
 		<div class="stat-list">
 			{{> stat number=pageUser.subscribers.length property="subscribers"}}
@@ -62,7 +62,7 @@
 
 <div class="upload-window-wrapper upload-window-wrapper_invisible">
 	<div class="window upload-window upload-window-wrapper__window">
-		<div class="window__header">
+		<div class="header window__header">
 			image uploading
 		</div>
 		

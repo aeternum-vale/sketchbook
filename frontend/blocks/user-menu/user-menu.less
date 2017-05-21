@@ -47,12 +47,12 @@
 	
 
 	&__dropdown {
-		top: @header-height + 10px;
+		top: @page-header-height + 10px;
 	}
 
 	&_unlogged {
 		padding: 0 10px;
-		line-height: @header-height;
+		line-height: @page-header-height;
 
 		display: block;
 		text-decoration: none;
@@ -80,7 +80,7 @@
 		z-index: 6;
 
 		left: (@user-menu-avatar-size - @user-menu-avatar-border-size * 2)/2 - @user-menu-dropdown-arrow-width/2;
-		bottom: -( (@header-height - @user-menu-avatar-size)/2 + @user-menu-dropdown-arrow-height + 2px );
+		bottom: -( (@page-header-height - @user-menu-avatar-size)/2 + @user-menu-dropdown-arrow-height + 2px );
 		
 
 		width: 0;

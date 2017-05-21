@@ -17,7 +17,12 @@ let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
+function imageRequestListener(req, res, next) {
+	//req.params.username
 
+	res.locals.page = 'image';
+	res.render('image');
+}
 
 function uploadImageListRequestListener(req, res, next) {
 	debug('The file is ready to be uploaded');
@@ -137,4 +142,5 @@ function imageListRequestListener(req, res, next) {
 exports.registerRoutes = function(app) {
 	app.post('/upload', isAuth, uploadImageListRequestListener);
 	app.get('/images', imageListRequestListener);
+	app.get('/image/:id', imageRequestListener);
 };

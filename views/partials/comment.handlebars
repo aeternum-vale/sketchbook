@@ -1,0 +1,14 @@
+{{#if parent}}
+	<div class="panel comment {{parent}}__comment">
+{{else}}
+	<div class="panel comment image-post__comment">
+{{/if}}
+	<div class="comment__top-side">
+		<div class="comment__avatar"></div>
+		<div class="comment__metadata">
+			<div class="comment__username">{{username}}</div>
+			<div class="comment__date">{{date}}</div>
+		</div>
+	</div>
+	<div class="comment__text">{{text}}</div>
+</div>
