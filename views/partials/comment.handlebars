@@ -1,7 +1,7 @@
 {{#if parent}}
-	<div class="panel comment {{parent}}__comment">
+	<div class="panel comment {{parent}}__comment" data-id="{{commentId}}">
 {{else}}
-	<div class="panel comment image-post__comment">
+	<div class="panel comment comments-section__comment" data-id="{{commentId}}">
 {{/if}}
 	<div class="comment__top-side">
 		<div class="comment__avatar"></div>
@@ -9,6 +9,9 @@
 			<div class="comment__username">{{username}}</div>
 			<div class="comment__date">{{date}}</div>
 		</div>
+		{{#if ownComment}}
+			<div class="comment__close-button"></div>
+		{{/if}}
 	</div>
 	<div class="comment__text">{{text}}</div>
 </div>

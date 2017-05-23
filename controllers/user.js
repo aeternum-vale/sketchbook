@@ -57,7 +57,7 @@ function userProfileRequestListener(req, res, next) {
 		res.locals = result;
 
 		if (result.loggedUser && result.pageUser)
-			res.locals.ownPage = (result.loggedUser._id.toString() === result.pageUser._id.toString());
+			res.locals.ownPage = (result.loggedUser._id === result.pageUser._id);
 		res.locals.page = 'user';
 
 

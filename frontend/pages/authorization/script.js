@@ -80,19 +80,20 @@ loginForm.onsubmit = function(e) {
    xhr.onreadystatechange = function() {
       if (this.readyState != 4) return;
       if (this.status != 200) {
-         alert("Error sending request.");
+         alert("Error sending request");
          return;
       }
 
       let response = JSON.parse(this.responseText);
       if (response.success)
-         window.location = response.url;
-      else {
-         if (response.message)
-            alert(response.message);
-         else
-            alert('Server error. Please retry later.')
-      }
+         if (response.url)
+            window.location = response.url;
+         else {
+            if (response.message)
+               alert(response.message);
+            else
+               alert('Server error. Please retry later.')
+         }
 
    };
 

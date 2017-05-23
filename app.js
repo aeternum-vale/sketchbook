@@ -42,7 +42,7 @@ app.use(require('middleware/sendHttpError'));
 
 app.get('/', function(req, res) {
 
-
+	debug(req.session.userId);
 
 	res.render('home');
 });
@@ -56,6 +56,7 @@ app.get('/authorization', function(req, res) {
 
 require('controllers/user').registerRoutes(app);
 require('controllers/image').registerRoutes(app);
+require('controllers/comment').registerRoutes(app);
 
 
 app.use(function(req, res, next) {

@@ -67,7 +67,7 @@ if (isLogged) {
 				console.log("error " + this.status);
 		};
 
-		xhr.open("POST", "/upload", true);
+		xhr.open("POST", "/image", true);
 
 		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 		//xhr.setRequestHeader('Content-Type', 'multipart/form-data');

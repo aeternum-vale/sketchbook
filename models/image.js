@@ -2,7 +2,6 @@ let mongoose = require('libs/mongoose');
 let autoIncrement = require('mongoose-auto-increment');
 let Schema = mongoose.Schema;
 
-let User = require('models/user');
 let co = require('co');
 let fs = require('fs');
 let config = require('config');
@@ -11,8 +10,7 @@ let path = require('path');
 let debug = require('debug')('app:image:model');
 let imagePaths = require('libs/imagePaths');
 
-
-
+let db = mongoose.connection.db;
 
 let imageSchema = new Schema({
 
@@ -27,17 +25,18 @@ let imageSchema = new Schema({
 	},
 
 	author: {
-		type: Schema.Types.ObjectId,
-		ref: 'User'
+		type: Number,
+		ref: 'User',
+		required: true
 	},
 
 	comments: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'Comment'
 	}],
 
 	likes: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'Like'
 	}]
 
@@ -46,44 +45,70 @@ let imageSchema = new Schema({
 });
 
 
-imageSchema.plugin(autoIncrement.plugin, 'Image');
+imageSchema.plugin(autoIncrement.plugin, {
+	model: 'Image',
+	startAt: 1
+});
 
 imageSchema.post('save', function(doc) {
-	debug('trying to change user\'s images');
+	debug('save: %o', doc);
 
 	co(function*() {
 
-		let user = yield User.findById(doc.author).exec();
-		user.images.push(doc);
-		yield user.save();
-
-
+		return new Promise((resolve, reject) => {
+			db.collection('users').update({
+				_id: doc.author
+			}, {
+				$addToSet: {
+					images: doc._id
+				}
+			}, err => {
+				if (err) reject(err);
+				resolve();
+			})
+		});
 
 	}).catch(err => {
+		debug(err);
 		throw err;
 	});
 });
 
 imageSchema.post('remove', function(doc) {
-	debug('trying to remove user\'s images');
+	debug('remove: %o', doc);
 
 	co(function*() {
 
-		yield User.findOneAndUpdate({
-			_id: doc.author
-		}, {
-			$pop: {
-				images: {
-					_id: doc._id
+		yield new Promise((resolve, reject) => {
+			db.collection('comments').remove({
+				_id: {
+					$in: doc.comments
 				}
-			}
-		}).exec();
+			}, err => {
+				if (err) reject(err);
+				resolve();
+			})
+		});
+
+
+		yield new Promise((resolve, reject) => {
+			db.collection('users').update({
+				_id: doc.author
+			}, {
+				$pop: {
+					images: doc._id
+				}
+			}, err => {
+				if (err) reject(err);
+				resolve();
+			})
+		});
+
 
 		let imageFileName = imagePaths.getImageFileNameByStringId(doc._id.toString());
 		let imagePreviewFileName = imagePaths.getImagePreviewFileNameByStringId(doc._id.toString());
 		let imagePath = path.join(config.get('userdata:dir'), imageFileName);
 		let imagePreviewPath = path.join(config.get('userdata:dir'), imagePreviewFileName);
-
 
 		let hasImage = new Promise((resolve, reject) => {
 			fs.stat(imagePath, (err) => {

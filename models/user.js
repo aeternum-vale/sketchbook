@@ -1,5 +1,6 @@
 let crypto = require('crypto');
 let mongoose = require('libs/mongoose');
+let autoIncrement = require('mongoose-auto-increment');
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
@@ -35,7 +36,7 @@ let userSchema = new Schema({
 	},
 
 	country: {
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'Country'
 	},
 
@@ -51,17 +52,17 @@ let userSchema = new Schema({
 	avatarPath: String,
 
 	links: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'Link'
 	}],
 
 	subscribers: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'User'
 	}],
 
 	subscriptions: [{
-		type: Schema.Types.ObjectId,
+		type: Number,
 		ref: 'User'
 	}],
 
@@ -72,6 +73,11 @@ let userSchema = new Schema({
 
 }, {
 	autoIndex: false
+});
+
+userSchema.plugin(autoIncrement.plugin, {
+	model: 'User',
+	startAt: 1
 });
 
 userSchema.methods.encryptPassword = function(password) {

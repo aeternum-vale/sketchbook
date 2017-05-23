@@ -1,5 +1,5 @@
 let Image = require('models/image');
-let User = require('models/User');
+let User = require('models/user');
 let co = require('co');
 let config = require('config');
 let debug = require('debug')('app:image:controller');
@@ -10,10 +10,11 @@ let formidable = require('formidable');
 let path = require('path');
 let imageManipulation = require('libs/imageManipulation');
 let imagePaths = require('libs/imagePaths');
+let getDateString = require('libs/getDateString');
 let isAuth = require('middleware/isAuth');
 let addLoggedUser = require('middleware/addLoggedUser');
 let InvalidImage = require('error').InvalidImage;
-let moment = require('moment');
+
 
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
@@ -27,7 +28,22 @@ function imageRequestListener(req, res, next) {
 		if (!Image.indexesEnsured)
 			yield Image.ensureIndexes();
 
-		let image = yield Image.findById(req.params.id).exec();
+		let image = yield Image.findById(req.params.id).populate('comments').exec();
+
+		if (!image)
+			throw new HttpError(404, "Image not found");
+
+		for (var i = 0; i < image.comments.length; i++) {
+			image.comments[i].username = (yield User.findById(image.comments[i].author, 'username')
+				.exec()).username;
+
+			image.comments[i].createDateStr = getDateString(image.comments[i].created);
+
+			if (image.comments[i].author === req.session.userId)
+				image.comments[i].ownComment = true;
+		}
+
+
 		let author = yield User.findById(image.author).exec();
 
 
@@ -38,19 +54,18 @@ function imageRequestListener(req, res, next) {
 
 	}).then(result => {
 
-		let created = moment(result.image.created);
-		let daysPassed = moment().diff(created, 'days', true);
+		res.locals.loggedUser = res.loggedUser;
 
-		let createDateStr;
-		if (daysPassed >= config.get('image:relativeTimeLimitDays'))
-			createDateStr = created.format("MMM Do YY");
-		else
-			createDateStr = created.fromNow();
+		if (res.locals.loggedUser)
+			if (res.locals.loggedUser._id === result.author._id)
+				res.locals.ownImage = true;
+
 
 		res.locals.image = result.image;
 		res.locals.author = result.author;
-		res.locals.image.createDateStr = createDateStr;
+		res.locals.image.createDateStr = getDateString(result.image.created);
 		res.locals.page = 'image';
+
 		res.render('image');
 	}).catch(err => {
 		next(err);
@@ -63,7 +78,7 @@ function imageRequestListener(req, res, next) {
 function uploadImageListRequestListener(req, res, next) {
 	debug('The file is ready to be uploaded');
 
-	if (!req.xhr) next();
+	if (!req.xhr) next(500);
 
 	co(function*() {
 
@@ -175,8 +190,32 @@ function imageListRequestListener(req, res, next) {
 	});
 }
 
+function imageDeleteListRequestListener(req, res, next) {
+	let imageId = require('libs/getImageIdByReferer')(req.headers.referer);
+
+	debug('deleting image #' + imageId);
+
+	if (!req.xhr) next(500);
+
+	co(function*() {
+		let image = yield Image.findById(imageId).exec();
+		yield image.remove();
+
+	}).then(() => {
+		debug('successful deleting');
+		res.json({
+			success: true,
+			url: `/user/${res.loggedUser.username}`
+		});
+	}).catch(err => {
+		next(err);
+	});
+
+}
+
 exports.registerRoutes = function(app) {
-	app.post('/upload', isAuth, uploadImageListRequestListener);
+	app.post('/image', isAuth, uploadImageListRequestListener);
+	app.delete('/image', isAuth, addLoggedUser, imageDeleteListRequestListener);
 	app.get('/images', imageListRequestListener);
 	app.get('/image/:id', addLoggedUser, imageRequestListener);
 };

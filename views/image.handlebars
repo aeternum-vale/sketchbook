@@ -1,3 +1,5 @@
+{{> is-logged-script}}
+
 <div class="image-post-wrapper">
 	<div class="image-post-wrapper__image-post image-post">
 		<div class="image-post__image-wrapper">
@@ -16,9 +18,17 @@
 						</div>
 					</div>
 					
-					<div class="button image-post__subscribe-button">
-						subscribe
-					</div>
+					{{#if ownImage}}
+						<div id="delete-image-button" class="button image-post__subscribe-button">
+							delete
+						</div>
+					{{else}}
+						<div id="subscribe-button" class="button image-post__subscribe-button">
+							subscribe
+						</div>
+					{{/if}}
+
+
 				</div>
 				<div class="image-post__info-board">
 					<div class="button image-post__like-button">
@@ -29,20 +39,22 @@
 					</div>
 
 				</div>
-				<div class="image-post__comments">
+				<div id="comments-section" class="comments-section image-post__comments-section">
 
-					{{!-- 
- 					{{> comment 
- 						username="hervrot"
- 						date="25 Oct 2018"
- 						text="fuck you!"
- 					}}
- 					--}}
+					{{#each image.comments}}
+						{{> comment 
+							commentId=_id
+ 							username=username
+ 							date=createDateStr
+ 							text=text
+ 							ownComment=ownComment
+ 						}}
+					{{/each}}
 
 				</div>
 			</div>
 			
-			<div class="panel comment comment-send image-post__comment-send">
+			<div id="comment-send" class="panel comment comment-send image-post__comment-send" data-image-id="{{image._id}}">
 				<div class="comment__top-side">
 					<div class="comment__avatar"></div>
 					<div class="comment__username">{{loggedUser.username}}</div>
