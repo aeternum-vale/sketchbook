@@ -1,8 +1,5 @@
-{{#if parent}}
-	<div class="panel comment {{parent}}__comment" data-id="{{commentId}}">
-{{else}}
-	<div class="panel comment comments-section__comment" data-id="{{commentId}}">
-{{/if}}
+
+<div class="panel comment {{#if ghost}}comment_ghost {{/if}}comments-section__comment" data-id="{{commentId}}" >
 	<div class="comment__top-side">
 		<div class="comment__avatar"></div>
 		<div class="comment__metadata">

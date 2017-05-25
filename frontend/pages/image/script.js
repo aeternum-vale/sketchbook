@@ -2,34 +2,73 @@
 
 import './style.less';
 
-//let imageId = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+let CommentSend = require(BLOCKS + 'comment-send');
+let CommentsSection = require(BLOCKS + 'comments-section');
 
-require(BLOCKS + 'comment-send')('comment-send');
-require(BLOCKS + 'comments-section')('comments-section');
+let commentsSection = new CommentsSection('comments-section');
+let commentSend = new CommentSend('comment-send', commentsSection.elem);
+
+//------------------------------
 
 let deleteImage = document.getElementById('delete-image-button');
 
 deleteImage.onclick = function(e) {
-
-	let xhr = new XMLHttpRequest();
-	xhr.open('DELETE', '/image', true);
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-	xhr.onreadystatechange = function() {
-		if (this.readyState != 4) return;
-		if (this.status != 200) {
-			alert("Error sending request");
-			return;
-		}
-
-		let response = JSON.parse(this.responseText);
+	require(LIBS + 'sendXHR')(null, 'DELETE', '/image', function(response) {
 		if (response.success) {
 			if (response.url)
 				window.location = response.url;
 		} else
 			alert('Server error. Please retry later.')
-	};
-
-	xhr.send();
+	});
 };
+
+
+//------------------------------
+
+let image = document.getElementById('image');
+let imageWrapper = document.getElementById('image-wrapper');
+let imagePost = document.getElementById('image-post');
+let sideBar = document.getElementById('side-bar');
+
+let imgOriginalW = image.offsetWidth;
+let imgOriginalH = image.offsetHeight;
+
+window.onload = function(e) {
+	resizeImage();
+}
+
+
+window.addEventListener('resize', e => {
+	resizeImage();
+});
+
+function resizeImage() {
+	image.removeAttribute('width');
+	image.removeAttribute('height');
+
+	if (image.offsetWidth >= image.offsetHeight) {
+		if (imageWrapper.offsetHeight < image.offsetHeight)
+			image.\ = imageWrapper.offsetHeight;
+
+		if (imagePost.scrollWidth > imagePost.offsetWidth) {
+			image.removeAttribute('height');
+			image.width = imagePost.offsetWidth - sideBar.offsetWidth;
+		}
+	} else {
+		if (imagePost.scrollWidth > imagePost.offsetWidth)
+			image.width = imagePost.offsetWidth - sideBar.offsetWidth;
+
+		if (imageWrapper.offsetHeight < image.offsetHeight) {
+			image.removeAttribute('width');
+			image.height = imageWrapper.offsetHeight;
+		}
+	}
+
+	// 	console.log(
+	// `image.width:${image.width}
+	// image.height:${image.height}
+	// imagePost.scrollWidth:${imagePost.scrollWidth}
+	// imagePost.offsetWidth:${imagePost.offsetWidth}
+	// sideBar.scrollWidth:${sideBar.scrollWidth}
+	// sideBar.offsetWidth:${sideBar.offsetWidth}`);
+}

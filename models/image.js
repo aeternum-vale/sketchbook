@@ -95,7 +95,7 @@ imageSchema.post('remove', function(doc) {
 			db.collection('users').update({
 				_id: doc.author
 			}, {
-				$pop: {
+				$pull: {
 					images: doc._id
 				}
 			}, err => {

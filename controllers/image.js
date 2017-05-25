@@ -21,8 +21,6 @@ let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {
-	//req.params.id
-
 	co(function*() {
 
 		if (!Image.indexesEnsured)
@@ -70,9 +68,6 @@ function imageRequestListener(req, res, next) {
 	}).catch(err => {
 		next(err);
 	});
-
-
-
 }
 
 function uploadImageListRequestListener(req, res, next) {
@@ -145,13 +140,17 @@ function uploadImageListRequestListener(req, res, next) {
 			});
 		});
 
-		return imagePreviewFileName;
+		return {
+			imagePreviewFileName,
+			id: newImage._id
+		};
 
-	}).then(imageFile => {
+	}).then(result => {
 		debug('added new image');
 		res.json({
 			success: true,
-			path: imageFile
+			previewUrl: result.imagePreviewFileName,
+			imageId: result.id
 		});
 	}).catch(err => {
 		if (err instanceof InvalidImage) {

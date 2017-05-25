@@ -38,6 +38,21 @@ function recieveCommentRequestListener(req, res, next) {
 
 function deleteCommentRequestListener(req, res, next) {
 	debug('deleting comment #' + req.body.commentId);
+
+	co(function*() {
+
+		let comment = yield Comment.findById(req.body.commentId).exec();
+		yield comment.remove();
+
+	}).then(() => {
+		res.json({
+			success: true
+		})
+	}).catch(err => {
+		next(err)
+	});
+
+
 }
 
 

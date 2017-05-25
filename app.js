@@ -41,9 +41,6 @@ app.use(require('express-session')({
 app.use(require('middleware/sendHttpError'));
 
 app.get('/', function(req, res) {
-
-	debug(req.session.userId);
-
 	res.render('home');
 });
 

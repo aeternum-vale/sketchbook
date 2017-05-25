@@ -66,7 +66,8 @@ module.exports = {
       NODE_ENV: JSON.stringify(NODE_ENV),
       LANG: JSON.stringify('en'),
       BASE: JSON.stringify(__dirname + '/'),
-      BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/')
+      BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/'),
+      LIBS: JSON.stringify(__dirname + '/libs/')
     })
   ]
 

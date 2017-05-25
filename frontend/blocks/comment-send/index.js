@@ -1,36 +1,28 @@
-module.exports = function (id) {
-	let commentSendForm = document.getElementById(id);
-	let commentSendButton = commentSendForm.querySelector('.comment-send__send-button');
-	let commentSendTextarea = commentSendForm.querySelector('.comment-send__textarea');
 
+module.exports = function(id, commentSection) {
+
+	function insertNewComment(text) {
+		let newComment = commentGhost.cloneNode(true);
+		newComment.classList.remove('comment_ghost');
+		newComment.querySelector('.comment__text').textContent = text;
+		commentSection.appendChild(newComment);
+	}
+
+	let elem = document.getElementById(id);
+	let commentSendButton = elem.querySelector('.comment-send__send-button');
+	let commentSendTextarea = elem.querySelector('.comment-send__textarea');
+	let commentGhost = commentSection.querySelector('.comment_ghost');
 
 	commentSendButton.onclick = function() {
+		let text = commentSendTextarea.value;
+		let body = `text=${encodeURIComponent(text)}`;
 
-
-		//alert(commentSendTextarea.value + " " + commentSendForm.dataset.imageId);
-
-		let body = `text=${
-         	encodeURIComponent(commentSendTextarea.value)}`;
-
-		let xhr = new XMLHttpRequest();
-		xhr.open("POST", '/comment', true);
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-		xhr.onreadystatechange = function() {
-			if (this.readyState != 4) return;
-			if (this.status != 200) {
-				alert("Error sending request");
-				return;
-			}
-
-			let response = JSON.parse(this.responseText);
+		require(LIBS + 'sendXHR')(body, 'POST', '/comment', function(response) {
 			if (response.success) {
+				commentSendTextarea.value = '';
+				insertNewComment(text);
+			} else alert('Server error. Please retry later.');
+		});
+	};
 
-			} else
-				alert('Server error. Please retry later.')
-		};
-
-		xhr.send(body);
-	}
 };

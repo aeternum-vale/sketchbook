@@ -2,22 +2,14 @@
 
 import './style.less';
 
+let UserMenu = require(BLOCKS + 'user-menu');
+let userMenu = new UserMenu('user-menu');
 
-let userMenu = document.getElementsByClassName('user-menu')[0];
 let linkListSwitch = document.getElementsByClassName('link-list-switch')[0];
-
-//if (!userMenu.classList.contains('user-menu_unlogged'))
-//	isLogged = true;
-
-userMenu.onclick = function(e) {
-	if (isLogged)
-		this.classList.toggle('user-menu_active');
-};
 
 linkListSwitch.onclick = function(e) {
 	this.classList.toggle('link-list-switch_active');
 };
-
 
 
 if (isLogged) {
@@ -59,7 +51,7 @@ if (isLogged) {
 				let response = JSON.parse(this.responseText);
 				console.log(response);
 				if (response.success) {
-					insertNewImagePreview(response.path);
+					insertNewImagePreview(response.imageId, response.previewUrl);
 					closeUploadDialog();
 				} else if (response.message)
 					uploadErrorMessage.textContent = response.message;
@@ -111,10 +103,15 @@ if (isLogged) {
 	}
 
 
-	function insertNewImagePreview(path) {
+	function insertNewImagePreview(imageId, previewUrl) {
 		let newImagePreview = imagePreviewGhost.cloneNode(true);
 		newImagePreview.classList.remove('image-preview_ghost');
-		newImagePreview.style.backgroundImage = `url('/${path}')`;
+
+		newImagePreview.href = `/image/${imageId}`;
+		newImagePreview.style.backgroundImage = `url('/${previewUrl}')`;
+
+		newImagePreview.querySelector('.image-preview__text')
+			.textContent = '0 comments 0 likes';
 
 		galleryWrapper.appendChild(newImagePreview);
 

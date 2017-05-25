@@ -64,9 +64,6 @@
 		flex-shrink: 1;
 		flex-grow: 1;
 		background-color: #000;
-
-		border-right: solid @image-post-border-size #000;
-
 	}
 
 	&__image {
@@ -76,11 +73,15 @@
 
 	&__sidebar {
 		position: relative;
+		box-sizing: border-box;
+
 		height: 100%;
 
 		// display: flex;
 		// flex-direction: column;
 		// justify-content: space-between;
+
+
 
 		flex-shrink: 0;
 		flex-grow: 0;
@@ -90,6 +91,8 @@
 
 
 		background-color: @global-panel-color;
+
+		border-left: solid @image-post-border-size #000;
 	}
 
 	&__top-side {

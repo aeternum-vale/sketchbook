@@ -72,19 +72,7 @@ loginForm.onsubmit = function(e) {
       encodeURIComponent(loginForm['username'].value)}&password=${
          encodeURIComponent(loginForm['password'].value)}`;
 
-   let xhr = new XMLHttpRequest();
-   xhr.open("POST", '/login', true);
-   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-   xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-   xhr.onreadystatechange = function() {
-      if (this.readyState != 4) return;
-      if (this.status != 200) {
-         alert("Error sending request");
-         return;
-      }
-
-      let response = JSON.parse(this.responseText);
+   require(LIBS + 'sendXHR')(body, 'POST', '/login', function(response) {
       if (response.success)
          if (response.url)
             window.location = response.url;
@@ -94,10 +82,8 @@ loginForm.onsubmit = function(e) {
             else
                alert('Server error. Please retry later.')
          }
+   });
 
-   };
-
-   xhr.send(body);
 }
 
 
@@ -128,35 +114,17 @@ joinForm.onsubmit = function(e) {
             body += (body === '' ? '' : '&') + item.name + '=' + encodeURIComponent(joinForm[item.name].value);
       });
 
-   let xhr = new XMLHttpRequest();
-   xhr.open("POST", '/join', true);
-   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-   xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-   xhr.onreadystatechange = function() {
-      if (this.readyState != 4) return;
-      // по окончании запроса доступны:
-      // status, statusText
-      // responseText, responseXML (при content-type: text/xml)
-      if (this.status != 200) {
-         alert("Error sending request.");
-         return;
-      }
-
-      let response = JSON.parse(this.responseText);
-      if (response.success)
-         window.location = response.url;
-      else {
-         if (response.property)
-            setPropertyError(response.property, response.message);
-         else
-            alert('Server error. Please retry later.')
-      }
-
-   };
-
    if (result.success)
-      xhr.send(body);
+      require(LIBS + 'sendXHR')(body, 'POST', '/join', function(response) {
+         if (response.success)
+            window.location = response.url;
+         else {
+            if (response.property)
+               setPropertyError(response.property, response.message);
+            else
+               alert('Server error. Please retry later.')
+         }
+      });
 };
 
 

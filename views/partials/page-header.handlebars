@@ -4,8 +4,14 @@
 			<div class="page-header__logo"></div>
 		</a>
 
-		
-		{{> user-menu username="aeternum-vale"}}
-
+		{{#if loggedUser}}
+			{{> user-menu 
+				username="aeternum-vale"
+				id="user-menu"
+			}}
+		{{else}}
+			<a href="/authorization" class="header-element">log in / sign up</a>	
+		{{/if}}
+	
 	</div>
 </header>

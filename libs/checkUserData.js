@@ -1,7 +1,7 @@
 let props = {
   'username': {
     re: {
-      value: /^[A-Z0-9_]+$/i,
+      value: /^[A-Z0-9-]+$/i,
       message: 'must only contain alphanumeric symbols'
     },
     min: 4,

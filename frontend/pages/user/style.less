@@ -9,6 +9,7 @@
 @import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/window/window.less";
 @import "../../blocks/file-picker/file-picker.less";
+@import "../../blocks/header-element/header-element.less";
 
 @avatar-size: 245px;
 @avatar-border-size: 8px;
@@ -193,6 +194,8 @@
 }
 
 .image-preview {
+	display: block;
+
 	flex-shrink: 0;
 	box-sizing: border-box;
 	position: relative;
@@ -244,7 +247,6 @@
 
 	&_ghost {
 		display: none;
-		visibility: hidden;
 	}
 
 }

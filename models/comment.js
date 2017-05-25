@@ -70,14 +70,12 @@ commentSchema.post('remove', function(doc) {
 	co(function*() {
 		debug('remove: %o', doc);
 
-		return new Promise((resolve, reject) => {
-			db.collection('users').update({
+		yield new Promise((resolve, reject) => {
+			db.collection('images').update({
 				_id: doc.image
 			}, {
-				$pop: {
-					comments: {
-						_id: doc._id
-					}
+				$pull: {
+					comments: doc._id
 				}
 			}, err => {
 				if (err) reject(err);

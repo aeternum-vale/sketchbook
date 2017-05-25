@@ -1,11 +1,11 @@
 {{> is-logged-script}}
 
 <div class="image-post-wrapper">
-	<div class="image-post-wrapper__image-post image-post">
-		<div class="image-post__image-wrapper">
-			<img class="image-post__image" src="/image{{image._id}}.jpg" alt="">
+	<div id="image-post" class="image-post-wrapper__image-post image-post">
+		<div id="image-wrapper" class="image-post__image-wrapper">
+			<img id="image" class="image-post__image" src="/image{{image._id}}.jpg" alt="">
 		</div>
-		<div class="image-post__sidebar">
+		<div id="side-bar" class="image-post__sidebar">
 			<div class="image-post__top-side">
 				<div class="header image-post__header">
 					<div class="image-post__header-left-side">
@@ -40,7 +40,6 @@
 
 				</div>
 				<div id="comments-section" class="comments-section image-post__comments-section">
-
 					{{#each image.comments}}
 						{{> comment 
 							commentId=_id
@@ -50,7 +49,13 @@
  							ownComment=ownComment
  						}}
 					{{/each}}
-
+					{{> comment 
+						commentId=0
+						username=loggedUser.username
+						date='a few seconds ago'
+						ownComment=true
+						ghost=true
+ 					}}
 				</div>
 			</div>
 			
