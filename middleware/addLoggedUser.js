@@ -11,7 +11,7 @@ module.exports = function(req, res, next) {
 			return User.findById(req.session.userId).exec();
 			
 		}).then(user => {
-			//res.locals.loggedUser = user;
+			res.locals.loggedUser = user;
 			res.loggedUser = user;
 			next();
 		}).catch(err => {

@@ -10,8 +10,11 @@ module.exports = {
 
   entry: {
     authorization: './authorization/script',
+    'logged-authorization': './authorization/logged-script',
     user: './user/script',
+    'logged-user': './user/logged-script',
     image: './image/script',
+    'logged-image': './image/logged-script'
   },
 
   output: {

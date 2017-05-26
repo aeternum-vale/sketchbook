@@ -10,6 +10,8 @@ let config = require('config');
 let debug = require('debug')('app:user:controller');
 let imagePaths = require('libs/imagePaths');
 
+let addLoggedUser = require('middleware/addLoggedUser');
+
 function usersListRequestListener(req, res, next) {
 
 	co(function*() {
@@ -36,9 +38,9 @@ function userProfileRequestListener(req, res, next) {
 		if (!User.indexesEnsured)
 			yield User.ensureIndexes();
 
-		let loggedUser;
-		if (req.session.userId)
-			loggedUser = yield User.findById(req.session.userId).exec();
+		// let loggedUser;
+		// if (req.session.userId)
+		// 	loggedUser = yield User.findById(req.session.userId).exec();
 
 		let pageUser = yield User.findOne({
 			username: req.params.username
@@ -47,24 +49,20 @@ function userProfileRequestListener(req, res, next) {
 		if (!pageUser)
 			throw new HttpError(404, 'this user doesn\'t exist');
 
-		return {
-			loggedUser,
-			pageUser
-		};
+		return pageUser;
 
 
-	}).then(result => {
-		res.locals = result;
+	}).then(pageUser => {
+		res.locals.pageUser = pageUser;
 
-		if (result.loggedUser && result.pageUser)
-			res.locals.ownPage = (result.loggedUser._id === result.pageUser._id);
+		if (res.loggedUser && pageUser)
+			res.locals.ownPage = (res.loggedUser._id === pageUser._id);
+		
 		res.locals.page = 'user';
-
 
 		res.locals.pageUser.images.forEach(item => {
 			item.previewUrl = imagePaths.getImagePreviewFileNameByStringId(item._id);
 		});
-
 
 		res.render('user');
 	}).catch(err => {
@@ -184,10 +182,17 @@ function logoutRequestListener(req, res, next) {
 	res.redirect(303, '/');
 }
 
+function authorizationRequestListener(req, res, next) {
+	res.render('authorization', {
+		page: 'authorization'
+	});
+}
+
 exports.registerRoutes = function(app) {
 	app.post('/join', joinRequestListener);
 	app.post('/login', loginRequestListener);
 	app.get('/logout', logoutRequestListener);
 	app.get('/users', usersListRequestListener);
-	app.get('/user/:username', userProfileRequestListener);
+	app.get('/user/:username', addLoggedUser, userProfileRequestListener);
+	app.get('/authorization', authorizationRequestListener);
 };

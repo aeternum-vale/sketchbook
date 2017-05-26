@@ -13,13 +13,10 @@ let handlebars = require('express-handlebars')
 		defaultLayout: 'main'
 	});
 
-
 let app = express();
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', config.get('port'));
-
-
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/userdata'));
@@ -44,17 +41,10 @@ app.get('/', function(req, res) {
 	res.render('home');
 });
 
-
-app.get('/authorization', function(req, res) {
-	res.render('authorization', {
-		page: 'authorization'
-	});
-});
-
 require('controllers/user').registerRoutes(app);
 require('controllers/image').registerRoutes(app);
 require('controllers/comment').registerRoutes(app);
-
+require('controllers/like').registerRoutes(app);
 
 app.use(function(req, res, next) {
 	next(404);
@@ -75,7 +65,6 @@ app.use(function(err, req, res, next) {
 		err = new HttpError(500);
 		res.sendHttpError(err);
 	}
-
 
 });
 

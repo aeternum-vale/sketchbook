@@ -13,7 +13,11 @@ function recieveCommentRequestListener(req, res, next) {
 
 	if (!req.xhr) next();
 
-	let imageId = require('libs/getImageIdByReferer')(req.headers.referer);
+	let imageId;
+	if (req.headers.referer)
+		imageId = require('libs/getImageIdByReferer')(req.headers.referer);
+	else
+		next(500);
 
 	co(function*() {
 		if (!Comment.indexesEnsured)

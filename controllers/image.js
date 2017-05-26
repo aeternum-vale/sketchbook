@@ -52,8 +52,6 @@ function imageRequestListener(req, res, next) {
 
 	}).then(result => {
 
-		res.locals.loggedUser = res.loggedUser;
-
 		if (res.locals.loggedUser)
 			if (res.locals.loggedUser._id === result.author._id)
 				res.locals.ownImage = true;

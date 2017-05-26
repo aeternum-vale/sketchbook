@@ -2,29 +2,6 @@
 
 import './style.less';
 
-let CommentSend = require(BLOCKS + 'comment-send');
-let CommentsSection = require(BLOCKS + 'comments-section');
-
-let commentsSection = new CommentsSection('comments-section');
-let commentSend = new CommentSend('comment-send', commentsSection.elem);
-
-//------------------------------
-
-let deleteImage = document.getElementById('delete-image-button');
-
-deleteImage.onclick = function(e) {
-	require(LIBS + 'sendXHR')(null, 'DELETE', '/image', function(response) {
-		if (response.success) {
-			if (response.url)
-				window.location = response.url;
-		} else
-			alert('Server error. Please retry later.')
-	});
-};
-
-
-//------------------------------
-
 let image = document.getElementById('image');
 let imageWrapper = document.getElementById('image-wrapper');
 let imagePost = document.getElementById('image-post');
@@ -48,7 +25,7 @@ function resizeImage() {
 
 	if (image.offsetWidth >= image.offsetHeight) {
 		if (imageWrapper.offsetHeight < image.offsetHeight)
-			image.\ = imageWrapper.offsetHeight;
+			image.height = imageWrapper.offsetHeight;
 
 		if (imagePost.scrollWidth > imagePost.offsetWidth) {
 			image.removeAttribute('height');
@@ -65,7 +42,7 @@ function resizeImage() {
 	}
 
 	// 	console.log(
-	// `image.width:${image.width}
+	// 		`image.width:${image.width}
 	// image.height:${image.height}
 	// imagePost.scrollWidth:${imagePost.scrollWidth}
 	// imagePost.offsetWidth:${imagePost.offsetWidth}
