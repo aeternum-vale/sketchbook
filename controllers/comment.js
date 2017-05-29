@@ -1,4 +1,5 @@
 let Comment = require('models/comment');
+let User = require('models/user');
 let co = require('co');
 let config = require('config');
 let debug = require('debug')('app:comment:controller');
@@ -6,6 +7,7 @@ let HttpError = require('error').HttpError;
 
 let isAuth = require('middleware/isAuth');
 let addLoggedUser = require('middleware/addLoggedUser');
+let addRefererParams = require('middleware/addRefererParams');
 
 let url = require('url');
 
@@ -13,26 +15,25 @@ function recieveCommentRequestListener(req, res, next) {
 
 	if (!req.xhr) next();
 
-	let imageId;
-	if (req.headers.referer)
-		imageId = require('libs/getImageIdByReferer')(req.headers.referer);
-	else
-		next(500);
+	let imageId = req.refererParams.value;
 
 	co(function*() {
 		if (!Comment.indexesEnsured)
 			yield Comment.ensureIndexes();
 
-		return new Comment({
+		let comment = yield new Comment({
 			text: req.body.text,
-			author: req.session.userId,
+			author: res.loggedUser._id,
 			image: imageId
 		}).save();
+
+		return comment;
 
 	}).then(comment => {
 		debug('new comment is added: %s', comment.text);
 		res.json({
-			success: true
+			success: true,
+			commentId: comment._id
 		});
 	}).catch(err => {
 		next(err);
@@ -61,6 +62,6 @@ function deleteCommentRequestListener(req, res, next) {
 
 
 exports.registerRoutes = function(app) {
-	app.post('/comment', isAuth, recieveCommentRequestListener);
+	app.post('/comment', isAuth, addLoggedUser, addRefererParams, recieveCommentRequestListener);
 	app.delete('/comment', isAuth, deleteCommentRequestListener);
 };

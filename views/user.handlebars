@@ -23,7 +23,7 @@
 <div class="header page-header extra-header">
 	<div class="extra-header__wrapper">
 		<div class="stat-list">
-			{{> stat number=pageUser.subscribers.length property="subscribers"}}
+			{{> stat number=pageUser.subscribers.length property="subscribers" id="subscribers-number"}}
 			{{> stat number=pageUser.subscriptions.length property="subscriptions"}}
 			{{> stat number=pageUser.images.length property="publications" id="publication-number"}}
 		</div>
@@ -31,7 +31,16 @@
 		{{#if ownPage}}
 			{{> button caption="upload image" parent="extra-header" id="upload-window-caller"}}
 		{{else}}
-			{{> button caption="subscribe" parent="extra-header"}}
+			<div id="subscribe-button" 
+			{{#if isSubscribed}}
+				data-checked="true"
+				class="button button_active extra-header__button extra-header__button_active">
+			{{else}}
+				class="button extra-header__button">
+			{{/if}}				
+				subscribe
+			</div>
+
 		{{/if}}
 	</div>
 </div>

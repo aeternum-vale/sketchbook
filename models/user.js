@@ -27,7 +27,7 @@ let userSchema = new Schema({
 	},
 
 	name: String,
-	
+
 	surname: String,
 
 	age: {
@@ -69,6 +69,16 @@ let userSchema = new Schema({
 	images: [{
 		type: Number,
 		ref: 'Image'
+	}],
+
+	likes: [{
+		type: Number,
+		ref: 'Image'
+	}], 
+
+	comments: [{
+		type: Number,
+		ref: 'Comments'
 	}]
 
 }, {

@@ -1,4 +1,5 @@
 let User = require('models/user');
+let Image = require('models/image');
 let userViewModel = require('viewModels/user');
 let co = require('co');
 let checkUserData = require('libs/checkUserData');
@@ -11,6 +12,8 @@ let debug = require('debug')('app:user:controller');
 let imagePaths = require('libs/imagePaths');
 
 let addLoggedUser = require('middleware/addLoggedUser');
+let addRefererParams = require('middleware/addRefererParams');
+let isAuth = require('middleware/isAuth');
 
 function usersListRequestListener(req, res, next) {
 
@@ -40,7 +43,7 @@ function userProfileRequestListener(req, res, next) {
 
 		// let loggedUser;
 		// if (req.session.userId)
-		// 	loggedUser = yield User.findById(req.session.userId).exec();
+		// loggedUser = yield User.findById(req.session.userId).exec();
 
 		let pageUser = yield User.findOne({
 			username: req.params.username
@@ -55,9 +58,13 @@ function userProfileRequestListener(req, res, next) {
 	}).then(pageUser => {
 		res.locals.pageUser = pageUser;
 
-		if (res.loggedUser && pageUser)
+		if (res.loggedUser) {
 			res.locals.ownPage = (res.loggedUser._id === pageUser._id);
-		
+
+			if (~pageUser.subscribers.indexOf(res.loggedUser._id))
+				res.locals.isSubscribed = true;
+		}
+
 		res.locals.page = 'user';
 
 		res.locals.pageUser.images.forEach(item => {
@@ -188,9 +195,116 @@ function authorizationRequestListener(req, res, next) {
 	});
 }
 
+
+function subscribeRequestListener(req, res, next) {
+
+	let index;
+	if (req.refererParams.field === 'user') {
+		let username = req.refererParams.value;
+
+		co(function*() {
+
+			let user = yield User.findOne({
+				username
+			}).exec();
+
+			if (~user.subscribers.indexOf(res.loggedUser._id)) {
+
+				yield user.update({
+					$pull: {
+						subscribers: res.loggedUser._id
+					}
+				}).exec();
+
+				yield res.loggedUser.update({
+					$pull: {
+						subscribers: user._id
+					}
+				}).exec();
+
+			} else {
+
+				yield user.update({
+					$addToSet: {
+						subscribers: res.loggedUser._id
+					}
+				}).exec();
+
+				yield res.loggedUser.update({
+					$addToSet: {
+						subscribers: user._id
+					}
+				}).exec();
+			}
+
+		}).then(result => {
+			res.json({
+				success: true
+			});
+		}).catch(err => {
+			next(err);
+		});
+
+	} else if (req.refererParams.field === 'image') {
+
+		let imageId = req.refererParams.value;
+
+		co(function*() {
+
+			let image = yield Image.findById(imageId).exec();
+
+
+
+			let user = yield User.findById(image.author).exec();
+
+
+			if (~user.subscribers.indexOf(res.loggedUser._id)) {
+
+				yield user.update({
+					$pull: {
+						subscribers: res.loggedUser._id
+					}
+				}).exec();
+
+				yield res.loggedUser.update({
+					$pull: {
+						subscribers: user._id
+					}
+				}).exec();
+
+			} else {
+
+				yield user.update({
+					$addToSet: {
+						subscribers: res.loggedUser._id
+					}
+				}).exec();
+
+				yield res.loggedUser.update({
+					$addToSet: {
+						subscribers: user._id
+					}
+				}).exec();
+			}
+
+		}).then(result => {
+			res.json({
+				success: true
+			});
+		}).catch(err => {
+			next(err);
+		});
+
+	} else
+		next(404);
+
+
+}
+
 exports.registerRoutes = function(app) {
 	app.post('/join', joinRequestListener);
 	app.post('/login', loginRequestListener);
+	app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);
 	app.get('/logout', logoutRequestListener);
 	app.get('/users', usersListRequestListener);
 	app.get('/user/:username', addLoggedUser, userProfileRequestListener);

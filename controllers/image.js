@@ -13,6 +13,7 @@ let imagePaths = require('libs/imagePaths');
 let getDateString = require('libs/getDateString');
 let isAuth = require('middleware/isAuth');
 let addLoggedUser = require('middleware/addLoggedUser');
+let addRefererParams = require('middleware/addRefererParams');
 let InvalidImage = require('error').InvalidImage;
 
 
@@ -44,7 +45,6 @@ function imageRequestListener(req, res, next) {
 
 		let author = yield User.findById(image.author).exec();
 
-
 		return {
 			image,
 			author
@@ -52,13 +52,17 @@ function imageRequestListener(req, res, next) {
 
 	}).then(result => {
 
-		if (res.locals.loggedUser)
+		if (res.locals.loggedUser) {
 			if (res.locals.loggedUser._id === result.author._id)
 				res.locals.ownImage = true;
 
 
-		res.locals.image = result.image;
+			if (~result.image.likes.indexOf(res.loggedUser._id))
+				res.locals.isLiked = true;
+		}
+
 		res.locals.author = result.author;
+		res.locals.image = result.image;
 		res.locals.image.createDateStr = getDateString(result.image.created);
 		res.locals.page = 'image';
 
@@ -71,7 +75,7 @@ function imageRequestListener(req, res, next) {
 function uploadImageListRequestListener(req, res, next) {
 	debug('The file is ready to be uploaded');
 
-	if (!req.xhr) next(500);
+	if (!req.xhr) return next(404);
 
 	co(function*() {
 
@@ -160,9 +164,7 @@ function uploadImageListRequestListener(req, res, next) {
 		} else
 			next(err);
 	});
-
 }
-
 
 function imageListRequestListener(req, res, next) {
 	co(function*() {
@@ -188,11 +190,12 @@ function imageListRequestListener(req, res, next) {
 }
 
 function imageDeleteListRequestListener(req, res, next) {
-	let imageId = require('libs/getImageIdByReferer')(req.headers.referer);
+
+	let imageId = req.refererParams.value;;
 
 	debug('deleting image #' + imageId);
 
-	if (!req.xhr) next(500);
+	if (!req.xhr) return next(404);
 
 	co(function*() {
 		let image = yield Image.findById(imageId).exec();
@@ -207,12 +210,56 @@ function imageDeleteListRequestListener(req, res, next) {
 	}).catch(err => {
 		next(err);
 	});
+}
 
+function likeRequestListener(req, res, next) {
+	if (!req.xhr) return next(404);
+
+	if (req.refererParams.field !== 'image') return next(404);
+
+	let imageId = req.refererParams.value;
+
+	co(function*() {
+
+		let image = yield Image.findById(imageId).exec();
+		let userId = res.loggedUser._id;
+
+		let index;
+		if (~(index = image.likes.indexOf(userId)))
+			image.likes.splice(index);
+		else
+			image.likes.push(userId);
+
+		yield image.save();
+
+		yield res.loggedUser.update({
+			$addToSet: {
+				likes: imageId
+			}
+		}).exec();
+
+		return {
+			isLiked: !~index,
+			likeAmount: image.likes.length
+		};
+
+	}).then(result => {
+
+		res.json({
+			success: true,
+			isLiked: result.isLiked,
+			likeAmount: result.likeAmount
+		});
+
+	}).catch(err => {
+		next(err);
+	});
 }
 
 exports.registerRoutes = function(app) {
 	app.post('/image', isAuth, uploadImageListRequestListener);
-	app.delete('/image', isAuth, addLoggedUser, imageDeleteListRequestListener);
+	app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
 	app.get('/images', imageListRequestListener);
 	app.get('/image/:id', addLoggedUser, imageRequestListener);
+	app.post('/like', isAuth, addLoggedUser, addRefererParams, likeRequestListener);
 };

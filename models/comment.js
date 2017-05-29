@@ -47,7 +47,7 @@ commentSchema.post('save', function(doc) {
 	co(function*() {
 		debug('save: %o', doc);
 
-		return new Promise((resolve, reject) => {
+		yield new Promise((resolve, reject) => {
 			db.collection('images').update({
 				_id: doc.image
 			}, {
@@ -59,6 +59,20 @@ commentSchema.post('save', function(doc) {
 				resolve();
 			})
 		});
+
+		yield new Promise((resolve, reject) => {
+			db.collection('users').update({
+				_id: doc.author
+			}, {
+				$addToSet: {
+					comments: doc._id
+				}
+			}, err => {
+				if (err) reject(err);
+				resolve();
+			})
+		});
+
 
 	}).catch(err => {
 		debug(err);
@@ -82,6 +96,20 @@ commentSchema.post('remove', function(doc) {
 				resolve();
 			})
 		});
+
+		yield new Promise((resolve, reject) => {
+			db.collection('users').update({
+				_id: doc.author
+			}, {
+				$pull: {
+					comments: doc._id
+				}
+			}, err => {
+				if (err) reject(err);
+				resolve();
+			})
+		});
+
 
 	}).catch(err => {
 		throw err;

@@ -41,8 +41,8 @@ function resizeImage() {
 		}
 	}
 
-	// 	console.log(
-	// 		`image.width:${image.width}
+	// console.log(
+	// `image.width:${image.width}
 	// image.height:${image.height}
 	// imagePost.scrollWidth:${imagePost.scrollWidth}
 	// imagePost.offsetWidth:${imagePost.offsetWidth}

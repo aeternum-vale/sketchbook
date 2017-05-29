@@ -8,25 +8,30 @@ let commentSend = new CommentSend('comment-send', commentsSection.elem);
 
 let deleteImage = document.getElementById('delete-image-button');
 
-deleteImage.onclick = function(e) {
-	require(LIBS + 'sendXHR')(null, 'DELETE', '/image', function(response) {
-		if (response.success) {
-			if (response.url)
-				window.location = response.url;
-		} else
-			alert('Server error. Please retry later.')
-	});
-};
+if (deleteImage)
+	deleteImage.onclick = function(e) {
+		require(LIBS + 'sendXHR')(null, 'DELETE', '/image', function(response) {
+			if (response.success) {
+				if (response.url)
+					window.location = response.url;
+			} else
+				alert('Server error. Please retry later.')
+		});
+	};
 
 //------------------------------
 
-let like = document.getElementById('like');
 
-like.onclick = function(e) {
-	require(LIBS + 'sendXHR')(null, 'POST', '/like', function(response) {
-		if (response.success) {
-			console.log('it is liked!');
-		} else
-			alert('Server error. Please retry later.')
+let LikeButton = require(BLOCKS + 'like-button');
+let likeButton = new LikeButton({
+	elem: document.getElementById('like')
+});
+
+//------------------------------
+let subscribeButtonElem;
+if (subscribeButtonElem = document.getElementById('subscribe-button')) {
+	let SubscribeButton = require(BLOCKS + 'subscribe-button');
+	let subscribeButton = new SubscribeButton({
+		elem: subscribeButtonElem
 	});
-};
+}

@@ -37,7 +37,7 @@ let imageSchema = new Schema({
 
 	likes: [{
 		type: Number,
-		ref: 'Like'
+		ref: 'User'
 	}]
 
 }, {
@@ -79,6 +79,50 @@ imageSchema.post('remove', function(doc) {
 
 	co(function*() {
 
+
+		for (let i = 0; i < doc.likes.length; i++) {
+
+			yield new Promise((resolve, reject) => {
+				db.collection('users').update({
+					_id: doc.likes[i]
+				}, {
+					$pull: {
+						likes: doc._id
+					}
+				}, err => {
+					if (err) reject(err);
+					resolve();
+				});
+			});
+		}
+
+		for (let i = 0; i < doc.comments.length; i++) {
+
+			let comment = yield new Promise((resolve, reject) => {
+				db.collection('comment').find({
+					_id: doc.comments[i]
+				}, (err, comment) => {
+					if (err) reject(err);
+					resolve(comment);
+				});
+			});
+
+			yield new Promise((resolve, reject) => {
+				db.collection('users').update({
+					_id: comment.author
+				}, {
+					$pull: {
+						comments: doc.comments[i]
+					}
+				}, err => {
+					if (err) reject(err);
+					resolve();
+				});
+			});
+
+		}
+
+
 		yield new Promise((resolve, reject) => {
 			db.collection('comments').remove({
 				_id: {
@@ -87,8 +131,9 @@ imageSchema.post('remove', function(doc) {
 			}, err => {
 				if (err) reject(err);
 				resolve();
-			})
+			});
 		});
+
 
 
 		yield new Promise((resolve, reject) => {
@@ -101,7 +146,7 @@ imageSchema.post('remove', function(doc) {
 			}, err => {
 				if (err) reject(err);
 				resolve();
-			})
+			});
 		});
 
 

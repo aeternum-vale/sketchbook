@@ -21,7 +21,11 @@
 							delete
 						</div>
 					{{else}}
-						<div id="subscribe-button" class="button image-post__subscribe-button">
+						<div id="subscribe-button"
+						{{#if isSubscribed}}
+							data-active="true"
+						{{/if}}
+						class="button image-post__subscribe-button">
 							subscribe
 						</div>
 					{{/if}}
@@ -29,7 +33,10 @@
 
 				</div>
 				<div class="image-post__info-board">
-					<div id="like" class="button image-post__like-button">
+					<div id="like" 
+					data-like-amount="{{image.likes.length}}"
+					{{#if isLiked}}data-active="true"{{/if}}
+					class="button like-button image-post__like-button{{#if isLiked}} button_active like-button_active{{/if}}">
 						like {{image.likes.length}}
 					</div>
 					<div class="image-post__description">

@@ -73,9 +73,10 @@ function clearUploadDialog() {
 	uploadErrorMessage.textContent = '';
 }
 
-uploadWindowCaller.onclick = function(e) {
-	openUploadDialog();
-};
+if (uploadWindowCaller)
+	uploadWindowCaller.onclick = function(e) {
+		openUploadDialog();
+	};
 
 uploadWindowWrapper.onmousedown = function(e) {
 	//e.preventDefault();
@@ -100,4 +101,25 @@ function insertNewImagePreview(imageId, previewUrl) {
 	galleryWrapper.appendChild(newImagePreview);
 
 	publicationNumber.textContent = +publicationNumber.textContent + 1;
+}
+
+
+//------
+
+let subscribeButtonElem;
+if (subscribeButtonElem = document.getElementById('subscribe-button')) {
+	let SubscribeButton = require(BLOCKS + 'subscribe-button');
+	let subscribeButton = new SubscribeButton({
+		elem: subscribeButtonElem
+	});
+
+	let subscribersNumberElem = document.getElementById('subscribers-number');
+	let subscribersNumber = +subscribersNumberElem.textContent;
+
+	subscribeButton.on('change', function() {
+		if (subscribeButton.checked)
+			subscribersNumberElem.textContent = ++subscribersNumber;
+		else
+			subscribersNumberElem.textContent = --subscribersNumber;
+	});
 }
