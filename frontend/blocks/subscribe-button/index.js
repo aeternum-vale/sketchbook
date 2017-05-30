@@ -20,7 +20,8 @@ let SubscribeButton = function(options) {
 				} else {
 					this.toggle();
 					this.available = true;
-					alert('Server error. Please retry later.');
+					trigger.on('error');
+					//alert('Server error. Please retry later.');
 				}
 			});
 

@@ -1,9 +1,9 @@
 <div class="image-post-wrapper">
 	<div id="image-post" class="image-post-wrapper__image-post image-post">
-		<div id="image-wrapper" class="image-post__image-wrapper">
-			<img id="image" class="image-post__image" src="/image{{image._id}}.jpg" alt="">
+		<div class="image-post__image-wrapper">
+			<img class="image-post__image" src="/image{{image._id}}.jpg" alt="">
 		</div>
-		<div id="side-bar" class="image-post__sidebar">
+		<div class="image-post__sidebar">
 			<div class="image-post__top-side">
 				<div class="header image-post__header">
 					<div class="image-post__header-left-side">
@@ -44,7 +44,7 @@
 					</div>
 
 				</div>
-				<div id="comments-section" class="comments-section image-post__comments-section">
+				<div id="comment-section" class="comment-section image-post__comment-section">
 					{{#each image.comments}}
 						{{> comment 
 							commentId=_id

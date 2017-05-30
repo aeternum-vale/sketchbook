@@ -1,29 +1,32 @@
+let eventMixin = require(LIBS + 'eventMixin');
 
-module.exports = function(id, commentSection) {
+let CommentSendForm = function(options) {
 
-	function insertNewComment(text, id) {
-		let newComment = commentGhost.cloneNode(true);
-		newComment.classList.remove('comment_ghost');
-		newComment.querySelector('.comment__text').textContent = text;
-		newComment.dataset.id = id;
-		commentSection.appendChild(newComment);
-	}
+	this.elem = options.elem;
+	this.commentSendTextarea = this.elem.querySelector('.comment-send__textarea');
 
-	let elem = document.getElementById(id);
-	let commentSendButton = elem.querySelector('.comment-send__send-button');
-	let commentSendTextarea = elem.querySelector('.comment-send__textarea');
-	let commentGhost = commentSection.querySelector('.comment_ghost');
+	this.elem.onclick = e => {
 
-	commentSendButton.onclick = function() {
-		let text = commentSendTextarea.value;
+		if (!e.target.classList.contains('comment-send__send-button')) return;
+
+		let text = this.commentSendTextarea.value;
 		let body = `text=${encodeURIComponent(text)}`;
 
-		require(LIBS + 'sendXHR')(body, 'POST', '/comment', function(response) {
+		require(LIBS + 'sendXHR')(body, 'POST', '/comment', response => {
 			if (response.success) {
-				commentSendTextarea.value = '';
-				insertNewComment(text, response.commentId);
+				this.commentSendTextarea.value = '';
+				this.trigger('post', {
+					text,
+					id: response.commentId
+				});
 			} else alert('Server error. Please retry later.');
 		});
 	};
 
 };
+
+for (let key in eventMixin) {
+	CommentSendForm.prototype[key] = eventMixin[key];
+}
+
+module.exports = CommentSendForm;

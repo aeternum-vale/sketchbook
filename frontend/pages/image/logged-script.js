@@ -1,33 +1,28 @@
+let CommentSection = require(BLOCKS + 'comment-section');
 let CommentSend = require(BLOCKS + 'comment-send');
-let CommentsSection = require(BLOCKS + 'comments-section');
+let commentSection = new CommentSection({
+	elem: document.getElementById('comment-section')
+});
+let commentSend = new CommentSend({
+	elem: document.getElementById('comment-send')
+});
+commentSend.on('post', e => {
+	commentSection.insertNewComment(e.text, e.id);
+});
 
-let commentsSection = new CommentsSection('comments-section');
-let commentSend = new CommentSend('comment-send', commentsSection.elem);
-
-//------------------------------
-
-let deleteImage = document.getElementById('delete-image-button');
-
-if (deleteImage)
-	deleteImage.onclick = function(e) {
-		require(LIBS + 'sendXHR')(null, 'DELETE', '/image', function(response) {
-			if (response.success) {
-				if (response.url)
-					window.location = response.url;
-			} else
-				alert('Server error. Please retry later.')
-		});
-	};
-
-//------------------------------
-
+let DeleteImageButton = require(BLOCKS + 'delete-image-button');
+let deleteImageButtonElem = document.getElementById('delete-image-button');
+let deleteImageButton;
+if (deleteImageButtonElem)
+	deleteImageButton = new DeleteImageButton({
+		elem: deleteImageButtonElem
+	});
 
 let LikeButton = require(BLOCKS + 'like-button');
 let likeButton = new LikeButton({
 	elem: document.getElementById('like')
 });
 
-//------------------------------
 let subscribeButtonElem;
 if (subscribeButtonElem = document.getElementById('subscribe-button')) {
 	let SubscribeButton = require(BLOCKS + 'subscribe-button');

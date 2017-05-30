@@ -1,48 +1,54 @@
 const DEFAULT_FN_LENGTH = 23;
 const DEFAULT_VALUE = 'no file chosen';
 
-module.exports = function(id, fileNameLength) {
-	fileNameLength = fileNameLength || DEFAULT_FN_LENGTH;
 
-	let uploadInput = document.createElement('input');
-	uploadInput.type = "file";
-	uploadInput.accept = "image/*";
+let FilePicker = function(options) {
 
-	let filePicker = document.getElementById(id);
-	let fpButton = filePicker.querySelector('.file-picker__button');
-	let fpFileName = filePicker.querySelector('.file-picker__filename');
+	this.fileNameLength = options.fileNameLength || DEFAULT_FN_LENGTH;
 
-	fpButton.addEventListener('click', e => {
-		uploadInput.click();
+	this.uploadInput = document.createElement('input');
+	this.uploadInput.type = "file";
+	this.uploadInput.accept = "image/*";
+
+	this.elem = options.elem;
+	this.fpButton = this.elem.querySelector('.file-picker__button');
+	this.fpFileName = this.elem.querySelector('.file-picker__filename');
+
+	this.fpButton.addEventListener('click', e => {
+		this.uploadInput.click();
 	});
 
-	uploadInput.addEventListener('change', e => {
-		
-		let filename = uploadInput.value.substring(uploadInput.value.lastIndexOf('\\') + 1);
-
-		let visibleFileName;
-		let partSize = ~~((fileNameLength - 1) / 2);
-
-		if (filename.length === 0)
-			visibleFileName = DEFAULT_VALUE;
-		else if (filename.length <= fileNameLength) {
-			fpFileName.title = '';
-			visibleFileName = filename;
-		} else {
-			fpFileName.title = filename;
-			visibleFileName = filename.slice(0, partSize) + '…' + filename.slice(-partSize);
-		}
-
-		fpFileName.textContent = visibleFileName;
-
+	this.uploadInput.addEventListener('change', e => {
+		this.setVisibleFileName();
 	});
-
-	this.getFile = function() {
-		return uploadInput.files[0];
-	};
-
-	this.clear = function() {
-		fpFileName.textContent = DEFAULT_VALUE;
-	}
 
 };
+
+FilePicker.prototype.setVisibleFileName = function() {
+	let filename = this.uploadInput.value.substring(this.uploadInput.value.lastIndexOf('\\') + 1);
+
+	let visibleFileName;
+	let partSize = ~~((this.fileNameLength - 1) / 2);
+
+	if (filename.length === 0)
+		visibleFileName = DEFAULT_VALUE;
+	else if (filename.length <= this.fileNameLength) {
+		this.fpFileName.title = '';
+		visibleFileName = filename;
+	} else {
+		this.fpFileName.title = filename;
+		visibleFileName = filename.slice(0, partSize) + '…' + filename.slice(-partSize);
+	}
+
+	this.fpFileName.textContent = visibleFileName;
+};
+
+FilePicker.prototype.getFile = function() {
+	return this.uploadInput.files[0];
+};
+
+FilePicker.prototype.clear = function() {
+	this.fpFileName.textContent = DEFAULT_VALUE;
+}
+
+module.exports = FilePicker;

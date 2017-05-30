@@ -1,6 +1,6 @@
-<div class="authorization">
+<div id="auth-widget" class="auth-widget">
 
-	<div class="window auth-window window_invisible">
+	<div class="window auth-window join-window window_invisible">
 		<div class="header window__header">
 			signing up
 		</div>
@@ -10,12 +10,15 @@
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
 			{{> textbox name="password-again" caption="password again" type="password" parent="window"}}
 			{{> button caption="join" parent="window" id="join" submit=true}}
-			<span id="login-ref" class="window__message">Already have an account? <a class="ref">Log in</a></span>
+
+
+			<span class="window__message">
+				Already have an account? <span class="ref">Log in</span>
+			</span>
 		</form>
 	</div>
 
-
-	<div class="window auth-window">
+	<div class="window auth-window login-window">
 		<div class="header window__header">
 			logging in
 		</div>
@@ -23,9 +26,10 @@
 			{{> textbox name="username" caption="username" parent="window"}}
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
 			{{> button caption="login" parent="window" id="login" submit=true}}
-			<span id="join-ref" class="window__message">Don’t have an account? <a class="ref">Sign up</span></a></span>
+			<span class="window__message">
+				Don’t have an account? <span class="ref">Sign up</span>
+			</span>
 		</form>
 	</div>
 
-	
 </div>

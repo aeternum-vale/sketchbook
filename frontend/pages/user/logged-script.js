@@ -1,5 +1,7 @@
 let FilePicker = require(BLOCKS + 'file-picker');
-let uploadImageFilePicker = new FilePicker('uploadImageFilePicker');
+let uploadImageFilePicker = new FilePicker({
+	elem: document.getElementById('upload-image-fp')
+});
 
 let uploadWindowCaller = document.getElementById('upload-window-caller');
 let uploadButton = document.getElementById('upload-button');
