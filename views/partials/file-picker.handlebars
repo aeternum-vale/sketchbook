@@ -1,4 +1,4 @@
-<div class="file-picker window__file-picker" id={{id}}>
+<div class="file-picker window__file-picker"{{#if id}} id={{id}}{{/if}}>
 	{{!-- <input type="file" accept="image/*" class="file-picker__input"> --}}
 	<span class="file-picker__filename">no file chosen</span>
 	{{> button caption="choose file" parent="file-picker"}}

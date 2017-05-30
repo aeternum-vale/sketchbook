@@ -10,6 +10,8 @@
 @import "../../blocks/window/window.less";
 @import "../../blocks/file-picker/file-picker.less";
 @import "../../blocks/header-element/header-element.less";
+@import "../../blocks/backdrop/backdrop.less";
+@import "../../blocks/modal-window/modal-window.less";
 
 @avatar-size: 245px;
 @avatar-border-size: 8px;
@@ -28,10 +30,6 @@
 
 @image-preview-margin: 15px;
 @gallery-ver-margin: @global-content-padding - @image-preview-margin;
-
-
-
-
 
 .pseudo-header {
 	position: relative;
@@ -251,24 +249,6 @@
 
 }
 
-.backdrop {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-
-
-	visibility: visible;
-	background-color: #000;
-	opacity: .6;
-	z-index: 15;
-
-	&_invisible {
-		visibility: hidden;
-	}
-}
-
 
 .upload-window-wrapper {
 	position: fixed;
@@ -282,20 +262,15 @@
 	justify-content: center;
 
 	z-index: 16;
-	visibility: visible;
 
-
-	&__window {
-		
-	}
-
+	
 	&_invisible {
-		visibility: hidden;
+		display: none;
 	}
+
 }
 
 .upload-window {
-	position: fixed;
 
 	& .window__panel {
 		height: 260px;
@@ -306,4 +281,5 @@
 	& .window__button {
 		margin: 0;
 	}
+
 }

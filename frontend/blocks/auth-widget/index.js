@@ -23,7 +23,6 @@ let AuthWidget = function(options) {
 	this.joinWindow = this.elem.querySelector('.join-window');
 	this.loginWindow = this.elem.querySelector('.login-window');
 
-
 	this.elem.onclick = e => {
 
 		if (e.target.matches('.window__message .ref')) {
@@ -68,15 +67,15 @@ AuthWidget.prototype.submitLoginForm = function() {
       		encodeURIComponent(this.loginForm['username'].value)}&password=${
          	encodeURIComponent(this.loginForm['password'].value)}`;
 
-	require(LIBS + 'sendXHR')(body, 'POST', '/login', function(response) {
+	require(LIBS + 'sendXHR')(body, 'POST', '/login', response => {
 		if (response.success)
 			if (response.url)
-				trigger('submit', {
+				this.trigger('submit', {
 					url: response.url
 				});
 			else {
-				trigger('error', {
-					message: response: message
+				this.trigger('error', {
+					message: response.message
 				});
 			}
 	});
@@ -99,14 +98,14 @@ AuthWidget.prototype.submitJoinForm = function() {
 	if (result.success)
 		require(LIBS + 'sendXHR')(body, 'POST', '/join', function(response) {
 			if (response.success)
-				trigger('submit', {
+				this.trigger('submit', {
 					url: response.url
 				});
 			else {
 				if (response.property)
 					this.setPropertyError(response.property, response.message);
 				else
-					trigger('error');
+					this.trigger('error');
 			}
 		});
 };
