@@ -50,6 +50,8 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 			} else
 			if (response.message)
 				self.setError(response.message);
+			else
+				self.trigger('error');
 		} else
 			self.trigger('error');
 	};

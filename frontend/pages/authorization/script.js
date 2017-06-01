@@ -3,6 +3,9 @@
 import './style.less';
 
 let AuthWidget = require(BLOCKS + 'auth-widget');
+
+
+
 let authWidget = new AuthWidget({
    elem: document.getElementById('auth-widget')
 });

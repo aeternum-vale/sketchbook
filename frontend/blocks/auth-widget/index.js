@@ -67,16 +67,19 @@ AuthWidget.prototype.submitLoginForm = function() {
       		encodeURIComponent(this.loginForm['username'].value)}&password=${
          	encodeURIComponent(this.loginForm['password'].value)}`;
 
-	require(LIBS + 'sendXHR')(body, 'POST', '/login', response => {
+	require(LIBS + 'sendXHR')(body, 'POST', '/login', (err, response) => {
+		if (err) {
+			this.trigger('error', err);
+			return;
+		}
+
 		if (response.success)
 			if (response.url)
 				this.trigger('submit', {
 					url: response.url
 				});
 			else {
-				this.trigger('error', {
-					message: response.message
-				});
+				this.trigger('error', new Error(response.message));
 			}
 	});
 };

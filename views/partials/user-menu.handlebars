@@ -1,9 +1,10 @@
-<div id="{{id}}" class="header-element user-menu">
+<div id="{{id}}" class="header-element user-menu dropdown">
+
 	<div class="user-menu__username">{{loggedUser.username}}</div>
 	<div class="user-menu__avatar"></div>
 	<div class="user-menu__arrow"></div>
 
-	<div class="dropdown user-menu__dropdown">
+	<div class="dropdown__item-list user-menu__item-list">
 		{{> dropdown-item caption="view profile" link="/user/" linkValue=loggedUser.username }}
 		{{> dropdown-item caption="upload" link="/upload" }}
 		{{> dropdown-item caption="settings" link="/settings" }}

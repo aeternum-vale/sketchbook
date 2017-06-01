@@ -46,4 +46,11 @@
 	}
 }
 
+.button-active(@_font-size) {
+	@_padding: @_font-size / 3;
+	@_offset: @_font-size / 8;
+	padding-top: @_padding + @_offset / 2;
+	padding-bottom: @_padding - @_offset / 2;
+}
+
 

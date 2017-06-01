@@ -12,6 +12,8 @@
 @import "../../blocks/header-element/header-element.less";
 @import "../../blocks/backdrop/backdrop.less";
 @import "../../blocks/modal-window/modal-window.less";
+@import "../../blocks/message-modal-window/message-modal-window.less";
+@import "../../blocks/upload-image-modal-window/upload-image-modal-window.less";
 
 @avatar-size: 245px;
 @avatar-border-size: 8px;
@@ -92,13 +94,13 @@
 		text-align: right;
 	}
 
-	&__link-list-switch {
+	&__links-dropdown {
 		margin-top: 10px;
 	}
 
 }
 
-.link-list-switch {
+.links-dropdown {
 	position: relative;
 	width: 42px;
 	height: 42px;
@@ -112,17 +114,12 @@
 		background-image: url('images/link-list-switch-active.png');
 	}
 
-	&__dropdown {
+	&__item-list {
 		top: 42px;
 		right: 42px;
 	}
 
-	&_active &__dropdown {
-		visibility: visible;
-	}
-
 }
-
 
 .extra-header {
 	position: relative;
@@ -140,6 +137,10 @@
 		.button(16px);
 		padding-left: 20px;
 		padding-right: 20px;
+	}
+
+	&__button.button_active {
+		.button-active(16px);
 	}
 }
 
@@ -245,41 +246,6 @@
 
 	&_ghost {
 		display: none;
-	}
-
-}
-
-
-.upload-window-wrapper {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	z-index: 16;
-
-	
-	&_invisible {
-		display: none;
-	}
-
-}
-
-.upload-window {
-
-	& .window__panel {
-		height: 260px;
-		justify-content: space-between;
-		padding: 20px;
-	}
-
-	& .window__button {
-		margin: 0;
 	}
 
 }

@@ -9,8 +9,8 @@
 		<div class="description">
 			<div class="description__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis illo dignissimos, fugiat accusamus beatae at, eius excepturi tenetur. Quasi ipsa quidem adipisci nostrum voluptatibus tempore voluptates iste. Provident, nulla, pariatur!
 			</div>
-			<div class="link-list-switch description__link-list-switch">
-				<ul class="dropdown link-list-switch__dropdown">
+			<div id="links-dropdown" class="dropdown links-dropdown description__links-dropdown">
+				<ul class="dropdown__item-list links-dropdown__item-list">
 					{{> dropdown-item caption="instagram" icon="true"}}
 					{{> dropdown-item caption="deviantart" icon="true"}}
 					{{> dropdown-item caption="facebook" icon="true"}}
@@ -36,13 +36,11 @@
 			<div id="subscribe-button" 
 			{{#if isSubscribed}}
 				data-checked="true"
-				class="button button_active extra-header__button extra-header__button_active">
+				class="button button_active extra-header__button"
 			{{else}}
-				class="button extra-header__button">
-			{{/if}}				
-				subscribe
-			</div>
-
+				class="button extra-header__button"
+			{{/if}}		
+			>subscribe</div>
 		{{/if}}
 	</div>
 </div>
@@ -71,8 +69,19 @@
 
 
 <div class="backdrop backdrop_invisible"></div>
-<div class="upload-window-wrapper upload-window-wrapper_invisible"> 
-	<div id="upload-window" class="window window_invisible modal-window  upload-window">
+<div class="modal-window-wrapper modal-window-wrapper_invisible"> 
+
+	<div id="message-modal-window" class="window window_invisible modal-window message-modal-window">
+		<div class="header window__header">
+			caption
+		</div>
+		
+		<div class="panel window__panel">
+			<div class="message-modal-window__message">message</div>
+		</div>
+	</div>
+
+	<div id="upload-image-modal-window" class="window window_invisible modal-window upload-image-modal-window">
 		<div class="header window__header">
 			image uploading
 		</div>

@@ -44,19 +44,15 @@
 		border-color: @global-main-color-light transparent transparent transparent;
 	}
 
-	&__dropdown {
+	&__item-list {
 		top: @page-header-height + 10px;
 	}
 
-	&_active &__dropdown {
-		visibility: visible;
-	}
-
-	&_active &__arrow {
+	.header-element_active &__arrow {
 		border-color: #fff transparent transparent transparent;
 	}
 
-	&_active &__avatar::before {
+	.header-element_active &__avatar::before {
 		content: "";
 		display: block;
 		position: absolute;

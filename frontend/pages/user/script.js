@@ -2,11 +2,14 @@
 
 import './style.less';
 
-let UserMenu = require(BLOCKS + 'user-menu');
-let userMenu = new UserMenu('user-menu');
+let Dropdown = require(BLOCKS + 'dropdown');
 
-let linkListSwitch = document.getElementsByClassName('link-list-switch')[0];
+let linksDropdown = new Dropdown({
+	elem: document.getElementById('links-dropdown'),
+	className: 'links-dropdown'
+});
 
-linkListSwitch.onclick = function(e) {
-	this.classList.toggle('link-list-switch_active');
-};
+let userMenuDropdown = new Dropdown({
+	elem: document.getElementById('user-menu'),
+	className: 'header-element'
+});

@@ -1,44 +1,31 @@
-module.exports = function(options) {
+let eventMixin = require(LIBS + 'eventMixin');
 
-	let elem = options.elem;
+let LikeButton = function(options) {
 
-	let likeAmount = +elem.dataset.likeAmount;
-	let active = !!elem.dataset.active;
-	let available = true;
+	this.elem = options.elem;
 
-	function setLike() {
-		elem.textContent = `like ${likeAmount}`;
-	}
+	this.likeAmount = +this.elem.dataset.likeAmount;
+	this.active = !!this.elem.dataset.active;
+	this.available = true;
 
-	function toggle() {
-		if (active) {
-			elem.classList.remove('button_active');
-			elem.classList.remove('like-button_active');
-			likeAmount--;
-			active = false;
-		} else {
-			elem.classList.add('button_active');
-			elem.classList.add('like-button_active');
-			likeAmount++;
-			active = true;
-		}
-		setLike();
-	}
+	this.elem.onclick = e => {
 
-	elem.onclick = function(e) {
+		if (this.available) {
+			this.available = false;
+			this.toggle();
 
-		if (available) {
-			available = false;
-			toggle();
+			require(LIBS + 'sendXHR')(null, 'POST', '/like', (err, response) => {
+				if (err) {
+					this.trigger('error', err);
+					return;
+				}
 
-
-			require(LIBS + 'sendXHR')(null, 'POST', '/like', function(response) {
 				if (response.success) {
-					available = true;
+					this.available = true;
 				} else {
-					toggle();
-					available = true;
-					alert('Server error. Please retry later.');
+					this.toggle();
+					this.available = true;
+					this.trigger('error');
 				}
 			});
 
@@ -46,4 +33,27 @@ module.exports = function(options) {
 
 	};
 
+};
+
+LikeButton.prototype.setLike = function() {
+	this.elem.textContent = `like ${this.likeAmount}`;
+};
+
+LikeButton.prototype.toggle = function() {
+	if (this.active) {
+		this.elem.classList.remove('button_active');
+		this.likeAmount--;
+		this.active = false;
+	} else {
+		this.elem.classList.add('button_active');
+		this.likeAmount++;
+		this.active = true;
+	}
+	this.setLike();
+};
+
+for (let key in eventMixin) {
+	LikeButton.prototype[key] = eventMixin[key];
 }
+
+module.exports = LikeButton;

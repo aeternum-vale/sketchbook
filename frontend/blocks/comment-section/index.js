@@ -1,3 +1,5 @@
+let eventMixin = require(LIBS + 'eventMixin');
+
 let CommentSection = function(options) {
 
 	this.elem = options.elem;
@@ -9,14 +11,24 @@ let CommentSection = function(options) {
 		let comment = e.target.closest('.comment');
 
 		let body = `commentId=${encodeURIComponent(comment.dataset.id)}`;
-		require(LIBS + 'sendXHR')(body, 'DELETE', '/comment', response => {
-			if (response.success) {
+		require(LIBS + 'sendXHR')(body, 'DELETE', '/comment', (err, response) => {
+			if (err) {
+				this.trigger('error', err);
+				return;
+			}
+
+			if (response.success)
 				comment.remove();
-			} else alert('Server error. Please retry later.');
+			else
+				this.trigger('error');
 		});
 	};
 
 };
+
+for (let key in eventMixin) {
+	CommentSection.prototype[key] = eventMixin[key];
+}
 
 CommentSection.prototype.insertNewComment = function(text, id) {
 	let newComment = this._commentGhost.cloneNode(true);

@@ -14,14 +14,17 @@ let SubscribeButton = function(options) {
 			this.available = false;
 			this.toggle();
 
-			require(LIBS + 'sendXHR')(null, 'POST', '/subscribe', response => {
+			require(LIBS + 'sendXHR')(null, 'POST', '/subscribe', (err, response) => {
+				if (err) {
+					this.trigger('error', err);
+				}
+
 				if (response.success) {
 					this.available = true;
 				} else {
 					this.toggle();
 					this.available = true;
-					trigger.on('error');
-					//alert('Server error. Please retry later.');
+					this.trigger('error');
 				}
 			});
 
@@ -32,11 +35,9 @@ let SubscribeButton = function(options) {
 SubscribeButton.prototype.toggle = function() {
 	if (this.checked) {
 		this.elem.classList.remove('button_active');
-		this.elem.classList.remove('extra-header__button_active');
 		this.checked = false;
 	} else {
 		this.elem.classList.add('button_active');
-		this.elem.classList.add('extra-header__button_active');
 		this.checked = true;
 	}
 

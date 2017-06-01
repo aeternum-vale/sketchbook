@@ -1,7 +1,11 @@
+let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
+let MessageModalWindow = require(BLOCKS + 'message-modal-window');
+
+
+
 let galleryWrapper = document.getElementsByClassName('gallery__wrapper')[0];
 let imagePreviewGhost = document.getElementsByClassName('image-preview')[0];
 let publicationNumber = document.getElementById('publication-number');
-let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
 let subscribeButtonElem;
 let uploadWindowCaller;
 
@@ -12,7 +16,7 @@ if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
 }
 
 let uploadImageModalWindow = new UploadImageModalWindow({
-	elem: document.getElementById('upload-window')
+	elem: document.getElementById('upload-image-modal-window')
 });
 
 uploadImageModalWindow.on('uploaded', e => {
@@ -51,3 +55,12 @@ function insertNewImagePreview(imageId, previewUrl) {
 	galleryWrapper.appendChild(newImagePreview);
 	publicationNumber.textContent = +publicationNumber.textContent + 1;
 }
+
+//------
+
+
+let messageModalWindow = new MessageModalWindow({
+	elem: document.getElementById('message-modal-window')
+});
+
+messageModalWindow.show('Hello World!');
