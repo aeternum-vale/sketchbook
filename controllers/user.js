@@ -198,6 +198,9 @@ function authorizationRequestListener(req, res, next) {
 
 function subscribeRequestListener(req, res, next) {
 
+	return next(500);
+
+
 	let index;
 	if (req.refererParams.field === 'user') {
 		let username = req.refererParams.value;

@@ -1,4 +1,3 @@
-
 module.exports = function(body, method, url, cb) {
 	let xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);
@@ -8,7 +7,15 @@ module.exports = function(body, method, url, cb) {
 	xhr.onreadystatechange = function() {
 		if (this.readyState != 4) return;
 		if (this.status != 200) {
-			cb(new Error("Error sending request"));
+
+			let message = 'Server is not responding';
+
+			if (this.responseText) {
+				let response = JSON.parse(this.responseText);
+				message = response.message
+			}
+
+			cb(message);
 			return;
 		}
 

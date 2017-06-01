@@ -1,4 +1,7 @@
 let eventMixin = require(LIBS + 'eventMixin');
+let componentErrors = require(LIBS + 'componentErrors');
+let ClientError = componentErrors.ClientError;
+let ServerError = componentErrors.ServerError;
 
 let SubscribeButton = function(options) {
 
@@ -16,7 +19,14 @@ let SubscribeButton = function(options) {
 
 			require(LIBS + 'sendXHR')(null, 'POST', '/subscribe', (err, response) => {
 				if (err) {
-					this.trigger('error', err);
+					this.trigger('error', new ServerError(err));
+					this.elem.dispatchEvent(new CustomEvent('error', {
+						bubbles: true,
+						detail: new ServerError(err)
+					}));
+					this.toggle();
+					this.available = true;
+					return;
 				}
 
 				if (response.success) {
@@ -24,8 +34,14 @@ let SubscribeButton = function(options) {
 				} else {
 					this.toggle();
 					this.available = true;
-					this.trigger('error');
+					this.trigger('error', new ServerError(response.message));
+					this.elem.dispatchEvent(new CustomEvent('error', {
+						bubbles: true,
+						detail: new ServerError(response.message)
+					}));
 				}
+
+
 			});
 
 		}
@@ -46,7 +62,7 @@ SubscribeButton.prototype.toggle = function() {
 
 
 for (let key in eventMixin) {
- 	SubscribeButton.prototype[key] = eventMixin[key];
+	SubscribeButton.prototype[key] = eventMixin[key];
 }
 
 module.exports = SubscribeButton;

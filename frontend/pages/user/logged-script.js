@@ -9,6 +9,10 @@ let publicationNumber = document.getElementById('publication-number');
 let subscribeButtonElem;
 let uploadWindowCaller;
 
+let ComponentError = require(LIBS + 'componentErrors').ComponentError;
+
+
+
 if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
 	uploadWindowCaller.onclick = function() {
 		uploadImageModalWindow.activate();
@@ -39,6 +43,8 @@ if (subscribeButtonElem = document.getElementById('subscribe-button')) {
 		else
 			subscribersNumberElem.textContent = --subscribersNumber;
 	});
+
+
 }
 
 
@@ -59,8 +65,16 @@ function insertNewImagePreview(imageId, previewUrl) {
 //------
 
 
-let messageModalWindow = new MessageModalWindow({
-	elem: document.getElementById('message-modal-window')
-});
+document.addEventListener('error', e => {
 
-messageModalWindow.show('Hello World!');
+	let error = e.detail;
+
+	if (error instanceof ComponentError) {
+
+		let messageModalWindow = new MessageModalWindow({
+			elem: document.getElementById('message-modal-window')
+		});
+
+		messageModalWindow.show(error.message);
+	}
+});

@@ -8,10 +8,11 @@ module.exports = function(req, res, next) {
 		if (req.xhr)
 			res.json({
 				succes: false,
-				error
+				message: error.message,
 			});
 		else
 			res.render("error", {
+				message: error.message,
 				error: error
 			});
 	};

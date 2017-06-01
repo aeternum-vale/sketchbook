@@ -7,31 +7,31 @@ function CustomError(message) {
 	else
 		this.stack = (new Error()).stack;
 }
-CustomError.prototype = Object.crate(Error.prototype);
+CustomError.prototype = Object.create(Error.prototype);
 CustomError.prototype.constructor = CustomError;
 
 
 function ComponentError(message) {
-	CustomError.call(this, message);
+	CustomError.call(this, message || 'An error has occurred' );
 	this.name = "ComponentError";
 }
-ComponentError.prototype = Object.crate(CustomError.prototype);
+ComponentError.prototype = Object.create(CustomError.prototype);
 ComponentError.prototype.constructor = ComponentError;
 
 
 function ClientError(message) {
-	ComponentError.call(this, message);
+	ComponentError.call(this, message || 'An error has occurred. Check if javascript is enabled');
 	this.name = "ClientError";
 }
-ClientError.prototype = Object.crate(ComponentError.prototype);
+ClientError.prototype = Object.create(ComponentError.prototype);
 ClientError.prototype.constructor = ClientError;
 
 
 function ServerError(message) {
-	ComponentError.call(this, message);
+	ComponentError.call(this, message || 'There is some error on the server side');
 	this.name = "ServerError";
 }
-ServerError.prototype = Object.crate(ComponentError.prototype);
+ServerError.prototype = Object.create(ComponentError.prototype);
 ServerError.prototype.constructor = ServerError;
 
 module.exports = {
