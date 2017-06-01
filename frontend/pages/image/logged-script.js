@@ -7,16 +7,21 @@ let commentSend = new CommentSend({
 	elem: document.getElementById('comment-send')
 });
 commentSend.on('post', e => {
-	commentSection.insertNewComment(e.text, e.id);
+	commentSection.insertNewComment(e.detail.text, e.detail.id);
 });
 
 let DeleteImageButton = require(BLOCKS + 'delete-image-button');
 let deleteImageButtonElem = document.getElementById('delete-image-button');
 let deleteImageButton;
-if (deleteImageButtonElem)
+if (deleteImageButtonElem) {
 	deleteImageButton = new DeleteImageButton({
 		elem: deleteImageButtonElem
 	});
+
+	deleteImageButton.on('deleted', e => {
+		window.location = e.detail.url || '/';
+	});
+}
 
 let LikeButton = require(BLOCKS + 'like-button');
 let likeButton = new LikeButton({

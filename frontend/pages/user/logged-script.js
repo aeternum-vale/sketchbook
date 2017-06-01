@@ -1,17 +1,10 @@
 let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
-let MessageModalWindow = require(BLOCKS + 'message-modal-window');
-
-
 
 let galleryWrapper = document.getElementsByClassName('gallery__wrapper')[0];
 let imagePreviewGhost = document.getElementsByClassName('image-preview')[0];
 let publicationNumber = document.getElementById('publication-number');
 let subscribeButtonElem;
 let uploadWindowCaller;
-
-let ComponentError = require(LIBS + 'componentErrors').ComponentError;
-
-
 
 if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
 	uploadWindowCaller.onclick = function() {
@@ -24,7 +17,7 @@ let uploadImageModalWindow = new UploadImageModalWindow({
 });
 
 uploadImageModalWindow.on('uploaded', e => {
-	insertNewImagePreview(e.imageId, e.previewUrl);
+	insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
 });
 
 
@@ -44,9 +37,7 @@ if (subscribeButtonElem = document.getElementById('subscribe-button')) {
 			subscribersNumberElem.textContent = --subscribersNumber;
 	});
 
-
 }
-
 
 function insertNewImagePreview(imageId, previewUrl) {
 	let newImagePreview = imagePreviewGhost.cloneNode(true);
@@ -61,20 +52,3 @@ function insertNewImagePreview(imageId, previewUrl) {
 	galleryWrapper.appendChild(newImagePreview);
 	publicationNumber.textContent = +publicationNumber.textContent + 1;
 }
-
-//------
-
-
-document.addEventListener('error', e => {
-
-	let error = e.detail;
-
-	if (error instanceof ComponentError) {
-
-		let messageModalWindow = new MessageModalWindow({
-			elem: document.getElementById('message-modal-window')
-		});
-
-		messageModalWindow.show(error.message);
-	}
-});

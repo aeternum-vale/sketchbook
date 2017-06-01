@@ -12,15 +12,14 @@ let CommentSection = function(options) {
 
 		let body = `commentId=${encodeURIComponent(comment.dataset.id)}`;
 		require(LIBS + 'sendXHR')(body, 'DELETE', '/comment', (err, response) => {
+
 			if (err) {
-				this.trigger('error', err);
+				this.error(err);
 				return;
 			}
 
-			if (response.success)
-				comment.remove();
-			else
-				this.trigger('error');
+			comment.remove();
+
 		});
 	};
 

@@ -18,29 +18,14 @@ let SubscribeButton = function(options) {
 			this.toggle();
 
 			require(LIBS + 'sendXHR')(null, 'POST', '/subscribe', (err, response) => {
+
+				this.available = true;
+
 				if (err) {
-					this.trigger('error', new ServerError(err));
-					this.elem.dispatchEvent(new CustomEvent('error', {
-						bubbles: true,
-						detail: new ServerError(err)
-					}));
 					this.toggle();
-					this.available = true;
+					this.error(err);
 					return;
-				}
-
-				if (response.success) {
-					this.available = true;
-				} else {
-					this.toggle();
-					this.available = true;
-					this.trigger('error', new ServerError(response.message));
-					this.elem.dispatchEvent(new CustomEvent('error', {
-						bubbles: true,
-						detail: new ServerError(response.message)
-					}));
-				}
-
+				} 
 
 			});
 

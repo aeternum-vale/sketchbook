@@ -198,7 +198,7 @@ function authorizationRequestListener(req, res, next) {
 
 function subscribeRequestListener(req, res, next) {
 
-	return next(500);
+	//return next(500);
 
 
 	let index;

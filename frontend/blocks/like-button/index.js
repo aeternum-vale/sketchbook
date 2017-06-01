@@ -15,18 +15,15 @@ let LikeButton = function(options) {
 			this.toggle();
 
 			require(LIBS + 'sendXHR')(null, 'POST', '/like', (err, response) => {
+				
+				this.available = true;
+
 				if (err) {
-					this.trigger('error', err);
+					this.toggle();
+					this.error(err);
 					return;
 				}
 
-				if (response.success) {
-					this.available = true;
-				} else {
-					this.toggle();
-					this.available = true;
-					this.trigger('error');
-				}
 			});
 
 		}

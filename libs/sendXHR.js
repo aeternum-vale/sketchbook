@@ -1,3 +1,5 @@
+let ServerError = require(LIBS + 'componentErrors').ServerError;
+
 module.exports = function(body, method, url, cb) {
 	let xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);
@@ -6,21 +8,26 @@ module.exports = function(body, method, url, cb) {
 
 	xhr.onreadystatechange = function() {
 		if (this.readyState != 4) return;
+		let response
 		if (this.status != 200) {
 
 			let message = 'Server is not responding';
 
 			if (this.responseText) {
-				let response = JSON.parse(this.responseText);
+				response = JSON.parse(this.responseText);
 				message = response.message
 			}
 
-			cb(message);
+			cb(new ServerError(message), response);
 			return;
 		}
 
-		let response = JSON.parse(this.responseText);
-		cb(null, response);
+		response = JSON.parse(this.responseText);
+		if (response.success)
+			cb(null, response);
+		else
+			cb(new ServerError(response.message), response);
+
 	};
 
 	xhr.send(body);

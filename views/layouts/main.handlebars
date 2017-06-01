@@ -5,6 +5,7 @@
 	{{#if page}}
 		<title>{{page}}</title>
 		<link rel="stylesheet" href="/{{page}}.css">
+		<script defer src="/common-{{page}}.js"></script>
 		<script defer src="/{{page}}.js"></script>
 		{{#if loggedUser}}
 			<script defer src="/logged-{{page}}.js"></script>

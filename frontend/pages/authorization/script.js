@@ -4,8 +4,6 @@ import './style.less';
 
 let AuthWidget = require(BLOCKS + 'auth-widget');
 
-
-
 let authWidget = new AuthWidget({
    elem: document.getElementById('auth-widget')
 });
@@ -19,7 +17,7 @@ window.onpopstate = e => {
 };
 
 authWidget.on('change', e => {
-   if (e.loginWindowActive)
+   if (e.detail.loginWindowActive)
 
       history.pushState({
       type: 'login'
@@ -32,11 +30,7 @@ authWidget.on('change', e => {
 });
 
 authWidget.on('submit', e => {
-   window.location = e.url;
-});
-
-authWidget.on('error', e => {
-   alert('Server error. Please retry later.');
+   window.location = e.detail.url || '/';
 });
 
 if ((history.state && history.state.type === 'join') || window.location.search === '?join') {

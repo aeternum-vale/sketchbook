@@ -68,19 +68,16 @@ AuthWidget.prototype.submitLoginForm = function() {
          	encodeURIComponent(this.loginForm['password'].value)}`;
 
 	require(LIBS + 'sendXHR')(body, 'POST', '/login', (err, response) => {
+
 		if (err) {
-			this.trigger('error', err);
+			this.error(err);
 			return;
 		}
 
-		if (response.success)
-			if (response.url)
-				this.trigger('submit', {
-					url: response.url
-				});
-			else {
-				this.trigger('error', new Error(response.message));
-			}
+		this.trigger('submit', {
+			url: response.url
+		});
+
 	});
 };
 
@@ -99,17 +96,21 @@ AuthWidget.prototype.submitJoinForm = function() {
 
 
 	if (result.success)
-		require(LIBS + 'sendXHR')(body, 'POST', '/join', function(response) {
-			if (response.success)
-				this.trigger('submit', {
-					url: response.url
-				});
-			else {
-				if (response.property)
+		require(LIBS + 'sendXHR')(body, 'POST', '/join', (err, response) => {
+
+			if (err) {
+				if (response || response.property) {
 					this.setPropertyError(response.property, response.message);
-				else
-					this.trigger('error');
+					return;
+				}
+				this.error(err);
+				return;
 			}
+
+			this.trigger('submit', {
+				url: response.url
+			});
+
 		});
 };
 

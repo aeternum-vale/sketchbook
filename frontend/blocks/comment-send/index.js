@@ -13,18 +13,18 @@ let CommentSendForm = function(options) {
 		let body = `text=${encodeURIComponent(text)}`;
 
 		require(LIBS + 'sendXHR')(body, 'POST', '/comment', (err, response) => {
+
 			if (err) {
-				this.trigger('error', err);
+				this.error(err);
 				return;
 			}
 
-			if (response.success) {
-				this.commentSendTextarea.value = '';
-				this.trigger('post', {
-					text,
-					id: response.commentId
-				});
-			} else this.trigger('error');
+			this.commentSendTextarea.value = '';
+			this.trigger('post', {
+				text,
+				id: response.commentId
+			});
+
 		});
 	};
 

@@ -1,5 +1,6 @@
 let ModalWindow = require(BLOCKS + 'modal-window');
 let FilePicker = require(BLOCKS + 'file-picker');
+let ServerError = require(LIBS + 'componentErrors').ServerError;
 
 
 let UploadImageModalWindow = function(options) {
@@ -51,9 +52,9 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 			if (response.message)
 				self.setError(response.message);
 			else
-				self.trigger('error');
+				self.error(new ServerError());
 		} else
-			self.trigger('error');
+			self.error(new ServerError());
 	};
 
 	xhr.open("POST", "/image", true);

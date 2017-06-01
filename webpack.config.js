@@ -71,6 +71,19 @@ module.exports = {
       BASE: JSON.stringify(__dirname + '/'),
       BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/'),
       LIBS: JSON.stringify(__dirname + '/libs/')
+    }),
+
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-user',
+      chunks: ['user', 'logged-user']
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-authorization',
+      chunks: ['authorization', 'logged-authorization']
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-image',
+      chunks: ['image', 'logged-image']
     })
   ]
 
