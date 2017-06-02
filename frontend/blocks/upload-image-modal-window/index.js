@@ -1,10 +1,17 @@
 let ModalWindow = require(BLOCKS + 'modal-window');
 let FilePicker = require(BLOCKS + 'file-picker');
-let ServerError = require(LIBS + 'componentErrors').ServerError;
-
 
 let UploadImageModalWindow = function(options) {
 	ModalWindow.apply(this, arguments);
+};
+UploadImageModalWindow.prototype = Object.create(ModalWindow.prototype);
+UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;
+
+
+UploadImageModalWindow.prototype.setElem = function() {
+	this.elem = document.getElementById('upload-image-modal-window');
+	if (!this.elem)
+		this.elem = this.renderWindow();
 
 	this.uploadButton = this.elem.querySelector('.upload-image-button');
 
@@ -15,7 +22,6 @@ let UploadImageModalWindow = function(options) {
 	this.imageDescription = this.elem.querySelector('.window__textarea');
 	this.uploadErrorMessage = this.elem.querySelector('.window__error-message');
 
-
 	this.elem.onclick = e => {
 		if (e.target === this.uploadButton) {
 			let file = this.uploadImageFilePicker.getFile();
@@ -25,10 +31,13 @@ let UploadImageModalWindow = function(options) {
 		}
 	};
 
+	this.setListeners();
 };
-UploadImageModalWindow.prototype = Object.create(ModalWindow.prototype);
-UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;
 
+
+UploadImageModalWindow.prototype.renderWindow = function() {
+	return require('./renderWindow')(this.wrapper);
+};
 
 
 UploadImageModalWindow.prototype.uploadImage = function(file, description) {
@@ -39,7 +48,7 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 		//console.log(event.loaded + ' / ' + event.total);
 	};
 
-	xhr.onload = xhr.onerror = function () {
+	xhr.onload = xhr.onerror = function() {
 		if (this.status == 200) {
 			let response = JSON.parse(this.responseText);
 			if (response.success) {
@@ -66,8 +75,19 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 };
 
 UploadImageModalWindow.prototype.activate = function() {
-	this.clear();
 	ModalWindow.prototype.activate.apply(this);
+
+	if (!this.elem)
+		this.setElem();
+	
+	this.clear();
+
+	this.elem.classList.remove('window_invisible');
+};
+
+UploadImageModalWindow.prototype.deactivate = function() {
+	ModalWindow.prototype.deactivate.apply(this);
+	this.elem.classList.add('window_invisible');
 };
 
 UploadImageModalWindow.prototype.clear = function() {
@@ -79,6 +99,7 @@ UploadImageModalWindow.prototype.clear = function() {
 UploadImageModalWindow.prototype.setError = function(error) {
 	this.uploadErrorMessage.textContent = error;
 };
+
 
 
 module.exports = UploadImageModalWindow;

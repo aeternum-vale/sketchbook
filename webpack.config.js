@@ -14,7 +14,9 @@ module.exports = {
     user: './user/script',
     'logged-user': './user/logged-script',
     image: './image/script',
-    'logged-image': './image/logged-script'
+    'logged-image': './image/logged-script',
+    feed: './feed/script',
+    'logged-feed': './feed/logged-script'
   },
 
   output: {
@@ -84,6 +86,10 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common-image',
       chunks: ['image', 'logged-image']
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common-feed',
+      chunks: ['feed', 'logged-feed']
     })
   ]
 

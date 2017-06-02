@@ -256,10 +256,65 @@ function likeRequestListener(req, res, next) {
 	});
 }
 
+
+function feedRequestListener(req, res, next) {
+
+
+
+	co(function*() {
+		let feed = [];
+
+		let subs = res.loggedUser.subscriptions;
+
+		for (let i = 0; i < subs.length; i++) {
+			let imageIds = (yield User.findById(subs[i], {
+				images: true
+			}).exec()).images;
+
+			for (let j = 0; j < imageIds.length; j++) {
+				let image = yield Image.findById(imageIds[j]).exec();
+				if (image)
+					feed.push(image);
+			}
+		};
+
+		feed.sort((a, b) => {
+			if (a.created > b.created)
+				return 1
+			else if (a.created < b.created)
+				return -1;
+			return 0;
+		});
+
+		return feed;
+
+	}).then(feed => {
+
+		res.locals.page = 'feed';
+		res.locals.feed = feed;
+
+		feed.forEach(item => {
+			item.previewUrl = imagePaths.getImagePreviewFileNameByStringId(item._id);
+		});
+
+
+		res.render('feed');
+
+	}).catch(err => {
+		next(err);
+	});
+
+
+
+}
+
+
 exports.registerRoutes = function(app) {
 	app.post('/image', isAuth, uploadImageListRequestListener);
 	app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
 	app.get('/images', imageListRequestListener);
 	app.get('/image/:id', addLoggedUser, imageRequestListener);
 	app.post('/like', isAuth, addLoggedUser, addRefererParams, likeRequestListener);
+
+	app.get('/feed', isAuth, addLoggedUser, feedRequestListener);
 };

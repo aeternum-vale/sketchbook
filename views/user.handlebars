@@ -65,36 +65,3 @@
 	</div>
 </div>
 {{> footer}}
-
-
-
-<div class="backdrop backdrop_invisible"></div>
-<div class="modal-window-wrapper modal-window-wrapper_invisible"> 
-
-	<div id="message-modal-window" class="window window_invisible modal-window message-modal-window">
-		<div class="header window__header">
-			caption
-		</div>
-		
-		<div class="panel window__panel">
-			<div class="message-modal-window__message">message</div>
-		</div>
-	</div>
-
-	<div id="upload-image-modal-window" class="window window_invisible modal-window upload-image-modal-window">
-		<div class="header window__header">
-			image uploading
-		</div>
-		
-		<div class="panel window__panel">
-			{{> file-picker}}
-
-			<textarea class="window__textarea" placeholder="description goes here…"></textarea>
-
-			<span class="window__error-message"></span>
-
-			<div class="button button__window upload-image-button">upload</div>
-		</div>
-	</div>
-</div>
-

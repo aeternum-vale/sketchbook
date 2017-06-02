@@ -1,0 +1,20 @@
+{{> page-header}}
+<div class="pseudo-header"></div>
+
+this is your feed
+
+<div class="gallery">
+	<div class="gallery__wrapper">
+
+		{{#each feed}}
+			{{> image-preview 
+				comments=comments.length
+				likes=likes.length
+				previewUrl=previewUrl
+				imageId=_id
+			}}
+		{{/each}}
+
+	</div>
+</div>
+{{> footer}}

@@ -14,3 +14,5 @@ window.onload = e => {
 window.addEventListener('resize', e => {
 	imagePost.resizeImage();
 });
+
+require(LIBS + 'setGlobalErrorCatcher')();

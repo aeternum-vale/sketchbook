@@ -221,7 +221,7 @@ function subscribeRequestListener(req, res, next) {
 
 				yield res.loggedUser.update({
 					$pull: {
-						subscribers: user._id
+						subscriptions: user._id
 					}
 				}).exec();
 
@@ -235,7 +235,7 @@ function subscribeRequestListener(req, res, next) {
 
 				yield res.loggedUser.update({
 					$addToSet: {
-						subscribers: user._id
+						subscriptions: user._id
 					}
 				}).exec();
 			}
@@ -256,10 +256,7 @@ function subscribeRequestListener(req, res, next) {
 
 			let image = yield Image.findById(imageId).exec();
 
-
-
 			let user = yield User.findById(image.author).exec();
-
 
 			if (~user.subscribers.indexOf(res.loggedUser._id)) {
 
@@ -271,7 +268,7 @@ function subscribeRequestListener(req, res, next) {
 
 				yield res.loggedUser.update({
 					$pull: {
-						subscribers: user._id
+						subscriptions: user._id
 					}
 				}).exec();
 
@@ -285,7 +282,7 @@ function subscribeRequestListener(req, res, next) {
 
 				yield res.loggedUser.update({
 					$addToSet: {
-						subscribers: user._id
+						subscriptions: user._id
 					}
 				}).exec();
 			}

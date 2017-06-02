@@ -12,9 +12,7 @@ if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
 	};
 }
 
-let uploadImageModalWindow = new UploadImageModalWindow({
-	elem: document.getElementById('upload-image-modal-window')
-});
+let uploadImageModalWindow = new UploadImageModalWindow();
 
 uploadImageModalWindow.on('uploaded', e => {
 	insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);

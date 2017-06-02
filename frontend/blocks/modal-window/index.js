@@ -1,27 +1,55 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let ModalWindow = function(options) {
-	this.elem = options.elem;
-	this.wrapper = this.elem.closest('.modal-window-wrapper');
-	this.backdrop = this.wrapper.previousElementSibling;
-
-	if (!this.backdrop.matches('.backdrop'))
-		throw new Error('Incorrect backdrop');
+let ModalWindow = function() {
 
 	this.active = false;
+	this.backdrop = null;
+	this.wrapper = null;
 
-	this.wrapper.onclick = e => {
-		if (!e.target.classList.contains('modal-window-wrapper')) return;
-		this.deactivate();
-	};
-
+	this.listeners = [];
 };
 
+ModalWindow.prototype.setListeners = function() {
+	this.listeners.forEach(item => {
+		this.elem.addEventListener(item.eventName, item.cb);
+	});
+};
+
+ModalWindow.prototype.setBackdrop = function() {
+	this.backdrop = document.getElementById('backdrop');
+	if (!this.backdrop)
+		this.backdrop = this.renderBackdrop();
+};
+
+ModalWindow.prototype.setWrapper = function() {
+	this.wrapper = document.getElementById('modal-window-wrapper');
+
+	if (!this.wrapper)
+		this.wrapper = this.renderWrapper();
+
+	this.wrapper.onclick = e => {
+		if (e.target && !e.target.classList.contains('modal-window-wrapper')) return;
+		this.deactivate();
+	};
+};
+
+ModalWindow.prototype.renderBackdrop = function() {
+	return require('./renderBackdrop')();
+};
+
+ModalWindow.prototype.renderWrapper = function() {
+	return require('./renderWrapper')();
+};
 
 ModalWindow.prototype.activate = function() {
+	if (!this.backdrop)
+		this.setBackdrop();
+
+	if (!this.wrapper)
+		this.setWrapper();
+
 	this.active = true;
 
-	this.elem.classList.remove('window_invisible');
 	this.backdrop.classList.remove('backdrop_invisible');
 	this.wrapper.classList.remove('modal-window-wrapper_invisible');
 };
@@ -29,10 +57,10 @@ ModalWindow.prototype.activate = function() {
 ModalWindow.prototype.deactivate = function() {
 	this.active = false;
 
-	this.elem.classList.add('window_invisible');
 	this.backdrop.classList.add('backdrop_invisible');
 	this.wrapper.classList.add('modal-window-wrapper_invisible');
 };
+
 
 for (let key in eventMixin) {
 	ModalWindow.prototype[key] = eventMixin[key];

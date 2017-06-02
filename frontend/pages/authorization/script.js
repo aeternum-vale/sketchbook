@@ -42,3 +42,5 @@ if ((history.state && history.state.type === 'join') || window.location.search =
    history.replaceState({
       type: 'login'
    }, "login", "?login");
+
+require(LIBS + 'setGlobalErrorCatcher')();
