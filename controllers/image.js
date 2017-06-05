@@ -1,5 +1,8 @@
 let Image = require('models/image');
 let User = require('models/user');
+
+let imagePreviewViewModel = require('viewModels/imagePreview');
+
 let co = require('co');
 let config = require('config');
 let debug = require('debug')('app:image:controller');
@@ -259,8 +262,6 @@ function likeRequestListener(req, res, next) {
 
 function feedRequestListener(req, res, next) {
 
-
-
 	co(function*() {
 		let feed = [];
 
@@ -288,24 +289,21 @@ function feedRequestListener(req, res, next) {
 
 		return feed;
 
-	}).then(feed => {
+	}).then(rawFeed => {
 
 		res.locals.page = 'feed';
-		res.locals.feed = feed;
 
-		feed.forEach(item => {
-			item.previewUrl = imagePaths.getImagePreviewFileNameByStringId(item._id);
+		let feed = [];
+		rawFeed.forEach(item => {
+			feed.push(imagePreviewViewModel(item));
 		});
 
-
+		res.locals.feed = feed;
 		res.render('feed');
 
 	}).catch(err => {
 		next(err);
 	});
-
-
-
 }
 
 
@@ -315,6 +313,5 @@ exports.registerRoutes = function(app) {
 	app.get('/images', imageListRequestListener);
 	app.get('/image/:id', addLoggedUser, imageRequestListener);
 	app.post('/like', isAuth, addLoggedUser, addRefererParams, likeRequestListener);
-
 	app.get('/feed', isAuth, addLoggedUser, feedRequestListener);
 };

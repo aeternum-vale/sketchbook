@@ -1,1 +1,17 @@
-<h1>THIS IS A MAIN PAGE</h1>
+{{> page-header}}
+
+<div class="cutaway-wrapper">
+	
+	{{#each cutaways}}
+		{{> cutaway
+			username=username
+			imagesTop=imagesTop
+			imagesBottom=imagesBottom
+		}}
+	{{/each}}
+
+	
+</div>
+
+
+{{> footer}}

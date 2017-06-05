@@ -1,3 +1,4 @@
+@button-padding-reduc-rate: 3;
 
 .button {
 	display: flex;
@@ -34,7 +35,7 @@
 	font-size: @_font-size;
 	line-height: @_font-size;
 
-	@_padding: @_font-size / 3;
+	@_padding: @_font-size / @button-padding-reduc-rate;
 	padding: @_padding;
 	border-radius: @_font-size / 4;
 
@@ -47,7 +48,7 @@
 }
 
 .button-active(@_font-size) {
-	@_padding: @_font-size / 3;
+	@_padding: @_font-size / @button-padding-reduc-rate;
 	@_offset: @_font-size / 8;
 	padding-top: @_padding + @_offset / 2;
 	padding-bottom: @_padding - @_offset / 2;

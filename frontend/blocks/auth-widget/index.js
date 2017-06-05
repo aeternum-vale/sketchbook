@@ -12,7 +12,7 @@ let fields = [{
 	extra: true
 }];
 
-let loginWindowActive = true;
+
 
 let AuthWidget = function(options) {
 	this.elem = options.elem;
@@ -23,12 +23,14 @@ let AuthWidget = function(options) {
 	this.joinWindow = this.elem.querySelector('.join-window');
 	this.loginWindow = this.elem.querySelector('.login-window');
 
+	this.loginWindowActive = true;
+
 	this.elem.onclick = e => {
 
 		if (e.target.matches('.window__message .ref')) {
 			this.toggle();
-			this.trigger('change', {
-				loginWindowActive
+			this.trigger('switch', {
+				loginWindowActive: this.loginWindowActive
 			});
 		}
 
@@ -74,7 +76,7 @@ AuthWidget.prototype.submitLoginForm = function() {
 			return;
 		}
 
-		this.trigger('submit', {
+		this.trigger('authorized', {
 			url: response.url
 		});
 
@@ -91,7 +93,7 @@ AuthWidget.prototype.submitJoinForm = function() {
 	else
 		fields.forEach(item => {
 			if (!item.extra)
-				body += (body === '' ? '' : '&') + item.name + '=' + encodeURIComponent(joinForm[item.name].value);
+				body += (body === '' ? '' : '&') + item.name + '=' + encodeURIComponent(this.joinForm[item.name].value);
 		});
 
 
@@ -107,7 +109,7 @@ AuthWidget.prototype.submitJoinForm = function() {
 				return;
 			}
 
-			this.trigger('submit', {
+			this.trigger('authorized', {
 				url: response.url
 			});
 
@@ -142,18 +144,18 @@ AuthWidget.prototype.setJoin = function() {
 	this.loginWindow.classList.add('window_invisible');
 	this.joinWindow.classList.remove('window_invisible');
 
-	loginWindowActive = false;
+	this.loginWindowActive = false;
 };
 
 AuthWidget.prototype.setLogin = function() {
 	this.joinWindow.classList.add('window_invisible');
 	this.loginWindow.classList.remove('window_invisible');
 
-	loginWindowActive = true;
+	this.loginWindowActive = true;
 };
 
 AuthWidget.prototype.toggle = function() {
-	if (loginWindowActive)
+	if (this.loginWindowActive)
 		this.setJoin();
 	else
 		this.setLogin();

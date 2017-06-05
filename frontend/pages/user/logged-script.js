@@ -3,6 +3,7 @@ let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
 let galleryWrapper = document.getElementsByClassName('gallery__wrapper')[0];
 let imagePreviewGhost = document.getElementsByClassName('image-preview')[0];
 let publicationNumber = document.getElementById('publication-number');
+let Dropdown = require(BLOCKS + 'dropdown');
 let subscribeButtonElem;
 let uploadWindowCaller;
 
@@ -36,6 +37,11 @@ if (subscribeButtonElem = document.getElementById('subscribe-button')) {
 	});
 
 }
+
+let userMenuDropdown = new Dropdown({
+	elem: document.getElementById('user-menu'),
+	className: 'header-element'
+});
 
 function insertNewImagePreview(imageId, previewUrl) {
 	let newImagePreview = imagePreviewGhost.cloneNode(true);

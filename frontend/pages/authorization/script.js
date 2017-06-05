@@ -16,7 +16,7 @@ window.onpopstate = e => {
          authWidget.setLogin();
 };
 
-authWidget.on('change', e => {
+authWidget.on('switch', e => {
    if (e.detail.loginWindowActive)
 
       history.pushState({
@@ -29,7 +29,7 @@ authWidget.on('change', e => {
 
 });
 
-authWidget.on('submit', e => {
+authWidget.on('authorized', e => {
    window.location = e.detail.url || '/';
 });
 

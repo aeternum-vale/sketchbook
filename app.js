@@ -38,7 +38,7 @@ app.use(require('express-session')({
 app.use(require('middleware/sendHttpError'));
 
 app.get('/', function(req, res) {
-	res.render('home');
+	res.redirect(303, '/home');
 });
 
 require('controllers/user').registerRoutes(app);

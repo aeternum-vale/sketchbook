@@ -1,6 +1,8 @@
 let User = require('models/user');
 let Image = require('models/image');
 let userViewModel = require('viewModels/user');
+let imagePreviewViewModel = require('viewModels/imagePreview');
+
 let co = require('co');
 let checkUserData = require('libs/checkUserData');
 let PropertyError = require('error').PropertyError;
@@ -41,10 +43,6 @@ function userProfileRequestListener(req, res, next) {
 		if (!User.indexesEnsured)
 			yield User.ensureIndexes();
 
-		// let loggedUser;
-		// if (req.session.userId)
-		// loggedUser = yield User.findById(req.session.userId).exec();
-
 		let pageUser = yield User.findOne({
 			username: req.params.username
 		}).populate('images').exec();
@@ -53,7 +51,6 @@ function userProfileRequestListener(req, res, next) {
 			throw new HttpError(404, 'this user doesn\'t exist');
 
 		return pageUser;
-
 
 	}).then(pageUser => {
 		res.locals.pageUser = pageUser;
@@ -198,9 +195,6 @@ function authorizationRequestListener(req, res, next) {
 
 function subscribeRequestListener(req, res, next) {
 
-	//return next(500);
-
-
 	let index;
 	if (req.refererParams.field === 'user') {
 		let username = req.refererParams.value;
@@ -297,8 +291,91 @@ function subscribeRequestListener(req, res, next) {
 
 	} else
 		next(404);
+}
 
 
+function homeRequestListener(req, res, next) {
+
+	const CUTAWAY_COUNT = 3;
+	const IMAGE_PREVIEW_COUNT = 12;
+	const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
+
+	co(function*() {
+
+		let cutaways = [];
+		let i = 0;
+		let j = 0;
+
+		//for (let i = 0; i < CUTAWAY_COUNT; i++)
+		//	cutaways.push({});
+
+		let reprUsers = yield User.find().limit(CUTAWAY_COUNT).exec();
+		for (i = 0; i < CUTAWAY_COUNT; i++) {
+
+			let rawImages = yield Image.find({
+				author: reprUsers[i]._id
+			}).limit(IMAGE_PREVIEW_COUNT).exec();
+
+			let images = [];
+			rawImages.forEach(item => {
+				images.push(imagePreviewViewModel(item));
+			});
+
+			while (images.length < IMAGE_PREVIEW_COUNT) {
+				let curLength = images.length;
+				for (j = 0; j < curLength; j++)
+					if (images.length < IMAGE_PREVIEW_COUNT)
+						images.push(images[j]);
+			}
+
+
+
+			let imagesTop = [];
+			let imagesBottom = [];
+			let imagePreviewSideCount = ~~(IMAGE_PREVIEW_COUNT / 2);
+
+			//4 5 6
+			for (j = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; j < imagePreviewSideCount; j++)
+				imagesTop.push(images[j]);
+			//1 2 3
+			for (j = 0; j < IMAGE_PREVIEW_VISIBLE_COUNT; j++)
+				imagesTop.push(images[j]);
+			//4 5 6
+			for (j = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; j < imagePreviewSideCount; j++)
+				imagesTop.push(images[j]);
+
+
+			//7 8 9
+			for (j = imagePreviewSideCount; j < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j++)
+				imagesBottom.push(images[j]);
+			//10 11 12
+			for (j = imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j < IMAGE_PREVIEW_COUNT; j++)
+				imagesBottom.push(images[j]);
+			//7 8 9
+			for (j = imagePreviewSideCount; j < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j++)
+				imagesBottom.push(images[j]);
+
+			cutaways.push({
+				username: reprUsers[i].username,
+				imagesTop,
+				imagesBottom
+			});
+
+
+		}
+
+		return cutaways;
+
+
+	}).then(cutaways => {
+
+		res.locals.cutaways = cutaways;
+		res.locals.page = 'home';
+		res.render('home');
+
+	}).catch(err => {
+		next(err);
+	});
 }
 
 exports.registerRoutes = function(app) {
@@ -309,4 +386,6 @@ exports.registerRoutes = function(app) {
 	app.get('/users', usersListRequestListener);
 	app.get('/user/:username', addLoggedUser, userProfileRequestListener);
 	app.get('/authorization', authorizationRequestListener);
+
+	app.get('/home', addLoggedUser, homeRequestListener);
 };

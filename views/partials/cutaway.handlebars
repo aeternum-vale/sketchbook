@@ -1,0 +1,26 @@
+<div class="window cutaway cutaway-wrapper__cutaway">
+	<div class="header window__header">
+		<div class="cutaway__header-left-side">
+			<div class="cutaway__avatar"></div>
+			<div class="cutaway__username">{{username}}</div>
+		</div>
+		<div class="button cutaway__subscribe-button">subscribe</div>
+	</div>
+	<div class="window__panel cutaway__outer-panel">
+		<div class="cutaway__preview-wrapper cutaway__top">
+
+			{{#each imagesTop}}
+				<div class="cutaway__image-preview" style="background-image: url('/{{previewUrl}}')"></div>
+			{{/each}}
+
+		</div>
+		<div class="cutaway__preview-wrapper cutaway__bottom">
+			{{#each imagesBottom}}
+				<div class="cutaway__image-preview" style="background-image: url('/{{previewUrl}}')"></div>
+			{{/each}}
+
+		</div>
+		<div class="panel cutaway__inner-panel">
+		</div>
+	</div>
+</div>

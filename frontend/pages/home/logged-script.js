@@ -9,5 +9,4 @@ let userMenuDropdown = new Dropdown({
 	className: 'header-element'
 });
 
-
 require(LIBS + 'setGlobalErrorCatcher')();

@@ -7,6 +7,6 @@ module.exports = function() {
 	document.addEventListener('error', e => {
 		let error = e.detail;
 		if (error instanceof ComponentError)
-			messageModalWindow.show(error.message);
+			messageModalWindow.activate(error.message);
 	});
 };
