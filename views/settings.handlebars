@@ -18,12 +18,28 @@
 		<div class="settings__caption">User profile information</div>
 		<div class="settings__section">
 
-			{{> textbox
-				parent="settings"
-				caption="link"
-			}}
+			<div id="social-collection" class="social-collection settings__social-collection">
 
-			<div class="button settings__add-button">add</div>
+				<div class="social-collection__social-list">
+					<div class="social-collection__social">
+						<div class="social-collection__icon"></div>
+						<span class="social-collection__link">/username</span>
+					</div>
+
+					<div class="social-collection__social">
+						<div class="social-collection__icon"></div>
+						<span class="social-collection__link">/usdfseme</span>
+					</div>
+				</div>
+				
+				{{> textbox-button
+					parent="social-collection"
+					caption="link"
+				}}
+
+			</div>
+
+			
 
 			{{> textarea
 				parent="settings"

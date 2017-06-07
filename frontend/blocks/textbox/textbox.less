@@ -1,30 +1,28 @@
-
-
-@field-width: 326px;
-@field-height: 42px;
-@field-border: 4px;
-@field-border-radius: 8px;
+@textbox-field-width: 326px;
+@textbox-field-height: 42px;
+@textbox-field-border: 4px;
+@textbox-field-border-radius: 8px;
 @textbox-caption-gap: 10px;
 
 .textbox {
 	position: relative;
 
-	margin-bottom: @field-border;
+	margin-bottom: @textbox-field-border;
 
 	&::before {
 		content: "";
 
 		display: block;
 		position: absolute;
-		top: -@field-border;
-		left: -@field-border;
+		top: -@textbox-field-border;
+		left: -@textbox-field-border;
 		
-	 	width: @field-width + @field-border * 2;
-	 	height: @field-height + @field-border * 2;
+	 	width: @textbox-field-width + @textbox-field-border * 2;
+	 	height: @textbox-field-height + @textbox-field-border * 2;
 
 		margin-top: @medium-font-size + @textbox-caption-gap;
 
-		border-radius: @field-border-radius;
+		border-radius: @textbox-field-border-radius;
 
 		background-color: #bfd2da;
 		background-image: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
@@ -33,18 +31,16 @@
 	}
 
 	&__field {
-
-
 		position: relative;
-		width: @field-width;
-		height: @field-height;
+		width: @textbox-field-width;
+		height: @textbox-field-height;
 
 		box-sizing: border-box;
 		margin-top: @textbox-caption-gap;
-		padding-left: @field-border-radius;
+		padding-left: @textbox-field-border-radius;
 
 		border-width: 0px;
-		border-radius: @field-border-radius;
+		border-radius: @textbox-field-border-radius;
 
 		background-color: #9eadb4;
 		box-shadow: inset 0 6px 13px rgba(0,0,0,.61);
@@ -54,7 +50,7 @@
 	&__info {
 		position: relative;
 		height: @medium-font-size;
-		padding-left: @field-border-radius;
+		padding-left: @textbox-field-border-radius;
 	}
 
 	&__caption {

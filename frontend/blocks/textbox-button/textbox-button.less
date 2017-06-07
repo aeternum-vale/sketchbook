@@ -1,0 +1,29 @@
+@import "../textbox/textbox.less";
+
+@textbox-button-button-width: 30px;
+@textbox-button-field-width: @textbox-field-width - @textbox-field-border - @textbox-button-button-width;
+
+.textbox-button {
+
+	display: flex;
+
+	&.textbox::before {
+		margin-top: 0;
+	}
+	
+	& .textbox__field {
+		width: @textbox-button-field-width;
+		margin-top: 0;
+
+	}
+
+	&__button {
+		width: @textbox-button-button-width;
+		height: @textbox-field-height;
+		margin-left: @textbox-field-border;
+
+		background-color: white;
+		z-index: 5;
+		cursor: pointer;
+	}
+}

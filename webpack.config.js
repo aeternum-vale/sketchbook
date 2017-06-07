@@ -46,6 +46,9 @@ module.exports = {
     extensions: ['', '.js']
   },
 
+  // node: {
+  //   __dirname: true
+  // },
 
   module: {
     loaders: [{
@@ -93,17 +96,20 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common-home',
       chunks: ['home', 'logged-home']
-    }),
-
-    new HandlebarsPlugin({
-      entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
-      partials: [
-        path.join(__dirname, "views", "partials", "*.handlebars")
-      ]
     })
   ]
 
 };
+
+
+// module.exports.plugins.push(
+//   new HandlebarsPlugin({
+//     entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
+//     partials: [
+//       path.join(__dirname, "views", "partials", "*.handlebars")
+//     ]
+//   })
+// );
 
 
 if (NODE_ENV == 'production') {

@@ -7,8 +7,7 @@
 		<div class="file-picker upload-image-modal-window__file-picker" id="file-picker">
 			<span class="file-picker__filename">no file chosen</span>
 			<div class="button file-picker__button">choose file</div>
-		</div>		
-		<div class="textbox upload-image-modal-window__textarea textarea">
+		</div>		<div class="textbox upload-image-modal-window__textarea textarea">
 			<div class="textbox__info">
 				<span class="textbox__caption"></span>
 				<span class="textbox__error"></span>
