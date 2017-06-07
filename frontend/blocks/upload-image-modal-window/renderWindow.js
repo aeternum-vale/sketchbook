@@ -1,9 +1,7 @@
 module.exports = function(wrapper) {
-	let uplWindow = document.createElement('DIV');
-	uplWindow.className = 'window window_invisible modal-window upload-image-modal-window';
-	uplWindow.id = 'upload-image-modal-window';
-	uplWindow.innerHTML = require('./template.handlebars');
-
+	let parent = document.createElement('DIV');
+	parent.innerHTML = require('html-loader!./upload-image-modal-window');
+	let uplWindow = parent.firstElementChild;
 	wrapper.appendChild(uplWindow);
 	return uplWindow;
 };

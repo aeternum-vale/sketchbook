@@ -13,7 +13,7 @@ UploadImageModalWindow.prototype.setElem = function() {
 	if (!this.elem)
 		this.elem = this.renderWindow();
 
-	this.uploadButton = this.elem.querySelector('.upload-image-button');
+	this.uploadButton = this.elem.querySelector('.upload-image-modal-window__button');
 
 	this.uploadImageFilePicker = new FilePicker({
 		elem: this.elem.querySelector('.file-picker')

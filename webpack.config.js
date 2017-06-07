@@ -4,7 +4,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
 const path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HandlebarsPlugin = require("handlebars-webpack-plugin");
+var HandlebarsPlugin = require('handlebars-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'frontend', 'pages'),
@@ -46,14 +46,6 @@ module.exports = {
     extensions: ['', '.js']
   },
 
-  externals: [{
-    'handlebars/runtime': {
-      root: 'Handlebars',
-      amd: 'handlebars/runtime',
-      commonjs2: 'handlebars/runtime',
-      commonjs: 'handlebars/runtime'
-    }
-  }],
 
   module: {
     loaders: [{
@@ -72,9 +64,6 @@ module.exports = {
       test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
       loader: 'url?limit=4096'
         //loader: 'file?name=[path][name].[ext]&limit=4096'
-    }, {
-      test: /\.handlebars$/,
-      loader: "handlebars?runtime=handlebars/runtime"
     }]
   },
 
@@ -85,7 +74,8 @@ module.exports = {
       LANG: JSON.stringify('en'),
       BASE: JSON.stringify(__dirname + '/'),
       BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/'),
-      LIBS: JSON.stringify(__dirname + '/libs/')
+      LIBS: JSON.stringify(__dirname + '/libs/'),
+      PUBLIC: JSON.stringify(__dirname + '/public/')
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
@@ -106,36 +96,15 @@ module.exports = {
     }),
 
     new HandlebarsPlugin({
-      // path to hbs entry file(s)
-      entry: path.join(__dirname, "app", "src", "*.handlebars"),
-      // output path and filename(s)
-      // if ommited, the input filepath stripped of its extension will be used
-      output: path.join(__dirname, "build", "[name].html"),
-      // data passed to main hbs template: `main-template(data)`
-      data: require("./app/data/project.json"),
-
-      // globbed path to partials, where folder/filename is unique
+      entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
       partials: [
-        path.join(__dirname, "app", "src", "components", "*", "*.handlebars")
-      ],
-
-      // register custom helpers. May be either a function or a glob-pattern
-      helpers: {
-        nameOfHbsHelper: Function.prototype,
-        projectHelpers: path.join(__dirname, "app", "helpers", "*.helper.js")
-      },
-
-      // hooks
-      onBeforeSetup: function(Handlebars) {},
-      onBeforeAddPartials: function(Handlebars, partialsMap) {},
-      onBeforeCompile: function(Handlebars, templateContent) {},
-      onBeforeRender: function(Handlebars, data) {},
-      onBeforeSave: function(Handlebars, resultHtml, filename) {},
-      onDone: function(Handlebars, filename) {}
+        path.join(__dirname, "views", "partials", "*.handlebars")
+      ]
     })
   ]
 
 };
+
 
 if (NODE_ENV == 'production') {
   module.exports.plugins.push(

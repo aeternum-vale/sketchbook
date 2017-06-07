@@ -1,14 +1,18 @@
 @import "../modal-window/modal-window.less";
 @import "../textarea/textarea.less";
+@import "../button/button.less";
 
 .upload-image-modal-window {
 	& .window__panel {
-		height: 260px;
 		justify-content: space-between;
 		padding: 20px;
 	}
 
-	& .window__button {
+	&__button {
 		margin: 0;
+	}
+
+	&__textarea {
+		margin-bottom: 20px;
 	}
 }
