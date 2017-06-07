@@ -1,16 +1,13 @@
-{{#if parent}}
-<div class="textbox {{parent}}__textbox">
-{{else}}
-<div class="textbox">
-{{/if}}
+
+<div class="textbox{{#if parent}} {{parent}}__textbox"{{/if}}>
 	<div class="textbox__info">
 		<span class="textbox__caption">{{caption}}</span>
 		<span class="textbox__error"></span>
 	</div>
 	{{#if type}}
-	<input name="{{name}}" type="{{type}}"
+		<input name="{{name}}" type="{{type}}"
 	{{else}}
-	<input name="{{name}}" type="text"     
+		<input name="{{name}}" type="text"     
 	{{/if}}
 	class="textbox__field" />
 </div>

@@ -1,0 +1,79 @@
+@import "../../style/global.less";
+
+@import "../../blocks/page-header/page-header.less";
+@import "../../blocks/footer/footer.less";
+@import "../../blocks/user-menu/user-menu.less";
+@import "../../blocks/button/button.less";
+@import "../../blocks/file-picker/file-picker.less";
+@import "../../blocks/textbox/textbox.less";
+@import "../../blocks/textarea/textarea.less";
+
+.settings-wrapper  {
+	display: flex;
+	justify-content: center;
+}
+
+.settings {
+	.screen-wrapper();
+	flex-direction: column;
+	align-items: center;
+
+	padding-top: 20px;
+	padding-bottom: 20px;
+
+	&__caption {
+		font-size: @large-font-size;
+	}
+
+	&__section {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 30px 0;
+	}
+
+	&__upload-section {
+		flex-direction: row;
+	}
+
+	&__avatar {
+		flex-shrink: 0;
+		flex-grow: 0;
+
+		.avatar(120px);
+	}
+
+	&__avatar-upload-controls {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+
+		margin-left: 20px;
+	}
+
+	&__file-picker {
+		margin-bottom: 10px;
+	}
+
+	&__add-button,
+	&__upload-button {
+		.button(16px);
+		margin-bottom: 10px;
+	}
+
+	&__delete-button {
+		.button(13px);
+	}
+
+	&__save-button {
+		.button(20px);
+	}
+
+	&__add-button {
+		margin-bottom: 10px;
+	}
+
+	&__textbox {
+		margin-bottom: 20px;
+	}
+}

@@ -19,7 +19,7 @@ UploadImageModalWindow.prototype.setElem = function() {
 		elem: this.elem.querySelector('.file-picker')
 	});
 
-	this.imageDescription = this.elem.querySelector('.window__textarea');
+	this.imageDescription = this.elem.querySelector('textarea.textbox__field');
 	this.uploadErrorMessage = this.elem.querySelector('.window__error-message');
 
 	this.elem.onclick = e => {

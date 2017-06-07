@@ -1,4 +1,5 @@
-<div class="file-picker window__file-picker"{{#if id}} id={{id}}{{/if}}>
+
+<div class="file-picker {{#if parent}}{{parent}}__file-picker"{{else}}window__file-picker"{{/if}} {{#if id}}id="{{id}}"{{else}}id="file-picker"{{/if}}>
 	<span class="file-picker__filename">no file chosen</span>
 	<div class="button file-picker__button">choose file</div>
 </div>

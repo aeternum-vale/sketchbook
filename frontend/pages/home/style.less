@@ -1,12 +1,12 @@
 @import "../../style/global.less";
 
-@import "../../blocks/header/header.less";
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
-@import "../../blocks/header-element/header-element.less";
 @import "../../blocks/window/window.less";
 @import "../../blocks/button/button.less";
+@import "../../blocks/message-modal-window/message-modal-window.less";
+
 
 @cutaway-header-padding: 6px;
 @cutaway-avatar-size: 54px;
@@ -66,12 +66,7 @@
 
 
 	&__avatar {
-		box-sizing: border-box;
-		width: @cutaway-avatar-size;
-		height: @cutaway-avatar-size;
-		border: 2px solid #000;
-		border-radius: 6px;
-		background-color: #fff;
+		.avatar(@cutaway-avatar-size);
 		margin-right: @cutaway-header-padding;
 	}
 

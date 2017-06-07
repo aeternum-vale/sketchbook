@@ -1,0 +1,62 @@
+{{> page-header}}
+
+<div class="settings-wrapper">
+	<div class="settings">
+
+		<div class="settings__caption">Upload profile picture</div>
+		<div class="settings__section settings__upload-section">
+			<div class="settings__avatar"></div>
+			<div class="settings__avatar-upload-controls">
+				{{> file-picker 
+					parent="settings"
+				}}
+				<div class="button settings__upload-button">upload picture</div>
+				<div class="button settings__delete-button">delete picture</div>
+			</div>
+		</div>
+
+		<div class="settings__caption">User profile information</div>
+		<div class="settings__section">
+
+			{{> textbox
+				parent="settings"
+				caption="link"
+			}}
+
+			<div class="button settings__add-button">add</div>
+
+			{{> textarea
+				parent="settings"
+				caption="profile description"
+				placeholder="tell us about yourself"
+			}}
+
+			<div class="button settings__save-button">save changes</div>
+
+		</div>
+
+		<div class="settings__caption">Change password</div>
+		<div class="settings__section">
+			{{> textbox
+				type="password"
+				parent="settings"
+				caption="old password"
+			}}
+			{{> textbox
+				type="password"
+				parent="settings"
+				caption="new password"
+			}}
+			{{> textbox
+				type="password"
+				parent="settings"
+				caption="new password again"
+			}}
+
+			<div class="button settings__save-button">change</div>
+		</div>
+
+	</div>
+</div>
+
+{{> footer}}

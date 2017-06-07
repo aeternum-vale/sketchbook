@@ -1,7 +1,5 @@
 "use strict";
 
-import './style.less';
-
 let Dropdown = require(BLOCKS + 'dropdown');
 
 let userMenuDropdown = new Dropdown({

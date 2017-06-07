@@ -18,6 +18,7 @@ let FilePicker = function(options) {
 		this.uploadInput.click();
 	});
 
+
 	this.uploadInput.addEventListener('change', e => {
 		this.setVisibleFileName();
 	});

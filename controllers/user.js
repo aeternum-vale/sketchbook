@@ -192,7 +192,6 @@ function authorizationRequestListener(req, res, next) {
 	});
 }
 
-
 function subscribeRequestListener(req, res, next) {
 
 	let index;
@@ -293,7 +292,6 @@ function subscribeRequestListener(req, res, next) {
 		next(404);
 }
 
-
 function homeRequestListener(req, res, next) {
 
 	const CUTAWAY_COUNT = 3;
@@ -378,6 +376,11 @@ function homeRequestListener(req, res, next) {
 	});
 }
 
+function settingsRequestListener(req, res, next) {
+	res.locals.page = 'settings';
+	res.render('settings');
+}
+
 exports.registerRoutes = function(app) {
 	app.post('/join', joinRequestListener);
 	app.post('/login', loginRequestListener);
@@ -386,6 +389,7 @@ exports.registerRoutes = function(app) {
 	app.get('/users', usersListRequestListener);
 	app.get('/user/:username', addLoggedUser, userProfileRequestListener);
 	app.get('/authorization', authorizationRequestListener);
-
 	app.get('/home', addLoggedUser, homeRequestListener);
+	app.get('/settings', isAuth, addLoggedUser, settingsRequestListener);
+
 };

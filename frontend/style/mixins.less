@@ -9,3 +9,13 @@
 	min-width: 540px;
 	padding: 0 @global-content-padding;
 }
+
+
+.avatar(@_size) {
+	box-sizing: border-box;
+	width: @_size;
+	height: @_size;
+	border-radius: @_size / 8;
+	border: solid @_size / 16 #000;
+	background-color: white;
+}
