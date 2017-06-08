@@ -4,16 +4,19 @@
 	<div class="settings">
 
 		<div class="settings__caption">Upload profile picture</div>
-		<div class="settings__section settings__upload-section">
-			<div class="settings__avatar"></div>
-			<div class="settings__avatar-upload-controls">
-				{{> file-picker 
-					parent="settings"
-				}}
-				<div class="button settings__upload-button">upload picture</div>
-				<div class="button settings__delete-button">delete picture</div>
-			</div>
+		<div class="settings__section">
+			<div id="upload-avatar-section" class="upload-avatar-section">
+				<div class="upload-avatar-section__avatar"></div>
+				<div class="upload-avatar-section__controls">
+					{{> file-picker 
+						parent="upload-avatar-section"
+					}}
+					<div class="button upload-avatar-section__upload-button">upload picture</div>
+					<div class="button upload-avatar-section__delete-button">delete picture</div>
+				</div>
+			</div>	
 		</div>
+		
 
 		<div class="settings__caption">User profile information</div>
 		<div class="settings__section">
@@ -38,8 +41,6 @@
 				}}
 
 			</div>
-
-			
 
 			{{> textarea
 				parent="settings"
@@ -69,7 +70,7 @@
 				caption="new password again"
 			}}
 
-			<div class="button settings__save-button">change</div>
+			<div class="button settings__save-button">save changes</div>
 		</div>
 
 	</div>

@@ -7,8 +7,10 @@ let SocialCollection = function(options) {
 	this.elem.onclick = e => {
 		if (!e.target.matches('.textbox-button__button')) return;
 
-		if (this.textbox.value)
+		if (this.textbox.value) {
 			this.insertNewSocial(this.textbox.value);
+			this.textbox.value = '';
+		}
 	};
 
 }

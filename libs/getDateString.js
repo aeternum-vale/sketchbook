@@ -6,7 +6,7 @@ module.exports = function(date) {
 	let daysPassed = moment().diff(created, 'days', true);
 
 	let createDateStr;
-	if (daysPassed >= config.get('image:relativeTimeLimitDays'))
+	if (daysPassed >= config.get('userdata:image:relativeTimeLimitDays'))
 		createDateStr = created.format("D MMM YYYY HH:mm");
 	else
 		createDateStr = created.fromNow();

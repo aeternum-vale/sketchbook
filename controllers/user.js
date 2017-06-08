@@ -17,6 +17,9 @@ let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
 let isAuth = require('middleware/isAuth');
 
+let formidable = require('formidable');
+let form = new formidable.IncomingForm();
+
 function usersListRequestListener(req, res, next) {
 
 	co(function*() {
@@ -358,12 +361,9 @@ function homeRequestListener(req, res, next) {
 				imagesTop,
 				imagesBottom
 			});
-
-
 		}
 
 		return cutaways;
-
 
 	}).then(cutaways => {
 
@@ -381,10 +381,42 @@ function settingsRequestListener(req, res, next) {
 	res.render('settings');
 }
 
+
+function avatarUploadRequestListener(req, res, next) {
+	if (!req.xhr) return next(404);
+
+	co(function*() {
+
+		let formData = yield new Promise((resolve, reject) => {
+			form.parse(req, function(err, fields, files) {
+				if (err) reject(303);
+
+				resolve({
+					files,
+					fields
+				});
+
+			});
+		});
+
+		debug(formData);
+
+	}).then(result => {
+
+		res.json({
+			success: true
+		});
+
+	}).catch(err => {
+		next(err);
+	});
+}
+
 exports.registerRoutes = function(app) {
 	app.post('/join', joinRequestListener);
 	app.post('/login', loginRequestListener);
 	app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);
+	app.post('/avatar', isAuth, addLoggedUser, avatarUploadRequestListener);
 	app.get('/logout', logoutRequestListener);
 	app.get('/users', usersListRequestListener);
 	app.get('/user/:username', addLoggedUser, userProfileRequestListener);

@@ -9,7 +9,6 @@ let debug = require('debug')('app:image:controller');
 let HttpError = require('error').HttpError;
 let fs = require('fs');
 let http = require('http');
-let formidable = require('formidable');
 let path = require('path');
 let imageManipulation = require('libs/imageManipulation');
 let imagePaths = require('libs/imagePaths');
@@ -19,8 +18,9 @@ let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
 let InvalidImage = require('error').InvalidImage;
 
-
+let formidable = require('formidable');
 let form = new formidable.IncomingForm();
+
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 

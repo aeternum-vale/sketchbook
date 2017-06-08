@@ -49,6 +49,7 @@ FilePicker.prototype.getFile = function() {
 };
 
 FilePicker.prototype.clear = function() {
+	this.uploadInput.value = '';
 	this.fpFileName.textContent = DEFAULT_VALUE;
 }
 

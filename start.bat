@@ -1,5 +1,0 @@
-start cmd /k "mongod --dbpath c:\mongo\db"
-start cmd /k "mongo"
-start cmd /k "d: & cd d:\yandexdisk\sketchbook & webpack"
-start cmd /k "d: & cd d:\yandexdisk\sketchbook & npm run sb"
-start cmd /k "d: & cd d:\yandexdisk\sketchbook"

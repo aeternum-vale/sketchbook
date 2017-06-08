@@ -8,10 +8,11 @@ module.exports = function(body, method, url, cb) {
 
 	xhr.onreadystatechange = function() {
 		if (this.readyState != 4) return;
-		let response
-		if (this.status != 200) {
 
-			let message = 'Server is not responding';
+		let response;
+		let message = 'Server is not responding';
+
+		if (this.status != 200) {
 
 			if (this.responseText) {
 				response = JSON.parse(this.responseText);

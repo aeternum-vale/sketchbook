@@ -1,0 +1,38 @@
+@import "../button/button.less";
+
+.upload-avatar-section {
+
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+
+	&__avatar {
+		flex-shrink: 0;
+		flex-grow: 0;
+
+		.avatar(120px);
+	}
+
+	&__controls {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+
+		margin-left: 20px;
+	}
+
+	&__file-picker {
+		margin-bottom: 10px;
+	}
+
+	&__upload-button {
+		.button(16px);
+		margin-bottom: 10px;
+	}
+
+	&__delete-button {
+		.button(13px);
+	}
+
+
+}

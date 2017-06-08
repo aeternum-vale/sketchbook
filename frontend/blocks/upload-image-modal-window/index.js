@@ -1,5 +1,7 @@
 let ModalWindow = require(BLOCKS + 'modal-window');
 let FilePicker = require(BLOCKS + 'file-picker');
+let ClientError = require(LIBS + 'componentErrors').ClientError;
+
 
 let UploadImageModalWindow = function(options) {
 	ModalWindow.apply(this, arguments);
@@ -41,37 +43,61 @@ UploadImageModalWindow.prototype.renderWindow = function() {
 
 
 UploadImageModalWindow.prototype.uploadImage = function(file, description) {
-	var xhr = new XMLHttpRequest();
-	let self = this;
-
-	xhr.upload.onprogress = event => {
-		//console.log(event.loaded + ' / ' + event.total);
-	};
-
-	xhr.onload = xhr.onerror = function() {
-		if (this.status == 200) {
-			let response = JSON.parse(this.responseText);
-			if (response.success) {
-				self.trigger('uploaded', {
-					imageId: response.imageId,
-					previewUrl: response.previewUrl
-				});
-				self.deactivate();
-			} else
-			if (response.message)
-				self.setError(response.message);
-			else
-				self.error(new ServerError());
-		} else
-			self.error(new ServerError());
-	};
-
-	xhr.open("POST", "/image", true);
-	xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 	var formData = new FormData();
 	formData.append("image", file);
 	formData.append("description", description);
-	xhr.send(formData);
+
+	require(LIBS + 'sendFormData')("/image", formData, (err, response) => {
+
+		if (err) {
+			if (err instanceof ClientError)
+				this.setError(err.message);
+			else
+				this.error(err);
+			return;
+		}
+
+		this.trigger('uploaded', {
+			imageId: response.imageId,
+			previewUrl: response.previewUrl
+		});
+		this.deactivate();
+
+	});
+
+
+
+	/*	var xhr = new XMLHttpRequest();
+		let self = this;
+
+		xhr.upload.onprogress = event => {
+			//console.log(event.loaded + ' / ' + event.total);
+		};
+
+		xhr.onload = xhr.onerror = function() {
+			if (this.status == 200) {
+				let response = JSON.parse(this.responseText);
+				if (response.success) {
+					self.trigger('uploaded', {
+						imageId: response.imageId,
+						previewUrl: response.previewUrl
+					});
+					self.deactivate();
+				} else
+				if (response.message)
+					self.setError(response.message);
+				else
+					self.error(new ServerError());
+			} else
+				self.error(new ServerError());
+		};
+
+		xhr.open("POST", "/image", true);
+		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		var formData = new FormData();
+		formData.append("image", file);
+		formData.append("description", description);
+		xhr.send(formData);*/
 };
 
 UploadImageModalWindow.prototype.activate = function() {
@@ -79,7 +105,7 @@ UploadImageModalWindow.prototype.activate = function() {
 
 	if (!this.elem)
 		this.setElem();
-	
+
 	this.clear();
 
 	this.elem.classList.remove('window_invisible');

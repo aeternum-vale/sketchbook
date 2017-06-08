@@ -9,6 +9,7 @@
 @import "../../blocks/textarea/textarea.less";
 @import "../../blocks/textbox-button/textbox-button.less";
 @import "../../blocks/social-collection/social-collection.less";
+@import "../../blocks/upload-avatar-section/upload-avatar-section.less";
 
 .settings-wrapper  {
 	display: flex;
@@ -34,38 +35,6 @@
 		padding: 30px 0;
 	}
 
-	&__upload-section {
-		flex-direction: row;
-	}
-
-	&__avatar {
-		flex-shrink: 0;
-		flex-grow: 0;
-
-		.avatar(120px);
-	}
-
-	&__avatar-upload-controls {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-
-		margin-left: 20px;
-	}
-
-	&__file-picker {
-		margin-bottom: 10px;
-	}
-
-	&__add-button,
-	&__upload-button {
-		.button(16px);
-		margin-bottom: 10px;
-	}
-
-	&__delete-button {
-		.button(13px);
-	}
 
 	&__save-button {
 		.button(20px);
