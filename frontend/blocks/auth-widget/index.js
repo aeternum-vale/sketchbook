@@ -69,7 +69,7 @@ AuthWidget.prototype.submitLoginForm = function() {
       		encodeURIComponent(this.loginForm['username'].value)}&password=${
          	encodeURIComponent(this.loginForm['password'].value)}`;
 
-	require(LIBS + 'sendXHR')(body, 'POST', '/login', (err, response) => {
+	require(LIBS + 'sendRequest')(body, 'POST', '/login', (err, response) => {
 
 		if (err) {
 			this.error(err);
@@ -98,7 +98,7 @@ AuthWidget.prototype.submitJoinForm = function() {
 
 
 	if (result.success)
-		require(LIBS + 'sendXHR')(body, 'POST', '/join', (err, response) => {
+		require(LIBS + 'sendRequest')(body, 'POST', '/join', (err, response) => {
 
 			if (err) {
 				if (response || response.property) {

@@ -60,7 +60,6 @@ function deleteCommentRequestListener(req, res, next) {
 
 }
 
-
 exports.registerRoutes = function(app) {
 	app.post('/comment', isAuth, addLoggedUser, addRefererParams, recieveCommentRequestListener);
 	app.delete('/comment', isAuth, deleteCommentRequestListener);

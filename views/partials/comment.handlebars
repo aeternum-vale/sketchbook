@@ -1,14 +1,16 @@
+<div class="panel comment {{#if ghost}}comment_ghost {{/if}}comment-section__comment" data-id="{{commentId}}">
+    <div class="comment__top-side">
+        <a class="comment__ref" href="{{userUrl}}">
+            <div class="comment__avatar" style="background-image: url('{{avatarUrl}}')"></div>
+            <div class="comment__metadata">
+                <div class="comment__username">{{username}}</div>
+                <div class="comment__date">{{date}}</div>
+            </div>
+        </a>
 
-<div class="panel comment {{#if ghost}}comment_ghost {{/if}}comment-section__comment" data-id="{{commentId}}" >
-	<div class="comment__top-side">
-		<div class="comment__avatar"></div>
-		<div class="comment__metadata">
-			<div class="comment__username">{{username}}</div>
-			<div class="comment__date">{{date}}</div>
-		</div>
-		{{#if ownComment}}
-			<div class="comment__close-button"></div>
-		{{/if}}
-	</div>
-	<div class="comment__text">{{text}}</div>
+        {{#if ownComment}}
+            <div class="comment__close-button"></div>
+        {{/if}}
+    </div>
+    <div class="comment__text">{{text}}</div>
 </div>

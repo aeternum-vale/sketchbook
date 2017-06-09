@@ -6,7 +6,7 @@
 		<div class="settings__caption">Upload profile picture</div>
 		<div class="settings__section">
 			<div id="upload-avatar-section" class="upload-avatar-section">
-				<div class="upload-avatar-section__avatar"></div>
+				<div class="upload-avatar-section__avatar" style="background-image: url('{{loggedUser.avatarUrls.medium}}')"></div>
 				<div class="upload-avatar-section__controls">
 					{{> file-picker 
 						parent="upload-avatar-section"

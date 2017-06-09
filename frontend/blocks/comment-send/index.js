@@ -12,7 +12,7 @@ let CommentSendForm = function(options) {
 		let text = this.commentSendTextarea.value;
 		let body = `text=${encodeURIComponent(text)}`;
 
-		require(LIBS + 'sendXHR')(body, 'POST', '/comment', (err, response) => {
+		require(LIBS + 'sendRequest')(body, 'POST', '/comment', (err, response) => {
 
 			if (err) {
 				this.error(err);

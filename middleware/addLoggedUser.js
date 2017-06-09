@@ -1,4 +1,5 @@
-let User = require('models/User');
+let User = require('models/user');
+let userViewModel = require('viewModels/user');
 let co = require('co');
 
 module.exports = function(req, res, next) {
@@ -9,10 +10,16 @@ module.exports = function(req, res, next) {
 				yield User.ensureIndexes();
 
 			return User.findById(req.session.userId).exec();
+
 			
-		}).then(user => {
+			
+		}).then(rawUser => {
+
+			let user = userViewModel(rawUser);
+
 			res.locals.loggedUser = user;
-			res.loggedUser = user;
+			res.loggedUser = rawUser;
+
 			next();
 		}).catch(err => {
 			next(err);

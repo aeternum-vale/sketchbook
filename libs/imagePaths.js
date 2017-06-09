@@ -1,10 +1,11 @@
 let config = require('config');
+let path = require('path');
 
-function getImageFileNameByStringId(id) {
+function getImageFileNameById(id) {
 	return `${config.get('userdata:image:prefix')}${id}.${config.get('userdata:image:ext')}`;
 }
 
-function getImagePreviewFileNameByStringId(id) {
+function getImagePreviewFileNameById(id) {
 	return `${config.get('userdata:image:prefix')}${id}${config.get('userdata:preview:postfix')}.${config.get('userdata:preview:ext')}`;
 }
 
@@ -12,10 +13,25 @@ function getImageFileNameByPath(path) {
 	return path.substring(path.lastIndexOf('\\') + 1);
 }
 
-function getAvatarFileNamesByStringId(id){
-	let big = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:big:postfix')}${config.get('userdata:avatar:ext')}`;
-	let medium = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:medium:postfix')}${config.get('userdata:avatar:ext')}`;
-	let small = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:small:postfix')}${config.get('userdata:avatar:ext')}`;
+function getAvatarPathsById(id) {
+	let uploadDir = path.resolve(config.get('userdata:dir'));
+
+	let big = path.join(uploadDir, `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:big:postfix')}.${config.get('userdata:avatar:ext')}`);
+	let medium = path.join(uploadDir, `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:medium:postfix')}.${config.get('userdata:avatar:ext')}`);
+	let small = path.join(uploadDir, `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:small:postfix')}.${config.get('userdata:avatar:ext')}`);
+
+	return {
+		big,
+		medium,
+		small
+	}
+}
+
+function getAvatarFileNamesById(id) {
+
+	let big = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:big:postfix')}.${config.get('userdata:avatar:ext')}`;
+	let medium = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:medium:postfix')}.${config.get('userdata:avatar:ext')}`;
+	let small = `${config.get('userdata:avatar:prefix')}${id}${config.get('userdata:avatar:small:postfix')}.${config.get('userdata:avatar:ext')}`;
 
 	return {
 		big,
@@ -25,8 +41,9 @@ function getAvatarFileNamesByStringId(id){
 }
 
 module.exports = {
-	getImageFileNameByStringId,
-	getImagePreviewFileNameByStringId,
+	getImageFileNameById,
+	getImagePreviewFileNameById,
 	getImageFileNameByPath,
-	getAvatarFileNamesByStringId
-}
+	getAvatarPathsById,
+	getAvatarFileNamesById
+};

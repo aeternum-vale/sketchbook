@@ -2,7 +2,7 @@
 <div class="panel info-panel">
 	<div class="info-panel__wrapper">
 		<div class="person info-panel__person">
-			<div class="person__avatar"></div>
+			<div class="person__avatar" style="background-image: url('{{pageUser.avatarUrls.big}}')"></div>
 			<div class="person__username">{{pageUser.username}}</div>
 		</div>
 		<div class="description">
@@ -10,9 +10,18 @@
 			</div>
 			<div id="links-dropdown" class="dropdown links-dropdown description__links-dropdown">
 				<ul class="dropdown__item-list links-dropdown__item-list">
-					{{> dropdown-item caption="instagram" icon="true"}}
-					{{> dropdown-item caption="deviantart" icon="true"}}
-					{{> dropdown-item caption="facebook" icon="true"}}
+					{{> dropdown-item
+                            caption="instagram"
+                            icon="true"
+                    }}
+					{{> dropdown-item
+                            caption="deviantart"
+                            icon="true"
+                    }}
+					{{> dropdown-item
+                            caption= "facebook"
+                            icon="true"
+                    }}
 				</ul>
 			</div>
 
@@ -22,9 +31,18 @@
 <div class="header page-header extra-header">
 	<div class="extra-header__wrapper">
 		<div class="stat-list">
-			{{> stat number=pageUser.subscribers.length property="subscribers" id="subscribers-number"}}
-			{{> stat number=pageUser.subscriptions.length property="subscriptions"}}
-			{{> stat number=pageUser.images.length property="publications" id="publication-number"}}
+			{{> stat
+                    number=pageUser.subscribers.length
+                    property="subscribers"
+                    id="subscribers-number"
+            }}
+			{{> stat number=pageUser.subscriptions.length
+                    property="subscriptions"
+            }}
+			{{> stat number=pageUser.images.length
+                    property="publications"
+                    id="publication-number"
+            }}
 		</div>
 
 		{{#if ownPage}}

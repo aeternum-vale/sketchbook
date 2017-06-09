@@ -39,11 +39,14 @@
 		"preview": {
 			"ext": "jpg",
 			"postfix": "_preview",
-			"size": 300
+			"size": 300,
+			"quality": 50
 		},
 
 		"avatar": {
 			"ext": "jpg",
+
+			"quality": 100,
 
 			"prefix": "avatar",
 

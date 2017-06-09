@@ -4,7 +4,7 @@ let DeleteImageButton = function(options) {
 	this.elem = options.elem;
 
 	this.elem.onclick = e => {
-		require(LIBS + 'sendXHR')(null, 'DELETE', '/image', (err, response) => {
+		require(LIBS + 'sendRequest')(null, 'DELETE', '/image', (err, response) => {
 			if (err) {
 				this.error(err);
 				return;

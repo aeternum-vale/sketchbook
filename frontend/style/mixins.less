@@ -12,10 +12,16 @@
 
 
 .avatar(@_size) {
+	flex-shrink: 0;
+	flex-grow: 0;
+
 	box-sizing: border-box;
 	width: @_size;
 	height: @_size;
 	border-radius: @_size / 8;
 	border: solid @_size / 16 #000;
+
 	background-color: white;
+	background-size: cover;
+	background-position: center;
 }

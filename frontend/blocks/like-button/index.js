@@ -14,7 +14,7 @@ let LikeButton = function(options) {
 			this.available = false;
 			this.toggle();
 
-			require(LIBS + 'sendXHR')(null, 'POST', '/like', (err, response) => {
+			require(LIBS + 'sendRequest')(null, 'POST', '/like', (err, response) => {
 				
 				this.available = true;
 

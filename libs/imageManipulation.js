@@ -2,7 +2,7 @@ let Jimp = require('jimp');
 let debug = require('debug')('app:imageManipulation');
 let InvalidImage = require('error').InvalidImage;
 
-function resize(path, newPath, size) {
+function resize(path, newPath, size, quality) {
 
 	return Jimp.read(path).then(image => {
 		return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ function resize(path, newPath, size) {
 			}
 
 			image.rgba(false);
-			image.quality(50);
+			image.quality(quality || 75);
 
 			image.write(newPath, err => {
 				if (err) reject(err);

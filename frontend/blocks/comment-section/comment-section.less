@@ -1,71 +1,9 @@
+@import "../comment/comment.less";
+
 .comment-section {
 	overflow-y: scroll;
 
 	&__comment:last-child {
 		border: none;
-	}
-
-}
-
-.comment {
-	position: relative;
-	box-sizing: border-box;
-
-	padding: @image-post-padding;
-	border-radius: 2px;
-	border-bottom: solid @image-post-border-size #000;
-
-	&__avatar {
-
-		box-sizing: border-box;
-
-		width: 42px;
-		height: 42px;
-		margin-right: @image-post-padding;
-
-		border-radius: 6px;
-		border: 2px solid #000;
-
-		background-color: #fff;
-	}
-
-
-	&__top-side {
-		display: flex;
-		margin-bottom: @image-post-padding;
-	}
-
-	&__metadata {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-
-	&__date {
-		font-size: 10px;
-		line-height: 10px;
-	}
-
-	&__close-button {
-		position: absolute;
-		visibility: hidden;
-
-		right: @image-post-padding;
-		top: @image-post-padding;
-
-		width: 20px;
-		height: 20px;
-
-		background-color: red;
-		
-		cursor: pointer;	
-	}
-
-	&:hover &__close-button {
-		visibility: visible;
-	}
-
-	&_ghost {
-		display: none;
 	}
 }

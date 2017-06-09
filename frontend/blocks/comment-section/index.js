@@ -11,7 +11,7 @@ let CommentSection = function(options) {
 		let comment = e.target.closest('.comment');
 
 		let body = `commentId=${encodeURIComponent(comment.dataset.id)}`;
-		require(LIBS + 'sendXHR')(body, 'DELETE', '/comment', (err, response) => {
+		require(LIBS + 'sendRequest')(body, 'DELETE', '/comment', (err, response) => {
 
 			if (err) {
 				this.error(err);

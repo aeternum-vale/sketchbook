@@ -9,7 +9,7 @@ let Dropdown = function(options) {
 		this.toggle();
 	};
 
-}
+};
 
 Dropdown.prototype.activate = function() {
 	this.elem.classList.add('dropdown_active');

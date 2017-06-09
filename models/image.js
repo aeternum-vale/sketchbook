@@ -150,8 +150,8 @@ imageSchema.post('remove', function(doc) {
 		});
 
 
-		let imageFileName = imagePaths.getImageFileNameByStringId(doc._id.toString());
-		let imagePreviewFileName = imagePaths.getImagePreviewFileNameByStringId(doc._id.toString());
+		let imageFileName = imagePaths.getImageFileNameById(doc._id.toString());
+		let imagePreviewFileName = imagePaths.getImagePreviewFileNameById(doc._id.toString());
 		let imagePath = path.join(config.get('userdata:dir'), imageFileName);
 		let imagePreviewPath = path.join(config.get('userdata:dir'), imagePreviewFileName);
 

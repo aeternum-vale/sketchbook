@@ -2,6 +2,7 @@ let Image = require('models/image');
 let User = require('models/user');
 
 let imagePreviewViewModel = require('viewModels/imagePreview');
+let userViewModel = require('viewModels/user');
 
 let co = require('co');
 let config = require('config');
@@ -35,16 +36,14 @@ function imageRequestListener(req, res, next) {
 		if (!image)
 			throw new HttpError(404, "Image not found");
 
-		for (var i = 0; i < image.comments.length; i++) {
-			image.comments[i].username = (yield User.findById(image.comments[i].author, 'username')
-				.exec()).username;
+		for (let i = 0; i < image.comments.length; i++) {
+			image.comments[i].commentator = userViewModel(yield User.findById(image.comments[i].author).exec());
 
 			image.comments[i].createDateStr = getDateString(image.comments[i].created);
 
 			if (image.comments[i].author === req.session.userId)
 				image.comments[i].ownComment = true;
 		}
-
 
 		let author = yield User.findById(image.author).exec();
 
@@ -59,12 +58,14 @@ function imageRequestListener(req, res, next) {
 			if (res.locals.loggedUser._id === result.author._id)
 				res.locals.ownImage = true;
 
+			debug(res.locals.ownImage);
+
 
 			if (~result.image.likes.indexOf(res.loggedUser._id))
 				res.locals.isLiked = true;
 		}
 
-		res.locals.author = result.author;
+		res.locals.author = userViewModel(result.author);
 		res.locals.image = result.image;
 		res.locals.image.createDateStr = getDateString(result.image.created);
 		res.locals.page = 'image';
@@ -117,7 +118,7 @@ function uploadImageListRequestListener(req, res, next) {
 		});
 
 		yield imageManipulation.resize(tempImagePath,
-			tempImagePreviewPath, config.get('userdata:preview:size'));
+			tempImagePreviewPath, config.get('userdata:preview:size'), config.get('userdata:preview:quality'));
 
 		let newImage = yield new Image({
 			author: req.session.userId,
@@ -125,9 +126,9 @@ function uploadImageListRequestListener(req, res, next) {
 		}).save();
 
 		let imageFileName = imagePaths
-			.getImageFileNameByStringId(newImage._id.toString());
+			.getImageFileNameById(newImage._id);
 		let imagePreviewFileName = imagePaths
-			.getImagePreviewFileNameByStringId(newImage._id.toString());
+			.getImagePreviewFileNameById(newImage._id);
 		let imagePath = path.join(uploadDir, imageFileName);
 		let imagePreviewPath = path.join(uploadDir, imagePreviewFileName);
 
@@ -194,7 +195,7 @@ function imageListRequestListener(req, res, next) {
 
 function imageDeleteListRequestListener(req, res, next) {
 
-	let imageId = req.refererParams.value;;
+	let imageId = req.refererParams.value;
 
 	debug('deleting image #' + imageId);
 
@@ -277,11 +278,11 @@ function feedRequestListener(req, res, next) {
 				if (image)
 					feed.push(image);
 			}
-		};
+		}
 
 		feed.sort((a, b) => {
 			if (a.created > b.created)
-				return 1
+				return 1;
 			else if (a.created < b.created)
 				return -1;
 			return 0;

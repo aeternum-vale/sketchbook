@@ -1,7 +1,6 @@
-
-<li class="dropdown-item dropdown__item">
-{{#if icon}}
-	<div class="dropdown-item__icon"></div>
-{{/if}}
-	<a href="{{link}}{{linkValue}}" class="dropdown-item__text">{{caption}}</a>
-</li>
+<a class="dropdown-item dropdown__item" href="{{link}}{{linkValue}}">
+    {{#if icon}}
+        <div class="dropdown-item__icon"></div>
+    {{/if}}
+    <span class="dropdown-item__text">{{caption}}</span>
+</a>

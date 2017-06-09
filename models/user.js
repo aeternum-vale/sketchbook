@@ -30,17 +30,15 @@ let userSchema = new Schema({
 
 	surname: String,
 
-	age: {
-		type: Number,
-		default: 0
-	},
-
 	country: {
 		type: Number,
 		ref: 'Country'
 	},
 
-	city: String,
+	hasAvatar: {
+		type: Boolean,
+		default: false
+	},	
 
 	description: String,
 
@@ -48,8 +46,6 @@ let userSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-
-	avatarPath: String,
 
 	links: [{
 		type: Number,

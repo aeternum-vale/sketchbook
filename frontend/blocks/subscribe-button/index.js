@@ -17,7 +17,7 @@ let SubscribeButton = function(options) {
 			this.available = false;
 			this.toggle();
 
-			require(LIBS + 'sendXHR')(null, 'POST', '/subscribe', (err, response) => {
+			require(LIBS + 'sendRequest')(null, 'POST', '/subscribe', (err, response) => {
 
 				this.available = true;
 
