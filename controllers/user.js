@@ -37,7 +37,7 @@ function usersListRequestListener(req, res, next) {
             yield User.ensureIndexes();
 
         return new Promise((resolve, reject) => {
-            User.find({}, function (err, users) {
+            User.find({}, function(err, users) {
                 if (err) reject(err);
                 resolve(users);
             });
@@ -103,7 +103,7 @@ function joinRequestListener(req, res, next) {
 
             debug('data validation completed: %o', result);
 
-            if (result.success) {
+            if (!result) {
                 if (!User.indexesEnsured)
                     yield User.ensureIndexes();
 
@@ -122,7 +122,7 @@ function joinRequestListener(req, res, next) {
                 return newUser;
 
             } else {
-                throw new PropertyError(result.errors[0].property, result.errors[0].message);
+                throw new PropertyError(result.errors[0].name, result.errors[0].message);
             }
 
         }).then((user) => {
@@ -138,7 +138,7 @@ function joinRequestListener(req, res, next) {
             if (err instanceof PropertyError)
                 res.json({
                     success: false,
-                    property: err.property,
+                    property: err.name,
                     message: err.message
                 });
             else
@@ -307,6 +307,19 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
+    let getErrorArray = require('libs/checkUserData').getErrorArray;
+
+    let errs = getErrorArray({
+        'password': 'Zxc',
+        'password-again': '',
+        'email': 'as',
+        'username': ''
+    });
+
+    debug(errs);
+
+
+
     const CUTAWAY_COUNT = 3;
     const IMAGE_PREVIEW_COUNT = 12;
     const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
@@ -397,7 +410,7 @@ function avatarUploadRequestListener(req, res, next) {
     co(function*() {
 
         let formData = yield new Promise((resolve, reject) => {
-            form.parse(req, function (err, fields, files) {
+            form.parse(req, function(err, fields, files) {
                 if (err) reject(303);
 
                 resolve({
@@ -420,7 +433,7 @@ function avatarUploadRequestListener(req, res, next) {
             config.get('userdata:avatar:big:size'), config.get('userdata:avatar:big:size'));
 
         yield new Promise((resolve, reject) => {
-            fs.unlink(formPath, function (err) {
+            fs.unlink(formPath, function(err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -440,7 +453,7 @@ function avatarUploadRequestListener(req, res, next) {
 
 
         yield new Promise((resolve, reject) => {
-            fs.unlink(tempAvatarPath, function (err) {
+            fs.unlink(tempAvatarPath, function(err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -484,12 +497,7 @@ function avatarDeleteRequestListener(req, res, next) {
     });
 }
 
-function isUrl(str) {
-    let urlRegex = '^(?!mailto:)(?:(?:http|https)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$';
-    // let urlRegex = '^(?!mailto:)(?:(?:http|https|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$';
-    let url = new RegExp(urlRegex, 'i');
-    return str.length < 2083 && url.test(str);
-}
+let isUrl = str => checkUserData.testProperty('url', str);
 
 function socialPostRequestListener(req, res, next) {
 
@@ -513,11 +521,11 @@ function socialPostRequestListener(req, res, next) {
         if (host.indexOf('www.') === 0)
             host = host.substring(4);
 
-		if (parsedUrl.pathname.length <= 1) {
-			let firstDotPos = host.indexOf('.');
-			if (~host.indexOf('.', firstDotPos + 1))
-				host = host.substring(firstDotPos + 1);
-		}
+        if (parsedUrl.pathname.length <= 1) {
+            let firstDotPos = host.indexOf('.');
+            if (~host.indexOf('.', firstDotPos + 1))
+                host = host.substring(firstDotPos + 1);
+        }
 
         for (let i = 0; i < res.loggedUser.links.length; i++)
             if (res.loggedUser.links[i].host === host)
@@ -575,7 +583,7 @@ function socialDeleteRequestListener(req, res, next) {
 }
 
 
-exports.registerRoutes = function (app) {
+exports.registerRoutes = function(app) {
     app.post('/join', joinRequestListener);
     app.post('/login', loginRequestListener);
     app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);

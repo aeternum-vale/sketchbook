@@ -116,7 +116,7 @@ AuthWidget.prototype.submitJoinForm = function() {
 		});
 };
 
-AuthWidget.prototype.getOptionsObj = function(property, message) {
+AuthWidget.prototype.getOptionsObj = function() {
 	let options = {};
 	fields.forEach(item => {
 		options[item.name] = this.joinForm[item.name].value;
