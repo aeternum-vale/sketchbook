@@ -17,6 +17,7 @@ let imagePaths = require('libs/imagePaths');
 let imageManipulation = require('libs/imageManipulation');
 let path = require('path');
 let fs = require('fs');
+let url = require('url');
 
 let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
@@ -483,11 +484,104 @@ function avatarDeleteRequestListener(req, res, next) {
     });
 }
 
+function isUrl(str) {
+    let urlRegex = '^(?!mailto:)(?:(?:http|https)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$';
+    // let urlRegex = '^(?!mailto:)(?:(?:http|https|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$';
+    let url = new RegExp(urlRegex, 'i');
+    return str.length < 2083 && url.test(str);
+}
+
+function socialPostRequestListener(req, res, next) {
+
+    if (!req.xhr) return next(400);
+
+    co(function*() {
+
+        let link = req.body.link;
+
+        if (!isUrl(link)) {
+            link = 'https://' + link;
+
+            if (!isUrl(link))
+                throw new HttpError(400, 'Invalid URL');
+        }
+
+        let parsedUrl = url.parse(link);
+        let host = parsedUrl.host;
+
+
+        if (host.indexOf('www.') === 0)
+            host = host.substring(4);
+
+		if (parsedUrl.pathname.length <= 1) {
+			let firstDotPos = host.indexOf('.');
+			if (~host.indexOf('.', firstDotPos + 1))
+				host = host.substring(firstDotPos + 1);
+		}
+
+        for (let i = 0; i < res.loggedUser.links.length; i++)
+            if (res.loggedUser.links[i].host === host)
+                throw new HttpError(400, 'You already have a link to this resource');
+
+        let linkObj = {
+            host: host,
+            href: parsedUrl.href
+        };
+
+        res.loggedUser.links.push(linkObj);
+
+        yield res.loggedUser.save();
+
+        return linkObj;
+    }).then(linkObj => {
+        res.json({
+            success: true,
+            linkObj
+        });
+    }).catch(err => {
+        next(err);
+    });
+}
+
+function socialDeleteRequestListener(req, res, next) {
+    if (!req.xhr) return next(400);
+
+    co(function*() {
+        let link = req.body.link;
+
+
+        if (!isUrl(link))
+            throw new HttpError(400, 'Invalid URL');
+
+
+        for (let i = 0; i < res.loggedUser.links.length; i++)
+            if (res.loggedUser.links[i].href === link) {
+                res.loggedUser.links.splice(i, 1);
+                break;
+            }
+
+        yield res.loggedUser.save();
+
+    }).then(result => {
+
+        res.json({
+            success: true
+        });
+
+    }).catch(err => {
+        next(err);
+    });
+
+}
+
+
 exports.registerRoutes = function (app) {
     app.post('/join', joinRequestListener);
     app.post('/login', loginRequestListener);
     app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);
     app.post('/avatar', isAuth, addLoggedUser, avatarUploadRequestListener);
+    app.post('/social', isAuth, addLoggedUser, socialPostRequestListener);
+    app.delete('/social', isAuth, addLoggedUser, socialDeleteRequestListener);
     app.delete('/avatar', isAuth, addLoggedUser, avatarDeleteRequestListener);
     app.get('/logout', logoutRequestListener);
     app.get('/users', usersListRequestListener);
@@ -495,5 +589,4 @@ exports.registerRoutes = function (app) {
     app.get('/authorization', authorizationRequestListener);
     app.get('/', addLoggedUser, homeRequestListener);
     app.get('/settings', isAuth, addLoggedUser, settingsRequestListener);
-
 };

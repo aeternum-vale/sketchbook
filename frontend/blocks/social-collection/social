@@ -1,4 +1,7 @@
-<div class="social-collection__social">
-	<div class="social-collection__icon"></div>
-	<span class="social-collection__link"></span>
+<div class="social-collection__social social" data-link="">
+    <a class="social__link" href="">
+        <div class="social__icon"></div>
+        <span class="social__host"></span>
+    </a>
+    <div class="social__close"></div>
 </div>

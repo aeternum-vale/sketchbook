@@ -1,7 +1,6 @@
 let eventMixin = require(LIBS + 'eventMixin');
 let componentErrors = require(LIBS + 'componentErrors');
 let ClientError = componentErrors.ClientError;
-let ServerError = componentErrors.ServerError;
 
 let SubscribeButton = function(options) {
 

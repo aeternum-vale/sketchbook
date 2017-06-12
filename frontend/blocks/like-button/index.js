@@ -21,7 +21,6 @@ let LikeButton = function(options) {
 				if (err) {
 					this.toggle();
 					this.error(err);
-					return;
 				}
 
 			});

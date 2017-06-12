@@ -10,18 +10,15 @@
 			</div>
 			<div id="links-dropdown" class="dropdown links-dropdown description__links-dropdown">
 				<ul class="dropdown__item-list links-dropdown__item-list">
-					{{> dropdown-item
-                            caption="instagram"
-                            icon="true"
-                    }}
-					{{> dropdown-item
-                            caption="deviantart"
-                            icon="true"
-                    }}
-					{{> dropdown-item
-                            caption= "facebook"
-                            icon="true"
-                    }}
+
+                    {{#each pageUser.links}}
+                        {{> dropdown-item
+                                caption=host
+                                link=href
+                                icon="true"
+                        }}
+                    {{/each}}
+
 				</ul>
 			</div>
 

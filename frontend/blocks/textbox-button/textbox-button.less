@@ -1,18 +1,22 @@
 @import "../textbox/textbox.less";
 
+
 @textbox-button-button-width: 30px;
 @textbox-button-field-width: @textbox-field-width - @textbox-field-border - @textbox-button-button-width;
 
-.textbox-button {
+@textbox-button-offset: @textbox-button-button-width + 3 * @textbox-field-border;
 
+.textbox-button {
 	display: flex;
 
 	&.textbox::before {
 		margin-top: 0;
+		width: 100%;
 	}
 	
 	& .textbox__field {
-		width: @textbox-button-field-width;
+		width: ~"calc(100% - @{textbox-button-offset})";
+		//width: @textbox-button-field-width;
 		margin-top: 0;
 
 	}

@@ -4,111 +4,111 @@ let autoIncrement = require('mongoose-auto-increment');
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
-	username: {
-		type: String,
-		unique: true,
-		required: true
-	},
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
 
-	hashedPassword: {
-		type: String,
-		required: true
-	},
+    hashedPassword: {
+        type: String,
+        required: true
+    },
 
-	salt: {
-		type: String,
-		required: true
-	},
+    salt: {
+        type: String,
+        required: true
+    },
 
-	email: {
-		type: String,
-		unique: true,
-		required: true
-	},
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
 
-	name: String,
+    name: String,
 
-	surname: String,
+    surname: String,
 
-	country: {
-		type: Number,
-		ref: 'Country'
-	},
+    country: {
+        type: Number,
+        ref: 'Country'
+    },
 
-	hasAvatar: {
-		type: Boolean,
-		default: false
-	},	
+    hasAvatar: {
+        type: Boolean,
+        default: false
+    },
 
-	description: String,
+    description: String,
 
-	created: {
-		type: Date,
-		default: Date.now
-	},
+    created: {
+        type: Date,
+        default: Date.now
+    },
 
-	links: [{
-		type: Number,
-		ref: 'Link'
-	}],
+    links: [{
+        host: String,
+        href: String
+    }],
 
-	subscribers: [{
-		type: Number,
-		ref: 'User'
-	}],
+    subscribers: [{
+        type: Number,
+        ref: 'User'
+    }],
 
-	subscriptions: [{
-		type: Number,
-		ref: 'User'
-	}],
+    subscriptions: [{
+        type: Number,
+        ref: 'User'
+    }],
 
-	images: [{
-		type: Number,
-		ref: 'Image'
-	}],
+    images: [{
+        type: Number,
+        ref: 'Image'
+    }],
 
-	likes: [{
-		type: Number,
-		ref: 'Image'
-	}], 
+    likes: [{
+        type: Number,
+        ref: 'Image'
+    }],
 
-	comments: [{
-		type: Number,
-		ref: 'Comments'
-	}]
+    comments: [{
+        type: Number,
+        ref: 'Comments'
+    }]
 
 }, {
-	autoIndex: false
+    autoIndex: false
 });
 
 userSchema.plugin(autoIncrement.plugin, {
-	model: 'User',
-	startAt: 1
+    model: 'User',
+    startAt: 1
 });
 
-userSchema.methods.encryptPassword = function(password) {
-	return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+userSchema.methods.encryptPassword = function (password) {
+    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 };
 
 userSchema.virtual('password')
-	.set(function(password) {
-		this._plainPassword = password;
-		this.salt = Math.random() + '';
-		this.hashedPassword = this.encryptPassword(password);
-	})
-	.get(function() {
-		return this._plainPassword;
-	});
+    .set(function (password) {
+        this._plainPassword = password;
+        this.salt = Math.random() + '';
+        this.hashedPassword = this.encryptPassword(password);
+    })
+    .get(function () {
+        return this._plainPassword;
+    });
 
-userSchema.methods.checkPassword = function(password) {
-	return this.encryptPassword(password) === this.hashedPassword;
-}
+userSchema.methods.checkPassword = function (password) {
+    return this.encryptPassword(password) === this.hashedPassword;
+};
 
 let User = mongoose.model('User', userSchema);
 User.ensureIndexes().then(() => {
-	User.indexesEnsured = true;
+    User.indexesEnsured = true;
 }).catch((err) => {
-	throw err;
+    throw err;
 });
 
 module.exports = User;

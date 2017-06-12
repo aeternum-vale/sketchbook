@@ -3,7 +3,7 @@ module.exports = function(req, res, next) {
 		if (req.xhr)
 			next(401);
 		else
-			res.redirect('/authorization', 302);
+			res.redirect(302, '/authorization');
 	} else
 		next();
 };

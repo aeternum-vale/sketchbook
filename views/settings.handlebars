@@ -1,79 +1,84 @@
 {{> page-header}}
 
 <div class="settings-wrapper">
-	<div class="settings">
+    <div class="settings">
 
-		<div class="settings__caption">Upload profile picture</div>
-		<div class="settings__section">
-			<div id="upload-avatar-section" class="upload-avatar-section">
-				<div class="upload-avatar-section__avatar" style="background-image: url('{{loggedUser.avatarUrls.medium}}')"></div>
-				<div class="upload-avatar-section__controls">
-					{{> file-picker 
-						parent="upload-avatar-section"
-					}}
-					<div class="button upload-avatar-section__upload-button">upload picture</div>
-					<div class="button upload-avatar-section__delete-button">delete picture</div>
-				</div>
-			</div>	
-		</div>
-		
+        <div class="settings__caption">Upload profile picture</div>
+        <div class="settings__section">
+            <div id="upload-avatar-section" class="upload-avatar-section">
+                <div class="upload-avatar-section__avatar"
+                     style="background-image: url('{{loggedUser.avatarUrls.medium}}')"></div>
+                <div class="upload-avatar-section__controls">
+                    {{> file-picker
+                            parent="upload-avatar-section"
+                    }}
+                    <div class="button upload-avatar-section__upload-button">upload picture</div>
+                    <div class="button upload-avatar-section__delete-button">delete picture</div>
+                </div>
+            </div>
+        </div>
 
-		<div class="settings__caption">User profile information</div>
-		<div class="settings__section">
 
-			<div id="social-collection" class="social-collection settings__social-collection">
+        <div class="settings__caption">Social profiles</div>
+        <div class="settings__section">
 
-				<div class="social-collection__social-list">
-					<div class="social-collection__social">
-						<div class="social-collection__icon"></div>
-						<span class="social-collection__link">/username</span>
-					</div>
+            <div id="social-collection" class="social-collection settings__social-collection">
 
-					<div class="social-collection__social">
-						<div class="social-collection__icon"></div>
-						<span class="social-collection__link">/usdfseme</span>
-					</div>
-				</div>
-				
-				{{> textbox-button
-					parent="social-collection"
-					caption="link"
-				}}
+                <div class="social-collection__social-list">
+                    {{#each loggedUser.links}}
+                        {{> social
+                                host=host
+                                href=href
+                        }}
+                    {{/each}}
+                </div>
 
-			</div>
+                <div class="social-collection__add-section">
+                    {{!<span class="social-collection__protocol">https://</span>-}}
+                    {{> textbox-button
+                            parent="social-collection"
+                            caption="link"
+                            placeholder="https://site.com/id"
+                    }}
+                </div>
 
-			{{> textarea
-				parent="settings"
-				caption="profile description"
-				placeholder="tell us about yourself"
-			}}
 
-			<div class="button settings__save-button">save changes</div>
+            </div>
+        </div>
+        <div class="settings__caption">Profile description</div>
+        <div class="settings__section">
 
-		</div>
+            {{> textarea
+                    parent="settings"
+                    placeholder="tell us about yourself"
+            }}
 
-		<div class="settings__caption">Change password</div>
-		<div class="settings__section">
-			{{> textbox
-				type="password"
-				parent="settings"
-				caption="old password"
-			}}
-			{{> textbox
-				type="password"
-				parent="settings"
-				caption="new password"
-			}}
-			{{> textbox
-				type="password"
-				parent="settings"
-				caption="new password again"
-			}}
+            <div class="button settings__save-button">save</div>
 
-			<div class="button settings__save-button">save changes</div>
-		</div>
+        </div>
 
-	</div>
+        <div class="settings__caption">Change password</div>
+        <div class="settings__section">
+            {{> textbox
+                    type="password"
+                    parent="settings"
+                    caption="old password"
+            }}
+            {{> textbox
+                    type="password"
+                    parent="settings"
+                    caption="new password"
+            }}
+            {{> textbox
+                    type="password"
+                    parent="settings"
+                    caption="new password again"
+            }}
+
+            <div class="button settings__save-button">save changes</div>
+        </div>
+
+    </div>
 </div>
 
 {{> footer}}

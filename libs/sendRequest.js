@@ -32,4 +32,4 @@ module.exports = function(body, method, url, cb) {
 	};
 
 	xhr.send(body);
-}
+};
