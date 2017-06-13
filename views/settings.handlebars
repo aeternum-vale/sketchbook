@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="settings__caption">Profile description</div>
-        <div class="settings__section">
+        <div id="description-add-section" class="settings__section">
 
             {{> textarea
                     parent="settings"
@@ -58,25 +58,28 @@
         </div>
 
         <div class="settings__caption">Change password</div>
-        <div class="settings__section">
+        <form name="change-password" class="settings__section">
             {{> textbox
+                    name="old"
                     type="password"
                     parent="settings"
                     caption="old password"
             }}
             {{> textbox
+                    name="new"
                     type="password"
                     parent="settings"
                     caption="new password"
             }}
             {{> textbox
+                    name="new-again"
                     type="password"
                     parent="settings"
                     caption="new password again"
             }}
 
             <div class="button settings__save-button">save changes</div>
-        </div>
+        </form>
 
     </div>
 </div>

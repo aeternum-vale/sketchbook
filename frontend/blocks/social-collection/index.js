@@ -20,7 +20,7 @@ let SocialCollection = function(options) {
 SocialCollection.prototype.sendSocial = function(link) {
 
 	let body = `link=${encodeURIComponent(link)}`;
-	require(LIBS + 'sendRequest')(body, 'POST', '/social', (err, response) => {
+	require(LIBS + 'sendRequest')(body, 'POST', '/userdata', (err, response) => {
 
 		if (err) {
 			this.error(err);
@@ -36,7 +36,7 @@ SocialCollection.prototype.sendSocial = function(link) {
 SocialCollection.prototype.deleteSocial = function(social) {
 
     let body = `link=${encodeURIComponent(social.dataset.link)}`;
-    require(LIBS + 'sendRequest')(body, 'DELETE', '/social', (err, response) => {
+    require(LIBS + 'sendRequest')(body, 'DELETE', '/settings', (err, response) => {
 
         if (err) {
             this.error(err);

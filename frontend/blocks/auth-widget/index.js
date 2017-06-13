@@ -1,5 +1,6 @@
 let checkUserData = require(LIBS + 'checkUserData');
 let eventMixin = require(LIBS + 'eventMixin');
+let ClientError = require(LIBS + 'componentErrors').ClientError;
 
 let fields = [{
 	name: 'username'
@@ -84,28 +85,28 @@ AuthWidget.prototype.submitLoginForm = function() {
 };
 
 AuthWidget.prototype.submitJoinForm = function() {
-	let result = checkUserData(this.getOptionsObj());
-	let body = '';
+	let errors = checkUserData.getErrorArray(this.getOptionsObj());
 
-	if (!result.success)
-		for (let i = 0; i < result.errors.length; i++)
-			this.setPropertyError(result.errors[i].property, result.errors[i].message);
-	else
+
+	if (errors.length === 0) {
+
+		let body = '';
+
 		fields.forEach(item => {
 			if (!item.extra)
-				body += (body === '' ? '' : '&') + item.name + '=' + encodeURIComponent(this.joinForm[item.name].value);
+				body += (body === '' ? '' : '&') +
+				item.name + '=' + encodeURIComponent(this.joinForm[item.name].value);
 		});
 
+		console.log('body: ' + body);
 
-	if (result.success)
 		require(LIBS + 'sendRequest')(body, 'POST', '/join', (err, response) => {
 
 			if (err) {
-				if (response || response.property) {
+				if (err instanceof ClientError)
 					this.setPropertyError(response.property, response.message);
-					return;
-				}
-				this.error(err);
+				else
+					this.error(err);
 				return;
 			}
 
@@ -114,6 +115,15 @@ AuthWidget.prototype.submitJoinForm = function() {
 			});
 
 		});
+
+	} else {
+		this.clearJoin();
+		for (let i = 0; i < errors.length; i++)
+			if (this.getJoinErrorTextBox(errors[i].property).textContent == '')
+				this.setPropertyError(errors[i].property, errors[i].message);
+	}
+
+
 };
 
 AuthWidget.prototype.getOptionsObj = function() {
@@ -136,10 +146,15 @@ AuthWidget.prototype.getJoinErrorTextBox = function(fieldName) {
 	return this.joinForm[fieldName].parentElement.querySelector('.textbox__error');
 };
 
-AuthWidget.prototype.setJoin = function() {
+
+AuthWidget.prototype.clearJoin = function() {
 	fields.forEach(item => {
 		this.getJoinErrorTextBox(item.name).textContent = '';
 	});
+};
+
+AuthWidget.prototype.setJoin = function() {
+	this.clearJoin();
 
 	this.loginWindow.classList.add('window_invisible');
 	this.joinWindow.classList.remove('window_invisible');

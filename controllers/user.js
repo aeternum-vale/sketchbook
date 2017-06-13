@@ -6,7 +6,7 @@ let imagePreviewViewModel = require('viewModels/imagePreview');
 let co = require('co');
 let checkUserData = require('libs/checkUserData');
 let PropertyError = require('error').PropertyError;
-let duplicatingUniquePropertyError = require('error').duplicatingUniquePropertyError;
+let DuplicatingUniquePropertyError = require('error').DuplicatingUniquePropertyError;
 let LoginError = require('error').LoginError;
 let HttpError = require('error').HttpError;
 let InvalidImage = require('error').InvalidImage;
@@ -99,11 +99,11 @@ function joinRequestListener(req, res, next) {
                 email: req.body.email
             };
 
-            let result = checkUserData(userData);
+            let errors = checkUserData.getErrorArray(userData);
 
-            debug('data validation completed: %o', result);
+            debug('data validation completed: %o', errors);
 
-            if (!result) {
+            if (errors.length === 0) {
                 if (!User.indexesEnsured)
                     yield User.ensureIndexes();
 
@@ -122,7 +122,7 @@ function joinRequestListener(req, res, next) {
                 return newUser;
 
             } else {
-                throw new PropertyError(result.errors[0].name, result.errors[0].message);
+                throw new PropertyError(result.errors[0].property, result.errors[0].message);
             }
 
         }).then((user) => {
@@ -138,7 +138,7 @@ function joinRequestListener(req, res, next) {
             if (err instanceof PropertyError)
                 res.json({
                     success: false,
-                    property: err.name,
+                    property: err.property,
                     message: err.message
                 });
             else
@@ -307,19 +307,6 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
-    let getErrorArray = require('libs/checkUserData').getErrorArray;
-
-    let errs = getErrorArray({
-        'password': 'Zxc',
-        'password-again': '',
-        'email': 'as',
-        'username': ''
-    });
-
-    debug(errs);
-
-
-
     const CUTAWAY_COUNT = 3;
     const IMAGE_PREVIEW_COUNT = 12;
     const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
@@ -405,7 +392,6 @@ function settingsRequestListener(req, res, next) {
 
 
 function avatarUploadRequestListener(req, res, next) {
-    if (!req.xhr) return next(404);
 
     co(function*() {
 
@@ -481,8 +467,6 @@ function avatarUploadRequestListener(req, res, next) {
 }
 
 function avatarDeleteRequestListener(req, res, next) {
-    if (!req.xhr) return next(404);
-
     co(function*() {
         res.loggedUser.hasAvatar = false;
         yield res.loggedUser.save();
@@ -499,88 +483,108 @@ function avatarDeleteRequestListener(req, res, next) {
 
 let isUrl = str => checkUserData.testProperty('url', str);
 
-function socialPostRequestListener(req, res, next) {
+function setSettingsRequestListener(req, res, next) {
+    function saveLink(link) {
+        co(function*() {
+            if (!isUrl(link)) {
+                link = 'https://' + link;
+                if (!isUrl(link))
+                    throw new HttpError(400, 'Invalid URL');
+            }
+            let parsedUrl = url.parse(link);
+            let host = parsedUrl.host;
+            if (host.indexOf('www.') === 0)
+                host = host.substring(4);
 
-    if (!req.xhr) return next(400);
-
-    co(function*() {
-
-        let link = req.body.link;
-
-        if (!isUrl(link)) {
-            link = 'https://' + link;
-
-            if (!isUrl(link))
-                throw new HttpError(400, 'Invalid URL');
-        }
-
-        let parsedUrl = url.parse(link);
-        let host = parsedUrl.host;
-
-
-        if (host.indexOf('www.') === 0)
-            host = host.substring(4);
-
-        if (parsedUrl.pathname.length <= 1) {
-            let firstDotPos = host.indexOf('.');
-            if (~host.indexOf('.', firstDotPos + 1))
-                host = host.substring(firstDotPos + 1);
-        }
-
-        for (let i = 0; i < res.loggedUser.links.length; i++)
-            if (res.loggedUser.links[i].host === host)
-                throw new HttpError(400, 'You already have a link to this resource');
-
-        let linkObj = {
-            host: host,
-            href: parsedUrl.href
-        };
-
-        res.loggedUser.links.push(linkObj);
-
-        yield res.loggedUser.save();
-
-        return linkObj;
-    }).then(linkObj => {
-        res.json({
-            success: true,
-            linkObj
-        });
-    }).catch(err => {
-        next(err);
-    });
-}
-
-function socialDeleteRequestListener(req, res, next) {
-    if (!req.xhr) return next(400);
-
-    co(function*() {
-        let link = req.body.link;
-
-
-        if (!isUrl(link))
-            throw new HttpError(400, 'Invalid URL');
-
-
-        for (let i = 0; i < res.loggedUser.links.length; i++)
-            if (res.loggedUser.links[i].href === link) {
-                res.loggedUser.links.splice(i, 1);
-                break;
+            if (parsedUrl.pathname.length <= 1) {
+                let firstDotPos = host.indexOf('.');
+                if (~host.indexOf('.', firstDotPos + 1))
+                    host = host.substring(firstDotPos + 1);
             }
 
-        yield res.loggedUser.save();
+            for (let i = 0; i < res.loggedUser.links.length; i++)
+                if (res.loggedUser.links[i].host === host)
+                    throw new HttpError(400, 'You already have a link to this resource');
 
-    }).then(result => {
+            let linkObj = {
+                host: host,
+                href: parsedUrl.href
+            };
 
-        res.json({
-            success: true
+            res.loggedUser.links.push(linkObj);
+
+            yield res.loggedUser.save();
+
+            return linkObj;
+        }).then(linkObj => {
+            res.json({
+                success: true,
+                linkObj
+            });
         });
+    }
+
+    function saveDescription(description) {
+        co(function*() {
+            let errors = checkUserData.getErrorArray({
+                description
+            });
+            if (errors.length == 0) {
+
+                res.loggedUser.description = description;
+                yield res.loggedUser.save();
+
+            } else
+                next(new HttpError(400, errors[0].message));
+        }).then(() => {
+            res.json({
+                success: true
+            });
+        });
+    }
+
+    debug('new settings: %o', req.body);
+
+    co(function*() {
+
+        if (req.body.link)
+            saveLink(req.body.link);
+
+        if (req.body.description)
+            saveDescription(req.body.description);
 
     }).catch(err => {
         next(err);
     });
 
 }
+
+function deleteSettingsRequestListener(req, res, next) {
+    function deleteLink(link) {
+        co(function*() {
+            if (!isUrl(link))
+                throw new HttpError(400, 'Invalid URL');
+
+            for (let i = 0; i < res.loggedUser.links.length; i++)
+                if (res.loggedUser.links[i].href === link) {
+                    res.loggedUser.links.splice(i, 1);
+                    break;
+                }
+
+            yield res.loggedUser.save();
+        }).then(result => {
+            res.json({
+                success: true
+            });
+        }).catch(err => {
+            next(err);
+        });
+    }
+
+    if (req.body.link)
+        deleteLink(req.body.link);
+}
+
 
 
 exports.registerRoutes = function(app) {
@@ -588,8 +592,8 @@ exports.registerRoutes = function(app) {
     app.post('/login', loginRequestListener);
     app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);
     app.post('/avatar', isAuth, addLoggedUser, avatarUploadRequestListener);
-    app.post('/social', isAuth, addLoggedUser, socialPostRequestListener);
-    app.delete('/social', isAuth, addLoggedUser, socialDeleteRequestListener);
+    app.post('/settings', isAuth, addLoggedUser, setSettingsRequestListener);
+    app.delete('/settings', isAuth, addLoggedUser, deleteSettingsRequestListener);
     app.delete('/avatar', isAuth, addLoggedUser, avatarDeleteRequestListener);
     app.get('/logout', logoutRequestListener);
     app.get('/users', usersListRequestListener);
