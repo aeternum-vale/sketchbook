@@ -62,7 +62,6 @@ function computeErrorMessage(template, property) {
 let validators = {
 
     'email': {
-        alias: 'e-mail',
         checks: [
             checks.nonEmpty(),
             checks.max(100, messages.tooBig()),
@@ -100,10 +99,18 @@ let validators = {
 
     'password-again': {
         checks: [
-            checks.nonEmpty('re-enter your password'), {
+            checks.nonEmpty('re-enter [property]'), {
                 errorMessage: 'passwords do not match',
-                test: function(value, data) {
-                    return (value === data['password']);
+                test: function(value, dataChunk, data) {
+					let originalPass = dataChunk.password;
+					if (!originalPass)
+						throw new Error('no original password reference');
+
+					for (let i = 0; i < data.length; i++)
+						if (data[i].property === originalPass)
+							return (value === data[i].value);
+
+					throw new Error('no orginal password data');
                 }
             }
 
@@ -133,18 +140,32 @@ let validators = {
 
 
 function getErrorArray(data) {
+	if (!Array.isArray(data)) {
+		let correctData = [];
+		for (let key in data) {
+			correctData.push({
+				property: key,
+				value: data[key]
+			});
+		}
+		data = correctData;
+	}
+
     let result = [];
 
-    for (let key in data) {
+    for (let i = 0; i < data.length; i++) {
+		let key = data[i].validator;
+		if (!key)
+			key = data[i].property;
 
         if (!validators[key])
             throw new Error('no validator for this property');
 
         validators[key].checks.forEach(check => {
-            if (!check.test(data[key], data))
+            if (!check.test(data[i].value, data[i], data))
                 result.push({
-                    property: key,
-                    message: computeErrorMessage(check.errorMessage, validators[key].alias || key)
+                    property: data[i].property,
+                    message: computeErrorMessage(check.errorMessage, data[i].alias || key)
                 });
         });
     }
@@ -153,7 +174,7 @@ function getErrorArray(data) {
 }
 
 function testProperty(name, value) {
-		let result = true;
+    let result = true;
     validators[name].checks.forEach(check => {
 
         if (!check.test(value))

@@ -4,25 +4,41 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 let PasswordChangeSection = function(options) {
     this.elem = options.elem;
     this.saveButton = this.elem.querySelector('.button');
-    this.old = this.elem.old;
-    this.new = this.elem.new;
-    this.newAgain = this.elem['new-again'];
+
 
     this.elem.onclick = e => {
         if (e.target !== this.saveButton) return;
 
         let errors = require(LIBS + 'checkUserData')
-            .getErrorArray({
-                'password': this.new.value,
-                'password-again': this.old.value
-            });
+            .getErrorArray([{
+                property: 'new',
+                validator: 'password',
+                alias: 'new password',
+                value: this.elem['new'].value
+            }, {
+                property: 'new-again',
+                validator: 'password-again',
+                alias: 'new password',
+                value: this.elem['new-again'].value,
+                password: 'new'
+            }]);
 
         if (errors.length === 0) {
 
         } else
-            this.error(new ClientError(errors[0].message));
-        
+            errors.forEach(item => {
+                this.setPropertyError(item.property, item.message);
+            });
     };
+};
+
+PasswordChangeSection.prototype.setPropertyError = function(property, message) {
+    this.getErrorTextBox(property).textContent = message;
+};
+
+
+PasswordChangeSection.prototype.getErrorTextBox = function(fieldName) {
+    return this.elem[fieldName].parentElement.querySelector('.textbox__error');
 };
 
 

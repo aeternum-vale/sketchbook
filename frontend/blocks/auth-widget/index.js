@@ -98,7 +98,6 @@ AuthWidget.prototype.submitJoinForm = function() {
 				item.name + '=' + encodeURIComponent(this.joinForm[item.name].value);
 		});
 
-		console.log('body: ' + body);
 
 		require(LIBS + 'sendRequest')(body, 'POST', '/join', (err, response) => {
 
@@ -127,9 +126,18 @@ AuthWidget.prototype.submitJoinForm = function() {
 };
 
 AuthWidget.prototype.getOptionsObj = function() {
-	let options = {};
+	let options = [];
 	fields.forEach(item => {
-		options[item.name] = this.joinForm[item.name].value;
+		let dataChunk = {
+			property: item.name,
+			value: this.joinForm[item.name].value
+		};
+		if (item.name == 'password-again') {
+			dataChunk.password = 'password';
+			dataChunk.alias = 'password';
+		}
+
+		options.push(dataChunk);
 		this.getJoinErrorTextBox(item.name).textContent = '';
 	});
 
