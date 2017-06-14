@@ -4,7 +4,8 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 
 let Form = function(options) {
     this.elem = options.elem;
-    this.fields = options.field;
+    this.fields = options.fields;
+    this.url = options.url;
 
     this.saveButton = this.elem.querySelector('.save-button');
 
@@ -33,8 +34,9 @@ Form.prototype.getDataObj = function() {
 
     for (let key in this.fields) {
         let chunk = this.fields[key];
-        if (chunk.validator) {
-            chunk.property = key;
+        if (!chunk.noValidation) {
+            if (!chunk.property)
+                chunk.property = key;
             chunk.value = this.elem[key].value;
             options.push(chunk);
         }
@@ -54,7 +56,9 @@ Form.prototype.send = function(body) {
         }
 
         this.clear();
-        this.trigger('success');
+        this.trigger('success', {
+            response
+        });
     });
 };
 

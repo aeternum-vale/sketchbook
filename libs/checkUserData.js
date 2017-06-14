@@ -24,6 +24,7 @@ let tests = {
     max: (max, value) => (value.length <= max),
     min: (min, value) => (value.length >= min),
     nonEmpty: (value) => (value.length > 0)
+
 };
 
 
@@ -146,6 +147,7 @@ let validators = {
 
 
 function getErrorArray(data) {
+
 	if (!Array.isArray(data)) {
 		let correctData = [];
 		for (let key in data) {
@@ -165,13 +167,13 @@ function getErrorArray(data) {
 			key = data[i].property;
 
         if (!validators[key])
-            throw new Error('no validator for this property');
+            throw new Error('no validator for this property: ' + key);
 
         validators[key].checks.forEach(check => {
             if (!check.test(data[i].value, data[i], data))
                 result.push({
                     property: data[i].property,
-                    message: computeErrorMessage(check.errorMessage, data[i].alias || key)
+                    message: computeErrorMessage(check.errorMessage, data[i].alias || data[i].property || key)
                 });
         });
     }

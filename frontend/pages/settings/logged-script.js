@@ -6,7 +6,7 @@ let Dropdown = require(BLOCKS + 'dropdown');
 let SocialCollection = require(BLOCKS + 'social-collection');
 let UploadAvatarSection = require(BLOCKS + 'upload-avatar-section');
 let DescriptionAddSection = require(BLOCKS + 'description-add-section');
-let PasswordChangeSection = require(BLOCKS + 'password-change-section');
+let PasswordChangeForm = require(BLOCKS + 'password-change-form');
 
 let userMenuDropdown = new Dropdown({
     elem: document.getElementById('user-menu'),
@@ -25,7 +25,7 @@ let descriptionAddSection = new DescriptionAddSection({
     elem: document.getElementById('description-add-section')
 });
 
-let passwordChangeSection = new PasswordChangeSection({
+let passwordChangeForm = new PasswordChangeForm({
     elem: document.forms['change-password']
 });
 

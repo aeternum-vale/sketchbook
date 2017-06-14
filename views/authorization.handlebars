@@ -9,8 +9,8 @@
 			{{> textbox name="email" caption="e-mail" parent="window"}}
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
 			{{> textbox name="password-again" caption="password again" type="password" parent="window"}}
-			{{> button caption="join" parent="window" id="join" submit=true}}
-
+			{{!> button caption="join" parent="window" id="join" submit=true}}
+			<div class="button save-button window__button">join</div>
 
 			<span class="window__message">
 				Already have an account? <span class="ref">Log in</span>
@@ -25,7 +25,7 @@
 		<form class="panel window__panel" action="/login" method="POST" name="login" role="form">
 			{{> textbox name="username" caption="username" parent="window"}}
 			{{> textbox name="password" caption="password" type="password" parent="window"}}
-			{{> button caption="login" parent="window" id="login" submit=true}}
+			<div class="button save-button window__button">login</div>
 			<span class="window__message">
 				Don’t have an account? <span class="ref">Sign up</span>
 			</span>

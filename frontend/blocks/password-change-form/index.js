@@ -1,6 +1,6 @@
 let Form = require(BLOCKS + 'form');
 
-let PasswordChangeSection = function(options) {
+let PasswordChangeForm = function(options) {
     Form.apply(this, arguments);
 
     this.fields = {
@@ -27,8 +27,8 @@ let PasswordChangeSection = function(options) {
     this.url = '/settings';
 
 };
-PasswordChangeSection.prototype = Object.create(Form.prototype);
-PasswordChangeSection.prototype.constructor = PasswordChangeSection;
+PasswordChangeForm.prototype = Object.create(Form.prototype);
+PasswordChangeForm.prototype.constructor = PasswordChangeForm;
 
 
-module.exports = PasswordChangeSection;
+module.exports = PasswordChangeForm;
