@@ -60,13 +60,13 @@
         <div class="settings__caption">Change password</div>
         <form name="change-password" class="settings__section">
             {{> textbox
-                    name="old"
+                    name="old-password"
                     type="password"
                     parent="settings"
                     caption="old password"
             }}
             {{> textbox
-                    name="new"
+                    name="new-password"
                     type="password"
                     parent="settings"
                     caption="new password"
@@ -78,7 +78,7 @@
                     caption="new password again"
             }}
 
-            <div class="button settings__save-button">save changes</div>
+            <div class="button save-button settings__save-button">save changes</div>
         </form>
 
     </div>

@@ -485,7 +485,7 @@ let isUrl = str => checkUserData.testProperty('url', str);
 
 function setSettingsRequestListener(req, res, next) {
     function saveLink(link) {
-        co(function*() {
+        return co(function*() {
             if (!isUrl(link)) {
                 link = 'https://' + link;
                 if (!isUrl(link))
@@ -525,7 +525,7 @@ function setSettingsRequestListener(req, res, next) {
     }
 
     function saveDescription(description) {
-        co(function*() {
+        return co(function*() {
             let errors = checkUserData.getErrorArray({
                 description
             });
@@ -535,7 +535,22 @@ function setSettingsRequestListener(req, res, next) {
                 yield res.loggedUser.save();
 
             } else
-                next(new HttpError(400, errors[0].message));
+                throw new HttpError(400, errors[0].message);
+        }).then(() => {
+            res.json({
+                success: true
+            });
+        });
+    }
+
+    function changePassword(oldPassword, newPassword) {
+        return co(function*() {
+            if (!res.loggedUser.checkPassword(oldPassword))
+                throw new PropertyError('old-password', 'incorrect password')
+
+            res.loggedUser.password = newPassword;
+            yield res.loggedUser.save();
+
         }).then(() => {
             res.json({
                 success: true
@@ -548,13 +563,23 @@ function setSettingsRequestListener(req, res, next) {
     co(function*() {
 
         if (req.body.link)
-            saveLink(req.body.link);
+            yield saveLink(req.body.link);
 
         if (req.body.description)
-            saveDescription(req.body.description);
+            yield saveDescription(req.body.description);
+
+        if (req.body['old-password'] && req.body['new-password'])
+            yield changePassword(req.body['old-password'], req.body['new-password']);
 
     }).catch(err => {
-        next(err);
+        if (err instanceof PropertyError)
+            res.json({
+                success: false,
+                property: err.property,
+                message: err.message
+            });
+        else
+            next(err);
     });
 
 }

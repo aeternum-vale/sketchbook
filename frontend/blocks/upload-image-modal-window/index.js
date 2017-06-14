@@ -64,40 +64,6 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 		this.deactivate();
 
 	});
-
-
-
-	/*	var xhr = new XMLHttpRequest();
-		let self = this;
-
-		xhr.upload.onprogress = event => {
-			//console.log(event.loaded + ' / ' + event.total);
-		};
-
-		xhr.onload = xhr.onerror = function() {
-			if (this.status == 200) {
-				let response = JSON.parse(this.responseText);
-				if (response.success) {
-					self.trigger('uploaded', {
-						imageId: response.imageId,
-						previewUrl: response.previewUrl
-					});
-					self.deactivate();
-				} else
-				if (response.message)
-					self.setError(response.message);
-				else
-					self.error(new ServerError());
-			} else
-				self.error(new ServerError());
-		};
-
-		xhr.open("POST", "/image", true);
-		xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-		var formData = new FormData();
-		formData.append("image", file);
-		formData.append("description", description);
-		xhr.send(formData);*/
 };
 
 UploadImageModalWindow.prototype.activate = function() {

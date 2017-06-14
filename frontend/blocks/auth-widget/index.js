@@ -87,7 +87,6 @@ AuthWidget.prototype.submitLoginForm = function() {
 AuthWidget.prototype.submitJoinForm = function() {
 	let errors = checkUserData.getErrorArray(this.getOptionsObj());
 
-
 	if (errors.length === 0) {
 
 		let body = '';

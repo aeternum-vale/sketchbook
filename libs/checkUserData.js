@@ -61,6 +61,12 @@ function computeErrorMessage(template, property) {
 
 let validators = {
 
+    'non-empty': {
+        checks: [
+            checks.nonEmpty()
+        ]
+    },
+
     'email': {
         checks: [
             checks.nonEmpty(),
