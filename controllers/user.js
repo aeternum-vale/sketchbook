@@ -121,9 +121,8 @@ function joinRequestListener(req, res, next) {
 
                 return newUser;
 
-            } else {
+            } else
                 throw new PropertyError(result.errors[0].property, result.errors[0].message);
-            }
 
         }).then((user) => {
             debug('registration is successful. User id: %s', user._id);

@@ -41,6 +41,14 @@ ModalWindow.prototype.renderWrapper = function() {
 	return require('./renderWrapper')();
 };
 
+ModalWindow.prototype.renderWindow = function(wrapper, innerHTML) {
+	let parent = document.createElement('DIV');
+	parent.innerHTML = innerHTML; //require(`html-loader!./window`);
+	let wnd = parent.firstElementChild;
+	wrapper.appendChild(wnd);
+	return wnd;
+}
+
 ModalWindow.prototype.activate = function() {
 	if (!this.backdrop)
 		this.setBackdrop();

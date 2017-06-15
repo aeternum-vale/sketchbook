@@ -1,0 +1,9 @@
+<div class='window window_invisible modal-window message-modal-window' id='message-modal-window'>
+    <div class="header window__header">
+    </div>
+
+    <div class="panel window__panel">
+        <div class="message-modal-window__message">
+        </div>
+    </div>
+</div>

@@ -10,4 +10,10 @@ let userMenuDropdown = new Dropdown({
 });
 
 
+let PromptWindow = require(BLOCKS + 'prompt-window');
+let prompt = new PromptWindow();
+prompt.activate();
+
+
+
 require(LIBS + 'setGlobalErrorCatcher')();
