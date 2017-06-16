@@ -1,5 +1,4 @@
 @import "../../style/global.less";
-
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
@@ -10,47 +9,39 @@
 @import "../../blocks/textbox-button/textbox-button.less";
 @import "../../blocks/social-collection/social-collection.less";
 @import "../../blocks/upload-avatar-section/upload-avatar-section.less";
-
-.settings-wrapper  {
-	display: flex;
-	justify-content: center;
+@import "../../blocks/prompt-window/prompt-window.less";
+@import '../../blocks/message-modal-window/message-modal-window';
+.settings-wrapper {
+    display: flex;
+    justify-content: center;
 }
 
 .settings {
-	.screen-wrapper();
-	flex-direction: column;
-	align-items: center;
-
-	padding-top: 20px;
-	padding-bottom: 20px;
-
-	&__caption {
-		font-size: @large-font-size;
-	}
-
-	&__section {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		padding: 30px 0;
-	}
-
-
-	&__save-button {
-		.button(20px);
-	}
-
-	&__add-button {
-		margin-bottom: 10px;
-	}
-	
-	&__textarea,
-	&__textbox {
-		margin-bottom: 20px;
-	}
-
-	&__social-collection {
-		margin-bottom: 30px;
-	}
-
+    .screen-wrapper();
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    &__caption {
+        font-size: @large-font-size;
+    }
+    &__section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 0;
+    }
+    &__save-button {
+        .button(20px);
+    }
+    &__add-button {
+        margin-bottom: 10px;
+    }
+    &__textarea,
+    &__textbox {
+        margin-bottom: 20px;
+    }
+    &__social-collection {
+        margin-bottom: 30px;
+    }
 }

@@ -27,7 +27,7 @@ DescriptionAddSection.prototype.sendDescription = function(description) {
             return;
         }
 
-        this.trigger('uploaded');
+        this.trigger('success');
     });
 };
 

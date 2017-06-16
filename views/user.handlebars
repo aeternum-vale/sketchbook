@@ -6,8 +6,7 @@
 			<div class="person__username">{{pageUser.username}}</div>
 		</div>
 		<div class="description">
-			<div class="description__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis illo dignissimos, fugiat accusamus beatae at, eius excepturi tenetur. Quasi ipsa quidem adipisci nostrum voluptatibus tempore voluptates iste. Provident, nulla, pariatur!
-			</div>
+			<div class="description__text">{{#if pageUser.description}}{{pageUser.description}}{{else}}Colors are split into their red, green, blue and alpha dimensions. The operation is applied to each color dimension separately. E.g., if the user added two colors, then the green dimension of the result is equal to sum of green dimensions of input colors. If the user multiplied a color by a number, each color dimension will get multiplied.{{/if}}</div>
 			<div id="links-dropdown" class="dropdown links-dropdown description__links-dropdown">
 				<ul class="dropdown__item-list links-dropdown__item-list">
 
@@ -47,13 +46,13 @@
 				upload image
 			</div>
 		{{else}}
-			<div id="subscribe-button" 
+			<div id="subscribe-button"
 			{{#if isSubscribed}}
 				data-checked="true"
 				class="button button_active extra-header__button"
 			{{else}}
 				class="button extra-header__button"
-			{{/if}}		
+			{{/if}}
 			>subscribe</div>
 		{{/if}}
 	</div>
@@ -62,7 +61,7 @@
 	<div class="gallery__wrapper">
 		{{#if pageUser.images}}
 			{{#each pageUser.images}}
-				{{> image-preview 
+				{{> image-preview
 					comments=comments.length
 					likes=likes.length
 					previewUrl=previewUrl
@@ -70,7 +69,7 @@
 				}}
 			{{/each}}
 		{{else}}
-			{{> image-preview 
+			{{> image-preview
 				ghost=true
 				comments='0'
 				likes='0'

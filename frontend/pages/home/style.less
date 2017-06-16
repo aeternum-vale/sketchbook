@@ -1,169 +1,123 @@
 @import "../../style/global.less";
-
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/window/window.less";
 @import "../../blocks/button/button.less";
-@import "../../blocks/message-modal-window/message-modal-window.less";
-
-
+@import "../../blocks/prompt-window/prompt-window.less";
+@import '../../blocks/message-modal-window/message-modal-window';
 @cutaway-header-padding: 6px;
 @cutaway-avatar-size: 54px;
 @cutaway-button-font-size: 21px;
-@cutaway-button-height:  @cutaway-button-font-size + (@cutaway-button-font-size / @button-padding-reduc-rate) * 2;
+@cutaway-button-height: @cutaway-button-font-size + (@cutaway-button-font-size / @button-padding-reduc-rate) * 2;
 @cutaway-header-padding-right: (@cutaway-avatar-size + @cutaway-header-padding * 2 - @cutaway-button-height) / 2;
-
 @cutaway-width: 450px;
 @cutaway-panel-width: @cutaway-width - @window-border-width * 2;
-
 @cutaway-panel-height: 290px;
 @cutaway-image-preview-margin: 10px;
 @cutaway-image-preview-size: (@cutaway-panel-height - @cutaway-image-preview-margin * 3) * 2 / 3;
-
 @cutaway-image-preview-count: 6;
 @cutaway-image-preview-wrapper-width: @cutaway-image-preview-size * @cutaway-image-preview-count + @cutaway-image-preview-margin * (@cutaway-image-preview-count + 1);
 @cutaway-image-preview-wrapper-offset: (@cutaway-image-preview-size + @cutaway-image-preview-margin) * @cutaway-image-preview-count;
-
-
 .cutaway-wrapper {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
-	// flex-flow: row wrap;
-	// justify-content: space-around;
-
-	padding: 20px 10px;
-
-	&__cutaway {
-		margin-bottom: 30px;
-	}
-
-	&__cutaway:last-child {
-		margin-bottom: 0;
-	}
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; // flex-flow: row wrap;
+    // justify-content: space-around;
+    padding: 20px 10px;
+    &__cutaway {
+        margin-bottom: 30px;
+    }
+    &__cutaway:last-child {
+        margin-bottom: 0;
+    }
 }
 
-
 .cutaway {
-	position: relative;
-	flex-shrink: 0;
-	box-sizing: border-box;
-
-	width: @cutaway-width;
-
-
-	& .header {
-		padding: @cutaway-header-padding;
-		padding-right: @cutaway-header-padding-right;
-
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-
-	&__avatar {
-		.avatar(@cutaway-avatar-size);
-		margin-right: @cutaway-header-padding;
-	}
-
-	&__header-left-side {
-		display: flex;
-		align-items: center;
-	}
-
-	&__subscribe-button {
-		.button(@cutaway-button-font-size);
-	}
-
-	&__outer-panel {
-		position: relative;
-		justify-content: flex-start;
-		overflow: hidden;
-		height: @cutaway-panel-height;
-	}
-
-	&__inner-panel {
-		position: absolute;
-		
-
-		width: 100%;
-		height: 100%;
-		background-color: transparent;
-		background-image: linear-gradient(to top, #1c1618, transparent);
-	}
-
-	&__preview-wrapper {
-		position: relative;
-		display: flex;
-		flex-shrink: 0;
-		overflow: hidden;
-
-		height: @cutaway-image-preview-size;
-		//width: ~"calc(100% - @{cutaway-image-preview-margin} * 2)";
-		
-		margin-top: @cutaway-image-preview-margin;
-	}
-
-	&__top {
-		align-self: flex-start;
-		justify-content: flex-start;
-		animation: top-scrolling 40s infinite linear;
-	}
-
-	&__bottom {
-		align-self: flex-end;
-		justify-content: flex-end;
-		animation: bottom-scrolling 35s infinite linear;
-	}
-
-	&__image-preview {
-		flex-shrink: 0;
-
-		background-size: cover;
-		background-position: center;
-		border-radius: 4px;
-
-		height: 100%;
-		width: @cutaway-image-preview-size;
-
-		margin-right: @cutaway-image-preview-margin;
-
-		background-color: #fff;
-		color: #000;
-
-	}
-
-
-	&__image-preview:first-child {
-		margin-left: @cutaway-image-preview-margin;
-
-
-
-	}
-
+    position: relative;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: @cutaway-width;
+    & .header {
+        padding: @cutaway-header-padding;
+        padding-right: @cutaway-header-padding-right;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__avatar {
+        .avatar(@cutaway-avatar-size);
+        margin-right: @cutaway-header-padding;
+    }
+    &__header-left-side {
+        display: flex;
+        align-items: center;
+    }
+    &__subscribe-button {
+        .button(@cutaway-button-font-size);
+    }
+    &__outer-panel {
+        position: relative;
+        justify-content: flex-start;
+        overflow: hidden;
+        height: @cutaway-panel-height;
+    }
+    &__inner-panel {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        background-image: linear-gradient(to top, #1c1618, transparent);
+    }
+    &__preview-wrapper {
+        position: relative;
+        display: flex;
+        flex-shrink: 0;
+        overflow: hidden;
+        height: @cutaway-image-preview-size; //width: ~"calc(100% - @{cutaway-image-preview-margin} * 2)";
+        margin-top: @cutaway-image-preview-margin;
+    }
+    &__top {
+        align-self: flex-start;
+        justify-content: flex-start;
+        animation: top-scrolling 40s infinite linear;
+    }
+    &__bottom {
+        align-self: flex-end;
+        justify-content: flex-end;
+        animation: bottom-scrolling 35s infinite linear;
+    }
+    &__image-preview {
+        flex-shrink: 0;
+        background-size: cover;
+        background-position: center;
+        border-radius: 4px;
+        height: 100%;
+        width: @cutaway-image-preview-size;
+        margin-right: @cutaway-image-preview-margin;
+        background-color: #fff;
+        color: #000;
+    }
+    &__image-preview:first-child {
+        margin-left: @cutaway-image-preview-margin;
+    }
 }
 
 @keyframes top-scrolling {
-	from {
-		transform: translateX(0);
-	}
-
-	to {
-		transform: translateX(-@cutaway-image-preview-wrapper-offset);
-	}
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-@cutaway-image-preview-wrapper-offset);
+    }
 }
 
-
 @keyframes bottom-scrolling {
-	from {
-		transform: translateX(0);
-	}
-
-	to {
-		transform: translateX(@cutaway-image-preview-wrapper-offset);
-	}
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(@cutaway-image-preview-wrapper-offset);
+    }
 }

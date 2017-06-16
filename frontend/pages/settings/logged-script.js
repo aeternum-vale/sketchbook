@@ -51,11 +51,15 @@ let passwordChangeForm = new Form({
 
 let messageModalWindow = new MessageModalWindow();
 passwordChangeForm.on('success', e => {
-    messageModalWindow.activate('password successfully changed');
+    messageModalWindow.activate('Password has been successfully changed');
 });
 
 uploadAvatarSection.on('uploaded', e => {
     alert(e.detail.url);
+});
+
+descriptionAddSection.on('success', e => {
+    messageModalWindow.activate('Description has been successfully changed');
 });
 
 require(LIBS + 'setGlobalErrorCatcher')();

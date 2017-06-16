@@ -1,62 +1,57 @@
-@import '../blocks/message-modal-window/message-modal-window';
-@import "../blocks/prompt-window/prompt-window.less";
-
-:active, :hover, :focus {
+:active,
+ :hover,
+ :focus {
     outline: 0;
     outline-offset: 0;
 }
 
-html, body {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-
-	background-color: #222;
-	font-family: Arial;
-	font-size: @medium-font-size;
-	color: @global-text-color;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    font-family: Arial;
+    font-size: @medium-font-size;
+    color: @global-text-color;
 }
 
 button {
-	border-width: 0px;
+    border-width: 0px;
 }
 
 a,
 a:active,
 a:visited,
 a:hover {
-	color: @global-text-color;
-	text-decoration: none;
+    color: @global-text-color;
+    text-decoration: none;
 }
 
 .ref {
-	position: relative;
-	color: @global-attention-color;
-	cursor: pointer;
-	text-decoration: none;
-	transition: color .3s ease;
-
-	&:hover {
-		color: @global-text-color;
-	}
-
-	&::before {
-		content: "";
-		display: block;
-		position: absolute;
-		transition: all .3s ease;
-		left: 0;
-		bottom: -2px;
-		width: 100%;
-		height: 1px;
-		background-color: @global-attention-color;
-		transform:  scaleX(0);
-	}
-
-	&:hover::before {
-		transform:  scaleX(1);
-		background-color: @global-text-color;
-	}
-
+    position: relative;
+    color: @global-attention-color;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color .3s ease;
+    &:hover {
+        color: @global-text-color;
+    }
+    &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        transition: all .3s ease;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1px;
+        background-color: @global-attention-color;
+        transform: scaleX(0);
+    }
+    &:hover::before {
+        transform: scaleX(1);
+        background-color: @global-text-color;
+    }
 }
