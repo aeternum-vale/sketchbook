@@ -5,12 +5,17 @@
 	{{#if page}}
 		<title>{{page}}</title>
 		<link rel="stylesheet" href="/{{page}}.css">
+	{{/if}}
+	{{{_sections.scripts}}}
+
+	<!--
 		<script defer src="/common-{{page}}.js"></script>
 		<script defer src="/{{page}}.js"></script>
 		{{#if loggedUser}}
 			<script defer src="/logged-{{page}}.js"></script>
 		{{/if}}
-	{{/if}}
+	-->
+
 </head>
 <body>
 	{{{body}}}

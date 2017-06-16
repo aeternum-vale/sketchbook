@@ -30,12 +30,7 @@ form.uploadDir = uploadDir;
 
 
 function usersListRequestListener(req, res, next) {
-
     co(function*() {
-
-        if (!User.indexesEnsured)
-            yield User.ensureIndexes();
-
         return new Promise((resolve, reject) => {
             User.find({}, function(err, users) {
                 if (err) reject(err);
@@ -52,9 +47,6 @@ function usersListRequestListener(req, res, next) {
 function userProfileRequestListener(req, res, next) {
     co(function*() {
 
-        if (!User.indexesEnsured)
-            yield User.ensureIndexes();
-
         let pageUser = yield User.findOne({
             username: req.params.username
         }).populate('images').exec();
@@ -66,7 +58,6 @@ function userProfileRequestListener(req, res, next) {
 
     }).then(pageUser => {
         res.locals.pageUser = userViewModel(pageUser);
-
 
         if (res.loggedUser) {
             res.locals.ownPage = (res.loggedUser._id === pageUser._id);
@@ -90,104 +81,96 @@ function userProfileRequestListener(req, res, next) {
 function joinRequestListener(req, res, next) {
     debug('recieved registration request: %o', req.body);
 
-    if (req.xhr || req.accepts('json,html') === 'json') {
-        co(function*() {
-            //console.log(mongoose.connection.readyState);
-            let userData = {
-                username: req.body.username,
-                password: req.body.password,
-                email: req.body.email
-            };
+    co(function*() {
+        //console.log(mongoose.connection.readyState);
+        let userData = {
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email
+        };
 
-            let errors = checkUserData.getErrorArray(userData);
+        let errors = checkUserData.getErrorArray(userData);
 
-            debug('data validation completed: %o', errors);
+        debug('data validation completed: %o', errors);
 
-            if (errors.length === 0) {
-                if (!User.indexesEnsured)
-                    yield User.ensureIndexes();
+        if (errors.length === 0) {
+            if (!User.indexesEnsured)
+                yield User.ensureIndexes();
 
-                let oldUser = yield User.findOne({
-                    username: userData.username
-                }).exec();
-                if (oldUser) throw new DuplicatingUniquePropertyError('username', 'this username is already taken');
+            let oldUser = yield User.findOne({
+                username: userData.username
+            }).exec();
+            if (oldUser) throw new DuplicatingUniquePropertyError('username', 'this username is already taken');
 
-                oldUser = yield User.findOne({
-                    email: userData.email
-                }).exec();
-                if (oldUser) throw new DuplicatingUniquePropertyError('email', 'this e-mail is already registered');
+            oldUser = yield User.findOne({
+                email: userData.email
+            }).exec();
+            if (oldUser) throw new DuplicatingUniquePropertyError('email', 'this e-mail is already registered');
 
-                let newUser = new User(userData).save();
+            let newUser = new User(userData).save();
 
-                return newUser;
+            return newUser;
 
-            } else
-                throw new PropertyError(result.errors[0].property, result.errors[0].message);
+        } else
+            throw new PropertyError(result.errors[0].property, result.errors[0].message);
 
-        }).then((user) => {
-            debug('registration is successful. User id: %s', user._id);
-            req.session.userId = user._id;
+    }).then((user) => {
+        debug('registration is successful. User id: %s', user._id);
+        req.session.userId = user._id;
 
-            res.json({
-                success: true,
-                url: '/'
-            });
-        }).catch(err => {
-
-            if (err instanceof PropertyError)
-                res.json({
-                    success: false,
-                    property: err.property,
-                    message: err.message
-                });
-            else
-                next(err);
+        res.json({
+            success: true,
+            url: '/'
         });
-    } else
-        res.redirect(303, '/');
+    }).catch(err => {
+
+        if (err instanceof PropertyError)
+            res.json({
+                success: false,
+                property: err.property,
+                message: err.message
+            });
+        else
+            next(err);
+    });
+
 }
 
 function loginRequestListener(req, res, next) {
     debug('recieved login request: %o', req.body);
     let loginUser = req.body;
 
-    if (req.xhr || req.accepts('json,html') === 'json') {
-        co(function*() {
+    co(function*() {
 
-            if (!User.indexesEnsured)
-                yield User.ensureIndexes();
+        user = yield User.findOne({
+            username: loginUser.username
+        }).exec();
 
-            user = yield User.findOne({
-                username: loginUser.username
-            }).exec();
+        if (!user) throw new LoginError('no such user');
 
-            if (!user) throw new LoginError('no such user');
+        if (!user.checkPassword(loginUser.password)) throw new LoginError('invalid password');
 
-            if (!user.checkPassword(loginUser.password)) throw new LoginError('invalid password');
+        return user;
 
-            return user;
+    }).then((user) => {
+        debug('login is successful. User id: %s', user._id);
+        req.session.userId = user._id;
 
-
-        }).then((user) => {
-            debug('login is successful. User id: %s', user._id);
-            req.session.userId = user._id;
-
-            res.json({
-                success: true,
-                url: '/'
-            });
-        }).catch(err => {
-
-            if (err instanceof LoginError)
-                res.json({
-                    success: false,
-                    message: 'Invalid login data'
-                });
-            else
-                next(err);
+        res.json({
+            success: true,
+            url: '/'
         });
-    } else
-        res.redirect(303, '/');
+    }).catch(err => {
+
+        if (err instanceof LoginError)
+            res.json({
+                success: false,
+                message: 'Invalid login data'
+            });
+        else
+            next(err);
+    });
+
 }
 
 function logoutRequestListener(req, res, next) {
@@ -608,8 +591,6 @@ function deleteSettingsRequestListener(req, res, next) {
     if (req.body.link)
         deleteLink(req.body.link);
 }
-
-
 
 exports.registerRoutes = function(app) {
     app.post('/join', joinRequestListener);

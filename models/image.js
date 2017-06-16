@@ -196,10 +196,6 @@ imageSchema.post('remove', function(doc) {
 
 
 let Image = mongoose.model('Image', imageSchema);
-Image.ensureIndexes().then(() => {
-	Image.indexesEnsured = true;
-}).catch(err => {
-	throw err;
-});
+Image.ensure = Image.ensureIndexes;
 
 module.exports = Image;

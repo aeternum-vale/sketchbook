@@ -1,7 +1,15 @@
+{{#section 'scripts'}}
+	<script defer src="/common-home.js"></script>
+	<script defer src="/home.js"></script>
+	{{#if loggedUser}}
+		<script defer src="/logged-home.js"></script>
+	{{/if}}
+{{/section}}
+
 {{> page-header}}
 
 <div class="cutaway-wrapper">
-	
+
 	{{#each cutaways}}
 		{{> cutaway
 			username=user.username
@@ -11,7 +19,7 @@
 		}}
 	{{/each}}
 
-	
+
 </div>
 
 

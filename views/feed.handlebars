@@ -1,10 +1,15 @@
+{{#section 'scripts'}}
+	<script defer src="/feed.js"></script>
+{{/section}}
+
+
 {{> page-header}}
 <div class="pseudo-header"></div>
 <div class="gallery">
 	<div class="gallery__wrapper">
 
 		{{#each feed}}
-			{{> image-preview 
+			{{> image-preview
 				comments=comments.length
 				likes=likes.length
 				previewUrl=previewUrl

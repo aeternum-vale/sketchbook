@@ -119,10 +119,6 @@ commentSchema.post('remove', function(doc) {
 
 
 let Comment = mongoose.model('Comment', commentSchema);
-Comment.ensureIndexes().then(() => {
-	Comment.indexesEnsured = true;
-}).catch(err => {
-	throw err;
-});
+Comment.ensure = Comment.ensureIndexes;
 
 module.exports = Comment;

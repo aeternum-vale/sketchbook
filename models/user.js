@@ -105,10 +105,6 @@ userSchema.methods.checkPassword = function (password) {
 };
 
 let User = mongoose.model('User', userSchema);
-User.ensureIndexes().then(() => {
-    User.indexesEnsured = true;
-}).catch((err) => {
-    throw err;
-});
+User.ensure = User.ensureIndexes;
 
 module.exports = User;

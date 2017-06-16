@@ -1,3 +1,11 @@
+{{#section 'scripts'}}
+	<script defer src="/common-image.js"></script>
+	<script defer src="/image.js"></script>
+	{{#if loggedUser}}
+		<script defer src="/logged-image.js"></script>
+	{{/if}}
+{{/section}}
+
 <div class="image-post-wrapper">
     <div id="image-post" class="image-post-wrapper__image-post image-post">
         <div class="image-post__image-wrapper">
@@ -80,4 +88,3 @@
         </div>
     </div>
 </div>
-

@@ -12,55 +12,49 @@ let addRefererParams = require('middleware/addRefererParams');
 let url = require('url');
 
 function recieveCommentRequestListener(req, res, next) {
+    let imageId = req.refererParams.value;
 
-	if (!req.xhr) next();
+    co(function*() {
 
-	let imageId = req.refererParams.value;
+        let comment = yield new Comment({
+            text: req.body.text,
+            author: res.loggedUser._id,
+            image: imageId
+        }).save();
 
-	co(function*() {
-		if (!Comment.indexesEnsured)
-			yield Comment.ensureIndexes();
+        return comment;
 
-		let comment = yield new Comment({
-			text: req.body.text,
-			author: res.loggedUser._id,
-			image: imageId
-		}).save();
-
-		return comment;
-
-	}).then(comment => {
-		debug('new comment is added: %s', comment.text);
-		res.json({
-			success: true,
-			commentId: comment._id
-		});
-	}).catch(err => {
-		next(err);
-	});
+    }).then(comment => {
+        debug('new comment is added: %s', comment.text);
+        res.json({
+            success: true,
+            commentId: comment._id
+        });
+    }).catch(err => {
+        next(err);
+    });
 
 }
 
 function deleteCommentRequestListener(req, res, next) {
-	debug('deleting comment #' + req.body.commentId);
+    debug('deleting comment #' + req.body.commentId);
 
-	co(function*() {
+    co(function*() {
 
-		let comment = yield Comment.findById(req.body.commentId).exec();
-		yield comment.remove();
+        let comment = yield Comment.findById(req.body.commentId).exec();
+        yield comment.remove();
 
-	}).then(() => {
-		res.json({
-			success: true
-		})
-	}).catch(err => {
-		next(err)
-	});
-
+    }).then(() => {
+        res.json({
+            success: true
+        })
+    }).catch(err => {
+        next(err)
+    });
 
 }
 
 exports.registerRoutes = function(app) {
-	app.post('/comment', isAuth, addLoggedUser, addRefererParams, recieveCommentRequestListener);
-	app.delete('/comment', isAuth, deleteCommentRequestListener);
+    app.post('/comment', isAuth, addLoggedUser, addRefererParams, recieveCommentRequestListener);
+    app.delete('/comment', isAuth, deleteCommentRequestListener);
 };
