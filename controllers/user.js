@@ -1,6 +1,7 @@
 let User = require('models/user');
 let Image = require('models/image');
 let userViewModel = require('viewModels/user');
+let imageViewModel = require('viewModels/image');
 let imagePreviewViewModel = require('viewModels/imagePreview');
 
 let co = require('co');
@@ -54,29 +55,28 @@ function userProfileRequestListener(req, res, next) {
         if (!pageUser)
             throw new HttpError(404, 'this user doesn\'t exist');
 
-        return pageUser;
+        let gallery = [];
 
-    }).then(pageUser => {
-        res.locals.pageUser = userViewModel(pageUser);
+        for (let i = 0; i < pageUser.images.length; i++) 
+            gallery.push(yield imageViewModel(pageUser.images[i], res.loggedUser._id));
+        
+        return {
+            pageUser,
+            gallery
+        };
 
-        if (res.loggedUser) {
-            res.locals.ownPage = (res.loggedUser._id === pageUser._id);
-
-            if (~pageUser.subscribers.indexOf(res.loggedUser._id))
-                res.locals.isSubscribed = true;
-        }
+    }).then(result => {
+        res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser._id);
 
         res.locals.page = 'user';
 
-        let imagesArray = [];
+
+
+        res.locals.galleryObj = JSON.stringify(result.gallery);
+
         res.locals.pageUser.images.forEach(item => {
             item.previewUrl = imagePaths.getImagePreviewFileNameById(item._id);
-            // imageArray.push({
-            //     url
-            // });
         });
-
-
 
         res.render('user');
     }).catch(err => {
@@ -295,11 +295,6 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
-    
-    debugger;
-    // res.json({
-    //     success: true
-    // });
 
     const CUTAWAY_COUNT = 3;
     const IMAGE_PREVIEW_COUNT = 12;
@@ -314,19 +309,30 @@ function homeRequestListener(req, res, next) {
         //for (let i = 0; i < CUTAWAY_COUNT; i++)
         //	cutaways.push({});
 
-        let reprUsers = yield User.find().limit(CUTAWAY_COUNT).exec();
+        let reprUsers = yield User.find({
+            'images.0': {
+                $exists: true
+            }
+        }).limit(CUTAWAY_COUNT).exec();
+
+
         for (i = 0; i < CUTAWAY_COUNT; i++) {
 
             let rawImages = yield Image.find({
                 author: reprUsers[i]._id
             }).limit(IMAGE_PREVIEW_COUNT).exec();
 
+
+
             let images = [];
             rawImages.forEach(item => {
                 images.push(imagePreviewViewModel(item));
             });
 
+
             while (images.length < IMAGE_PREVIEW_COUNT) {
+
+
                 let curLength = images.length;
                 for (j = 0; j < curLength; j++)
                     if (images.length < IMAGE_PREVIEW_COUNT)
@@ -364,7 +370,11 @@ function homeRequestListener(req, res, next) {
                 imagesTop,
                 imagesBottom
             });
+
+
         }
+
+
 
         return cutaways;
 

@@ -1,0 +1,85 @@
+<div id="image" class="image"{{#if image.ownImage}} data-is-own-image{{/if}} data-author-url="{{image.author.url}}">
+    <div class="image__image-post">
+        <div class="image__image-wrapper">
+            <img class="image__img-element" src="{{image.imgUrl}}" alt="">
+                                    <!-- wtf is this? ^ -->
+        </div>
+        <div class="image__sidebar">
+            <div class="image__top-side">
+                <div class="header image__header">
+                    <a class="image__header-left-side" href="{{image.author.url}}">
+                        <div class="image__avatar"
+                             style="background-image: url('{{image.author.avatarUrls.medium}}')"></div>
+                        <div class="image__metadata">
+                            <div class="image__username">{{image.author.username}}</div>
+                            <div class="image__post-date">{{image.createDateStr}}</div>
+                        </div>
+                    </a>
+
+                    {{#if image.ownImage}}
+                        <div class="button image__top-side-button">
+                            delete
+                        </div>
+                    {{else}}
+                        <div {{#if image.author.isNarrator}}
+                             data-active="true"
+                            {{/if}}
+                             class="button image__top-side-button">
+                            subscribe
+                        </div>
+                    {{/if}}
+
+
+                </div>
+                <div class="image__info-board">
+                    <div data-like-amount="{{image.likes.length}}"
+                         {{#if image.isLiked}}data-active="true"{{/if}}
+                         class="button like-button image__like-button{{#if image.isLiked}} button_active{{/if}}">
+                        like {{image.likes.length}}
+                    </div>
+                    <div class="image__description">
+                        {{image.description}}
+                    </div>
+
+                </div>
+                <div class="comment-section image__comment-section">
+                    {{#each image.comments}}
+                        {{> comment
+                                commentId=_id
+                                username=commentator.username
+                                date=createDateStr
+                                text=text
+                                ownComment=ownComment
+                                avatarUrl=commentator.avatarUrls.medium
+                                userUrl=commentator.url
+                        }}
+                    {{/each}}
+                    {{> comment
+                            commentId=0
+                            username=loggedUser.username
+                            avatarUrl=loggedUser.avatarUrls.medium
+                            date='a few seconds ago'
+                            ownComment=true
+                            ghost=true
+                    }}
+                </div>
+            </div>
+
+            <div class="panel comment comment-send image__comment-send"
+                 data-image-id="{{image._id}}">
+                <div class="comment__top-side">
+                    <div class="comment__avatar"
+                         style="background-image: url('{{loggedUser.avatarUrls.medium}}')"></div>
+                    <div class="comment__username">{{loggedUser.username}}</div>
+                </div>
+
+                <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>
+                <div class="button comment-send__send-button">send</div>
+            </div>
+        </div>
+    </div>
+	<div class="image__close-wrapper">
+		<div class="image__close-space"></div>
+		<div class="image__close-button"></div>
+	</div>
+</div>

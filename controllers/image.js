@@ -3,6 +3,7 @@ let User = require('models/user');
 
 let imagePreviewViewModel = require('viewModels/imagePreview');
 let userViewModel = require('viewModels/user');
+let imageViewModel = require('viewModels/image');
 
 let co = require('co');
 let config = require('config');
@@ -26,50 +27,47 @@ let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {
-    co(function*() {
-        let image = yield Image.findById(req.params.id).populate('comments').exec();
+    if (!req.xhr) {
+        co(function*() {
+            let rawImage = yield Image.findById(req.params.id).exec();
 
-        if (!image)
-            throw new HttpError(404, "Image not found");
+            if (!rawImage)
+                throw new HttpError(404, "Image not found");
 
-        for (let i = 0; i < image.comments.length; i++) {
-            image.comments[i].commentator = userViewModel(yield User.findById(image.comments[i].author).exec());
+            let image = yield imageViewModel(rawImage, res.loggedUser._id);
 
-            image.comments[i].createDateStr = getDateString(image.comments[i].created);
+            return image;
+        }).then(image => {
 
-            if (image.comments[i].author === req.session.userId)
-                image.comments[i].ownComment = true;
-        }
+            res.locals.image = image;
+            res.locals.page = 'image';
 
-        let author = yield User.findById(image.author).exec();
+            res.render('image');
+        }).catch(err => {
+            next(err);
+        });
+    } else {
+        if (!req.params.id) return next(404);
 
-        return {
-            image,
-            author
-        };
+        co(function*() {
+            let image = yield imageViewModel(yield Image.findById(req.params.id).exec());
+            return image;
+        }).then(image => {
+            res.locals.image = image;
 
-    }).then(result => {
+            res.render('partials/image', {layout: null}, function(err, image){
+                res.json({
+                    success: true,
+                    html: image
+                })
+            });
 
-        if (res.locals.loggedUser) {
-            if (res.locals.loggedUser._id === result.author._id)
-                res.locals.ownImage = true;
-
-            debug(res.locals.ownImage);
 
 
-            if (~result.image.likes.indexOf(res.loggedUser._id))
-                res.locals.isLiked = true;
-        }
-
-        res.locals.author = userViewModel(result.author);
-        res.locals.image = result.image;
-        res.locals.image.createDateStr = getDateString(result.image.created);
-        res.locals.page = 'image';
-
-        res.render('image');
-    }).catch(err => {
-        next(err);
-    });
+        }).catch(err => {
+            next(err);
+        });
+    }
 }
 
 function uploadImageListRequestListener(req, res, next) {
@@ -279,11 +277,19 @@ function feedRequestListener(req, res, next) {
     });
 }
 
+function getImageRequestListener(req, res, next) {
+
+
+}
+
+
 exports.registerRoutes = function(app) {
+
     app.post('/image', isAuth, uploadImageListRequestListener);
     app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
     app.get('/images', imageListRequestListener);
     app.get('/image/:id', addLoggedUser, imageRequestListener);
     app.post('/like', isAuth, addLoggedUser, addRefererParams, likeRequestListener);
     app.get('/feed', isAuth, addLoggedUser, feedRequestListener);
+
 };

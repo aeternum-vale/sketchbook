@@ -1,6 +1,6 @@
 let imagePaths = require('libs/imagePaths');
 
-module.exports = function(user) {
+module.exports = function(user, loggedUserId) {
 
 	let avatarFileNames;
 	if (user.hasAvatar)
@@ -24,6 +24,8 @@ module.exports = function(user) {
 		links: user.links,
 		subscribers: user.subscribers,
 		subscriptions: user.subscriptions,
+		isNarrator: !!(~user.subscribers.indexOf(loggedUserId)),
+		isLoggedUser: !!(user._id === loggedUserId),
 		images: user.images,
 		likes: user.likes,
 		comments: user.comments,

@@ -21,7 +21,6 @@ MessageModalWindow.prototype.setElem = function() {
 
 
 	this.elem.onclick = e => {
-		console.log('click');
         if (!e.target.matches('.message-modal-window__ok-button')) return;
 
         this.deactivate();

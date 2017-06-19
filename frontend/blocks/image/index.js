@@ -3,6 +3,8 @@ let eventMixin = require(LIBS + 'eventMixin');
 let Image = function(options) {
 
     this.elem = options.elem;
+
+
     this.post = this.elem.querySelector('.image__image-post');
     this.image = this.elem.querySelector('img.image__img-element');
     this.imageWrapper = this.elem.querySelector('.image__image-wrapper');
@@ -14,10 +16,7 @@ let Image = function(options) {
         window.location = this.elem.dataset.authorUrl;
     };
 
-
-
     if (options.isLoggedUser) {
-
         let CommentSection = require(BLOCKS + 'comment-section');
         let CommentSend = require(BLOCKS + 'comment-send');
         let LikeButton = require(BLOCKS + 'like-button');
@@ -35,7 +34,6 @@ let Image = function(options) {
             elem: document.querySelector('.like-button')
         });
 
-
         let topSideButton = document.querySelector('.image__top-side-button');
         if (this.elem.hasAttribute('data-is-own-image')) {
             let DeleteImageButton = require(BLOCKS + 'delete-image-button');
@@ -44,7 +42,7 @@ let Image = function(options) {
             });
 
             this.delete.on('deleted', e => {
-            	window.location = e.detail.url || '/';
+                window.location = e.detail.url || '/';
             });
         } else {
             let SubscribeButton = require(BLOCKS + 'subscribe-button');
@@ -78,6 +76,8 @@ Image.prototype.resizeImage = function() {
         }
     }
 };
+
+
 
 for (let key in eventMixin) {
     Image.prototype[key] = eventMixin[key];

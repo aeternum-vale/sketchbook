@@ -49,13 +49,13 @@
             }}
 		</div>
 
-		{{#if ownPage}}
+		{{#if pageUser.isLoggedUser}}
 			<div class="button extra-header__button" id="upload-window-caller">
 				upload image
 			</div>
 		{{else}}
 			<div id="subscribe-button"
-			{{#if isSubscribed}}
+			{{#if pageUser.isNarrator}}
 				data-checked="true"
 				class="button button_active extra-header__button"
 			{{else}}
@@ -65,7 +65,9 @@
 		{{/if}}
 	</div>
 </div>
-<div class="gallery" data-images>
+<div id="gallery" class="gallery">
+	<div class="gallery__obj">{{galleryObj}}</div>
+
 	<div class="gallery__wrapper">
 		{{#if pageUser.images}}
 			{{#each pageUser.images}}

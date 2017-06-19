@@ -1,5 +1,5 @@
 {{#unless ghost}}
-	<a href="/image/{{imageId}}" class="image-preview gallery__image-preview" style="background-image: url('/{{previewUrl}}')">
+	<a data-id="{{imageId}}" href="/image/{{imageId}}" class="image-preview gallery__image-preview" style="background-image: url('/{{previewUrl}}')">
 {{else}}
 	<a class="image-preview gallery__image-preview image-preview_ghost">
 {{/unless}}
