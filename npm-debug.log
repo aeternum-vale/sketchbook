@@ -1,0 +1,49 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'run',
+1 verbose cli   'sb' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.0
+4 verbose run-script [ 'presb', 'sb', 'postsb' ]
+5 info lifecycle sketchbook@1.0.0~presb: sketchbook@1.0.0
+6 silly lifecycle sketchbook@1.0.0~presb: no script for presb, continuing
+7 info lifecycle sketchbook@1.0.0~sb: sketchbook@1.0.0
+8 verbose lifecycle sketchbook@1.0.0~sb: unsafe-perm in lifecycle true
+9 verbose lifecycle sketchbook@1.0.0~sb: PATH: C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;D:\YandexDisk\sketchbook\node_modules\.bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Skype\Phone\;C:\Program Files\nodejs\;C:\mongo\bin;C:\Users\DA\AppData\Roaming\npm
+10 verbose lifecycle sketchbook@1.0.0~sb: CWD: D:\YandexDisk\sketchbook
+11 silly lifecycle sketchbook@1.0.0~sb: Args: [ '/d /s /c',
+11 silly lifecycle   'set DEBUG=app*& supervisor -w "app.js,controllers/,models/,config/,libs/,middleware/" -n error app.js' ]
+12 silly lifecycle sketchbook@1.0.0~sb: Returned: code: 1  signal: null
+13 info lifecycle sketchbook@1.0.0~sb: Failed to exec sb script
+14 verbose stack Error: sketchbook@1.0.0 sb: `set DEBUG=app*& supervisor -w "app.js,controllers/,models/,config/,libs/,middleware/" -n error app.js`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\lifecycle.js:255:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\spawn.js:40:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:877:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
+15 verbose pkgid sketchbook@1.0.0
+16 verbose cwd D:\YandexDisk\sketchbook
+17 error Windows_NT 6.1.7601
+18 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "sb"
+19 error node v6.10.0
+20 error npm  v3.10.10
+21 error code ELIFECYCLE
+22 error sketchbook@1.0.0 sb: `set DEBUG=app*& supervisor -w "app.js,controllers/,models/,config/,libs/,middleware/" -n error app.js`
+22 error Exit status 1
+23 error Failed at the sketchbook@1.0.0 sb script 'set DEBUG=app*& supervisor -w "app.js,controllers/,models/,config/,libs/,middleware/" -n error app.js'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the sketchbook package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     set DEBUG=app*& supervisor -w "app.js,controllers/,models/,config/,libs/,middleware/" -n error app.js
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs sketchbook
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls sketchbook
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

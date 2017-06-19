@@ -2,17 +2,21 @@
 
 import './style.less';
 
-let ImagePost = require(BLOCKS + 'image-post');
-let imagePost = new ImagePost({
-	elem: document.getElementById('image-post')
-})
+let Image = require(BLOCKS + 'image');
+let image = new Image({
+	elem: document.getElementById('image'),
+	isLoggedUser: document.body.hasAttribute('data-is-logged-user')
+});
+
+
+
 
 window.onload = e => {
-	imagePost.resizeImage();
-}
+	image.resizeImage();
+};
 
 window.addEventListener('resize', e => {
-	imagePost.resizeImage();
+	image.resizeImage();
 });
 
 require(LIBS + 'setGlobalErrorCatcher')();

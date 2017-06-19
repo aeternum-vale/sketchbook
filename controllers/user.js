@@ -68,9 +68,15 @@ function userProfileRequestListener(req, res, next) {
 
         res.locals.page = 'user';
 
+        let imagesArray = [];
         res.locals.pageUser.images.forEach(item => {
             item.previewUrl = imagePaths.getImagePreviewFileNameById(item._id);
+            // imageArray.push({
+            //     url
+            // });
         });
+
+
 
         res.render('user');
     }).catch(err => {
@@ -289,6 +295,12 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
+    
+    debugger;
+    // res.json({
+    //     success: true
+    // });
+
     const CUTAWAY_COUNT = 3;
     const IMAGE_PREVIEW_COUNT = 12;
     const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
@@ -357,6 +369,8 @@ function homeRequestListener(req, res, next) {
         return cutaways;
 
     }).then(cutaways => {
+
+
 
         res.locals.cutaways = cutaways;
         res.locals.page = 'home';

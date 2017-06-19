@@ -1,0 +1,150 @@
+@import "../../blocks/header/header.less";
+@import "../../blocks/button/button.less";
+@import "../../blocks/panel/panel.less";
+@import "../../blocks/comment-section/comment-section.less";
+@import "../../blocks/comment-send/comment-send.less";
+@import "../../blocks/like-button/like-button.less";
+
+@image-owner-avatar-size: 45px;
+@image-header-height: 70px;
+@image-padding: (@image-header-height - @image-owner-avatar-size) / 2;
+@image-header-verp-padding: @image-padding;
+@image-border-size: 2px;
+@image-comment-send-height: 180px;
+@image-gap: 25px;
+@image-close-wrapper-width: 20px;
+@image-close-wrapper-gap: 5px;
+.image {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    &__close-wrapper {
+        position: relative;
+        flex-shrink: 0;
+        flex-grow: 0;
+        width: @image-close-wrapper-width;
+        height: calc(~"100% - @{image-gap}");
+        margin-left: @image-close-wrapper-gap;
+    }
+    &__close-space {
+        position: absolute;
+        width: @image-close-wrapper-width + @image-close-wrapper-gap + @image-gap / 2;
+        height: calc(~"100% - @{image-close-wrapper-width}");
+        left: -@image-close-wrapper-gap;
+        top: @image-close-wrapper-width;
+        cursor: pointer;
+    }
+    &__close-button {
+        width: @image-close-wrapper-width;
+        height: @image-close-wrapper-width;
+        background-color: white;
+        opacity: .33;
+        cursor: pointer;
+    }
+    &__close-space:hover+&__close-button {
+        opacity: .66;
+    }
+    &__close-button:hover {
+        opacity: 1;
+    }
+    &__image-post {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-between;
+        width: calc(~"100% - 2 * @{image-gap}");
+        height: calc(~"100% - @{image-gap}"); //min-width: 90%;
+        border-radius: 10px;
+        box-shadow: 0 0 8px 10px rgba(0, 0, 0, .3);
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+    &__image-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        flex-shrink: 1;
+        flex-grow: 1;
+        background-color: #000;
+    }
+    &__image {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+    &__sidebar {
+        position: relative;
+        box-sizing: border-box;
+        height: 100%; // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
+        flex-shrink: 0;
+        flex-grow: 0;
+        width: 340px;
+        min-width: 340px;
+        background-color: @global-panel-color;
+        border-left: solid @image-border-size #000;
+    }
+    &__top-side {
+        position: relative;
+        height: calc(~"100% - @{image-comment-send-height}");
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 0;
+    }
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        height: @image-header-height;
+        padding: 0 @image-header-verp-padding;
+        border-bottom: solid @image-border-size #000;
+    }
+    &__header-left-side {
+        display: flex;
+    }
+    &__avatar {
+        .avatar(@image-owner-avatar-size);
+        margin-right: @image-padding;
+    }
+    &__metadata {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    &__username {}
+    &__post-date {
+        font-size: 10px;
+        line-height: 10px;
+    }
+    &__top-side-button {
+        .button(@small-font-size);
+    }
+    &__info-board {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding: @image-padding;
+        border-bottom: solid @image-border-size #000;
+        background-color: @global-panel-color;
+    }
+    &__like-button {
+        margin-bottom: @image-padding;
+    }
+    &__description {}
+    &__comment-section {
+        position: relative;
+        flex-grow: 1;
+    }
+    &__comment-sending-form {
+        height: 150px;
+        flex-shrink: 0;
+    }
+}

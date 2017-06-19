@@ -6,52 +6,50 @@
 	{{/if}}
 {{/section}}
 
-<div class="image-post-wrapper">
-    <div id="image-post" class="image-post-wrapper__image-post image-post">
-        <div class="image-post__image-wrapper">
-            <img class="image-post__image" src="/image{{image._id}}.jpg" alt="">
+<div id="image" class="image"{{#if ownImage}} data-is-own-image{{/if}} data-author-url="{{author.url}}">
+    <div class="image__image-post">
+        <div class="image__image-wrapper">
+            <img class="image__img-element" src="/image{{image._id}}.jpg" alt="">
         </div>
-        <div class="image-post__sidebar">
-            <div class="image-post__top-side">
-                <div class="header image-post__header">
-                    <a class="image-post__header-left-side" href="{{author.url}}">
-                        <div class="image-post__avatar"
+        <div class="image__sidebar">
+            <div class="image__top-side">
+                <div class="header image__header">
+                    <a class="image__header-left-side" href="{{author.url}}">
+                        <div class="image__avatar"
                              style="background-image: url('{{author.avatarUrls.medium}}')"></div>
-                        <div class="image-post__metadata">
-                            <div class="image-post__username">{{author.username}}</div>
-                            <div class="image-post__post-date">{{image.createDateStr}}</div>
+                        <div class="image__metadata">
+                            <div class="image__username">{{author.username}}</div>
+                            <div class="image__post-date">{{image.createDateStr}}</div>
                         </div>
                     </a>
 
                     {{#if ownImage}}
-                        <div id="delete-image-button" class="button image-post__subscribe-button">
+                        <div class="button image__top-side-button">
                             delete
                         </div>
                     {{else}}
-                        <div id="subscribe-button"
-                            {{#if isSubscribed}}
+                        <div {{#if isSubscribed}}
                              data-active="true"
                             {{/if}}
-                             class="button image-post__subscribe-button">
+                             class="button image__subscribe-button">
                             subscribe
                         </div>
                     {{/if}}
 
 
                 </div>
-                <div class="image-post__info-board">
-                    <div id="like"
-                         data-like-amount="{{image.likes.length}}"
+                <div class="image__info-board">
+                    <div data-like-amount="{{image.likes.length}}"
                          {{#if isLiked}}data-active="true"{{/if}}
-                         class="button like-button image-post__like-button{{#if isLiked}} button_active{{/if}}">
+                         class="button like-button image__like-button{{#if isLiked}} button_active{{/if}}">
                         like {{image.likes.length}}
                     </div>
-                    <div class="image-post__description">
+                    <div class="image__description">
                         {{image.description}}
                     </div>
 
                 </div>
-                <div id="comment-section" class="comment-section image-post__comment-section">
+                <div class="comment-section image__comment-section">
                     {{#each image.comments}}
                         {{> comment
                                 commentId=_id
@@ -74,7 +72,7 @@
                 </div>
             </div>
 
-            <div id="comment-send" class="panel comment comment-send image-post__comment-send"
+            <div class="panel comment comment-send image__comment-send"
                  data-image-id="{{image._id}}">
                 <div class="comment__top-side">
                     <div class="comment__avatar"
@@ -87,4 +85,8 @@
             </div>
         </div>
     </div>
+	<div class="image__close-wrapper">
+		<div class="image__close-space"></div>
+		<div class="image__close-button"></div>
+	</div>
 </div>

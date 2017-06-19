@@ -12,7 +12,7 @@ module.exports = {
 
 	trigger: function(eventName, detail) {
 		this.elem.dispatchEvent(new CustomEvent(eventName, {
-			bubbles: false,
+			bubbles: true,
 			cancelable: true,
 			detail: detail
 		}));
