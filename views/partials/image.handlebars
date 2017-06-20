@@ -1,4 +1,4 @@
-<div id="image" class="image"{{#if image.ownImage}} data-is-own-image{{/if}} data-author-url="{{image.author.url}}">
+<div id="image" class="image"{{#if image.isOwnImage}} data-is-own-image{{/if}} data-author-url="{{image.author.url}}">
     <div class="image__image-post">
         <div class="image__image-wrapper">
             <img class="image__img-element" src="{{image.imgUrl}}" alt="">
@@ -16,7 +16,7 @@
                         </div>
                     </a>
 
-                    {{#if image.ownImage}}
+                    {{#if image.isOwnImage}}
                         <div class="button image__top-side-button">
                             delete
                         </div>

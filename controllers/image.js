@@ -35,7 +35,6 @@ function imageRequestListener(req, res, next) {
                 throw new HttpError(404, "Image not found");
 
             let image = yield imageViewModel(rawImage, res.loggedUser._id);
-
             return image;
         }).then(image => {
 
@@ -47,7 +46,7 @@ function imageRequestListener(req, res, next) {
             next(err);
         });
     } else {
-        if (!req.params.id) return next(404);
+        if (!req.params.id) return next(400);
 
         co(function*() {
             let image = yield imageViewModel(yield Image.findById(req.params.id).exec());
@@ -55,15 +54,14 @@ function imageRequestListener(req, res, next) {
         }).then(image => {
             res.locals.image = image;
 
-            res.render('partials/image', {layout: null}, function(err, image){
+            res.render('partials/image', {
+                layout: null
+            }, function(err, html) {
                 res.json({
-                    success: true,
-                    html: image
+                    html,
+                    viewModel: image
                 })
             });
-
-
-
         }).catch(err => {
             next(err);
         });
@@ -142,18 +140,13 @@ function uploadImageListRequestListener(req, res, next) {
     }).then(result => {
         debug('added new image');
         res.json({
-            success: true,
             previewUrl: result.imagePreviewFileName,
             imageId: result.id
         });
     }).catch(err => {
-        if (err instanceof InvalidImage) {
-            debug('Invalid image');
-            res.json({
-                success: false,
-                message: err.message
-            });
-        } else
+        if (err instanceof InvalidImage)
+            next(new HttpError(400, 'Invalid image'));
+        else
             next(err);
     });
 }
@@ -183,7 +176,6 @@ function imageDeleteListRequestListener(req, res, next) {
     }).then(() => {
         debug('successful deleting');
         res.json({
-            success: true,
             url: `/user/${res.loggedUser.username}`
         });
     }).catch(err => {
@@ -193,13 +185,15 @@ function imageDeleteListRequestListener(req, res, next) {
 
 function likeRequestListener(req, res, next) {
 
-    if (req.refererParams.field !== 'image') return next(404);
-
-    let imageId = req.refererParams.value;
-
+    let imageId = req.body.id;
+    if (!imageId) return next(400);
+    
     co(function*() {
 
         let image = yield Image.findById(imageId).exec();
+        if (!image)
+            throw new HttpError(400);
+
         let userId = res.loggedUser._id;
 
         let index;
@@ -224,7 +218,6 @@ function likeRequestListener(req, res, next) {
     }).then(result => {
 
         res.json({
-            success: true,
             isLiked: result.isLiked,
             likeAmount: result.likeAmount
         });
@@ -289,7 +282,7 @@ exports.registerRoutes = function(app) {
     app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
     app.get('/images', imageListRequestListener);
     app.get('/image/:id', addLoggedUser, imageRequestListener);
-    app.post('/like', isAuth, addLoggedUser, addRefererParams, likeRequestListener);
+    app.post('/like', isAuth, addLoggedUser, likeRequestListener);
     app.get('/feed', isAuth, addLoggedUser, feedRequestListener);
 
 };

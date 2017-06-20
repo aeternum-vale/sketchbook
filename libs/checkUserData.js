@@ -140,6 +140,13 @@ let validators = {
         checks: [
             checks.max(255)
         ]
+    },
+
+    'comment': {
+        checks: [
+            checks.nonEmpty(),
+            checks.max(255)
+        ]
     }
 
 };

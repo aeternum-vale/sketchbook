@@ -4,15 +4,12 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 module.exports = function(bodyObj, method, url, cb) {
 
     let body = '';
-    if (!(bodyObj instanceof String)) {
+    if (!(typeof bodyObj === 'string')) {
         for (let key in bodyObj)
             body += (body === '' ? '' : '&') +
             key + '=' + encodeURIComponent(bodyObj[key]);
     } else
-        body = bodyObj;
-
-
-	
+    body = bodyObj;
 
 
     let xhr = new XMLHttpRequest();
@@ -32,15 +29,14 @@ module.exports = function(bodyObj, method, url, cb) {
             return;
         }
 
-        if (this.status != 200) {
-            cb(new ServerError(response.message));
-            return;
-        }
-
-        if (response.success)
+        if (this.status >= 200 && this.status < 300)
             cb(null, response);
-        else
-            cb(new ClientError(response.message), response);
+
+        if (this.status >= 400 && this.status < 500)
+            cb(new ClientError(response.message));
+
+        if (this.status >= 500)
+            cb(new ServerError(response.message));
     };
 
     xhr.send(body);

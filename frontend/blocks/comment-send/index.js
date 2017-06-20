@@ -3,16 +3,18 @@ let eventMixin = require(LIBS + 'eventMixin');
 let CommentSendForm = function(options) {
 
 	this.elem = options.elem;
+	this.id = options.id;
+
 	this.commentSendTextarea = this.elem.querySelector('.comment-send__textarea');
 
 	this.elem.onclick = e => {
-
 		if (!e.target.classList.contains('comment-send__send-button')) return;
-
 		let text = this.commentSendTextarea.value;
-		let body = `text=${encodeURIComponent(text)}`;
 
-		require(LIBS + 'sendRequest')(body, 'POST', '/comment', (err, response) => {
+		require(LIBS + 'sendRequest')({
+			id: this.id,
+			text
+		}, 'POST', '/comment', (err, response) => {
 
 			if (err) {
 				this.error(err);

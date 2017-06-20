@@ -9,7 +9,9 @@ let DescriptionAddSection = function(options) {
     this.elem.onclick = e => {
         if (e.target !== this.saveButton) return;
         let description = this.textarea.value;
-        let errors = require(LIBS + 'checkUserData').getErrorArray({description});
+        let errors = require(LIBS + 'checkUserData').getErrorArray({
+            description
+        });
 
         if (errors.length === 0)
             this.sendDescription(this.textarea.value);
@@ -20,8 +22,9 @@ let DescriptionAddSection = function(options) {
 
 
 DescriptionAddSection.prototype.sendDescription = function(description) {
-    let body = `description=${encodeURIComponent(description)}`;
-    require(LIBS + 'sendRequest')(body, 'POST', '/settings', (err, response) => {
+    require(LIBS + 'sendRequest')({
+        description
+    }, 'POST', '/settings', (err, response) => {
         if (err) {
             this.error(err);
             return;

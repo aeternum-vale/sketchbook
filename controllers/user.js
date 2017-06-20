@@ -57,21 +57,17 @@ function userProfileRequestListener(req, res, next) {
 
         let gallery = [];
 
-        for (let i = 0; i < pageUser.images.length; i++) 
-            gallery.push(yield imageViewModel(pageUser.images[i], res.loggedUser._id));
-        
+        for (let i = 0; i < pageUser.images.length; i++)
+            gallery.push(yield imageViewModel(pageUser.images[i], res.loggedUser && res.loggedUser._id));
+
         return {
             pageUser,
             gallery
         };
 
     }).then(result => {
-        res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser._id);
-
+        res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser && res.loggedUser._id);
         res.locals.page = 'user';
-
-
-
         res.locals.galleryObj = JSON.stringify(result.gallery);
 
         res.locals.pageUser.images.forEach(item => {
@@ -123,19 +119,15 @@ function joinRequestListener(req, res, next) {
     }).then((user) => {
         debug('registration is successful. User id: %s', user._id);
         req.session.userId = user._id;
-
         res.json({
-            success: true,
             url: '/'
         });
     }).catch(err => {
 
         if (err instanceof PropertyError)
-            res.json({
-                success: false,
-                property: err.property,
-                message: err.message
-            });
+            next(new HttpError(400, err.message, {
+                property: err.property
+            }));
         else
             next(err);
     });
@@ -163,16 +155,11 @@ function loginRequestListener(req, res, next) {
         req.session.userId = user._id;
 
         res.json({
-            success: true,
             url: '/'
         });
     }).catch(err => {
-
         if (err instanceof LoginError)
-            res.json({
-                success: false,
-                message: 'Invalid login data'
-            });
+            next(new HttpError(400, 'Invalid login data'));
         else
             next(err);
     });
@@ -235,9 +222,7 @@ function subscribeRequestListener(req, res, next) {
             }
 
         }).then(result => {
-            res.json({
-                success: true
-            });
+            res.json({});
         }).catch(err => {
             next(err);
         });
@@ -282,9 +267,7 @@ function subscribeRequestListener(req, res, next) {
             }
 
         }).then(result => {
-            res.json({
-                success: true
-            });
+            res.json({});
         }).catch(err => {
             next(err);
         });
@@ -460,13 +443,12 @@ function avatarUploadRequestListener(req, res, next) {
     }).then(mediumAvatarFileName => {
 
         res.json({
-            success: true,
             url: `/${mediumAvatarFileName}`
         });
 
     }).catch(err => {
         if (err instanceof InvalidImage)
-            next(new HttpError(500, err.message));
+            next(new HttpError(400, err.message));
         else
             next(err);
     });
@@ -524,7 +506,6 @@ function setSettingsRequestListener(req, res, next) {
             return linkObj;
         }).then(linkObj => {
             res.json({
-                success: true,
                 linkObj
             });
         });
@@ -543,9 +524,7 @@ function setSettingsRequestListener(req, res, next) {
             } else
                 throw new HttpError(400, errors[0].message);
         }).then(() => {
-            res.json({
-                success: true
-            });
+            res.json({});
         });
     }
 
@@ -558,9 +537,7 @@ function setSettingsRequestListener(req, res, next) {
             yield res.loggedUser.save();
 
         }).then(() => {
-            res.json({
-                success: true
-            });
+            res.json({});
         });
     }
 
@@ -579,11 +556,9 @@ function setSettingsRequestListener(req, res, next) {
 
     }).catch(err => {
         if (err instanceof PropertyError)
-            res.json({
-                success: false,
-                property: err.property,
-                message: err.message
-            });
+            next(new HttpError(400, err.message, {
+                property: err.property
+            }))
         else
             next(err);
     });
@@ -604,9 +579,7 @@ function deleteSettingsRequestListener(req, res, next) {
 
             yield res.loggedUser.save();
         }).then(result => {
-            res.json({
-                success: true
-            });
+            res.json({});
         }).catch(err => {
             next(err);
         });

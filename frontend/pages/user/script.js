@@ -11,7 +11,8 @@ let linksDropdown = new Dropdown({
 });
 
 let gallery = new Gallery({
-	elem: document.getElementById('gallery')
+	elem: document.getElementById('gallery'),
+	isLogged: window.isLogged
 });
 
 

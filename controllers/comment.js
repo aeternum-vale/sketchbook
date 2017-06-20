@@ -8,16 +8,30 @@ let HttpError = require('error').HttpError;
 let isAuth = require('middleware/isAuth');
 let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
+let checkUserData = require('libs/checkUserData');
 
 let url = require('url');
 
 function recieveCommentRequestListener(req, res, next) {
-    let imageId = req.refererParams.value;
+
+    let imageId = req.body.id;
+    let text = req.body.text;
+
+    if (!imageId || !text)
+        return next(400);
+
+
+    let errors = checkUserData.getErrorArray({
+        comment: text
+    });
+
+    if (errors.length > 0)
+        return next(new HttpError(400, errors[0].message))
 
     co(function*() {
 
         let comment = yield new Comment({
-            text: req.body.text,
+            text,
             author: res.loggedUser._id,
             image: imageId
         }).save();
@@ -27,7 +41,6 @@ function recieveCommentRequestListener(req, res, next) {
     }).then(comment => {
         debug('new comment is added: %s', comment.text);
         res.json({
-            success: true,
             commentId: comment._id
         });
     }).catch(err => {
@@ -45,9 +58,7 @@ function deleteCommentRequestListener(req, res, next) {
         yield comment.remove();
 
     }).then(() => {
-        res.json({
-            success: true
-        })
+        res.json({})
     }).catch(err => {
         next(err)
     });
@@ -55,6 +66,6 @@ function deleteCommentRequestListener(req, res, next) {
 }
 
 exports.registerRoutes = function(app) {
-    app.post('/comment', isAuth, addLoggedUser, addRefererParams, recieveCommentRequestListener);
+    app.post('/comment', isAuth, addLoggedUser, recieveCommentRequestListener);
     app.delete('/comment', isAuth, deleteCommentRequestListener);
 };

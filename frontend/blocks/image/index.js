@@ -1,9 +1,8 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
 let Image = function(options) {
-
     this.elem = options.elem;
-
+    this.viewModel = options.viewModel;
 
     this.post = this.elem.querySelector('.image__image-post');
     this.image = this.elem.querySelector('img.image__img-element');
@@ -16,7 +15,7 @@ let Image = function(options) {
         window.location = this.elem.dataset.authorUrl;
     };
 
-    if (options.isLoggedUser) {
+    if (options.isLogged) {
         let CommentSection = require(BLOCKS + 'comment-section');
         let CommentSend = require(BLOCKS + 'comment-send');
         let LikeButton = require(BLOCKS + 'like-button');
@@ -25,17 +24,19 @@ let Image = function(options) {
             elem: document.querySelector('.comment-section')
         });
         this.commentSend = new CommentSend({
-            elem: document.querySelector('.comment-send')
+            elem: document.querySelector('.comment-send'),
+            id: this.viewModel._id
         });
         this.commentSend.on('post', e => {
             this.commentSection.insertNewComment(e.detail.text, e.detail.id);
         });
         this.like = new LikeButton({
-            elem: document.querySelector('.like-button')
+            elem: document.querySelector('.like-button'),
+            id: this.viewModel._id
         });
 
         let topSideButton = document.querySelector('.image__top-side-button');
-        if (this.elem.hasAttribute('data-is-own-image')) {
+        if (options.isOwnImage) {
             let DeleteImageButton = require(BLOCKS + 'delete-image-button');
             this.delete = new DeleteImageButton({
                 elem: topSideButton

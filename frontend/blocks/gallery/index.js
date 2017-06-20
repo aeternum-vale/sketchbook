@@ -5,35 +5,37 @@ let eventMixin = require(LIBS + 'eventMixin');
 
 let Gallery = function(options) {
     this.elem = options.elem;
-    //this.imagesInfo = JSON.parse(this.elem.querySelector('.gallery__obj').textContent);
+    this.isLogged = options.isLogged;
 
     this.elem.onclick = e => {
         if (!e.target.matches('.image-preview')) return;
-
         e.preventDefault();
-
         this.renderImage(e.target.dataset.id);
-        //this.image = new Image({
-        //    elem: this.renderImage(e.target.dataset.id)
-        //});
-
-
     };
 };
 
 Gallery.prototype.renderImage = function(id) {
+
     let parent = document.createElement('DIV');
     require(LIBS + 'sendRequest')(null, 'GET', '/image/' + id, (err, response) => {
         if (err) {
             this.error(err);
             return;
         }
-        console.log(response.html);
-        parent.innerHTML = response.html;
-        this.image = parent.firstElementChild;
-        document.body.appendChild(this.image); //upper!
-    });
 
+        parent.innerHTML = response.html;
+        let imageElem = parent.firstElementChild;
+        document.body.insertBefore(imageElem, document.body.firstElementChild);
+        console.log(response.viewModel);
+
+
+        this.image = new Image({
+            elem: imageElem,
+            isLogged: this.isLogged,
+            viewModel: response.viewModel
+        });
+
+    });
 };
 
 

@@ -42,12 +42,13 @@ util.inherits(DuplicatingUniquePropertyError, PropertyError);
 DuplicatingUniquePropertyError.prototype.constructor = DuplicatingUniquePropertyError;
 
 
-function HttpError(status, message) {
+function HttpError(status, message, detail) {
 	CustomError.call(this, "Not found")
 	this.name = "HttpError";
 
 	this.status = status;
 	this.message = message || http.STATUS_CODES[status] || "Error";
+	this.detail = detail;
 }
 util.inherits(HttpError, CustomError);
 HttpError.prototype.constructor = HttpError;

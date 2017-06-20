@@ -17,13 +17,16 @@ module.exports = function(url, formData, cb) {
 			return;
 		}
 
-		if (this.status == 200) {
-			if (response.success)
-				cb(null, response);
-			else
-				cb(new ClientError(response.message), response);
-		} else
-			cb(new ServerError(response.message));
+
+		if (this.status >= 200 && this.status < 300)
+            cb(null, response);
+
+        if (this.status >= 400 && this.status < 500)
+            cb(new ClientError(response.message));
+
+        if (this.status >= 500)
+            cb(new ServerError(response.message));
+		
 	};
 
 	xhr.open("POST", url, true);

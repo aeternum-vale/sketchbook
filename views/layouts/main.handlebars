@@ -6,9 +6,12 @@
 		<title>{{page}}</title>
 		<link rel="stylesheet" href="/{{page}}.css">
 	{{/if}}
+	<script>
+		window.isLogged={{#if loggedUser}}true{{else}}false{{/if}};
+	</script>
 	{{{_sections.scripts}}}
 </head>
-<body{{#if loggedUser}} data-is-logged-user{{/if}}>
+<body>
 	{{{body}}}
 </body>
 </html>

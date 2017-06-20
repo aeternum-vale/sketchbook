@@ -1,42 +1,42 @@
 let eventMixin = require(LIBS + 'eventMixin');
 let SocialCollection = function(options) {
 
-	this.elem = options.elem;
-	this.socialList = this.elem.querySelector('.social-collection__social-list');
-	this.textbox = this.elem.querySelector('.textbox__field');
+    this.elem = options.elem;
+    this.socialList = this.elem.querySelector('.social-collection__social-list');
+    this.textbox = this.elem.querySelector('.textbox__field');
 
-	this.elem.onclick = e => {
+    this.elem.onclick = e => {
 
-		if (e.target.matches('.textbox-button__button') && this.textbox.value) {
+        if (e.target.matches('.textbox-button__button') && this.textbox.value) {
             this.sendSocial(this.textbox.value);
             return;
-		}
+        }
 
-		if (e.target.matches('.social__close'))
-			this.deleteSocial(e.target.closest('.social'));
-	};
+        if (e.target.matches('.social__close'))
+            this.deleteSocial(e.target.closest('.social'));
+    };
 };
 
 SocialCollection.prototype.sendSocial = function(link) {
+    require(LIBS + 'sendRequest')({
+        link
+    }, 'POST', '/userdata', (err, response) => {
 
-	let body = `link=${encodeURIComponent(link)}`;
-	require(LIBS + 'sendRequest')(body, 'POST', '/userdata', (err, response) => {
-
-		if (err) {
-			this.error(err);
-			return;
-		}
+        if (err) {
+            this.error(err);
+            return;
+        }
 
         this.insertNewSocial(response.linkObj);
         this.textbox.value = '';
-	});
+    });
 
 };
 
 SocialCollection.prototype.deleteSocial = function(social) {
-
-    let body = `link=${encodeURIComponent(social.dataset.link)}`;
-    require(LIBS + 'sendRequest')(body, 'DELETE', '/settings', (err, response) => {
+    require(LIBS + 'sendRequest')({
+        link: social.dataset.link
+    }, 'DELETE', '/settings', (err, response) => {
 
         if (err) {
             this.error(err);
@@ -49,11 +49,11 @@ SocialCollection.prototype.deleteSocial = function(social) {
 };
 
 SocialCollection.prototype.insertNewSocial = function(linkObj) {
-	let social = require(LIBS + 'renderElement')(require('html-loader!./social'));
-	social.dataset.link=linkObj.href;
-	social.querySelector('.social__link').setAttribute('href', linkObj.href);
-	social.querySelector('.social__host').textContent = linkObj.host;
-	this.socialList.appendChild(social);
+    let social = require(LIBS + 'renderElement')(require('html-loader!./social'));
+    social.dataset.link = linkObj.href;
+    social.querySelector('.social__link').setAttribute('href', linkObj.href);
+    social.querySelector('.social__host').textContent = linkObj.host;
+    this.socialList.appendChild(social);
 };
 
 for (let key in eventMixin) {
