@@ -10,16 +10,18 @@ let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
 let checkUserData = require('libs/checkUserData');
 
+let commentViewModel = require('viewModels/comment');
+
 let url = require('url');
 
 function recieveCommentRequestListener(req, res, next) {
 
     let imageId = req.body.id;
     let text = req.body.text;
+    let requireHtml = !!req.body.requireHtml;
 
     if (!imageId || !text)
         return next(400);
-
 
     let errors = checkUserData.getErrorArray({
         comment: text
@@ -30,19 +32,21 @@ function recieveCommentRequestListener(req, res, next) {
 
     co(function*() {
 
-        let comment = yield new Comment({
+        let rawComment = yield new Comment({
             text,
             author: res.loggedUser._id,
             image: imageId
         }).save();
 
-        return comment;
+        return commentViewModel(rawComment, res.loggedUser._id);
 
-    }).then(comment => {
-        debug('new comment is added: %s', comment.text);
+    }).then(viewModel => {
+        debug('new comment is added: %o', viewModel);
+
         res.json({
-            commentId: comment._id
+            viewModel
         });
+
     }).catch(err => {
         next(err);
     });

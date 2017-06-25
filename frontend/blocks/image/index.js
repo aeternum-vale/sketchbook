@@ -6,40 +6,48 @@ let Image = function(options) {
 
     this.post = this.elem.querySelector('.image__image-post');
     this.image = this.elem.querySelector('img.image__img-element');
+    this.description = this.elem.querySelector('.image__description');
+    this.date = this.elem.querySelector('.image__post-date');
+
+    this.image.onload = e => {
+        this.resize();
+    };
+
     this.imageWrapper = this.elem.querySelector('.image__image-wrapper');
     this.sideBar = this.elem.querySelector('.image__sidebar');
 
     this.elem.onclick = e => {
-        if (!(e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))) return;
+        if (e.target.matches('.image__control-prev'))
+            this.trigger('image_prev-clicked');
 
-        window.location = this.elem.dataset.authorUrl;
+        if (e.target.matches('.image__control-next'))
+            this.trigger('image_next-clicked');
+
+        if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))
+            window.location = this.elem.dataset.authorUrl;
     };
 
     if (options.isLogged) {
         let CommentSection = require(BLOCKS + 'comment-section');
-        let CommentSend = require(BLOCKS + 'comment-send');
         let LikeButton = require(BLOCKS + 'like-button');
 
         this.commentSection = new CommentSection({
-            elem: document.querySelector('.comment-section')
-        });
-        this.commentSend = new CommentSend({
-            elem: document.querySelector('.comment-send'),
+            elem: document.querySelector('.comment-section'),
+            commentSenderElem: document.querySelector('.comment-send'),
             id: this.viewModel._id
         });
-        this.commentSend.on('post', e => {
-            this.commentSection.insertNewComment(e.detail.text, e.detail.id);
-        });
-        this.like = new LikeButton({
+
+        this.likeButton = new LikeButton({
             elem: document.querySelector('.like-button'),
             id: this.viewModel._id
         });
 
         let topSideButton = document.querySelector('.image__top-side-button');
-        if (options.isOwnImage) {
+        if (this.viewModel.isOwnImage) {
             let DeleteImageButton = require(BLOCKS + 'delete-image-button');
             this.delete = new DeleteImageButton({
-                elem: topSideButton
+                elem: topSideButton,
+                id: this.viewModel._id
             });
 
             this.delete.on('deleted', e => {
@@ -48,14 +56,15 @@ let Image = function(options) {
         } else {
             let SubscribeButton = require(BLOCKS + 'subscribe-button');
             this.subscribe = new SubscribeButton({
-                elem: topSideButton
+                elem: topSideButton,
+                id: this.viewModel._id
             });
         }
     }
 
 };
 
-Image.prototype.resizeImage = function() {
+Image.prototype.resize = function() {
     this.image.removeAttribute('width');
     this.image.removeAttribute('height');
 
@@ -76,6 +85,16 @@ Image.prototype.resizeImage = function() {
             this.image.height = this.imageWrapper.offsetHeight;
         }
     }
+};
+
+Image.prototype.setViewModel = function(viewModel) {
+    this.id = viewModel._id;
+    this.image.setAttribute('src', viewModel.imgUrl);
+
+    this.likeButton.set(viewModel.likes.length, viewModel.isLiked, this.id);
+
+    this.description.textContent = viewModel.description;
+    this.date.textContent = viewModel.createDateStr;
 };
 
 

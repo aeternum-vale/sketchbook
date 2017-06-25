@@ -144,9 +144,11 @@ function loginRequestListener(req, res, next) {
             username: loginUser.username
         }).exec();
 
-        if (!user) throw new LoginError('no such user');
+        if (!user)
+            throw new LoginError();
 
-        if (!user.checkPassword(loginUser.password)) throw new LoginError('invalid password');
+        if (!user.checkPassword(loginUser.password))
+            throw new LoginError();
 
         return user;
 
@@ -182,60 +184,67 @@ function authorizationRequestListener(req, res, next) {
 
 function subscribeRequestListener(req, res, next) {
 
-    let index;
-    if (req.refererParams.field === 'user') {
-        let username = req.refererParams.value;
+    // let index;
+    // if (req.refererParams.field === 'user') {
+    //     let username = req.refererParams.value;
+    //
+    //     co(function*() {
+    //
+    //         let user = yield User.findOne({
+    //             username
+    //         }).exec();
+    //
+    //         if (~user.subscribers.indexOf(res.loggedUser._id)) {
+    //
+    //             yield user.update({
+    //                 $pull: {
+    //                     subscribers: res.loggedUser._id
+    //                 }
+    //             }).exec();
+    //
+    //             yield res.loggedUser.update({
+    //                 $pull: {
+    //                     subscriptions: user._id
+    //                 }
+    //             }).exec();
+    //
+    //         } else {
+    //
+    //             yield user.update({
+    //                 $addToSet: {
+    //                     subscribers: res.loggedUser._id
+    //                 }
+    //             }).exec();
+    //
+    //             yield res.loggedUser.update({
+    //                 $addToSet: {
+    //                     subscriptions: user._id
+    //                 }
+    //             }).exec();
+    //         }
+    //
+    //     }).then(result => {
+    //         res.json({});
+    //     }).catch(err => {
+    //         next(err);
+    //     });
+    //
+    // } else if (req.refererParams.field === 'image') {
 
-        co(function*() {
+        let imageId = req.body.id;//req.refererParams.value;
 
-            let user = yield User.findOne({
-                username
-            }).exec();
-
-            if (~user.subscribers.indexOf(res.loggedUser._id)) {
-
-                yield user.update({
-                    $pull: {
-                        subscribers: res.loggedUser._id
-                    }
-                }).exec();
-
-                yield res.loggedUser.update({
-                    $pull: {
-                        subscriptions: user._id
-                    }
-                }).exec();
-
-            } else {
-
-                yield user.update({
-                    $addToSet: {
-                        subscribers: res.loggedUser._id
-                    }
-                }).exec();
-
-                yield res.loggedUser.update({
-                    $addToSet: {
-                        subscriptions: user._id
-                    }
-                }).exec();
-            }
-
-        }).then(result => {
-            res.json({});
-        }).catch(err => {
-            next(err);
-        });
-
-    } else if (req.refererParams.field === 'image') {
-
-        let imageId = req.refererParams.value;
+        if (!imageId)
+            return next(404)
 
         co(function*() {
 
             let image = yield Image.findById(imageId).exec();
 
+            if (!image)
+                throw new HttpError(404);
+
             let user = yield User.findById(image.author).exec();
+
 
             if (~user.subscribers.indexOf(res.loggedUser._id)) {
 
@@ -272,8 +281,8 @@ function subscribeRequestListener(req, res, next) {
             next(err);
         });
 
-    } else
-        next(404);
+    // } else
+    //     next(404);
 }
 
 function homeRequestListener(req, res, next) {

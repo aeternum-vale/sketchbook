@@ -2,7 +2,11 @@
     <div class="image__image-post">
         <div class="image__image-wrapper">
             <img class="image__img-element" src="{{image.imgUrl}}" alt="">
-                                    <!-- wtf is this? ^ -->
+            <div class="image__controls">
+                <div class="image__control image__control-prev">prev</div>
+                <div class="image__control image__control-full">full</div>
+                <div class="image__control image__control-next">next</div>
+            </div>
         </div>
         <div class="image__sidebar">
             <div class="image__top-side">
@@ -44,23 +48,11 @@
                 </div>
                 <div class="comment-section image__comment-section">
                     {{#each image.comments}}
-                        {{> comment
-                                commentId=_id
-                                username=commentator.username
-                                date=createDateStr
-                                text=text
-                                ownComment=ownComment
-                                avatarUrl=commentator.avatarUrls.medium
-                                userUrl=commentator.url
-                        }}
+                        {{> comment}}
                     {{/each}}
                     {{> comment
-                            commentId=0
-                            username=loggedUser.username
-                            avatarUrl=loggedUser.avatarUrls.medium
-                            date='a few seconds ago'
-                            ownComment=true
-                            ghost=true
+                        ghost=true
+                        isOwnComment=true
                     }}
                 </div>
             </div>

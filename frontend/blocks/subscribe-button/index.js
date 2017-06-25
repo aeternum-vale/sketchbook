@@ -4,49 +4,52 @@ let ClientError = componentErrors.ClientError;
 
 let SubscribeButton = function(options) {
 
-	this.elem = options.elem;
+    this.elem = options.elem;
+    this.id = options.id;
 
-	this.checked = !!this.elem.dataset.checked;
-	this.available = true;
+    this.checked = !!this.elem.dataset.checked;
+    this.available = true;
 
-	this.elem.onclick = e => {
+    this.elem.onclick = e => {
 
-		if (this.available) {
+        if (this.available) {
 
-			this.available = false;
-			this.toggle();
+            this.available = false;
+            this.toggle();
 
-			require(LIBS + 'sendRequest')(null, 'POST', '/subscribe', (err, response) => {
+            require(LIBS + 'sendRequest')({
+                id: this.id
+            }, 'POST', '/subscribe', (err, response) => {
 
-				this.available = true;
+                this.available = true;
 
-				if (err) {
-					this.toggle();
-					this.error(err);
-					return;
-				} 
+                if (err) {
+                    this.toggle();
+                    this.error(err);
+                    return;
+                }
 
-			});
+            });
 
-		}
-	}
+        }
+    }
 };
 
 SubscribeButton.prototype.toggle = function() {
-	if (this.checked) {
-		this.elem.classList.remove('button_active');
-		this.checked = false;
-	} else {
-		this.elem.classList.add('button_active');
-		this.checked = true;
-	}
+    if (this.checked) {
+        this.elem.classList.remove('button_active');
+        this.checked = false;
+    } else {
+        this.elem.classList.add('button_active');
+        this.checked = true;
+    }
 
-	this.trigger('change');
+    this.trigger('change');
 };
 
 
 for (let key in eventMixin) {
-	SubscribeButton.prototype[key] = eventMixin[key];
+    SubscribeButton.prototype[key] = eventMixin[key];
 }
 
 module.exports = SubscribeButton;

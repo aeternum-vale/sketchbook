@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HandlebarsPlugin = require('handlebars-webpack-plugin');
+var config = require('./config');
 
 module.exports = {
   context: path.resolve(__dirname, 'frontend', 'pages'),
@@ -77,7 +78,8 @@ module.exports = {
       BASE: JSON.stringify(__dirname + '/'),
       BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/'),
       LIBS: JSON.stringify(__dirname + '/libs/'),
-      PUBLIC: JSON.stringify(__dirname + '/public/')
+      PUBLIC: JSON.stringify(__dirname + '/public/'),
+      PRELOAD_IMAGE_COUNT: JSON.stringify(config.get('image:preloadEntityCount'))
     }),
 
     new webpack.optimize.CommonsChunkPlugin({

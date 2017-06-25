@@ -23,49 +23,29 @@ let InvalidImage = require('error').InvalidImage;
 let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 
+
+
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {
-    if (!req.xhr) {
-        co(function*() {
-            let rawImage = yield Image.findById(req.params.id).exec();
+    co(function*() {
+        let rawImage = yield Image.findById(req.params.id).exec();
 
-            if (!rawImage)
-                throw new HttpError(404, "Image not found");
+        if (!rawImage)
+            throw new HttpError(404, "Image not found");
 
-            let image = yield imageViewModel(rawImage, res.loggedUser._id);
-            return image;
-        }).then(image => {
+        let image = yield imageViewModel(rawImage, res.loggedUser._id);
+        return image;
+    }).then(image => {
 
-            res.locals.image = image;
-            res.locals.page = 'image';
+        res.locals.image = image;
+        res.locals.page = 'image';
 
-            res.render('image');
-        }).catch(err => {
-            next(err);
-        });
-    } else {
-        if (!req.params.id) return next(400);
-
-        co(function*() {
-            let image = yield imageViewModel(yield Image.findById(req.params.id).exec());
-            return image;
-        }).then(image => {
-            res.locals.image = image;
-
-            res.render('partials/image', {
-                layout: null
-            }, function(err, html) {
-                res.json({
-                    html,
-                    viewModel: image
-                })
-            });
-        }).catch(err => {
-            next(err);
-        });
-    }
+        res.render('image');
+    }).catch(err => {
+        next(err);
+    });
 }
 
 function uploadImageListRequestListener(req, res, next) {
@@ -167,10 +147,18 @@ function imageListRequestListener(req, res, next) {
 }
 
 function imageDeleteListRequestListener(req, res, next) {
-    let imageId = req.refererParams.value;
+    let imageId = req.body.id; //req.refererParams.value;
+
+    if (!imageId)
+        return next(400);
+
     debug('deleting image #' + imageId);
     co(function*() {
         let image = yield Image.findById(imageId).exec();
+
+        if (!image)
+            throw new HttpError(400);
+
         yield image.remove();
 
     }).then(() => {
@@ -187,7 +175,7 @@ function likeRequestListener(req, res, next) {
 
     let imageId = req.body.id;
     if (!imageId) return next(400);
-    
+
     co(function*() {
 
         let image = yield Image.findById(imageId).exec();
@@ -270,14 +258,83 @@ function feedRequestListener(req, res, next) {
     });
 }
 
-function getImageRequestListener(req, res, next) {
+
+function galleryRequestListener(req, res, next) {
+    if (!req.body.id)
+        return next(400);
+
+    let preloadEntityCount = config.get('image:preloadEntityCount') || 1;
+    let knownImages = JSON.parse(req.body.knownImages);
+    let id = +req.body.id;
+
+    let loggedUserId;
+    if (res.loggedUser)
+        loggedUserId = res.loggedUser._id;
+
+    co(function*() {
+
+        let image = yield imageViewModel(yield Image.findById(id).exec(), loggedUserId);
+        let author = yield User.findById(image.author._id).exec();
+        let gallery = author.images;
+        let galleryIndex = author.images.indexOf(id);
+        let viewModelsLength = preloadEntityCount * 2 + 1;
+        let viewModels = {};
 
 
+        viewModels[gallery[galleryIndex]] = image;
+
+
+        for (let i = 1; i <= preloadEntityCount; i++) {
+            let galleryNextIndex = (galleryIndex + i) % gallery.length;
+            let galleryPrevIndex = galleryIndex - i;
+            if (galleryPrevIndex < 0) {
+                galleryPrevIndex %= gallery.length;
+                galleryPrevIndex = gallery.length + galleryPrevIndex;
+            }
+
+            if (!viewModels[gallery[galleryNextIndex]] && !~knownImages.indexOf(galleryNextIndex)) {
+                let next = yield Image.findById(gallery[galleryNextIndex]).exec();
+                if (next) viewModels[gallery[galleryNextIndex]] = yield imageViewModel(next, loggedUserId);
+            }
+
+            if (!viewModels[gallery[galleryPrevIndex]] && !~knownImages.indexOf(galleryPrevIndex)) {
+                let prev = yield Image.findById(gallery[galleryPrevIndex]).exec();
+                if (prev) viewModels[gallery[galleryPrevIndex]] = yield imageViewModel(prev, loggedUserId);
+            }
+        }
+
+        return {
+            image,
+            viewModels,
+            gallery
+        };
+    }).then(result => {
+        if (knownImages.length === 0) {
+
+            res.locals.image = result.image;
+            res.render('partials/image', {
+                layout: null
+            }, function(err, html) {
+                res.json({
+                    html,
+                    viewModels: result.viewModels,
+                    gallery: result.gallery
+                })
+            });
+
+        } else {
+            res.json({
+                viewModels: result.viewModels,
+                gallery: result.gallery
+            })
+        }
+    }).catch(err => {
+        next(err);
+    });
 }
 
-
 exports.registerRoutes = function(app) {
-
+    app.post('/gallery', addLoggedUser, galleryRequestListener);
     app.post('/image', isAuth, uploadImageListRequestListener);
     app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
     app.get('/images', imageListRequestListener);

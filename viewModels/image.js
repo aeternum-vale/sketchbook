@@ -1,8 +1,9 @@
-let Comments = require('models/Comment');
+let Comment = require('models/Comment');
 let User = require('models/User');
 
 
 let truncatedUserViewModel = require('viewModels/truncatedUser');
+let commentViewModel = require('viewModels/comment');
 
 
 let imagePaths = require('libs/imagePaths');
@@ -12,45 +13,41 @@ let co = require('co');
 let debug = require('debug')('app:viewModels:image')
 
 module.exports = function(image, loggedUserId) {
-	return co(function*() {
+    return co(function*() {
 
-		let comments = yield Comments.find({
-			_id: {
-				$in: image.comments
-			}
-		}).exec();
-
-
-
-		for (let i = 0; i < comments.length; i++) {
-			comments[i].commentator = truncatedUserViewModel(yield User.findById(comments[i].author).exec(), loggedUserId);
-
-			comments[i].createDateStr = getDateString(comments[i].created);
-			comments[i].ownComment = !!(comments[i].author === loggedUserId);
-		}
-
-		let likes = yield User.find({
-			_id: {
-				$in: image.likes
-			}
-		}, {
-			'username': true
-		}).exec();
+        let comments = yield Comment.find({
+            _id: {
+                $in: image.comments
+            }
+        }).exec();
 
 
-		let imageViewModel = {
-			_id: image._id,
-			imgUrl: '/' + imagePaths.getImageFileNameById(image._id),
-			isOwnImage: !!(loggedUserId === image.author),
-			isLiked: !!(~image.likes.indexOf(loggedUserId)),
-			description: image.description,
-			created: image.created,
-			createDateStr: getDateString(image.created),
-			author: truncatedUserViewModel(yield User.findById(image.author).exec(), loggedUserId),
-			comments,
-			likes
-		};
+        if (comments)
+            for (let i = 0; i < comments.length; i++)
+                comments[i] = yield commentViewModel(yield Comment.findById(comments[i]).exec(), loggedUserId);
 
-		return imageViewModel;
-	});
+
+        let likes = yield User.find({
+            _id: {
+                $in: image.likes
+            }
+        }, {
+            'username': true
+        }).exec();
+
+        let imageViewModel = {
+            _id: image._id,
+            imgUrl: '/' + imagePaths.getImageFileNameById(image._id),
+            isOwnImage: !!(loggedUserId === image.author),
+            isLiked: !!(~image.likes.indexOf(loggedUserId)),
+            description: image.description,
+            created: image.created,
+            createDateStr: getDateString(image.created),
+            author: truncatedUserViewModel(yield User.findById(image.author).exec(), loggedUserId),
+            comments,
+            likes
+        };
+
+        return imageViewModel;
+    });
 };

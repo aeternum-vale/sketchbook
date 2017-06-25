@@ -42,14 +42,14 @@
 	&_active,
 	&:active {
 		@_offset: @_font-size / 8;
-		padding-top: @_padding + @_offset / 2;
-		padding-bottom: @_padding - @_offset / 2;
+		padding-top: @_padding + @_offset / 1.5;
+		padding-bottom: @_padding - @_offset / 1.5;
 	}
 }
 
 .button-active(@_font-size) {
 	@_padding: @_font-size / @button-padding-reduc-rate;
 	@_offset: @_font-size / 8;
-	padding-top: @_padding + @_offset / 2;
-	padding-bottom: @_padding - @_offset / 2;
+	padding-top: @_padding + @_offset / 1.5;
+	padding-bottom: @_padding - @_offset / 1.5;
 }

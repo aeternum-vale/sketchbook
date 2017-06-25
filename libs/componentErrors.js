@@ -19,9 +19,10 @@ ComponentError.prototype = Object.create(CustomError.prototype);
 ComponentError.prototype.constructor = ComponentError;
 
 
-function ClientError(message) {
+function ClientError(message, detail) {
 	ComponentError.call(this, message || 'An error has occurred. Check if javascript is enabled');
 	this.name = "ClientError";
+	this.detail = detail;
 }
 ClientError.prototype = Object.create(ComponentError.prototype);
 ClientError.prototype.constructor = ClientError;

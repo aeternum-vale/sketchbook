@@ -9,14 +9,12 @@ let image = new Image({
 });
 
 
-
-
 window.onload = e => {
-	image.resizeImage();
+	image.resize();
 };
 
 window.addEventListener('resize', e => {
-	image.resizeImage();
+	image.resize();
 });
 
 require(LIBS + 'setGlobalErrorCatcher')();

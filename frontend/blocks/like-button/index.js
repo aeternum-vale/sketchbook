@@ -36,21 +36,37 @@ let LikeButton = function(options) {
 
 
 
-LikeButton.prototype.setLike = function() {
-    this.elem.textContent = `like ${this.likeAmount}`;
+LikeButton.prototype.set = function(likeAmount, active, id) {
+    if (id)
+        this.id = id;
+
+    this.setAmount(likeAmount);
+    if (active)
+        this.activate();
+    else
+        this.deactivate();
 };
 
 LikeButton.prototype.toggle = function() {
-    if (this.active) {
-        this.elem.classList.remove('button_active');
-        this.likeAmount--;
-        this.active = false;
-    } else {
-        this.elem.classList.add('button_active');
-        this.likeAmount++;
-        this.active = true;
-    }
-    this.setLike();
+    if (this.active)
+        this.set(this.likeAmount - 1, false);
+    else
+        this.set(this.likeAmount + 1, true);
+};
+
+LikeButton.prototype.setAmount = function(likeAmount) {
+    this.likeAmount = likeAmount;
+    this.elem.textContent = `like ${this.likeAmount}`;
+};
+
+LikeButton.prototype.activate = function() {
+    this.elem.classList.add('button_active');
+    this.active = true;
+};
+
+LikeButton.prototype.deactivate = function() {
+    this.elem.classList.remove('button_active');
+    this.active = false;
 };
 
 for (let key in eventMixin) {

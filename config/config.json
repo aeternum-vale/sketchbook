@@ -25,6 +25,11 @@
 		}
 	},
 
+	"image": {
+		"preloadEntityCount": 1,
+		"relativeTimeLimitDays": 3
+	},
+
 	"userdata": {
 		"dir": "./userdata",
 
@@ -32,8 +37,7 @@
 			"ext": "jpg",
 			"prefix": "image",
 			"minWidth": 300,
-			"minHeight": 300,
-			"relativeTimeLimitDays": 3
+			"minHeight": 300
 		},
 
 		"preview": {

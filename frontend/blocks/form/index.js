@@ -48,7 +48,7 @@ Form.prototype.getDataObj = function() {
 Form.prototype.send = function(body) {
     require(LIBS + 'sendRequest')(body, 'POST', this.url, (err, response) => {
         if (err) {
-            if (err instanceof ClientError)
+            if (err instanceof ClientError && err.detail)
                 this.setPropertyError(err.detail.property, err.message);
             else
                 this.error(err);

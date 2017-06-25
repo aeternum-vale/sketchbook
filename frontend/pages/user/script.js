@@ -10,10 +10,16 @@ let linksDropdown = new Dropdown({
 	className: 'links-dropdown'
 });
 
+
 let gallery = new Gallery({
 	elem: document.getElementById('gallery'),
-	isLogged: window.isLogged
+	isLogged: window.isLogged,
+	preloadEntityCount: PRELOAD_IMAGE_COUNT
 });
 
+
+window.addEventListener('resize', e => {
+	gallery.resizeImage();
+});
 
 require(LIBS + 'setGlobalErrorCatcher')();

@@ -1,11 +1,12 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let CommentSendForm = function(options) {
+let CommentSender = function(options) {
 
 	this.elem = options.elem;
 	this.id = options.id;
 
 	this.commentSendTextarea = this.elem.querySelector('.comment-send__textarea');
+
 
 	this.elem.onclick = e => {
 		if (!e.target.classList.contains('comment-send__send-button')) return;
@@ -20,11 +21,10 @@ let CommentSendForm = function(options) {
 				this.error(err);
 				return;
 			}
-
+			
 			this.commentSendTextarea.value = '';
-			this.trigger('post', {
-				text,
-				id: response.commentId
+			this.trigger('comment-sender_comment-posted', {
+				viewModel: response.viewModel
 			});
 
 		});
@@ -32,8 +32,7 @@ let CommentSendForm = function(options) {
 
 };
 
-for (let key in eventMixin) {
-	CommentSendForm.prototype[key] = eventMixin[key];
-}
+for (let key in eventMixin)
+	CommentSender.prototype[key] = eventMixin[key];
 
-module.exports = CommentSendForm;
+module.exports = CommentSender;

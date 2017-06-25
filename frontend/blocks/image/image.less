@@ -2,9 +2,8 @@
 @import "../../blocks/button/button.less";
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/comment-section/comment-section.less";
-@import "../../blocks/comment-send/comment-send.less";
+@import "../../blocks/comment-sender/comment-sender.less";
 @import "../../blocks/like-button/like-button.less";
-
 @image-owner-avatar-size: 45px;
 @image-header-height: 70px;
 @image-padding: (@image-header-height - @image-owner-avatar-size) / 2;
@@ -22,7 +21,28 @@
     width: 100%;
     height: 100%;
 
-    z-index: 30;
+    z-index: 15;
+    &__controls {
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        align-self: flex-end;
+        bottom: 10px;
+    }
+    &__control {
+        box-sizing: border-box;
+        width: 70px;
+        height: 70px;
+        margin-right: 10px;
+        border: solid 3px #555;
+        border-radius: 4px;
+        cursor: pointer;
+        //background-image: linear-gradient(to bottom, #868989, transparent);
+        background-color: rgb(73, 73, 73);
+    }
+    &__control:last-child {
+        margin-right: 0;
+    }
     &__close-wrapper {
         position: relative;
         flex-shrink: 0;
@@ -125,7 +145,10 @@
         line-height: 10px;
     }
     &__top-side-button {
-        .button(@small-font-size);
+        .button(14px);
+    }
+    &__top-side-button.button_active {
+        .button-active(14px);
     }
     &__info-board {
         display: flex;
