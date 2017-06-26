@@ -9,9 +9,13 @@ let LikeButton = function(options) {
     this.active = !!this.elem.dataset.active;
     this.available = true;
 
+    this.changed = false;
+
     this.elem.onclick = e => {
 
         if (this.available) {
+
+            this.changed = false;
             this.available = false;
             this.toggle();
 
@@ -25,7 +29,8 @@ let LikeButton = function(options) {
                     this.toggle();
                     this.error(err);
                 } else
-                    this.trigger('like-button_liked');
+                    if (!this.changed)
+                        this.trigger('like-button_changed');
             });
 
         }
@@ -35,8 +40,10 @@ let LikeButton = function(options) {
 };
 
 LikeButton.prototype.set = function(likeAmount, active, imageId) {
-    if (imageId)
+    if (imageId){
         this.imageId = imageId;
+        this.changed = true;
+    }
 
     this.setAmount(likeAmount);
     if (active)

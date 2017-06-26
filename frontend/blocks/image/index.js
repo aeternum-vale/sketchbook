@@ -51,7 +51,7 @@ let Image = function(options) {
             imageId: this.viewModel._id
         });
 
-        this.likeButton.on('like-button_liked', e => {
+        this.likeButton.on('like-button_changed', e => {
             this.trigger('image_changed');
         });
 
