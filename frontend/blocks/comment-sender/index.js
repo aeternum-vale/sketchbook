@@ -3,7 +3,7 @@ let eventMixin = require(LIBS + 'eventMixin');
 let CommentSender = function(options) {
 
 	this.elem = options.elem;
-	this.id = options.id;
+	this.imageId = options.imageId;
 
 	this.commentSendTextarea = this.elem.querySelector('.comment-send__textarea');
 
@@ -13,7 +13,7 @@ let CommentSender = function(options) {
 		let text = this.commentSendTextarea.value;
 
 		require(LIBS + 'sendRequest')({
-			id: this.id,
+			id: this.imageId,
 			text
 		}, 'POST', '/comment', (err, response) => {
 
@@ -21,7 +21,7 @@ let CommentSender = function(options) {
 				this.error(err);
 				return;
 			}
-			
+
 			this.commentSendTextarea.value = '';
 			this.trigger('comment-sender_comment-posted', {
 				viewModel: response.viewModel
@@ -29,7 +29,10 @@ let CommentSender = function(options) {
 
 		});
 	};
+};
 
+CommentSender.prototype.setImageId = function(id) {
+	this.imageId = id;
 };
 
 for (let key in eventMixin)

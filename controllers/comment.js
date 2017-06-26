@@ -16,9 +16,10 @@ let url = require('url');
 
 function recieveCommentRequestListener(req, res, next) {
 
+
     let imageId = req.body.id;
     let text = req.body.text;
-    let requireHtml = !!req.body.requireHtml;
+
 
     if (!imageId || !text)
         return next(400);
@@ -31,6 +32,7 @@ function recieveCommentRequestListener(req, res, next) {
         return next(new HttpError(400, errors[0].message))
 
     co(function*() {
+
 
         let rawComment = yield new Comment({
             text,
@@ -54,11 +56,11 @@ function recieveCommentRequestListener(req, res, next) {
 }
 
 function deleteCommentRequestListener(req, res, next) {
-    debug('deleting comment #' + req.body.commentId);
+    debug('deleting comment #' + req.body.id);
 
     co(function*() {
 
-        let comment = yield Comment.findById(req.body.commentId).exec();
+        let comment = yield Comment.findById(req.body.id).exec();
         yield comment.remove();
 
     }).then(() => {

@@ -3,7 +3,7 @@ let eventMixin = require(LIBS + 'eventMixin');
 let LikeButton = function(options) {
 
     this.elem = options.elem;
-    this.id = options.id;
+    this.imageId = options.imageId;
 
     this.likeAmount = +this.elem.dataset.likeAmount;
     this.active = !!this.elem.dataset.active;
@@ -16,7 +16,7 @@ let LikeButton = function(options) {
             this.toggle();
 
             require(LIBS + 'sendRequest')({
-                id: this.id
+                id: this.imageId
             }, 'POST', '/like', (err, response) => {
 
                 this.available = true;
@@ -24,8 +24,8 @@ let LikeButton = function(options) {
                 if (err) {
                     this.toggle();
                     this.error(err);
-                }
-
+                } else
+                    this.trigger('like-button_liked');
             });
 
         }
@@ -34,11 +34,9 @@ let LikeButton = function(options) {
 
 };
 
-
-
-LikeButton.prototype.set = function(likeAmount, active, id) {
-    if (id)
-        this.id = id;
+LikeButton.prototype.set = function(likeAmount, active, imageId) {
+    if (imageId)
+        this.imageId = imageId;
 
     this.setAmount(likeAmount);
     if (active)
@@ -69,8 +67,7 @@ LikeButton.prototype.deactivate = function() {
     this.active = false;
 };
 
-for (let key in eventMixin) {
+for (let key in eventMixin)
     LikeButton.prototype[key] = eventMixin[key];
-}
 
 module.exports = LikeButton;

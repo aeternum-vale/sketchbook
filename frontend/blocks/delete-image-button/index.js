@@ -4,7 +4,7 @@ let MessageModalWindow = require(BLOCKS + 'message-modal-window');
 
 let DeleteImageButton = function(options) {
     this.elem = options.elem;
-    this.id = options.id;
+    this.imageId = options.imageId;
 
     this.prompt = new PromptWindow({
         defaultMessage: 'Are you sure you want to delete this image? All the likes and comments will be permanently lost.'
@@ -15,14 +15,14 @@ let DeleteImageButton = function(options) {
     });
 
     this.successMessage.on('deactivated', e => {
-        this.trigger('deleted', {
+        this.trigger('delete-image-button_image-deleted', {
             url: this.url
         });
     });
 
     this.prompt.on('accept', e => {
         require(LIBS + 'sendRequest')({
-            id: this.id
+            id: this.imageId
         }, 'DELETE', '/image', (err, response) => {
             if (err) {
                 this.error(err);
@@ -39,9 +39,11 @@ let DeleteImageButton = function(options) {
     };
 }
 
-for (let key in eventMixin) {
-    DeleteImageButton.prototype[key] = eventMixin[key];
-}
+DeleteImageButton.setImageId = function(id) {
+    this.imageId = id;
+};
 
+for (let key in eventMixin)
+    DeleteImageButton.prototype[key] = eventMixin[key];
 
 module.exports = DeleteImageButton;

@@ -5,7 +5,7 @@ let ClientError = componentErrors.ClientError;
 let SubscribeButton = function(options) {
 
     this.elem = options.elem;
-    this.id = options.id;
+    this.imageId = options.imageId;
 
     this.checked = !!this.elem.dataset.checked;
     this.available = true;
@@ -18,7 +18,7 @@ let SubscribeButton = function(options) {
             this.toggle();
 
             require(LIBS + 'sendRequest')({
-                id: this.id
+                id: this.imageId
             }, 'POST', '/subscribe', (err, response) => {
 
                 this.available = true;
@@ -47,9 +47,7 @@ SubscribeButton.prototype.toggle = function() {
     this.trigger('change');
 };
 
-
-for (let key in eventMixin) {
+for (let key in eventMixin)
     SubscribeButton.prototype[key] = eventMixin[key];
-}
 
 module.exports = SubscribeButton;

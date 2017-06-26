@@ -7,27 +7,31 @@ let CommentSection = function(options) {
     this.elem = options.elem;
     this.commentSender = new CommentSender({
         elem: options.commentSenderElem,
-        id: options.id
+        imageId: options.imageId
     });
 
     this.ghost = this.elem.querySelector('.comment.comment_ghost');
 
     this.commentSender.on('comment-sender_comment-posted', e => {
         this.insertNewComment(e.detail.viewModel);
+        this.trigger('comment-section_changed');
     });
 
     this.elem.onclick = e => {
         if (!e.target.classList.contains('comment__close-button')) return;
 
         let comment = e.target.closest('.comment');
+        let commentId = comment.dataset.id;
 
         require(LIBS + 'sendRequest')({
-            commentId: comment.dataset.id
+            id: commentId
         }, 'DELETE', '/comment', (err, response) => {
             if (err) {
                 this.error(err);
                 return;
             }
+
+            this.trigger('comment-section_changed');
             comment.remove();
         });
     };
@@ -52,9 +56,19 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
     this.elem.appendChild(newComment);
 };
 
-CommentSection.prototype.set = function(comments, id) {
-    //this.elem
+CommentSection.prototype.set = function(viewModels, id) {
+    this.commentSender.setImageId(id);
+    this.clear();
+
+    viewModels.forEach(viewModel => {
+        this.insertNewComment(viewModel);
+    });
 };
+
+CommentSection.prototype.clear = function() {
+    this.elem.innerHTML = '';
+};
+
 
 for (let key in eventMixin)
     CommentSection.prototype[key] = eventMixin[key];

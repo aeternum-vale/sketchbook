@@ -93,10 +93,15 @@
         flex-grow: 1;
         background-color: #000;
     }
-    &__image {
+    &__img-element {
         flex-shrink: 0;
         flex-grow: 0;
     }
+
+    &_img-element-invisible &__img-element {
+        visibility: hidden;
+    }
+
     &__sidebar {
         position: relative;
         box-sizing: border-box;
@@ -172,4 +177,12 @@
         height: 150px;
         flex-shrink: 0;
     }
+
+
+    &_invisible {
+		display: none;
+	}
+
+
+
 }
