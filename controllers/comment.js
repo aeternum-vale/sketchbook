@@ -61,7 +61,10 @@ function deleteCommentRequestListener(req, res, next) {
     co(function*() {
 
         let comment = yield Comment.findById(req.body.id).exec();
-        yield comment.remove();
+        if (comment)
+            yield comment.remove();
+        else
+            throw new HttpError(404)
 
     }).then(() => {
         res.json({})

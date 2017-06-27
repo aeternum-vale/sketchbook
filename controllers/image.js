@@ -264,8 +264,8 @@ function galleryRequestListener(req, res, next) {
         return next(400);
 
     let preloadEntityCount = config.get('image:preloadEntityCount') || 1;
-    let knownImages = JSON.parse(req.body.knownImages);
     let id = +req.body.id;
+    let requireHtml = !!req.body.requireHtml;
 
     let loggedUserId;
     if (res.loggedUser)
@@ -276,32 +276,9 @@ function galleryRequestListener(req, res, next) {
         let image = yield imageViewModel(yield Image.findById(id).exec(), loggedUserId);
         let author = yield User.findById(image.author._id).exec();
         let gallery = author.images;
-        let galleryIndex = author.images.indexOf(id);
-        let viewModelsLength = preloadEntityCount * 2 + 1;
         let viewModels = {};
 
-
-        viewModels[gallery[galleryIndex]] = image;
-
-
-        for (let i = 1; i <= preloadEntityCount; i++) {
-            let galleryNextIndex = (galleryIndex + i) % gallery.length;
-            let galleryPrevIndex = galleryIndex - i;
-            if (galleryPrevIndex < 0) {
-                galleryPrevIndex %= gallery.length;
-                galleryPrevIndex = gallery.length + galleryPrevIndex;
-            }
-
-            if (!viewModels[gallery[galleryNextIndex]] && !~knownImages.indexOf(galleryNextIndex)) {
-                let next = yield Image.findById(gallery[galleryNextIndex]).exec();
-                if (next) viewModels[gallery[galleryNextIndex]] = yield imageViewModel(next, loggedUserId);
-            }
-
-            if (!viewModels[gallery[galleryPrevIndex]] && !~knownImages.indexOf(galleryPrevIndex)) {
-                let prev = yield Image.findById(gallery[galleryPrevIndex]).exec();
-                if (prev) viewModels[gallery[galleryPrevIndex]] = yield imageViewModel(prev, loggedUserId);
-            }
-        }
+        viewModels[image._id] = image;
 
         return {
             image,
@@ -309,7 +286,7 @@ function galleryRequestListener(req, res, next) {
             gallery
         };
     }).then(result => {
-        if (knownImages.length === 0) {
+        if (requireHtml) {
 
             res.locals.image = result.image;
             res.render('partials/image', {

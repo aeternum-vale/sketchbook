@@ -14,7 +14,8 @@ let linksDropdown = new Dropdown({
 let gallery = new Gallery({
 	elem: document.getElementById('gallery'),
 	isLogged: window.isLogged,
-	preloadEntityCount: PRELOAD_IMAGE_COUNT
+	preloadEntityCount: PRELOAD_IMAGE_COUNT,
+	isEmbedded: true
 });
 
 

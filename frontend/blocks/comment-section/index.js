@@ -5,6 +5,7 @@ let CommentSender = require(BLOCKS + 'comment-sender');
 let CommentSection = function(options) {
 
     this.elem = options.elem;
+    this.imageId = options.imageId;
     this.commentSender = new CommentSender({
         elem: options.commentSenderElem,
         imageId: options.imageId
@@ -13,8 +14,12 @@ let CommentSection = function(options) {
     this.ghost = this.elem.querySelector('.comment.comment_ghost');
 
     this.commentSender.on('comment-sender_comment-posted', e => {
-        this.insertNewComment(e.detail.viewModel);
-        this.trigger('comment-section_changed');
+        if (this.imageId === e.detail.imageId)
+            this.insertNewComment(e.detail.viewModel);
+            
+        this.trigger('comment-section_changed', {
+            imageId: e.detail.imageId
+        });
     });
 
     this.elem.onclick = e => {
@@ -22,6 +27,7 @@ let CommentSection = function(options) {
 
         let comment = e.target.closest('.comment');
         let commentId = comment.dataset.id;
+        let imageId = this.imageId;
 
         require(LIBS + 'sendRequest')({
             id: commentId
@@ -31,7 +37,9 @@ let CommentSection = function(options) {
                 return;
             }
 
-            this.trigger('comment-section_changed');
+            this.trigger('comment-section_changed', {
+                imageId
+            });
             comment.remove();
         });
     };
@@ -57,6 +65,7 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
 };
 
 CommentSection.prototype.set = function(viewModels, id) {
+    this.imageId = id;
     this.commentSender.setImageId(id);
     this.clear();
 

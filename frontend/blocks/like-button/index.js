@@ -9,18 +9,19 @@ let LikeButton = function(options) {
     this.active = !!this.elem.dataset.active;
     this.available = true;
 
-    this.changed = false;
+
 
     this.elem.onclick = e => {
 
         if (this.available) {
 
-            this.changed = false;
             this.available = false;
             this.toggle();
 
+            let id = this.imageId;
+
             require(LIBS + 'sendRequest')({
-                id: this.imageId
+                id
             }, 'POST', '/like', (err, response) => {
 
                 this.available = true;
@@ -29,8 +30,10 @@ let LikeButton = function(options) {
                     this.toggle();
                     this.error(err);
                 } else
-                    if (!this.changed)
-                        this.trigger('like-button_changed');
+                if (!this.changed)
+                    this.trigger('like-button_changed', {
+                        imageId: id
+                    });
             });
 
         }
@@ -40,10 +43,8 @@ let LikeButton = function(options) {
 };
 
 LikeButton.prototype.set = function(likeAmount, active, imageId) {
-    if (imageId){
+    if (imageId)
         this.imageId = imageId;
-        this.changed = true;
-    }
 
     this.setAmount(likeAmount);
     if (active)

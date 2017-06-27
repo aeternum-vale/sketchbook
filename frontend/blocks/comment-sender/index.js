@@ -7,13 +7,13 @@ let CommentSender = function(options) {
 
 	this.commentSendTextarea = this.elem.querySelector('.comment-send__textarea');
 
-
 	this.elem.onclick = e => {
 		if (!e.target.classList.contains('comment-send__send-button')) return;
 		let text = this.commentSendTextarea.value;
+		let imageId = this.imageId;
 
 		require(LIBS + 'sendRequest')({
-			id: this.imageId,
+			id: imageId,
 			text
 		}, 'POST', '/comment', (err, response) => {
 
@@ -24,7 +24,8 @@ let CommentSender = function(options) {
 
 			this.commentSendTextarea.value = '';
 			this.trigger('comment-sender_comment-posted', {
-				viewModel: response.viewModel
+				viewModel: response.viewModel,
+				imageId
 			});
 
 		});
