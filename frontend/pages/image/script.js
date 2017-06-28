@@ -2,19 +2,12 @@
 
 import './style.less';
 
+let Gallery = require(BLOCKS + 'gallery');
 let gallery = new Gallery({
+	image: document.getElementById('image'),
 	isLogged: window.isLogged,
 	preloadEntityCount: PRELOAD_IMAGE_COUNT,
 	isEmbedded: false
-});
-
-
-window.onload = e => {
-	image.resize();
-};
-
-window.addEventListener('resize', e => {
-	image.resize();
 });
 
 require(LIBS + 'setGlobalErrorCatcher')();

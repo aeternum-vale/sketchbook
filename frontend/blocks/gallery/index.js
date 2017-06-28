@@ -3,15 +3,18 @@ let eventMixin = require(LIBS + 'eventMixin');
 let Gallery = function(options) {
 
     this.elem = options.elem;
+    this.image = options.image;
+
     this.isLogged = options.isLogged;
-    this.isEmbedded = options.isEmbedded || false;
+
     this.preloadEntityCount = options.preloadEntityCount;
 
     this.viewModels = {};
-    console.log(this.viewModels);
-
     this.gallery = [];
     this.currentImageId = null;
+    Object.defineProperty(this, 'currentViewModel', {
+        get: () => this.viewModels[this.currentImageId]
+    });
 
     this.preloadedImages = {};
     for (let i = 1; i <= this.preloadEntityCount; i++) {
@@ -20,36 +23,65 @@ let Gallery = function(options) {
     }
 
 
-
-    this.publicationNumberElem = options.publicationNumberElem;
-    this.imagePreviewGhost = this.elem.querySelector('.image-preview');
-    this.galleryWrapper = this.elem.querySelector('.gallery__wrapper');
-
-
-    Object.defineProperty(this, 'currentViewModel', {
-        get: () => this.viewModels[this.currentImageId]
-    });
-
-    this.elem.onclick = e => {
-        if (!e.target.matches('.image-preview')) return;
-        e.preventDefault();
-        let imageId = +e.target.dataset.id;
-        console.log(imageId);
-
-        if (!this.image) {
-            this.currentImageId = imageId;
-            this.renderImageElem(imageId);
-        } else
-            this.setCurrentViewModel(imageId).then(() => {
-                this.activateImage();
-            });
-    };
-
     window.addEventListener('popstate', e => {
         this.onPopState(e.state);
     }, false);
 
+    window.addEventListener('resize', e => {
+        this.resizeImage();
+    });
+
+
     this.pushUserState();
+
+    this.isEmbedded = !!this.elem;
+
+    if (this.isEmbedded)
+        this.setGallery(options);
+    else {
+        this.currentImageId = +this.image.dataset.id;
+        this.requestViewModel(this.currentImageId).then(() => {
+            this.setImage();
+            this.pushImageState();
+
+            this.requestAllNecessaryViewModels().then(() => {
+                this.updatePreloadedImagesArray();
+            });
+
+            this.activateImgElem();
+        })
+    }
+
+};
+
+Gallery.prototype.onElemClick = function(e) {
+    if (!e.target.matches('.image-preview')) return;
+    e.preventDefault();
+    let imageId = +e.target.dataset.id;
+
+    if (!this.image) {
+        this.currentImageId = imageId;
+        this.renderImageElem().then(() => {
+            this.setImage();
+            this.requestAllNecessaryViewModels().then(() => {
+                this.updatePreloadedImagesArray();
+            });
+        });
+        this.pushImageState();
+    } else
+        this.setCurrentViewModel(imageId).then(() => {
+            this.activateImage();
+        });
+};
+
+Gallery.prototype.setGallery = function(options) {
+    this.publicationNumberElem = options.publicationNumberElem;
+    this.imagePreviewGhost = this.elem.querySelector('.image-preview');
+    this.galleryWrapper = this.elem.querySelector('.gallery__wrapper');
+
+    this.elem.onclick = e => {
+        this.onElemClick(e);
+    };
 };
 
 Gallery.prototype.setImage = function() {
@@ -72,13 +104,8 @@ Gallery.prototype.setImage = function() {
         if (e.target.matches('.image__control-next'))
             this.switchToNext();
 
-        if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button')) {
-
-            if (!this.isEmbedded)
-                window.location = this.image.dataset.authorUrl;
-            else
-                this.deactivateImage();
-        }
+        if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))
+            this.deactivateImage();
     };
 
     if (this.isLogged) {
@@ -124,11 +151,6 @@ Gallery.prototype.setImage = function() {
         }
     }
 
-    this.requestAllNecessaryViewModels().then(() => {
-        this.updatePreloadedImagesArray();
-    });
-    this.pushImageState();
-
 };
 
 Gallery.prototype.updatePreloadedImagesArray = function() {
@@ -148,6 +170,9 @@ Gallery.prototype.activateImage = function() {
 };
 
 Gallery.prototype.deactivateImage = function(noPushState) {
+    if (!this.isEmbedded)
+        window.location = this.image.dataset.authorUrl;
+
     this.image.classList.add('image_invisible');
 
     if (!noPushState)
@@ -190,17 +215,16 @@ Gallery.prototype.resizeImage = function() {
 };
 
 
-Gallery.prototype.renderImageElem = function(id) {
-    this.requestViewModel(id).then(response => {
+Gallery.prototype.renderImageElem = function() {
+    return this.requestViewModel(this.currentImageId, true).then(response => {
         let parent = document.createElement('DIV');
         parent.innerHTML = response.html;
         this.image = parent.firstElementChild;
         document.body.insertBefore(this.image, document.body.firstElementChild);
-        this.setImage();
     });
 };
 
-Gallery.prototype.requestViewModel = function(id) {
+Gallery.prototype.requestViewModel = function(id, requireHtml) {
     return new Promise((resolve, reject) => {
 
         if (this.viewModels[id]) {
@@ -209,11 +233,11 @@ Gallery.prototype.requestViewModel = function(id) {
         }
 
         require(LIBS + 'sendRequest')(
-            this.image ? {
+            (!requireHtml) ? {
                 id
             } : {
                 id,
-                requireHtml: true
+                requireHtml
             }, 'POST', '/gallery', (err, response) => {
 
                 if (err) {
@@ -316,14 +340,16 @@ Gallery.prototype.setCurrentViewModel = function(id, noPushState) {
     this.deactivateImgElem();
 
     return this.requestViewModel(id).then(() => {
-        this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
-        this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked, id);
-        this.description.textContent = this.currentViewModel.description;
-        this.date.textContent = this.currentViewModel.createDateStr;
-        this.commentSection.set(this.currentViewModel.comments, id);
+        if (id === this.currentImageId) {
+            this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
+            this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked, id);
+            this.description.textContent = this.currentViewModel.description;
+            this.date.textContent = this.currentViewModel.createDateStr;
+            this.commentSection.set(this.currentViewModel.comments, id);
 
-        if (!noPushState)
-            this.pushImageState();
+            if (!noPushState)
+                this.pushImageState();
+        }
     });
 };
 

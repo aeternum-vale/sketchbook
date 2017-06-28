@@ -1,5 +1,3 @@
-
-
 let Dropdown = require(BLOCKS + 'dropdown');
 let subscribeButtonElem;
 
