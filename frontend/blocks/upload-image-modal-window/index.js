@@ -57,7 +57,7 @@ UploadImageModalWindow.prototype.uploadImage = function(file, description) {
 			return;
 		}
 
-		this.trigger('uploaded', {
+		this.trigger('upload-image-modal-window__image-uploaded', {
 			imageId: response.imageId,
 			previewUrl: response.previewUrl
 		});

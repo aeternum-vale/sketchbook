@@ -1,5 +1,3 @@
-let Image = require(BLOCKS + 'image');
-
 let eventMixin = require(LIBS + 'eventMixin');
 
 let Gallery = function(options) {
@@ -14,16 +12,29 @@ let Gallery = function(options) {
 
     this.gallery = [];
     this.currentImageId = null;
+
+    this.preloadedImages = {};
+    for (let i = 1; i <= this.preloadEntityCount; i++) {
+        this.preloadedImages[i] = new Image();
+        this.preloadedImages[-i] = new Image();
+    }
+
+
+
+    this.publicationNumberElem = options.publicationNumberElem;
+    this.imagePreviewGhost = this.elem.querySelector('.image-preview');
+    this.galleryWrapper = this.elem.querySelector('.gallery__wrapper');
+
+
     Object.defineProperty(this, 'currentViewModel', {
         get: () => this.viewModels[this.currentImageId]
     });
-
-
 
     this.elem.onclick = e => {
         if (!e.target.matches('.image-preview')) return;
         e.preventDefault();
         let imageId = +e.target.dataset.id;
+        console.log(imageId);
 
         if (!this.image) {
             this.currentImageId = imageId;
@@ -34,16 +45,113 @@ let Gallery = function(options) {
             });
     };
 
+    window.addEventListener('popstate', e => {
+        this.onPopState(e.state);
+    }, false);
+
+    this.pushUserState();
+};
+
+Gallery.prototype.setImage = function() {
+    this.post = this.image.querySelector('.image__image-post');
+    this.imgElem = this.image.querySelector('img.image__img-element');
+    this.description = this.image.querySelector('.image__description');
+    this.date = this.image.querySelector('.image__post-date');
+    this.imageWrapper = this.image.querySelector('.image__image-wrapper');
+    this.sideBar = this.image.querySelector('.image__sidebar');
+
+    this.imgElem.onload = e => {
+        this.resizeImage();
+        this.activateImgElem();
+    };
+
+    this.image.onclick = e => {
+        if (e.target.matches('.image__control-prev'))
+            this.switchToPrev();
+
+        if (e.target.matches('.image__control-next'))
+            this.switchToNext();
+
+        if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button')) {
+
+            if (!this.isEmbedded)
+                window.location = this.image.dataset.authorUrl;
+            else
+                this.deactivateImage();
+        }
+    };
+
+    if (this.isLogged) {
+        let CommentSection = require(BLOCKS + 'comment-section');
+        let LikeButton = require(BLOCKS + 'like-button');
+
+        this.commentSection = new CommentSection({
+            elem: document.querySelector('.comment-section'),
+            commentSenderElem: document.querySelector('.comment-send'),
+            imageId: this.currentImageId
+        });
+
+        this.commentSection.on('comment-section_changed', e => {
+            this.deleteViewModel(e.detail.imageId);
+        });
+
+        this.likeButton = new LikeButton({
+            elem: document.querySelector('.like-button'),
+            imageId: this.currentImageId
+        });
+
+        this.likeButton.on('like-button_changed', e => {
+            this.deleteViewModel(e.detail.imageId);
+        });
+
+        let topSideButton = document.querySelector('.image__top-side-button');
+        if (this.currentViewModel.isOwnImage) {
+            let DeleteImageButton = require(BLOCKS + 'delete-image-button');
+            this.delete = new DeleteImageButton({
+                elem: topSideButton,
+                imageId: this.currentImageId
+            });
+
+            this.delete.on('delete-image-button_image-deleted', e => {
+                window.location = e.detail.url || '/';
+            });
+        } else {
+            let SubscribeButton = require(BLOCKS + 'subscribe-button');
+            this.subscribe = new SubscribeButton({
+                elem: topSideButton,
+                imageId: this.currentImageId
+            });
+        }
+    }
+
+    this.requestAllNecessaryViewModels().then(() => {
+        this.updatePreloadedImagesArray();
+    });
+    this.pushImageState();
 
 };
 
+Gallery.prototype.updatePreloadedImagesArray = function() {
+    for (let i = 1; i <= this.preloadEntityCount; i++) {
+        let nextId = this.getNextImageId(i);
+        let prevId = this.getNextImageId(-i);
+
+        if (this.viewModels[nextId])
+            this.preloadedImages[i].setAttribute('src', this.viewModels[nextId].imgUrl);
+        if (this.viewModels[prevId])
+            this.preloadedImages[-i].setAttribute('src', this.viewModels[prevId].imgUrl);
+    }
+};
 
 Gallery.prototype.activateImage = function() {
     this.image.classList.remove('image_invisible');
 };
 
-Gallery.prototype.deactivateImage = function() {
+Gallery.prototype.deactivateImage = function(noPushState) {
     this.image.classList.add('image_invisible');
+
+    if (!noPushState)
+        this.pushUserState();
 };
 
 Gallery.prototype.deactivateImgElem = function() {
@@ -123,78 +231,21 @@ Gallery.prototype.requestViewModel = function(id) {
     });
 };
 
-Gallery.prototype.setImage = function() {
-    this.post = this.image.querySelector('.image__image-post');
-    this.imgElem = this.image.querySelector('img.image__img-element');
-    this.description = this.image.querySelector('.image__description');
-    this.date = this.image.querySelector('.image__post-date');
-    this.imageWrapper = this.image.querySelector('.image__image-wrapper');
-    this.sideBar = this.image.querySelector('.image__sidebar');
+Gallery.prototype.insertNewImagePreview = function(imageId, previewUrl) {
+    let newImagePreview = this.imagePreviewGhost.cloneNode(true);
+    newImagePreview.classList.remove('image-preview_ghost');
 
-    this.imgElem.onload = e => {
-        this.resizeImage();
-        this.activateImgElem();
-    };
+    newImagePreview.dataset.id = imageId;
+    newImagePreview.href = `/image/${imageId}`;
+    newImagePreview.style.backgroundImage = `url('/${previewUrl}')`;
 
-    this.image.onclick = e => {
-        if (e.target.matches('.image__control-prev'))
-            this.switchToPrev();
+    newImagePreview.querySelector('.image-preview__text')
+        .textContent = '0 comments 0 likes';
 
-        if (e.target.matches('.image__control-next'))
-            this.switchToNext();
+    this.galleryWrapper.appendChild(newImagePreview);
 
-        if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))
-            if (!this.isEmbedded)
-                window.location = this.image.dataset.authorUrl;
-            else
-                this.deactivateImage();
-    };
-
-    if (this.isLogged) {
-        let CommentSection = require(BLOCKS + 'comment-section');
-        let LikeButton = require(BLOCKS + 'like-button');
-
-        this.commentSection = new CommentSection({
-            elem: document.querySelector('.comment-section'),
-            commentSenderElem: document.querySelector('.comment-send'),
-            imageId: this.currentImageId
-        });
-
-        this.commentSection.on('comment-section_changed', e => {
-            this.deleteViewModel(e.detail.imageId);
-        });
-
-        this.likeButton = new LikeButton({
-            elem: document.querySelector('.like-button'),
-            imageId: this.currentImageId
-        });
-
-        this.likeButton.on('like-button_changed', e => {
-            this.deleteViewModel(e.detail.imageId);
-        });
-
-        let topSideButton = document.querySelector('.image__top-side-button');
-        if (this.currentViewModel.isOwnImage) {
-            let DeleteImageButton = require(BLOCKS + 'delete-image-button');
-            this.delete = new DeleteImageButton({
-                elem: topSideButton,
-                imageId: this.currentImageId
-            });
-
-            this.delete.on('delete-image-button_image-deleted', e => {
-                window.location = e.detail.url || '/';
-            });
-        } else {
-            let SubscribeButton = require(BLOCKS + 'subscribe-button');
-            this.subscribe = new SubscribeButton({
-                elem: topSideButton,
-                imageId: this.currentImageId
-            });
-        }
-    }
-
-    this.setCurrentViewModel();
-    this.requestAllNecessaryViewModels();
+    if (this.publicationNumberElem)
+        this.publicationNumberElem.textContent = +this.publicationNumberElem.textContent + 1;
 };
 
 Gallery.prototype.deleteViewModel = function(id) {
@@ -202,41 +253,54 @@ Gallery.prototype.deleteViewModel = function(id) {
     console.log('delete #' + id);
 };
 
-
 Gallery.prototype.requestAllNecessaryViewModels = function() {
-    this.requestNextViewModels();
-    this.requestPrevViewModels();
+    return Promise.all([
+        this.requestNextViewModels(),
+        this.requestPrevViewModels()
+    ]);
 };
 
 Gallery.prototype.requestNextViewModels = function() {
+    let promises = []
     for (let i = 0; i < this.preloadEntityCount; i++)
-        this.requestViewModel(this.getNextImageId());
+        promises.push(this.requestViewModel(this.getNextImageId(i)));
+    return Promise.all(promises);
 };
 
 Gallery.prototype.requestPrevViewModels = function() {
+    let promises = []
     for (let i = 0; i < this.preloadEntityCount; i++)
-        this.requestViewModel(this.getPrevImageId());
+        promises.push(this.requestViewModel(this.getPrevImageId(i)));
+    return Promise.all(promises);
 };
 
 Gallery.prototype.switchToNext = function() {
     this.setCurrentViewModel(this.getNextImageId());
-    this.requestNextViewModels();
+    this.requestNextViewModels().then(() => {
+        this.updatePreloadedImagesArray();
+    });
+
 };
 
 Gallery.prototype.switchToPrev = function() {
     this.setCurrentViewModel(this.getPrevImageId());
-    this.requestPrevViewModels();
+    this.requestPrevViewModels().then(() => {
+        this.updatePreloadedImagesArray();
+    });
 };
 
-Gallery.prototype.getNextImageId = function() {
+Gallery.prototype.getNextImageId = function(offset) {
+    offset = offset || 1;
     let index = this.gallery.indexOf(this.currentImageId);
-    return this.gallery[(index + 1) % this.gallery.length];
+    return this.gallery[(index + offset) % this.gallery.length];
 };
 
-Gallery.prototype.getPrevImageId = function() {
+Gallery.prototype.getPrevImageId = function(offset) {
+    offset = offset || 1;
+
     let index = this.gallery.indexOf(this.currentImageId);
 
-    let galleryPrevIndex = index - 1;
+    let galleryPrevIndex = index - offset;
     if (galleryPrevIndex < 0) {
         galleryPrevIndex %= this.gallery.length;
         galleryPrevIndex = this.gallery.length + galleryPrevIndex;
@@ -246,7 +310,7 @@ Gallery.prototype.getPrevImageId = function() {
 };
 
 
-Gallery.prototype.setCurrentViewModel = function(id) {
+Gallery.prototype.setCurrentViewModel = function(id, noPushState) {
     id = id || this.currentImageId;
     this.currentImageId = id;
     this.deactivateImgElem();
@@ -257,7 +321,38 @@ Gallery.prototype.setCurrentViewModel = function(id) {
         this.description.textContent = this.currentViewModel.description;
         this.date.textContent = this.currentViewModel.createDateStr;
         this.commentSection.set(this.currentViewModel.comments, id);
+
+        if (!noPushState)
+            this.pushImageState();
     });
+};
+
+Gallery.prototype.pushImageState = function() {
+    history.pushState({
+        type: 'image',
+        id: this.currentImageId
+    }, 'image #' + this.currentImageId, '/image/' + this.currentImageId);
+};
+
+Gallery.prototype.pushUserState = function() {
+    history.pushState({
+        type: 'user'
+    }, '', this.currentImageId ? '/user/' + this.currentViewModel.author.username : '');
+};
+
+
+Gallery.prototype.onPopState = function(state) {
+    if (state && state.type)
+        switch (state.type) {
+            case 'image':
+                this.activateImage();
+                this.setCurrentViewModel(state.id, true);
+                break;
+
+            case 'user':
+                this.deactivateImage(true);
+                break;
+        }
 };
 
 for (let key in eventMixin)

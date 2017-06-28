@@ -2,10 +2,10 @@
 
 import './style.less';
 
-let Image = require(BLOCKS + 'image');
-let image = new Image({
-	elem: document.getElementById('image'),
-	isLoggedUser: document.body.hasAttribute('data-is-logged-user')
+let gallery = new Gallery({
+	isLogged: window.isLogged,
+	preloadEntityCount: PRELOAD_IMAGE_COUNT,
+	isEmbedded: false
 });
 
 

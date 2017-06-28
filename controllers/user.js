@@ -68,7 +68,6 @@ function userProfileRequestListener(req, res, next) {
     }).then(result => {
         res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser && res.loggedUser._id);
         res.locals.page = 'user';
-        res.locals.galleryObj = JSON.stringify(result.gallery);
 
         res.locals.pageUser.images.forEach(item => {
             item.previewUrl = imagePaths.getImagePreviewFileNameById(item._id);
