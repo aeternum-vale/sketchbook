@@ -16,7 +16,7 @@ let CommentSection = function(options) {
     this.commentSender.on('comment-sender_comment-posted', e => {
         if (this.imageId === e.detail.imageId)
             this.insertNewComment(e.detail.viewModel);
-            
+
         this.trigger('comment-section_changed', {
             imageId: e.detail.imageId
         });
@@ -64,9 +64,13 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
     this.elem.appendChild(newComment);
 };
 
-CommentSection.prototype.set = function(viewModels, id) {
-    this.imageId = id;
-    this.commentSender.setImageId(id);
+
+CommentSection.prototype.setImageId = function(imageId) {
+    this.imageId = imageId;
+    this.commentSender.setImageId(imageId);
+};
+
+CommentSection.prototype.set = function(viewModels) {
     this.clear();
 
     viewModels.forEach(viewModel => {

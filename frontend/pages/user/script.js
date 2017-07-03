@@ -10,7 +10,6 @@ let linksDropdown = new Dropdown({
     className: 'links-dropdown'
 });
 
-
 let uploadImageModalWindow = new UploadImageModalWindow();
 let uploadWindowCaller;
 
@@ -20,8 +19,16 @@ if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
     };
 }
 
+let gallery;
+
 uploadImageModalWindow.on('upload-image-modal-window__image-uploaded', e => {
-    gallery.insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
+    if (gallery)
+        gallery.insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
+    else {
+        createGallery().then(() => {
+            gallery.insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
+        });
+    }
 });
 
 let galleryElem = document.getElementById('gallery');
@@ -29,18 +36,26 @@ galleryElem.onclick = function(e) {
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
     let imageId = +e.target.dataset.id;
+    createGallery().then(() => {
+        gallery.onElemClick(e);
+    });
 
-    require.ensure([BLOCKS + 'gallery'], function(require) {
-        let Gallery = require(BLOCKS + 'gallery');
-        let gallery = new Gallery({
-            elem: galleryElem,
-            isLogged: window.isLogged,
-            preloadEntityCount: PRELOAD_IMAGE_COUNT,
-            isEmbedded: true,
-            publicationNumberElem: document.getElementById('publication-number')
+};
+
+function createGallery() {
+    return new Promise((resolve, reject) => {
+        require.ensure([BLOCKS + 'gallery'], function(require) {
+            let Gallery = require(BLOCKS + 'gallery');
+            gallery = new Gallery({
+                elem: galleryElem,
+                isLogged: window.isLogged,
+                preloadEntityCount: PRELOAD_IMAGE_COUNT,
+                isEmbedded: true,
+                publicationNumberElem: document.getElementById('publication-number')
+            });
+            resolve();
         });
 
-        gallery.onElemClick(e);
     });
 };
 

@@ -30,10 +30,9 @@ let LikeButton = function(options) {
                     this.toggle();
                     this.error(err);
                 } else
-                if (!this.changed)
                     this.trigger('like-button_changed', {
                         imageId: id,
-                        likeAmount: this.likeAmount
+                        likeAmount: response.likeAmount
                     });
             });
 
@@ -43,10 +42,11 @@ let LikeButton = function(options) {
 
 };
 
-LikeButton.prototype.set = function(likeAmount, active, imageId) {
-    if (imageId)
-        this.imageId = imageId;
+LikeButton.prototype.setImageId = function(imageId) {
+    this.imageId = imageId;
+};
 
+LikeButton.prototype.set = function(likeAmount, active) {
     this.setAmount(likeAmount);
     if (active)
         this.activate();

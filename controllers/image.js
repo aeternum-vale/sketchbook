@@ -185,18 +185,25 @@ function likeRequestListener(req, res, next) {
         let userId = res.loggedUser._id;
 
         let index;
+        debug(image.likes);
         if (~(index = image.likes.indexOf(userId)))
-            image.likes.splice(index);
+            image.likes.splice(index, 1);
         else
             image.likes.push(userId);
-
         yield image.save();
+        debug(image.likes);
 
-        yield res.loggedUser.update({
-            $addToSet: {
-                likes: imageId
-            }
-        }).exec();
+        if (~(index = res.loggedUser.likes.indexOf(imageId)))
+            res.loggedUser.likes.splice(index, 1);
+        else
+            res.loggedUser.likes.push(imageId);
+        yield res.loggedUser.save();
+
+        // yield res.loggedUser.update({
+        //     $addToSet: {
+        //         likes: imageId
+        //     }
+        // }).exec();
 
         return {
             isLiked: !~index,

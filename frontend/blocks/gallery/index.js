@@ -69,7 +69,7 @@ Gallery.prototype.onElemClick = function(e) {
         });
         this.pushImageState();
     } else
-        this.setCurrentViewModel(imageId).then(() => {
+        this.updateCurrentViewModel(imageId).then(() => {
             this.activateImage();
         });
 };
@@ -119,7 +119,11 @@ Gallery.prototype.setImage = function() {
         });
 
         this.commentSection.on('comment-section_changed', e => {
-            this.deleteViewModel(e.detail.imageId);
+            let imageId = e.detail.imageId;
+            this.deleteViewModel(imageId);
+            this.requestViewModel(imageId).then(() => {
+                this.updateComments(imageId);
+            });;
         });
 
         this.likeButton = new LikeButton({
@@ -128,9 +132,11 @@ Gallery.prototype.setImage = function() {
         });
 
         this.likeButton.on('like-button_changed', e => {
-            this.deleteViewModel(e.detail.imageId);
-
-            this.setImagePreviewText(e.detail.imageId, e.detail.likeAmount);
+            let imageId = e.detail.imageId;
+            this.deleteViewModel(imageId);
+            this.requestViewModel(imageId).then(() => {
+                this.updateLikes(imageId);
+            });
         });
 
         let topSideButton = document.querySelector('.image__top-side-button');
@@ -155,12 +161,11 @@ Gallery.prototype.setImage = function() {
 
 };
 
-Gallery.prototype.setImagePreviewText = function(imageId, likeAmount, commentAmount) {
+Gallery.prototype.updateImagePreviewText = function(imageId) {
+
+    let likeAmount = this.viewModels[imageId].likes.length;
+    let commentAmount = this.viewModels[imageId].comments.length;
     let previewImageElem = this.elem.querySelector(`.image-preview[data-id="${imageId}"]`);
-    if (likeAmount !== 0)
-        likeAmount = likeAmount || previewImageElem.dataset.likeAmount || 0;
-    if (commentAmount !== 0)
-        commentAmount = commentAmount || previewImageElem.dataset.commentAmount || 0;
     previewImageElem.dataset.likeAmount = likeAmount;
     previewImageElem.dataset.commentAmount = commentAmount;
     previewImageElem.querySelector('.image-preview__text').textContent = `${commentAmount} comments ${likeAmount} likes`;
@@ -268,6 +273,7 @@ Gallery.prototype.requestViewModel = function(id, requireHtml) {
     });
 };
 
+
 Gallery.prototype.insertNewImagePreview = function(imageId, previewUrl) {
     let newImagePreview = this.imagePreviewGhost.cloneNode(true);
     newImagePreview.classList.remove('image-preview_ghost');
@@ -312,7 +318,7 @@ Gallery.prototype.requestPrevViewModels = function() {
 };
 
 Gallery.prototype.switchToNext = function() {
-    this.setCurrentViewModel(this.getNextImageId());
+    this.updateCurrentViewModel(this.getNextImageId());
     this.requestNextViewModels().then(() => {
         this.updatePreloadedImagesArray();
     });
@@ -320,7 +326,7 @@ Gallery.prototype.switchToNext = function() {
 };
 
 Gallery.prototype.switchToPrev = function() {
-    this.setCurrentViewModel(this.getPrevImageId());
+    this.updateCurrentViewModel(this.getPrevImageId());
     this.requestPrevViewModels().then(() => {
         this.updatePreloadedImagesArray();
     });
@@ -347,23 +353,42 @@ Gallery.prototype.getPrevImageId = function(offset) {
 };
 
 
-Gallery.prototype.setCurrentViewModel = function(id, noPushState) {
-    id = id || this.currentImageId;
-    this.currentImageId = id;
+Gallery.prototype.updateCurrentViewModel = function(imageId, noPushState) {
+    imageId = imageId || this.currentImageId;
+    this.currentImageId = imageId;
     this.deactivateImgElem();
 
-    return this.requestViewModel(id).then(() => {
-        if (id === this.currentImageId) {
+    return this.requestViewModel(imageId).then(() => {
+        if (imageId === this.currentImageId) {
             this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
-            this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked, id);
+
+            this.likeButton.setImageId(imageId);
+            this.updateLikes(imageId);
+
+            this.commentSection.setImageId(imageId);
+            this.updateComments(imageId);
+
             this.description.textContent = this.currentViewModel.description;
             this.date.textContent = this.currentViewModel.createDateStr;
-            this.commentSection.set(this.currentViewModel.comments, id);
 
             if (!noPushState)
                 this.pushImageState();
         }
     });
+};
+
+Gallery.prototype.updateLikes = function(imageId) {
+    if (this.currentImageId === imageId)
+        this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked);
+    if (this.elem)
+        this.updateImagePreviewText(imageId);
+};
+
+Gallery.prototype.updateComments = function(imageId) {
+    if (this.currentImageId === imageId)
+        this.commentSection.set(this.currentViewModel.comments);
+    if (this.elem)
+        this.updateImagePreviewText(imageId);
 };
 
 Gallery.prototype.pushImageState = function() {
@@ -385,7 +410,7 @@ Gallery.prototype.onPopState = function(state) {
         switch (state.type) {
             case 'image':
                 this.activateImage();
-                this.setCurrentViewModel(state.id, true);
+                this.updateCurrentViewModel(state.id, true);
                 break;
 
             case 'user':
