@@ -62,8 +62,8 @@ module.exports = {
       exclude: [/node_modules/, /public/]
     }, {
       test: /\.less$/,
-      loader: 'style-loader!css-loader!autoprefixer-loader!less',
-      //loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!less'),
+      //loader: 'style-loader!css-loader!autoprefixer-loader!less',
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!less'),
       exclude: [/node_modules/, /public/]
     }, {
       test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
@@ -73,7 +73,7 @@ module.exports = {
   },
 
   plugins: [
-    //new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[name].css'),
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify(NODE_ENV),
       LANG: JSON.stringify('en'),

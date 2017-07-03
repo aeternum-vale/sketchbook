@@ -32,7 +32,8 @@ let LikeButton = function(options) {
                 } else
                 if (!this.changed)
                     this.trigger('like-button_changed', {
-                        imageId: id
+                        imageId: id,
+                        likeAmount: this.likeAmount
                     });
             });
 

@@ -129,6 +129,8 @@ Gallery.prototype.setImage = function() {
 
         this.likeButton.on('like-button_changed', e => {
             this.deleteViewModel(e.detail.imageId);
+
+            this.setImagePreviewText(e.detail.imageId, e.detail.likeAmount);
         });
 
         let topSideButton = document.querySelector('.image__top-side-button');
@@ -151,6 +153,17 @@ Gallery.prototype.setImage = function() {
         }
     }
 
+};
+
+Gallery.prototype.setImagePreviewText = function(imageId, likeAmount, commentAmount) {
+    let previewImageElem = this.elem.querySelector(`.image-preview[data-id="${imageId}"]`);
+    if (likeAmount !== 0)
+        likeAmount = likeAmount || previewImageElem.dataset.likeAmount || 0;
+    if (commentAmount !== 0)
+        commentAmount = commentAmount || previewImageElem.dataset.commentAmount || 0;
+    previewImageElem.dataset.likeAmount = likeAmount;
+    previewImageElem.dataset.commentAmount = commentAmount;
+    previewImageElem.querySelector('.image-preview__text').textContent = `${commentAmount} comments ${likeAmount} likes`;
 };
 
 Gallery.prototype.updatePreloadedImagesArray = function() {
@@ -363,7 +376,7 @@ Gallery.prototype.pushImageState = function() {
 Gallery.prototype.pushUserState = function() {
     history.pushState({
         type: 'user'
-    }, '', this.currentImageId ? '/user/' + this.currentViewModel.author.username : '');
+    }, '', this.currentViewModel ? '/user/' + this.currentViewModel.author.username : '');
 };
 
 
