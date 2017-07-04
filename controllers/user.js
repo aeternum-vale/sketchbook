@@ -286,8 +286,10 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
+    const MAX_CUTAWAY_COUNT = 3;
+    let cutawayCount = MAX_CUTAWAY_COUNT;
 
-    const CUTAWAY_COUNT = 3;
+
     const IMAGE_PREVIEW_COUNT = 12;
     const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
 
@@ -297,17 +299,18 @@ function homeRequestListener(req, res, next) {
         let i = 0;
         let j = 0;
 
-        //for (let i = 0; i < CUTAWAY_COUNT; i++)
+        //for (let i = 0; i < cutawayCount; i++)
         //	cutaways.push({});
 
         let reprUsers = yield User.find({
             'images.0': {
                 $exists: true
             }
-        }).limit(CUTAWAY_COUNT).exec();
+        }).limit(cutawayCount).exec();
 
+        cutawayCount = reprUsers.length;
 
-        for (i = 0; i < CUTAWAY_COUNT; i++) {
+        for (i = 0; i < cutawayCount; i++) {
 
             let rawImages = yield Image.find({
                 author: reprUsers[i]._id
@@ -322,7 +325,6 @@ function homeRequestListener(req, res, next) {
 
 
             while (images.length < IMAGE_PREVIEW_COUNT) {
-
 
                 let curLength = images.length;
                 for (j = 0; j < curLength; j++)

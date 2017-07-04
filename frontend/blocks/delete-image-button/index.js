@@ -14,9 +14,10 @@ let DeleteImageButton = function(options) {
         defaultMessage: 'Image has been successfully deleted'
     });
 
-    this.successMessage.on('deactivated', e => {
+    this.successMessage.on('modal-window_deactivated', e => {
         this.trigger('delete-image-button_image-deleted', {
-            url: this.url
+            url: this.url,
+            imageId: this.imageId
         });
     });
 
@@ -39,7 +40,7 @@ let DeleteImageButton = function(options) {
     };
 }
 
-DeleteImageButton.setImageId = function(id) {
+DeleteImageButton.prototype.setImageId = function(id) {
     this.imageId = id;
 };
 

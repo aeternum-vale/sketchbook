@@ -1,26 +1,42 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let CommentSender = require(BLOCKS + 'comment-sender');
-
 let CommentSection = function(options) {
 
     this.elem = options.elem;
     this.imageId = options.imageId;
-    this.commentSender = new CommentSender({
-        elem: options.commentSenderElem,
-        imageId: options.imageId
-    });
+
+    this.commentSenderElem = options.commentSenderElem;
+    this.commentSendTextarea = this.commentSenderElem.querySelector('.comment-send__textarea');
 
     this.ghost = this.elem.querySelector('.comment.comment_ghost');
 
-    this.commentSender.on('comment-sender_comment-posted', e => {
-        if (this.imageId === e.detail.imageId)
-            this.insertNewComment(e.detail.viewModel);
+    this.commentSenderElem.onclick = e => {
+        if (!e.target.classList.contains('comment-send__send-button')) return;
+        let text = this.commentSendTextarea.value;
+        let imageId = this.imageId;
 
-        this.trigger('comment-section_changed', {
-            imageId: e.detail.imageId
+        require(LIBS + 'sendRequest')({
+            id: imageId,
+            text
+        }, 'POST', '/comment', (err, response) => {
+
+            if (err) {
+                this.error(err);
+                return;
+            }
+
+            this.commentSendTextarea.value = '';
+            if (this.imageId === imageId) {
+                this.insertNewComment(response.viewModel);
+                this.scrollToBottom();
+            }
+
+            this.trigger('comment-section_changed', {
+                imageId
+            });
+
         });
-    });
+    };
 
     this.elem.onclick = e => {
         if (!e.target.classList.contains('comment__close-button')) return;
@@ -46,6 +62,9 @@ let CommentSection = function(options) {
 
 };
 
+CommentSection.prototype.scrollToBottom = function() {
+    this.elem.scrollTop = this.elem.scrollHeight;
+};
 
 CommentSection.prototype.insertNewComment = function(viewModel) {
     let newComment = this.ghost.cloneNode(true);
@@ -67,7 +86,6 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
 
 CommentSection.prototype.setImageId = function(imageId) {
     this.imageId = imageId;
-    this.commentSender.setImageId(imageId);
 };
 
 CommentSection.prototype.set = function(viewModels) {
@@ -82,9 +100,7 @@ CommentSection.prototype.clear = function() {
     this.elem.innerHTML = '';
 };
 
-
 for (let key in eventMixin)
     CommentSection.prototype[key] = eventMixin[key];
-
 
 module.exports = CommentSection;

@@ -280,7 +280,11 @@ function galleryRequestListener(req, res, next) {
 
     co(function*() {
 
-        let image = yield imageViewModel(yield Image.findById(id).exec(), loggedUserId);
+        let rawImage = yield Image.findById(id).exec();
+        if (!rawImage)
+            throw new HttpError(404);
+
+        let image = yield imageViewModel(rawImage, loggedUserId);
         let author = yield User.findById(image.author._id).exec();
         let gallery = author.images;
         let viewModels = {};

@@ -68,7 +68,7 @@ ModalWindow.prototype.deactivate = function() {
     this.backdrop.classList.add('backdrop_invisible');
     this.wrapper.classList.add('modal-window-wrapper_invisible');
 
-	this.trigger('deactivated');
+	this.trigger('modal-window_deactivated');
 };
 
 

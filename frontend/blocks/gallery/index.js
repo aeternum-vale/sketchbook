@@ -1,4 +1,5 @@
 let eventMixin = require(LIBS + 'eventMixin');
+let ClientError = require(LIBS + 'componentErrors').ClientError;
 
 let Gallery = function(options) {
 
@@ -51,7 +52,6 @@ let Gallery = function(options) {
             this.activateImgElem();
         })
     }
-
 };
 
 Gallery.prototype.onElemClick = function(e) {
@@ -69,7 +69,7 @@ Gallery.prototype.onElemClick = function(e) {
         });
         this.pushImageState();
     } else
-        this.updateCurrentViewModel(imageId).then(() => {
+        this.updateCurrentView(imageId).then(() => {
             this.activateImage();
         });
 };
@@ -142,13 +142,15 @@ Gallery.prototype.setImage = function() {
         let topSideButton = document.querySelector('.image__top-side-button');
         if (this.currentViewModel.isOwnImage) {
             let DeleteImageButton = require(BLOCKS + 'delete-image-button');
-            this.delete = new DeleteImageButton({
+            this.deleteButton = new DeleteImageButton({
                 elem: topSideButton,
                 imageId: this.currentImageId
             });
 
-            this.delete.on('delete-image-button_image-deleted', e => {
-                window.location = e.detail.url || '/';
+            this.deleteButton.on('delete-image-button_image-deleted', e => {
+                this.deleteViewModel(e.detail.imageId);
+                this.deleteImagePreview(e.detail.imageId);
+                this.switchToNext();
             });
         } else {
             let SubscribeButton = require(BLOCKS + 'subscribe-button');
@@ -159,16 +161,6 @@ Gallery.prototype.setImage = function() {
         }
     }
 
-};
-
-Gallery.prototype.updateImagePreviewText = function(imageId) {
-
-    let likeAmount = this.viewModels[imageId].likes.length;
-    let commentAmount = this.viewModels[imageId].comments.length;
-    let previewImageElem = this.elem.querySelector(`.image-preview[data-id="${imageId}"]`);
-    previewImageElem.dataset.likeAmount = likeAmount;
-    previewImageElem.dataset.commentAmount = commentAmount;
-    previewImageElem.querySelector('.image-preview__text').textContent = `${commentAmount} comments ${likeAmount} likes`;
 };
 
 Gallery.prototype.updatePreloadedImagesArray = function() {
@@ -232,7 +224,6 @@ Gallery.prototype.resizeImage = function() {
     }
 };
 
-
 Gallery.prototype.renderImageElem = function() {
     return this.requestViewModel(this.currentImageId, true).then(response => {
         let parent = document.createElement('DIV');
@@ -259,20 +250,53 @@ Gallery.prototype.requestViewModel = function(id, requireHtml) {
             }, 'POST', '/gallery', (err, response) => {
 
                 if (err) {
-                    this.error(err);
-                    return;
+                    if (err instanceof ClientError)
+                        return reject();
+                    else
+                        return this.error(err);
                 }
 
                 console.log(response);
                 this.gallery = response.gallery;
-                for (let key in response.viewModels)
-                    this.viewModels[key] = response.viewModels[key];
+                let provided = false;
 
-                resolve(response);
+                for (let key in response.viewModels) {
+                    if (key == id)
+                        provided = true;
+
+                    this.viewModels[key] = response.viewModels[key];
+                }
+
+                if (provided)
+                    resolve(response);
+                else
+                    reject();
             });
     });
 };
 
+Gallery.prototype.getImagePreviewById = function(id) {
+    return this.elem.querySelector(`.image-preview[data-id="${id}"]`);
+};
+
+Gallery.prototype.updateImagePreviewText = function(id) {
+    let likeAmount = this.viewModels[id].likes.length;
+    let commentAmount = this.viewModels[id].comments.length;
+    let previewImageElem = this.getImagePreviewById(id);
+    previewImageElem.dataset.likeAmount = likeAmount;
+    previewImageElem.dataset.commentAmount = commentAmount;
+    previewImageElem.querySelector('.image-preview__text').textContent = `${commentAmount} comments ${likeAmount} likes`;
+};
+
+Gallery.prototype.deleteImagePreview = function(id) {
+    let elem = this.getImagePreviewById(id);
+
+    if (this.publicationNumberElem)
+        this.publicationNumberElem.textContent = +this.publicationNumberElem.textContent - 1;
+
+    if (elem)
+        elem.remove();
+};
 
 Gallery.prototype.insertNewImagePreview = function(imageId, previewUrl) {
     let newImagePreview = this.imagePreviewGhost.cloneNode(true);
@@ -318,15 +342,18 @@ Gallery.prototype.requestPrevViewModels = function() {
 };
 
 Gallery.prototype.switchToNext = function() {
-    this.updateCurrentViewModel(this.getNextImageId());
+    this.updateCurrentView(this.getNextImageId()).catch(() => {
+        this.deactivateImage();
+    });
     this.requestNextViewModels().then(() => {
         this.updatePreloadedImagesArray();
-    });
+    }).catch(() => {
 
+    });
 };
 
 Gallery.prototype.switchToPrev = function() {
-    this.updateCurrentViewModel(this.getPrevImageId());
+    this.updateCurrentView(this.getPrevImageId());
     this.requestPrevViewModels().then(() => {
         this.updatePreloadedImagesArray();
     });
@@ -335,6 +362,7 @@ Gallery.prototype.switchToPrev = function() {
 Gallery.prototype.getNextImageId = function(offset) {
     offset = offset || 1;
     let index = this.gallery.indexOf(this.currentImageId);
+
     return this.gallery[(index + offset) % this.gallery.length];
 };
 
@@ -342,6 +370,9 @@ Gallery.prototype.getPrevImageId = function(offset) {
     offset = offset || 1;
 
     let index = this.gallery.indexOf(this.currentImageId);
+
+    if (~index && this.gallery.length === 1)
+        return this.gallery[0];
 
     let galleryPrevIndex = index - offset;
     if (galleryPrevIndex < 0) {
@@ -353,12 +384,13 @@ Gallery.prototype.getPrevImageId = function(offset) {
 };
 
 
-Gallery.prototype.updateCurrentViewModel = function(imageId, noPushState) {
+Gallery.prototype.updateCurrentView = function(imageId, noPushState) {
     imageId = imageId || this.currentImageId;
     this.currentImageId = imageId;
     this.deactivateImgElem();
 
     return this.requestViewModel(imageId).then(() => {
+
         if (imageId === this.currentImageId) {
             this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
 
@@ -370,6 +402,8 @@ Gallery.prototype.updateCurrentViewModel = function(imageId, noPushState) {
 
             this.description.textContent = this.currentViewModel.description;
             this.date.textContent = this.currentViewModel.createDateStr;
+
+            this.deleteButton.setImageId(imageId);
 
             if (!noPushState)
                 this.pushImageState();
@@ -399,18 +433,23 @@ Gallery.prototype.pushImageState = function() {
 };
 
 Gallery.prototype.pushUserState = function() {
+    let url = '';
+    if (this.image)
+        url = this.image.dataset.authorUrl;
+    // if (this.currentViewModel)
+    //     url = '/user/' + this.currentViewModelauthor.authorUrl;
+
     history.pushState({
         type: 'user'
-    }, '', this.currentViewModel ? '/user/' + this.currentViewModel.author.username : '');
+    }, '', url);
 };
-
 
 Gallery.prototype.onPopState = function(state) {
     if (state && state.type)
         switch (state.type) {
             case 'image':
                 this.activateImage();
-                this.updateCurrentViewModel(state.id, true);
+                this.updateCurrentView(state.id, true);
                 break;
 
             case 'user':
