@@ -23,7 +23,6 @@ let Gallery = function (options) {
         this.preloadedImages[-i] = new Image();
     }
 
-
     window.addEventListener('popstate', e => {
         this.onPopState(e.state);
     }, false);
@@ -32,8 +31,8 @@ let Gallery = function (options) {
         this.resizeImage();
     });
 
-
     this.pushUserState();
+
 
     this.isEmbedded = !!this.elem;
 
@@ -51,7 +50,6 @@ let Gallery = function (options) {
 
             this.activateImgElem();
         }).catch(() => {
-
         });
     }
 };
@@ -295,7 +293,7 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
 };
 
 Gallery.prototype.updateGallery = function () {
-    if (this.gallery) {
+    if (this.gallery && this.elem) {
         let imagePreviews = this.elem.querySelectorAll('.image-preview');
         for (let i = 0; i < imagePreviews.length; i++) {
             if (!~this.gallery.indexOf(+imagePreviews[i].dataset.id))
@@ -378,31 +376,32 @@ Gallery.prototype.requestPrevViewModels = function () {
 
 Gallery.prototype.switchToNext = function () {
     let nextImageId = this.getNextImageId();
-    this.updateCurrentView(nextImageId).catch(() => {
+    this.updateCurrentView(nextImageId).then(() => {
+        this.requestNextViewModels().then(() => {
+            this.updatePreloadedImagesArray();
+        }).catch(() => {
+        });
+    }).catch(() => {
 
         if (this.gallery.length > 0)
             this.switchToNext();
         else
             this.deactivateImage();
     });
-
-    this.requestNextViewModels().then(() => {
-        this.updatePreloadedImagesArray();
-    }).catch(() => {
-    });
 };
 
 Gallery.prototype.switchToPrev = function () {
     let prevImageId = this.getPrevImageId();
-    this.updateCurrentView(prevImageId).catch(() => {
+    this.updateCurrentView(prevImageId).then(() => {
+        this.requestPrevViewModels().then(() => {
+            this.updatePreloadedImagesArray();
+        }).catch(() => {
+        });
+    }).catch(() => {
         if (this.gallery.length > 0)
             this.switchToPrev();
         else
             this.deactivateImage();
-    });
-    this.requestPrevViewModels().then(() => {
-        this.updatePreloadedImagesArray();
-    }).catch(() => {
     });
 };
 
@@ -484,7 +483,7 @@ Gallery.prototype.pushUserState = function () {
     if (this.image)
         url = this.image.dataset.authorUrl;
     // if (this.currentViewModel)
-    //     url = '/user/' + this.currentViewModelauthor.authorUrl;
+    //     url = '/user/' + this.currentViewModel.author.authorUrl;
 
     history.pushState({
         type: 'user'

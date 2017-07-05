@@ -21,7 +21,7 @@ PromptWindow.prototype.setElem = function() {
         if (!e.target.matches('.prompt-window__button')) return;
 
         if (e.target.matches('.prompt-window__yes'))
-            this.trigger('accept');
+            this.trigger('prompt_accepted');
 
         this.deactivate();
     };

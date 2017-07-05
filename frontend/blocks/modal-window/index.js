@@ -7,6 +7,9 @@ let ModalWindow = function() {
     this.wrapper = null;
 
     this.listeners = [];
+
+
+
 };
 
 ModalWindow.prototype.setListeners = function() {
@@ -47,9 +50,12 @@ ModalWindow.prototype.renderWindow = function(wrapper, innerHTML) {
     let wnd = parent.firstElementChild;
     wrapper.appendChild(wnd);
     return wnd;
-}
+};
 
 ModalWindow.prototype.activate = function() {
+
+
+
     if (!this.backdrop)
         this.setBackdrop();
 

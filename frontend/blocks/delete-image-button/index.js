@@ -6,6 +6,8 @@ let DeleteImageButton = function(options) {
     this.elem = options.elem;
     this.imageId = options.imageId;
 
+    let _imageId = null;
+
     this.prompt = new PromptWindow({
         defaultMessage: 'Are you sure you want to delete this image? All the likes and comments will be permanently lost.'
     });
@@ -21,15 +23,14 @@ let DeleteImageButton = function(options) {
         });
     });
 
-    this.prompt.on('accept', e => {
+    this.prompt.on('prompt_accepted', e => {
         require(LIBS + 'sendRequest')({
-            id: this.imageId
+            id: _imageId
         }, 'DELETE', '/image', (err, response) => {
             if (err) {
                 this.error(err);
                 return;
             }
-
             this.url = response.url;
             this.successMessage.activate();
         });
@@ -37,8 +38,9 @@ let DeleteImageButton = function(options) {
 
     this.elem.onclick = e => {
         this.prompt.activate();
+        _imageId = this.imageId;
     };
-}
+};
 
 DeleteImageButton.prototype.setImageId = function(id) {
     this.imageId = id;
