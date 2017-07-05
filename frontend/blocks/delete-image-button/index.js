@@ -9,11 +9,11 @@ let DeleteImageButton = function(options) {
     let _imageId = null;
 
     this.prompt = new PromptWindow({
-        defaultMessage: 'Are you sure you want to delete this image? All the likes and comments will be permanently lost.'
+        message: 'Are you sure you want to delete this image? All the likes and comments will be permanently lost.'
     });
 
     this.successMessage = new MessageModalWindow({
-        defaultMessage: 'Image has been successfully deleted'
+        message: 'Image has been successfully deleted'
     });
 
     this.successMessage.on('modal-window_deactivated', e => {

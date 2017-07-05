@@ -1,12 +1,14 @@
-let ComponentError = require(LIBS + 'componentErrors').ComponentError;
-
-let MessageModalWindow = require(BLOCKS + 'message-modal-window');
-let messageModalWindow = new MessageModalWindow();
-
 module.exports = function() {
 	document.addEventListener('error', e => {
-		let error = e.detail;
-		if (error instanceof ComponentError)
-			messageModalWindow.activate(error.message);
+        require.ensure([LIBS + 'componentErrors', BLOCKS + 'message-modal-window'], function (require) {
+            let ComponentError = require(LIBS + 'componentErrors').ComponentError;
+            let MessageModalWindow = require(BLOCKS + 'message-modal-window');
+
+            let error = e.detail;
+            if (error instanceof ComponentError) {
+                let messageModalWindow = new MessageModalWindow({message: error.message});
+                messageModalWindow.activate();
+            }
+        });
 	});
 };

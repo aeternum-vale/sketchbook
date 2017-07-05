@@ -52,6 +52,7 @@ let Gallery = function (options) {
         }).catch(() => {
         });
     }
+
 };
 
 Gallery.prototype.onElemClick = function (e) {
