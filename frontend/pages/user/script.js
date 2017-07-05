@@ -41,7 +41,6 @@ let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
-    let imageId = +e.target.dataset.id;
     createGallery().then(() => {
         gallery.onElemClick(e);
     });

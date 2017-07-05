@@ -28,6 +28,14 @@ ClientError.prototype = Object.create(ComponentError.prototype);
 ClientError.prototype.constructor = ClientError;
 
 
+function ImageNotFound(message, detail) {
+    ClientError.call(this, message || 'Image not found. It probably has been removed');
+    this.name = "ImageNotFound";
+    this.detail = detail;
+}
+ImageNotFound.prototype = Object.create(ClientError.prototype);
+ImageNotFound.prototype.constructor = ImageNotFound;
+
 function ServerError(message) {
 	ComponentError.call(this, message || 'There is some error on the server side');
 	this.name = "ServerError";
@@ -38,5 +46,6 @@ ServerError.prototype.constructor = ServerError;
 module.exports = {
 	ComponentError,
 	ClientError,
+    ImageNotFound,
 	ServerError
 };

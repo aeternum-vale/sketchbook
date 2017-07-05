@@ -8,7 +8,8 @@ module.exports = function() {
             if (error instanceof ComponentError) {
                 let messageModalWindow = new MessageModalWindow({message: error.message});
                 messageModalWindow.activate();
-            }
+            } else
+                throw error;
         });
 	});
 };

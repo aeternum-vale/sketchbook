@@ -19,7 +19,7 @@ let DeleteImageButton = function(options) {
     this.successMessage.on('modal-window_deactivated', e => {
         this.trigger('delete-image-button_image-deleted', {
             url: this.url,
-            imageId: this.imageId
+            imageId: _imageId
         });
     });
 
@@ -37,6 +37,8 @@ let DeleteImageButton = function(options) {
     });
 
     this.elem.onclick = e => {
+        alert('let delete this');
+
         this.prompt.activate();
         _imageId = this.imageId;
     };

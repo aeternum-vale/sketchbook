@@ -159,6 +159,9 @@ function imageDeleteListRequestListener(req, res, next) {
         if (!image)
             throw new HttpError(400);
 
+        if (image.author !== res.loggedUser._id)
+            throw new HttpError(403);
+
         yield image.remove();
 
     }).then(() => {

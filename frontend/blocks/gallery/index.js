@@ -1,5 +1,6 @@
 let eventMixin = require(LIBS + 'eventMixin');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
+let ImageNotFound = require(LIBS + 'componentErrors').ImageNotFound;
 
 let Gallery = function (options) {
 
@@ -49,7 +50,8 @@ let Gallery = function (options) {
             });
 
             this.activateImgElem();
-        }).catch(() => {
+        }).catch((err) => {
+            this.error(err);
         });
     }
 
@@ -146,26 +148,34 @@ Gallery.prototype.setImage = function () {
         });
 
         let topSideButton = document.querySelector('.image__top-side-button');
-        if (this.currentViewModel.isOwnImage) {
-            let DeleteImageButton = require(BLOCKS + 'delete-image-button');
-            this.deleteButton = new DeleteImageButton({
-                elem: topSideButton,
-                imageId: this.currentImageId
-            });
 
-            this.deleteButton.on('delete-image-button_image-deleted', e => {
-                this.deleteViewModel(e.detail.imageId);
-                this.deleteImagePreview(e.detail.imageId);
-                this.switchToNext();
-            });
-        } else {
-            let SubscribeButton = require(BLOCKS + 'subscribe-button');
-            this.subscribe = new SubscribeButton({
-                elem: topSideButton,
-                imageId: this.currentImageId
-            });
-        }
+        let DeleteImageButton = require(BLOCKS + 'delete-image-button');
+        let SubscribeButton = require(BLOCKS + 'subscribe-button');
+
+        this.deleteButton = new DeleteImageButton({
+            elem: topSideButton,
+            imageId: this.currentImageId
+        });
+
+        this.deleteButton.on('delete-image-button_image-deleted', e => {
+            this.deleteViewModel(e.detail.imageId);
+            this.deleteImagePreview(e.detail.imageId);
+            this.switchToNext();
+        });
+
+        // this.subscribe = new SubscribeButton({
+        //     elem: topSideButton,
+        //     imageId: this.currentImageId
+        // });
     }
+
+};
+
+Gallery.prototype.setDeleteButton = function() {
+
+};
+
+Gallery.prototype.setSubscribeButton = function() {
 
 };
 
@@ -261,7 +271,7 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
                             this.gallery.splice(this.gallery.indexOf(id), 1);
                             this.updateGallery();
                         }
-                        return reject(err);
+                        return reject(new ImageNotFound());
                     }
                     else
                         return this.error(err);
@@ -287,7 +297,7 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
                         this.gallery.splice(this.gallery.indexOf(id), 1);
                         this.updateGallery();
                     }
-                    reject();
+                    reject(new ImageNotFound());
                 }
             });
     });
@@ -380,14 +390,17 @@ Gallery.prototype.switchToNext = function () {
     this.updateCurrentView(nextImageId).then(() => {
         this.requestNextViewModels().then(() => {
             this.updatePreloadedImagesArray();
-        }).catch(() => {
+        }).catch((err) => {
+            this.error(err);
         });
-    }).catch(() => {
-
-        if (this.gallery.length > 0)
-            this.switchToNext();
-        else
-            this.deactivateImage();
+    }).catch((err) => {
+        if (err instanceof ImageNotFound) {
+            if (this.gallery && this.gallery.length > 0)
+                this.switchToNext();
+            else
+                this.deactivateImage();
+        } else
+            this.error(err);
     });
 };
 
@@ -396,13 +409,17 @@ Gallery.prototype.switchToPrev = function () {
     this.updateCurrentView(prevImageId).then(() => {
         this.requestPrevViewModels().then(() => {
             this.updatePreloadedImagesArray();
-        }).catch(() => {
+        }).catch((err) => {
+            this.error(err);
         });
-    }).catch(() => {
-        if (this.gallery.length > 0)
-            this.switchToPrev();
-        else
-            this.deactivateImage();
+    }).catch((err) => {
+        if (err instanceof ImageNotFound) {
+            if (this.gallery && this.gallery.length > 0)
+                this.switchToPrev();
+            else
+                this.deactivateImage();
+        } else
+            throw err;
     });
 };
 
@@ -431,26 +448,30 @@ Gallery.prototype.getPrevImageId = function (offset) {
 };
 
 
-Gallery.prototype.updateCurrentView = function (imageId, noPushState) {
-    imageId = imageId || this.currentImageId;
-    this.currentImageId = imageId;
+Gallery.prototype.setTops
+
+
+Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) {
+    newCurrentImageId = newCurrentImageId || this.currentImageId;
+    this.currentImageId = newCurrentImageId;
     this.deactivateImgElem();
 
-    return this.requestViewModel(imageId).then(() => {
+    return this.requestViewModel(newCurrentImageId).then(() => {
 
-        if (imageId === this.currentImageId) {
+        if (newCurrentImageId === this.currentImageId) {
             this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
 
-            this.likeButton.setImageId(imageId);
-            this.updateLikes(imageId);
+            this.likeButton.setImageId(newCurrentImageId);
+            this.updateLikes(newCurrentImageId);
 
-            this.commentSection.setImageId(imageId);
-            this.updateComments(imageId);
+            this.commentSection.setImageId(newCurrentImageId);
+            this.updateComments(newCurrentImageId);
 
             this.description.textContent = this.currentViewModel.description;
             this.date.textContent = this.currentViewModel.createDateStr;
 
-            this.deleteButton.setImageId(imageId);
+            if (this.isLogged)
+                this.deleteButton.setImageId(newCurrentImageId);
 
             if (!noPushState)
                 this.pushImageState();

@@ -73,7 +73,6 @@ ModalWindow.prototype.show = function () {
 
 ModalWindow.prototype.activate = function () {
     ModalWindow.modalWindowsQueue.push(this);
-    console.log(ModalWindow.modalWindowsQueue);
 
     if (!ModalWindow.active)
         ModalWindow.show();
