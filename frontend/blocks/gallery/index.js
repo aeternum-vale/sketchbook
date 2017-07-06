@@ -172,7 +172,7 @@ Gallery.prototype.setImage = function () {
                         this.deleteButton.on('delete-image-button_image-deleted', e => {
                             let involvedImageId = e.detail.imageId;
                             this.deleteViewModel(involvedImageId);
-                            this.spliceFromGallery(involvedImageId);
+                            this.removeFromGalleryArray(involvedImageId);
                             this.deleteImagePreview(involvedImageId);
                             if (this.currentImageId === involvedImageId)
                                 this.switchToNext();
@@ -298,7 +298,7 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
                 if (err) {
                     if (err instanceof ClientError) {
                         if (this.gallery) {
-                            this.spliceFromGallery(id);
+                            this.removeFromGalleryArray(id);
                             this.updateGallery();
                         }
                         return reject(new ImageNotFound());
@@ -324,7 +324,7 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
                     resolve(response);
                 else {
                     if (this.gallery) {
-                        this.spliceFromGallery(id);
+                        this.removeFromGalleryArray(id);
                         this.updateGallery();
                     }
                     reject(new ImageNotFound());
@@ -333,8 +333,12 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
     });
 };
 
-Gallery.prototype.spliceFromGallery = function(id) {
+Gallery.prototype.removeFromGalleryArray = function(id) {
     this.gallery.splice(this.gallery.indexOf(id), 1);
+};
+
+Gallery.prototype.addToGalleryArray = function(id) {
+    this.gallery.push(id);
 };
 
 Gallery.prototype.updateGallery = function () {
@@ -383,6 +387,7 @@ Gallery.prototype.insertNewImagePreview = function (imageId, previewUrl) {
     this.galleryWrapper.appendChild(newImagePreview);
 
     this.setPublicationNumber(1, true);
+    this.addToGalleryArray(imageId);
 };
 
 Gallery.prototype.setPublicationNumber = function (value, relative) {
