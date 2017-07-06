@@ -1,6 +1,6 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let LikeButton = function(options) {
+let LikeButton = function (options) {
 
     this.elem = options.elem;
     this.imageId = options.imageId;
@@ -10,30 +10,36 @@ let LikeButton = function(options) {
     this.available = true;
 
 
-
     this.elem.onclick = e => {
+
+        let involvedImageId = this.imageId;
 
         if (this.available) {
 
             this.available = false;
             this.toggle();
 
-            let id = this.imageId;
-
             require(LIBS + 'sendRequest')({
-                id
+                id: involvedImageId
             }, 'POST', '/like', (err, response) => {
 
-                this.available = true;
 
-                if (err) {
-                    this.toggle();
-                    this.error(err);
-                } else
+                if (!err) {
+                    this.available = true;
                     this.trigger('like-button_changed', {
-                        imageId: id,
+                        imageId: involvedImageId,
                         likeAmount: response.likeAmount
                     });
+                } else {
+                    this.error(err);
+
+                    if (this.imageId === involvedImageId) {
+                        this.available = true;
+                        this.toggle();
+                    }
+                }
+
+
             });
 
         }
@@ -42,11 +48,11 @@ let LikeButton = function(options) {
 
 };
 
-LikeButton.prototype.setImageId = function(imageId) {
+LikeButton.prototype.setImageId = function (imageId) {
     this.imageId = imageId;
 };
 
-LikeButton.prototype.set = function(likeAmount, active) {
+LikeButton.prototype.set = function (likeAmount, active) {
     this.setAmount(likeAmount);
     if (active)
         this.activate();
@@ -54,24 +60,24 @@ LikeButton.prototype.set = function(likeAmount, active) {
         this.deactivate();
 };
 
-LikeButton.prototype.toggle = function() {
+LikeButton.prototype.toggle = function () {
     if (this.active)
         this.set(this.likeAmount - 1, false);
     else
         this.set(this.likeAmount + 1, true);
 };
 
-LikeButton.prototype.setAmount = function(likeAmount) {
+LikeButton.prototype.setAmount = function (likeAmount) {
     this.likeAmount = likeAmount;
     this.elem.textContent = `like ${this.likeAmount}`;
 };
 
-LikeButton.prototype.activate = function() {
+LikeButton.prototype.activate = function () {
     this.elem.classList.add('button_active');
     this.active = true;
 };
 
-LikeButton.prototype.deactivate = function() {
+LikeButton.prototype.deactivate = function () {
     this.elem.classList.remove('button_active');
     this.active = false;
 };

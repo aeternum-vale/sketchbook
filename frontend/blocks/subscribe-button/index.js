@@ -1,16 +1,16 @@
 let eventMixin = require(LIBS + 'eventMixin');
-let componentErrors = require(LIBS + 'componentErrors');
-let ClientError = componentErrors.ClientError;
 
-let SubscribeButton = function(options) {
+let SubscribeButton = function (options) {
 
     this.elem = options.elem;
     this.imageId = options.imageId;
 
-    this.checked = !!this.elem.dataset.checked;
+    this.active = !!this.elem.dataset.active;
     this.available = true;
 
     this.elem.onclick = e => {
+
+        let involvedImageId = this.imageId;
 
         if (this.available) {
 
@@ -18,33 +18,40 @@ let SubscribeButton = function(options) {
             this.toggle();
 
             require(LIBS + 'sendRequest')({
-                id: this.imageId
+                id: involvedImageId
             }, 'POST', '/subscribe', (err, response) => {
 
-                this.available = true;
-
-                if (err) {
-                    this.toggle();
+                if (!err) {
+                    this.available = true;
+                    this.trigger('subscribe-button_changed', {
+                        involvedImageId
+                    });
+                } else {
                     this.error(err);
-                    return;
+
+                    if (this.imageId === involvedImageId) {
+                        this.available = true;
+                        this.toggle();
+                    }
                 }
 
             });
-
         }
     }
 };
 
-SubscribeButton.prototype.toggle = function() {
-    if (this.checked) {
+SubscribeButton.prototype.toggle = function () {
+    if (this.active) {
         this.elem.classList.remove('button_active');
-        this.checked = false;
+        this.active = false;
     } else {
         this.elem.classList.add('button_active');
-        this.checked = true;
+        this.active = true;
     }
+};
 
-    this.trigger('change');
+SubscribeButton.prototype.setImageId = function (id) {
+    this.imageId = id;
 };
 
 for (let key in eventMixin)

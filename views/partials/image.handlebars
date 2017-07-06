@@ -20,18 +20,19 @@
                         </div>
                     </a>
 
-                    {{#if image.isOwnImage}}
-                        <div class="button image__top-side-button">
-                            delete
-                        </div>
-                    {{else}}
-                        <div {{#if image.author.isNarrator}}
-                             data-active="true"
-                            {{/if}}
-                             class="button image__top-side-button">
-                            subscribe
-                        </div>
-                    {{/if}}
+                    <div class="button button_invisible image__top-side-button image__delete-button">
+                        delete
+                    </div>
+                    <div
+                        {{#if image.author.isNarrator}}
+                        data-active="true"
+                        class="button button_active image__top-side-button image__subscribe-button"
+                        {{else}}
+                        class="button image__top-side-button image__subscribe-button"
+                        {{/if}}
+                    >
+                        subscribe
+                    </div>
 
 
                 </div>
@@ -47,14 +48,17 @@
 
                 </div>
                 <div class="comment-section image__comment-section">
-                    {{#each image.comments}}
-                        {{> comment}}
-                    {{/each}}
-                    {{> comment
-                        ghost=true
-                        isOwnComment=true
+                    {{#if image.comments}}
+                        {{#each image.comments}}
+                            {{> comment}}
+                        {{/each}}
+                    {{else}}
+                        {{> comment
+                                ghost=true
+                                isOwnComment=true
+                        }}
+                    {{/if}}
 
-                    }}
                 </div>
             </div>
 
@@ -71,8 +75,8 @@
             </div>
         </div>
     </div>
-	<div class="image__close-wrapper">
-		<div class="image__close-space"></div>
-		<div class="image__close-button"></div>
-	</div>
+    <div class="image__close-wrapper">
+        <div class="image__close-space"></div>
+        <div class="image__close-button"></div>
+    </div>
 </div>

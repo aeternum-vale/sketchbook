@@ -8,34 +8,37 @@ let CommentSection = function(options) {
     this.commentSenderElem = options.commentSenderElem;
     this.commentSendTextarea = this.commentSenderElem.querySelector('.comment-send__textarea');
 
-    this.ghost = this.elem.querySelector('.comment.comment_ghost');
+    this.ghost = this.elem.querySelector('.comment');
 
     this.commentSenderElem.onclick = e => {
         if (!e.target.classList.contains('comment-send__send-button')) return;
+
+        let involvedImageId = this.imageId;
         let text = this.commentSendTextarea.value;
-        let imageId = this.imageId;
+        if (text.length) {
 
-        require(LIBS + 'sendRequest')({
-            id: imageId,
-            text
-        }, 'POST', '/comment', (err, response) => {
+            require(LIBS + 'sendRequest')({
+                id: involvedImageId,
+                text
+            }, 'POST', '/comment', (err, response) => {
 
-            if (err) {
-                this.error(err);
-                return;
-            }
+                if (err) {
+                    this.error(err);
+                    return;
+                }
 
-            this.commentSendTextarea.value = '';
-            if (this.imageId === imageId) {
-                this.insertNewComment(response.viewModel);
-                this.scrollToBottom();
-            }
+                this.commentSendTextarea.value = '';
+                if (this.imageId === involvedImageId) {
+                    this.insertNewComment(response.viewModel);
+                    this.scrollToBottom();
+                }
 
-            this.trigger('comment-section_changed', {
-                imageId
+                this.trigger('comment-section_changed', {
+                    imageId: involvedImageId
+                });
+
             });
-
-        });
+        }
     };
 
     this.elem.onclick = e => {
@@ -43,7 +46,7 @@ let CommentSection = function(options) {
 
         let comment = e.target.closest('.comment');
         let commentId = comment.dataset.id;
-        let imageId = this.imageId;
+        let involvedImageId = this.imageId;
 
         require(LIBS + 'sendRequest')({
             id: commentId
@@ -54,7 +57,7 @@ let CommentSection = function(options) {
             }
 
             this.trigger('comment-section_changed', {
-                imageId
+                imageId: involvedImageId
             });
             comment.remove();
         });
@@ -77,7 +80,9 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
     newComment.querySelector('.comment__date').textContent = viewModel.createDateStr;
 
     if (!viewModel.isOwnComment)
-        newComment.querySelector('.comment__close-button').remove();
+        newComment.classList.add('comment_not-own');
+    else
+        newComment.classList.remove('comment_not-own');
 
     newComment.querySelector('.comment__text').textContent = viewModel.text;
     this.elem.appendChild(newComment);

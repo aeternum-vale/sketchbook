@@ -12,7 +12,7 @@ if (subscribeButtonElem = document.getElementById('subscribe-button')) {
 	let subscribersNumber = +subscribersNumberElem.textContent;
 
 	subscribeButton.on('change', function() {
-		if (subscribeButton.checked)
+		if (subscribeButton.active)
 			subscribersNumberElem.textContent = ++subscribersNumber;
 		else
 			subscribersNumberElem.textContent = --subscribersNumber;

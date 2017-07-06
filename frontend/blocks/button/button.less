@@ -1,55 +1,60 @@
 @button-padding-reduc-rate: 3;
 
 .button {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-	box-sizing: border-box;
+  box-sizing: border-box;
 
-	padding: 10px;
-	border-radius: 8px;
+  padding: 10px;
+  border-radius: 8px;
 
-	background-color: #e38d06;
-	background-image: linear-gradient(to top, #e38d06, #f3ca2c);
-	box-shadow: inset 0px  4px 6px -3px rgba(255, 255, 255, 0.75),
-				inset 0px -4px 6px -3px rgba(0, 0, 0, 0.75);
-	cursor: pointer;
+  background-color: #e38d06;
+  background-image: linear-gradient(to top, #e38d06, #f3ca2c);
+  box-shadow: inset 0px 4px 6px -3px rgba(255, 255, 255, 0.75),
+  inset 0px -4px 6px -3px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
 
-	font-size: 32px;
-	line-height: 32px;
-	text-shadow: 0 1px rgba(244, 221, 135, .75);
-	font-weight: bold;
-	color: #694f06;
+  font-size: 32px;
+  line-height: 32px;
+  text-shadow: 0 1px rgba(244, 221, 135, .75);
+  font-weight: bold;
+  color: #694f06;
 
-	&_active,
-	&:active {
-		padding-top: 12px;
-		padding-bottom: 8px;
-		box-shadow: inset 0px  4px 6px -3px rgba(0, 0, 0, 0.75),
-					inset 0px -4px 6px -3px rgba(255, 255, 255, 0.75);
-	}
+  &_active,
+  &:active {
+    padding-top: 12px;
+    padding-bottom: 8px;
+    box-shadow: inset 0px 4px 6px -3px rgba(0, 0, 0, 0.75),
+    inset 0px -4px 6px -3px rgba(255, 255, 255, 0.75);
+  }
+
+  &_invisible {
+    display: none;
+  }
+
 }
 
 .button(@_font-size) {
-	font-size: @_font-size;
-	line-height: @_font-size;
+  font-size: @_font-size;
+  line-height: @_font-size;
 
-	@_padding: @_font-size / @button-padding-reduc-rate;
-	padding: @_padding;
-	border-radius: @_font-size / 4;
+  @_padding: @_font-size / @button-padding-reduc-rate;
+  padding: @_padding;
+  border-radius: @_font-size / 4;
 
-	&_active,
-	&:active {
-		@_offset: @_font-size / 8;
-		padding-top: @_padding + @_offset / 1.5;
-		padding-bottom: @_padding - @_offset / 1.5;
-	}
+  &_active,
+  &:active {
+    @_offset: @_font-size / 8;
+    padding-top: @_padding + @_offset / 1.5;
+    padding-bottom: @_padding - @_offset / 1.5;
+  }
 }
 
 .button-active(@_font-size) {
-	@_padding: @_font-size / @button-padding-reduc-rate;
-	@_offset: @_font-size / 8;
-	padding-top: @_padding + @_offset / 1.5;
-	padding-bottom: @_padding - @_offset / 1.5;
+  @_padding: @_font-size / @button-padding-reduc-rate;
+  @_offset: @_font-size / 8;
+  padding-top: @_padding + @_offset / 1.5;
+  padding-bottom: @_padding - @_offset / 1.5;
 }
