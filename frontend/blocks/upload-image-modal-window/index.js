@@ -5,6 +5,7 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 
 let UploadImageModalWindow = function (options) {
     ModalWindow.apply(this, arguments);
+    this.available = true;
 };
 UploadImageModalWindow.prototype = Object.create(ModalWindow.prototype);
 UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;
@@ -36,27 +37,34 @@ UploadImageModalWindow.prototype.setElem = function () {
 };
 
 UploadImageModalWindow.prototype.uploadImage = function (file, description) {
-    var formData = new FormData();
-    formData.append("image", file);
-    formData.append("description", description);
 
-    require(LIBS + 'sendFormData')("/image", formData, (err, response) => {
+    if (this.available) {
+        let formData = new FormData();
+        formData.append("image", file);
+        formData.append("description", description);
 
-        if (err) {
-            if (err instanceof ClientError)
-                this.setError(err.message);
-            else
-                this.error(err);
-            return;
-        }
+        this.available = false;
+        require(LIBS + 'sendFormData')("/image", formData, (err, response) => {
 
-        this.trigger('upload-image-modal-window__image-uploaded', {
-            imageId: response.imageId,
-            previewUrl: response.previewUrl
+            if (err) {
+                if (err instanceof ClientError)
+                    this.setError(err.message);
+                else
+                    this.error(err);
+                return;
+            }
+
+            this.available = true;
+
+            this.trigger('upload-image-modal-window__image-uploaded', {
+                imageId: response.imageId,
+                previewUrl: response.previewUrl
+            });
+            this.deactivate();
+
         });
-        this.deactivate();
+    }
 
-    });
 };
 
 UploadImageModalWindow.prototype.show = function () {

@@ -334,11 +334,11 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
 };
 
 Gallery.prototype.removeFromGalleryArray = function(id) {
-    this.gallery.splice(this.gallery.indexOf(id), 1);
+    this.gallery && this.gallery.splice(this.gallery.indexOf(id), 1);
 };
 
 Gallery.prototype.addToGalleryArray = function(id) {
-    this.gallery.push(id);
+    this.gallery && this.gallery.push(id);
 };
 
 Gallery.prototype.updateGallery = function () {
@@ -563,8 +563,8 @@ Gallery.prototype.pushUserState = function () {
     let url = '';
     if (this.image)
         url = this.image.dataset.authorUrl;
-    // if (this.currentViewModel)
-    //     url = '/user/' + this.currentViewModel.author.authorUrl;
+    if (this.currentViewModel)
+         url = this.currentViewModel.author.authorUrl;
 
     history.pushState({
         type: 'user'

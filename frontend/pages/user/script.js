@@ -9,11 +9,11 @@ let linksDropdown = new Dropdown({
     className: 'links-dropdown'
 });
 
-let uploadWindowCaller;
+let uploadImageModalWindowCaller;
 let uploadImageModalWindow;
 
-if (uploadWindowCaller = document.getElementById('upload-window-caller')) {
-    uploadWindowCaller.onclick = function () {
+if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller')) {
+    uploadImageModalWindowCaller.onclick = function () {
         if (!uploadImageModalWindow) {
             require.ensure([BLOCKS + 'upload-image-modal-window'], function (require) {
                 let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
