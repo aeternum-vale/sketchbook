@@ -23,13 +23,13 @@ ModalWindow.prototype.setBackdrop = function () {
 };
 
 ModalWindow.prototype.setWrapper = function () {
-    this.wrapper = document.getElementById('modal-window-wrapper');
+    this.wrapper = document.getElementById('modal-wrapper');
 
     if (!this.wrapper)
         this.wrapper = this.renderWrapper();
 
     this.wrapper.onclick = e => {
-        if (e.target && !e.target.classList.contains('modal-window-wrapper')) return;
+        if (e.target && !e.target.classList.contains('modal-wrapper')) return;
         this.deactivate();
     };
 };
@@ -44,8 +44,8 @@ ModalWindow.prototype.renderBackdrop = function() {
 
 ModalWindow.prototype.renderWrapper = function() {
     let wrapper = document.createElement('DIV');
-    wrapper.className = 'modal-window-wrapper modal-window-wrapper_invisible';
-    wrapper.id = 'modal-window-wrapper';
+    wrapper.className = 'modal-wrapper modal-wrapper_invisible';
+    wrapper.id = 'modal-wrapper';
     document.body.appendChild(wrapper);
     return wrapper;
 };
@@ -68,7 +68,7 @@ ModalWindow.prototype.show = function () {
     this.active = true;
 
     this.backdrop.classList.remove('backdrop_invisible');
-    this.wrapper.classList.remove('modal-window-wrapper_invisible');
+    this.wrapper.classList.remove('modal-wrapper_invisible');
 };
 
 ModalWindow.prototype.activate = function () {
@@ -82,7 +82,7 @@ ModalWindow.prototype.deactivate = function () {
     this.active = false;
 
     this.backdrop.classList.add('backdrop_invisible');
-    this.wrapper.classList.add('modal-window-wrapper_invisible');
+    this.wrapper.classList.add('modal-wrapper_invisible');
 
     this.trigger('modal-window_deactivated');
 
