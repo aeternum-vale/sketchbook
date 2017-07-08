@@ -99,7 +99,6 @@ Gallery.prototype.setImage = function () {
 
     return new Promise((resolve, reject) => {
 
-        this.post = this.image.querySelector('.image__image-post');
         this.imgElem = this.image.querySelector('img.image__img-element');
         this.description = this.image.querySelector('.image__description');
         this.date = this.image.querySelector('.image__post-date');
@@ -254,13 +253,13 @@ Gallery.prototype.resizeImage = function () {
             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight)
                 this.imgElem.height = this.imageWrapper.offsetHeight;
 
-            if (this.post.scrollWidth > this.post.offsetWidth) {
+            if (this.imageWrapper.offsetWidth > this.image.offsetWidth) {
                 this.imgElem.removeAttribute('height');
-                this.imgElem.width = this.post.offsetWidth - this.sideBar.offsetWidth;
+                this.imgElem.width = this.image.offsetWidth - this.sideBar.offsetWidth;
             }
         } else {
-            if (this.post.scrollWidth > this.post.offsetWidth)
-                this.imgElem.width = this.post.offsetWidth - this.sideBar.offsetWidth;
+            if (this.imageWrapper.offsetWidth > this.image.offsetWidth)
+                this.imgElem.width = this.image.offsetWidth - this.sideBar.offsetWidth;
 
             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight) {
                 this.imgElem.removeAttribute('width');

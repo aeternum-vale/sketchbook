@@ -1,13 +1,13 @@
-let ModalWindow = require(BLOCKS + 'modal-window');
+let Modal = require(BLOCKS + 'modal');
 let FilePicker = require(BLOCKS + 'file-picker');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
 
 
 let UploadImageModalWindow = function (options) {
-    ModalWindow.apply(this, arguments);
+    Modal.apply(this, arguments);
     this.available = true;
 };
-UploadImageModalWindow.prototype = Object.create(ModalWindow.prototype);
+UploadImageModalWindow.prototype = Object.create(Modal.prototype);
 UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;
 
 
@@ -26,6 +26,8 @@ UploadImageModalWindow.prototype.setElem = function () {
     this.uploadErrorMessage = this.elem.querySelector('.window__error-message');
 
     this.elem.onclick = e => {
+        this.onElemClick(e);
+
         if (e.target === this.uploadButton) {
             let file = this.uploadImageFilePicker.getFile();
             if (file)
@@ -68,7 +70,7 @@ UploadImageModalWindow.prototype.uploadImage = function (file, description) {
 };
 
 UploadImageModalWindow.prototype.show = function () {
-    ModalWindow.prototype.show.apply(this);
+    Modal.prototype.show.apply(this);
 
     if (!this.elem)
         this.setElem();
@@ -80,7 +82,7 @@ UploadImageModalWindow.prototype.show = function () {
 
 UploadImageModalWindow.prototype.deactivate = function () {
     this.elem.classList.add('window_invisible');
-    ModalWindow.prototype.deactivate.apply(this);
+    Modal.prototype.deactivate.apply(this);
 };
 
 UploadImageModalWindow.prototype.clear = function () {

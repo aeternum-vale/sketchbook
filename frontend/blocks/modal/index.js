@@ -1,28 +1,30 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let ModalWindow = function () {
-
+let Modal = function () {
     this.active = false;
     this.backdrop = null;
     this.wrapper = null;
-
     this.listeners = [];
-
 };
 
-ModalWindow.prototype.setListeners = function () {
+Modal.prototype.onElemClick = function(e) {
+    if (e.target.matches('.modal-close-button'))
+        this.deactivate();
+};
+
+Modal.prototype.setListeners = function () {
     this.listeners.forEach(item => {
         this.elem.addEventListener(item.eventName, item.cb);
     });
 };
 
-ModalWindow.prototype.setBackdrop = function () {
+Modal.prototype.setBackdrop = function () {
     this.backdrop = document.getElementById('backdrop');
     if (!this.backdrop)
         this.backdrop = this.renderBackdrop();
 };
 
-ModalWindow.prototype.setWrapper = function () {
+Modal.prototype.setWrapper = function () {
     this.wrapper = document.getElementById('modal-wrapper');
 
     if (!this.wrapper)
@@ -34,7 +36,7 @@ ModalWindow.prototype.setWrapper = function () {
     };
 };
 
-ModalWindow.prototype.renderBackdrop = function() {
+Modal.prototype.renderBackdrop = function() {
     let backdrop = document.createElement('DIV');
     backdrop.className = 'backdrop backdrop_invisible';
     backdrop.id = 'backdrop';
@@ -42,7 +44,7 @@ ModalWindow.prototype.renderBackdrop = function() {
     return backdrop;
 };
 
-ModalWindow.prototype.renderWrapper = function() {
+Modal.prototype.renderWrapper = function() {
     let wrapper = document.createElement('DIV');
     wrapper.className = 'modal-wrapper modal-wrapper_invisible';
     wrapper.id = 'modal-wrapper';
@@ -50,7 +52,7 @@ ModalWindow.prototype.renderWrapper = function() {
     return wrapper;
 };
 
-ModalWindow.prototype.renderWindow = function (wrapper, innerHTML) {
+Modal.prototype.renderWindow = function (wrapper, innerHTML) {
     let parent = document.createElement('DIV');
     parent.innerHTML = innerHTML;
     let wnd = parent.firstElementChild;
@@ -58,7 +60,7 @@ ModalWindow.prototype.renderWindow = function (wrapper, innerHTML) {
     return wnd;
 };
 
-ModalWindow.prototype.show = function () {
+Modal.prototype.show = function () {
     if (!this.backdrop)
         this.setBackdrop();
 
@@ -71,14 +73,14 @@ ModalWindow.prototype.show = function () {
     this.wrapper.classList.remove('modal-wrapper_invisible');
 };
 
-ModalWindow.prototype.activate = function () {
-    ModalWindow.modalWindowsQueue.push(this);
+Modal.prototype.activate = function () {
+    Modal.modalsQueue.push(this);
 
-    if (!ModalWindow.active)
-        ModalWindow.show();
+    if (!Modal.active)
+        Modal.show();
 };
 
-ModalWindow.prototype.deactivate = function () {
+Modal.prototype.deactivate = function () {
     this.active = false;
 
     this.backdrop.classList.add('backdrop_invisible');
@@ -86,22 +88,22 @@ ModalWindow.prototype.deactivate = function () {
 
     this.trigger('modal-window_deactivated');
 
-    ModalWindow.modalWindowsQueue.shift();
-    ModalWindow.show();
+    Modal.modalsQueue.shift();
+    Modal.show();
 };
 
-ModalWindow.active = false;
-ModalWindow.modalWindowsQueue = [];
-ModalWindow.show = function () {
-    let nextModalWindow = ModalWindow.modalWindowsQueue[0];
+Modal.active = false;
+Modal.modalsQueue = [];
+Modal.show = function () {
+    let nextModalWindow = Modal.modalsQueue[0];
     if (nextModalWindow) {
         nextModalWindow.show();
-        ModalWindow.active = true;
+        Modal.active = true;
     } else
-        ModalWindow.active = false;
+        Modal.active = false;
 };
 
 for (let key in eventMixin)
-    ModalWindow.prototype[key] = eventMixin[key];
+    Modal.prototype[key] = eventMixin[key];
 
-module.exports = ModalWindow;
+module.exports = Modal;

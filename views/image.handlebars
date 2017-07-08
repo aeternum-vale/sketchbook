@@ -1,11 +1,13 @@
 {{#section 'scripts'}}
-	<script defer src="/common-image.js"></script>
-	<script defer src="/image.js"></script>
-	{{#if loggedUser}}
-		<script defer src="/logged-image.js"></script>
-	{{/if}}
+    <script defer src="/common-image.js"></script>
+    <script defer src="/image.js"></script>
+    {{#if loggedUser}}
+        <script defer src="/logged-image.js"></script>
+    {{/if}}
 {{/section}}
 
-{{> image
-	image=image
-}}
+{{!> backdrop}}
+<div id="modal-wrapper" class="modal-wrapper">
+    {{>image image=image}}
+</div>
+

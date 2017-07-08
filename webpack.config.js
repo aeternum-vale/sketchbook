@@ -100,23 +100,21 @@ module.exports = {
 
 };
 
-
-module.exports.plugins.push(
-    new HandlebarsPlugin({
-        entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
-        partials: [
-            path.join(__dirname, "views", "partials", "*.handlebars")
-        ],
-        onBeforeAddPartials: function (Handlebars, partialsMap) {
-            console.log(partialsMap);
-            for (let key in partialsMap) {
-                let newKey = key.substring(key.indexOf('/') + 1);
-                partialsMap[newKey] = partialsMap[key];
-                delete partialsMap[key];
-            }
-        }
-    })
-);
+// module.exports.plugins.push(
+//     new HandlebarsPlugin({
+//         entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
+//         partials: [
+//             path.join(__dirname, "views", "partials", "*.handlebars")
+//         ],
+//         onBeforeAddPartials: function (Handlebars, partialsMap) {
+//             for (let key in partialsMap) {
+//                 let newKey = key.substring(key.indexOf('/') + 1);
+//                 partialsMap[newKey] = partialsMap[key];
+//                 delete partialsMap[key];
+//             }
+//         }
+//     })
+// );
 
 
 if (NODE_ENV == 'production') {
