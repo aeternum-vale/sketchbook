@@ -29,10 +29,10 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
                     }
                 });
 
-                uploadImageModalWindow.activate();
+                uploadImageModalWindow.show();
             });
         } else
-            uploadImageModalWindow.activate();
+            uploadImageModalWindow.show();
     };
 }
 
@@ -42,7 +42,7 @@ galleryElem.onclick = function (e) {
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
     createGallery().then(() => {
-        gallery.onElemClick(e);
+        gallery.onGalleryClick(e);
     });
 };
 
@@ -51,7 +51,7 @@ function createGallery() {
         require.ensure([BLOCKS + 'gallery'], function (require) {
             let Gallery = require(BLOCKS + 'gallery');
             gallery = new Gallery({
-                elem: galleryElem,
+                gallery: galleryElem,
                 isLogged: window.isLogged,
                 preloadEntityCount: PRELOAD_IMAGE_COUNT,
                 isEmbedded: true,

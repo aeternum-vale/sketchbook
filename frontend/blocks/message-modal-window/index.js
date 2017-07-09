@@ -14,7 +14,7 @@ MessageModalWindow.prototype.setElem = function () {
     this.setWindowInnerHtml();
     this.elem = document.getElementById(this.elemId);
     if (!this.elem)
-        this.elem = this.renderWindow(this.wrapper, this.windowInnerHtml);
+        this.elem = this.renderWindow(this.windowInnerHtml);
     this.setListeners();
 
     this.elem.onclick = e => {

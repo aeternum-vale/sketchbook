@@ -11,7 +11,7 @@ let Dropdown = function(options) {
 
 };
 
-Dropdown.prototype.activate = function() {
+Dropdown.prototype.show = function() {
 	this.elem.classList.add('dropdown_active');
 	this.elem.classList.add(`${this.className}_active`);
 	this.active = true;
@@ -27,7 +27,7 @@ Dropdown.prototype.toggle = function() {
 	if (this.active) 
 		this.deactivate();
 	else
-		this.activate();
+		this.show();
 };
 
 module.exports = Dropdown;

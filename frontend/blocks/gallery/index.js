@@ -1,18 +1,20 @@
 let eventMixin = require(LIBS + 'eventMixin');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
 let ImageNotFound = require(LIBS + 'componentErrors').ImageNotFound;
+let Modal = require(BLOCKS + 'modal');
 
 let Gallery = function (options) {
+    Modal.apply(this, arguments);
 
+    this.gallery = options.gallery;
     this.elem = options.elem;
-    this.image = options.image;
 
     this.isLogged = options.isLogged;
 
     this.preloadEntityCount = options.preloadEntityCount;
 
     this.viewModels = {};
-    this.gallery = null;
+    this.galleryArray = null;
     this.currentImageId = null;
     Object.defineProperty(this, 'currentViewModel', {
         get: () => this.viewModels[this.currentImageId]
@@ -35,14 +37,14 @@ let Gallery = function (options) {
     this.pushUserState();
 
 
-    this.isEmbedded = !!this.elem;
+    this.isEmbedded = !!this.gallery;
 
     if (this.isEmbedded)
         this.setGallery(options);
     else {
-        this.currentImageId = +this.image.dataset.id;
+        this.currentImageId = +this.elem.dataset.id;
         this.requestViewModel(this.currentImageId).then(() => {
-            this.setImage().then(() => {
+            this.setElem().then(() => {
                 this.pushImageState();
 
                 this.requestAllNecessaryViewModels().then(() => {
@@ -57,53 +59,56 @@ let Gallery = function (options) {
     }
 };
 
-Gallery.prototype.onElemClick = function (e) {
+Gallery.prototype = Object.create(Modal.prototype);
+Gallery.prototype.constructor = Gallery;
+
+Gallery.prototype.onGalleryClick = function (e) {
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
     let imageId = +e.target.dataset.id;
 
-    if (!this.image) {
-        this.currentImageId = imageId;
-        this.renderImageElem().then(() => {
-            this.setImage().then(() => {
-                this.pushImageState();
-                this.requestAllNecessaryViewModels().then(() => {
-                    this.updatePreloadedImagesArray();
-                });
+    this.currentImageId = imageId;
+    this.requestViewModel(imageId).then(() => {
+        this.activate().then(() => {
+            this.updateCurrentView(imageId);
+            this.pushImageState();
+            this.requestAllNecessaryViewModels().then(() => {
+                this.updatePreloadedImagesArray();
             });
-        }).catch((err) => {
-            if (err instanceof ImageNotFound) {
-                this.deleteImagePreview(imageId);
-                this.error(err);
-            }
         });
+    }).catch((err) => {
+        if (err instanceof ImageNotFound) {
+            this.deleteImagePreview(imageId);
+            this.error(err);
+        }
+    });
 
-    } else
-        this.updateCurrentView(imageId).then(() => {
-            this.activateImage();
-        });
 };
 
 
 Gallery.prototype.setGallery = function (options) {
     this.publicationNumberElem = options.publicationNumberElem;
-    this.imagePreviewGhost = this.elem.querySelector('.image-preview');
-    this.galleryWrapper = this.elem.querySelector('.gallery__wrapper');
+    this.imagePreviewGhost = this.gallery.querySelector('.image-preview');
+    this.galleryWrapper = this.gallery.querySelector('.gallery__wrapper');
 
-    this.elem.onclick = e => {
-        this.onElemClick(e);
+    this.gallery.onclick = e => {
+        this.onGalleryClick(e);
     };
 };
 
-Gallery.prototype.setImage = function () {
+Gallery.prototype.setElem = function () {
 
     return new Promise((resolve, reject) => {
 
-        this.imgElem = this.image.querySelector('img.image__img-element');
-        this.description = this.image.querySelector('.image__description');
-        this.date = this.image.querySelector('.image__post-date');
-        this.imageWrapper = this.image.querySelector('.image__image-wrapper');
-        this.sideBar = this.image.querySelector('.image__sidebar');
+        Modal.prototype.show.apply(this);
+        if (!this.elem)
+            this.elem = this.renderWindow(require(`html-loader!./window`));
+
+        this.imgElem = this.elem.querySelector('img.image__img-element');
+        this.description = this.elem.querySelector('.image__description');
+        this.date = this.elem.querySelector('.image__post-date');
+        this.imageWrapper = this.elem.querySelector('.image__image-wrapper');
+        this.sideBar = this.elem.querySelector('.image__sidebar');
         this.deleteButtonElem = document.querySelector('.image__delete-button');
         this.subscribeButtonElem = document.querySelector('.image__subscribe-button');
 
@@ -113,7 +118,9 @@ Gallery.prototype.setImage = function () {
             this.activateImgElem();
         };
 
-        this.image.onclick = e => {
+        this.elem.onclick = e => {
+            this.onElemClick(e);
+
             if (e.target.matches('.image__control-prev'))
                 this.switchToPrev();
 
@@ -121,7 +128,7 @@ Gallery.prototype.setImage = function () {
                 this.switchToNext();
 
             if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))
-                this.deactivateImage();
+                this.deactivate();
         };
 
         if (this.isLogged) {
@@ -220,31 +227,51 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
     }
 };
 
-Gallery.prototype.activateImage = function () {
-    this.image.classList.remove('image_invisible');
+
+Gallery.prototype.show = function () {
+    Modal.prototype.show.apply(this);
+    return new Promise((resolve, reject) => {
+
+
+
+        if (!this.elem)
+            this.setElem().then(() => {
+                this.elem.classList.remove('image_invisible');
+                resolve();
+            });
+        else {
+            this.elem.classList.remove('image_invisible');
+            resolve();
+        }
+    });
+
 };
 
-Gallery.prototype.deactivateImage = function (noPushState) {
+Gallery.prototype.deactivate = function (noPushState) {
     if (!this.isEmbedded)
-        window.location = this.image.dataset.authorUrl;
+        window.location = this.elem.dataset.authorUrl;
+    else {
+        this.elem.classList.add('image_invisible');
 
-    this.image.classList.add('image_invisible');
+        if (!noPushState)
+            this.pushUserState();
 
-    if (!noPushState)
-        this.pushUserState();
+        Modal.prototype.deactivate.apply(this);
+    }
+
 };
 
 Gallery.prototype.deactivateImgElem = function () {
-    this.image.classList.add('image_img-element-invisible');
+    this.elem.classList.add('image_img-element-invisible');
 };
 
 Gallery.prototype.activateImgElem = function () {
-    this.image.classList.remove('image_img-element-invisible');
+    this.elem.classList.remove('image_img-element-invisible');
 };
 
 
 Gallery.prototype.resizeImage = function () {
-    if (this.image) {
+    if (this.elem) {
 
         this.imgElem.removeAttribute('width');
         this.imgElem.removeAttribute('height');
@@ -253,13 +280,13 @@ Gallery.prototype.resizeImage = function () {
             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight)
                 this.imgElem.height = this.imageWrapper.offsetHeight;
 
-            if (this.imageWrapper.offsetWidth > this.image.offsetWidth) {
+            if (this.imageWrapper.offsetWidth > this.elem.offsetWidth) {
                 this.imgElem.removeAttribute('height');
-                this.imgElem.width = this.image.offsetWidth - this.sideBar.offsetWidth;
+                this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
             }
         } else {
-            if (this.imageWrapper.offsetWidth > this.image.offsetWidth)
-                this.imgElem.width = this.image.offsetWidth - this.sideBar.offsetWidth;
+            if (this.imageWrapper.offsetWidth > this.elem.offsetWidth)
+                this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
 
             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight) {
                 this.imgElem.removeAttribute('width');
@@ -273,12 +300,12 @@ Gallery.prototype.renderImageElem = function () {
     return this.requestViewModel(this.currentImageId, true).then(response => {
         let parent = document.createElement('DIV');
         parent.innerHTML = response.html;
-        this.image = parent.firstElementChild;
-        document.body.insertBefore(this.image, document.body.firstElementChild);
+        this.elem = parent.firstElementChild;
+        document.body.insertBefore(this.elem, document.body.firstElementChild);
     });
 };
 
-Gallery.prototype.requestViewModel = function (id, requireHtml) {
+Gallery.prototype.requestViewModel = function (id) {
     return new Promise((resolve, reject) => {
 
         if (this.viewModels[id]) {
@@ -286,73 +313,68 @@ Gallery.prototype.requestViewModel = function (id, requireHtml) {
             return;
         }
 
-        require(LIBS + 'sendRequest')(
-            (!requireHtml) ? {
-                    id
-                } : {
-                    id,
-                    requireHtml
-                }, 'POST', '/gallery', (err, response) => {
-
-                if (err) {
-                    if (err instanceof ClientError) {
-                        if (this.gallery) {
-                            this.removeFromGalleryArray(id);
-                            this.updateGallery();
-                        }
-                        return reject(new ImageNotFound());
-                    }
-                    else
-                        return this.error(err);
-                }
-
-                console.log(response);
-                this.gallery = response.gallery;
-                this.updateGallery();
-
-                let provided = false;
-
-                for (let key in response.viewModels) {
-                    if (key == id)
-                        provided = true;
-
-                    this.viewModels[key] = response.viewModels[key];
-                }
-
-                if (provided)
-                    resolve(response);
-                else {
-                    if (this.gallery) {
+        require(LIBS + 'sendRequest')({
+            id
+        }, 'POST', '/gallery', (err, response) => {
+            if (err) {
+                if (err instanceof ClientError) {
+                    if (this.galleryArray) {
                         this.removeFromGalleryArray(id);
                         this.updateGallery();
                     }
-                    reject(new ImageNotFound());
+                    return reject(new ImageNotFound());
                 }
-            });
+                else
+                    return this.error(err);
+            }
+
+            console.log(response);
+            this.galleryArray = response.gallery;
+            this.updateGallery();
+
+            let provided = false;
+
+            for (let key in response.viewModels) {
+                if (key == id)
+                    provided = true;
+
+                this.viewModels[key] = response.viewModels[key];
+            }
+
+            if (provided)
+                resolve(response);
+            else {
+                if (this.galleryArray) {
+                    this.removeFromGalleryArray(id);
+                    this.updateGallery();
+                }
+                reject(new ImageNotFound());
+            }
+        });
     });
 };
 
-Gallery.prototype.removeFromGalleryArray = function(id) {
-    this.gallery && this.gallery.splice(this.gallery.indexOf(id), 1);
+Gallery.prototype.removeFromGalleryArray = function (id) {
+    this.galleryArray && this.galleryArray.splice(this.galleryArray.indexOf(id), 1);
 };
 
-Gallery.prototype.addToGalleryArray = function(id) {
-    this.gallery && this.gallery.push(id);
+Gallery.prototype.addToGalleryArray = function (id) {
+    this.galleryArray && this.galleryArray.push(id);
 };
 
 Gallery.prototype.updateGallery = function () {
-    if (this.gallery && this.elem) {
-        let imagePreviews = this.elem.querySelectorAll('.image-preview');
+    if (this.galleryArray && this.gallery) {
+        let imagePreviews = this.gallery.querySelectorAll('.image-preview');
         for (let i = 0; i < imagePreviews.length; i++) {
-            if (!~this.gallery.indexOf(+imagePreviews[i].dataset.id))
+            if (!~this.galleryArray.indexOf(+imagePreviews[i].dataset.id))
                 imagePreviews[i].remove();
         }
-        this.setPublicationNumber(this.gallery.length);
+        this.setPublicationNumber(this.galleryArray.length);
     }
 };
 
 Gallery.prototype.getImagePreviewById = function (id) {
-    return this.elem.querySelector(`.image-preview[data-id="${id}"]`);
+    return this.gallery.querySelector(`.image-preview[data-id="${id}"]`);
 };
 
 Gallery.prototype.updateImagePreviewText = function (id) {
@@ -411,7 +433,7 @@ Gallery.prototype.requestAllNecessaryViewModels = function () {
 
 Gallery.prototype.requestNextViewModels = function () {
 
-    if (this.gallery && this.gallery.length === 0)
+    if (this.galleryArray && this.galleryArray.length === 0)
         return Promise.reject(new ImageNotFound());
 
     let promises = [];
@@ -421,7 +443,7 @@ Gallery.prototype.requestNextViewModels = function () {
 };
 
 Gallery.prototype.requestPrevViewModels = function () {
-    if (this.gallery && this.gallery.length === 0)
+    if (this.galleryArray && this.galleryArray.length === 0)
         return Promise.reject(new ImageNotFound());
     let promises = [];
     for (let i = 0; i < this.preloadEntityCount; i++)
@@ -430,8 +452,8 @@ Gallery.prototype.requestPrevViewModels = function () {
 };
 
 Gallery.prototype.switchToNext = function () {
-    if (this.gallery && !this.gallery.length) {
-        this.deactivateImage();
+    if (this.galleryArray && !this.galleryArray.length) {
+        this.deactivate();
         return;
     }
 
@@ -446,10 +468,10 @@ Gallery.prototype.switchToNext = function () {
         });
     }).catch((err) => {
         if (err instanceof ImageNotFound) {
-            if (this.gallery && this.gallery.length)
+            if (this.galleryArray && this.galleryArray.length)
                 this.switchToNext();
             else
-                this.deactivateImage();
+                this.deactivate();
         } else
             this.error(err);
     });
@@ -457,8 +479,8 @@ Gallery.prototype.switchToNext = function () {
 
 Gallery.prototype.switchToPrev = function () {
 
-    if (this.gallery && !this.gallery.length) {
-        this.deactivateImage();
+    if (this.galleryArray && !this.galleryArray.length) {
+        this.deactivate();
         return;
     }
 
@@ -472,10 +494,10 @@ Gallery.prototype.switchToPrev = function () {
         });
     }).catch((err) => {
         if (err instanceof ImageNotFound) {
-            if (this.gallery && this.gallery.length)
+            if (this.galleryArray && this.galleryArray.length)
                 this.switchToPrev();
             else
-                this.deactivateImage();
+                this.deactivate();
         } else
             throw err;
     });
@@ -483,26 +505,26 @@ Gallery.prototype.switchToPrev = function () {
 
 Gallery.prototype.getNextImageId = function (offset) {
     offset = offset || 1;
-    let index = this.gallery.indexOf(this.currentImageId);
+    let index = this.galleryArray.indexOf(this.currentImageId);
 
-    return this.gallery[(index + offset) % this.gallery.length];
+    return this.galleryArray[(index + offset) % this.galleryArray.length];
 };
 
 Gallery.prototype.getPrevImageId = function (offset) {
     offset = offset || 1;
 
-    let index = this.gallery.indexOf(this.currentImageId);
+    let index = this.galleryArray.indexOf(this.currentImageId);
 
-    if (~index && this.gallery.length === 1)
-        return this.gallery[0];
+    if (~index && this.galleryArray.length === 1)
+        return this.galleryArray[0];
 
     let galleryPrevIndex = index - offset;
     if (galleryPrevIndex < 0) {
-        galleryPrevIndex %= this.gallery.length;
-        galleryPrevIndex = this.gallery.length + galleryPrevIndex;
+        galleryPrevIndex %= this.galleryArray.length;
+        galleryPrevIndex = this.galleryArray.length + galleryPrevIndex;
     }
 
-    return this.gallery[galleryPrevIndex];
+    return this.galleryArray[galleryPrevIndex];
 };
 
 Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) {
@@ -524,12 +546,10 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
             this.description.textContent = this.currentViewModel.description;
             this.date.textContent = this.currentViewModel.createDateStr;
 
-
             if (this.currentViewModel.isOwnImage) {
                 this.setDeleteButton();
                 this.deleteButton.setImageId(newCurrentImageId);
             }
-
 
             if (!noPushState)
                 this.pushImageState();
@@ -540,14 +560,14 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
 Gallery.prototype.updateLikes = function (imageId) {
     if (this.currentImageId === imageId)
         this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked);
-    if (this.elem)
+    if (this.gallery)
         this.updateImagePreviewText(imageId);
 };
 
 Gallery.prototype.updateComments = function (imageId) {
     if (this.currentImageId === imageId)
         this.commentSection.set(this.currentViewModel.comments);
-    if (this.elem)
+    if (this.gallery)
         this.updateImagePreviewText(imageId);
 };
 
@@ -560,10 +580,8 @@ Gallery.prototype.pushImageState = function () {
 
 Gallery.prototype.pushUserState = function () {
     let url = '';
-    if (this.image)
-        url = this.image.dataset.authorUrl;
     if (this.currentViewModel)
-         url = this.currentViewModel.author.authorUrl;
+        url = this.currentViewModel.author.url;
 
     history.pushState({
         type: 'user'
@@ -574,12 +592,12 @@ Gallery.prototype.onPopState = function (state) {
     if (state && state.type)
         switch (state.type) {
             case 'image':
-                this.activateImage();
+                this.show();
                 this.updateCurrentView(state.id, true);
                 break;
 
             case 'user':
-                this.deactivateImage(true);
+                this.deactivate(true);
                 break;
         }
 };

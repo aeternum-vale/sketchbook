@@ -1,80 +1,75 @@
-<div id="image" class="image image_img-element-invisible" data-author-url= data-id=>
-    <div class="image__image-post">
-        <div class="image__image-wrapper">
-            <img class="image__img-element" src="" alt="">
-            <div class="image__controls">
-                <div class="image__control image__control-prev">prev</div>
-                <div class="image__control image__control-full">full</div>
-                <div class="image__control image__control-next">next</div>
-            </div>
+<div id="image" class="modal image" data-author-url= data-id=>
+    <div class="image__image-wrapper">
+        <img class="image__img-element" alt="">
+        <div class="image__controls">
+            <div class="image__control image__control-prev">prev</div>
+            <div class="image__control image__control-full">full</div>
+            <div class="image__control image__control-next">next</div>
         </div>
-        <div class="image__sidebar">
-            <div class="image__top-side">
-                <div class="header image__header">
-                    <a class="image__header-left-side" href="">
-                        <div class="image__avatar"
-                             style="background-image: url('')"></div>
-                        <div class="image__metadata">
-                            <div class="image__username"></div>
-                            <div class="image__post-date"></div>
-                        </div>
-                    </a>
-
-                    <div class="button button_invisible image__top-side-button image__delete-button">
-                        delete
-                    </div>
-                    <div
-                        class="button image__top-side-button image__subscribe-button"
-                    >
-                        subscribe
-                    </div>
-
-
-                </div>
-                <div class="image__info-board">
-                    <div data-like-amount=""
-                         
-                         class="button like-button image__like-button">
-                        like 
-                    </div>
-                    <div class="image__description">
-                        
-                    </div>
-
-                </div>
-                <div class="comment-section image__comment-section">
-                        <div class="panel comment comment-section__comment comment_ghost" data-id="">
-                            <div class="comment__top-side">
-                                <a class="comment__ref" href="">
-                                    <div class="comment__avatar" style="background-image: url('')"></div>
-                                    <div class="comment__metadata">
-                                        <div class="comment__username"></div>
-                                        <div class="comment__date"></div>
-                                    </div>
-                                </a>
-                                <div class="comment__close-button"></div>
-                            </div>
-                            <div class="comment__text"></div>
-                        </div>
-
-                </div>
-            </div>
-
-            <div class="panel comment comment-send image__comment-send"
-                 data-image-id="">
-                <div class="comment__top-side">
-                    <div class="comment__avatar"
+    </div>
+    <div class="image__sidebar">
+        <div class="image__top-side">
+            <div class="header image__header">
+                <a class="image__header-left-side" href="">
+                    <div class="image__avatar"
                          style="background-image: url('')"></div>
-                    <div class="comment__username"></div>
+                    <div class="image__metadata">
+                        <div class="image__username"></div>
+                        <div class="image__post-date"></div>
+                    </div>
+                </a>
+
+                <div class="button button_invisible image__top-side-button image__delete-button">
+                    delete
+                </div>
+                <div
+                    class="button image__top-side-button image__subscribe-button"
+                >
+                    subscribe
                 </div>
 
-                <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>
-                <div class="button comment-send__send-button">send</div>
+
+            </div>
+            <div class="image__info-board">
+                <div data-like-amount=""
+                     
+                     class="button like-button image__like-button">
+                    like 
+                </div>
+                <div class="image__description">
+                    
+                </div>
+
+            </div>
+            <div class="comment-section image__comment-section">
+                    <div class="panel comment comment-section__comment comment_ghost" data-id="">
+                        <div class="comment__top-side">
+                            <a class="comment__ref" href="">
+                                <div class="comment__avatar" style="background-image: url('')"></div>
+                                <div class="comment__metadata">
+                                    <div class="comment__username"></div>
+                                    <div class="comment__date"></div>
+                                </div>
+                            </a>
+                            <div class="comment__close-button"></div>
+                        </div>
+                        <div class="comment__text"></div>
+                    </div>
+
             </div>
         </div>
+
+        <div class="panel comment comment-send image__comment-send"
+             data-image-id="">
+            <div class="comment__top-side">
+                <div class="comment__avatar"
+                     style="background-image: url('')"></div>
+                <div class="comment__username"></div>
+            </div>
+
+            <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>
+            <div class="button comment-send__send-button">send</div>
+        </div>
     </div>
-    <div class="image__close-wrapper">
-        <div class="image__close-space"></div>
-        <div class="image__close-button"></div>
-    </div>
-</div>
+    <div class="modal-close-button image__modal-close-button"></div></div>
+

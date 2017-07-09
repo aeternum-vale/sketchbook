@@ -52,11 +52,11 @@ Modal.prototype.renderWrapper = function() {
     return wrapper;
 };
 
-Modal.prototype.renderWindow = function (wrapper, innerHTML) {
+Modal.prototype.renderWindow = function (innerHTML) {
     let parent = document.createElement('DIV');
     parent.innerHTML = innerHTML;
     let wnd = parent.firstElementChild;
-    wrapper.appendChild(wnd);
+    this.wrapper.appendChild(wnd);
     return wnd;
 };
 
@@ -75,9 +75,14 @@ Modal.prototype.show = function () {
 
 Modal.prototype.activate = function () {
     Modal.modalsQueue.push(this);
-
-    if (!Modal.active)
-        Modal.show();
+    return new Promise((resolve, reject) => {
+        if (!Modal.active)
+            Modal.show().then(() => {
+                resolve();
+            });
+        else
+            resolve();
+    });
 };
 
 Modal.prototype.deactivate = function () {
@@ -97,10 +102,13 @@ Modal.modalsQueue = [];
 Modal.show = function () {
     let nextModalWindow = Modal.modalsQueue[0];
     if (nextModalWindow) {
-        nextModalWindow.show();
         Modal.active = true;
-    } else
+        return nextModalWindow.show();
+    } else {
         Modal.active = false;
+        return Promise.resolve();
+    }
+
 };
 
 for (let key in eventMixin)

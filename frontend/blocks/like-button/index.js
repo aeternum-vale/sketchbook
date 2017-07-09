@@ -55,7 +55,7 @@ LikeButton.prototype.setImageId = function (imageId) {
 LikeButton.prototype.set = function (likeAmount, active) {
     this.setAmount(likeAmount);
     if (active)
-        this.activate();
+        this.show();
     else
         this.deactivate();
 };
@@ -72,7 +72,7 @@ LikeButton.prototype.setAmount = function (likeAmount) {
     this.elem.textContent = `like ${this.likeAmount}`;
 };
 
-LikeButton.prototype.activate = function () {
+LikeButton.prototype.show = function () {
     this.elem.classList.add('button_active');
     this.active = true;
 };

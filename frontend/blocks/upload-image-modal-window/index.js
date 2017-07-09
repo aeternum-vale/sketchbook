@@ -14,7 +14,7 @@ UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;
 UploadImageModalWindow.prototype.setElem = function () {
     this.elem = document.getElementById('upload-image-modal-window');
     if (!this.elem)
-        this.elem = this.renderWindow(this.wrapper, require(`html-loader!./window`));
+        this.elem = this.renderWindow(require(`html-loader!./window`));
 
     this.uploadButton = this.elem.querySelector('.upload-image-modal-window__button');
 
