@@ -6,6 +6,7 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 let UploadImageModalWindow = function (options) {
     Modal.apply(this, arguments);
     this.available = true;
+    this.status = Modal.statuses.MAJOR;
 };
 UploadImageModalWindow.prototype = Object.create(Modal.prototype);
 UploadImageModalWindow.prototype.constructor = UploadImageModalWindow;

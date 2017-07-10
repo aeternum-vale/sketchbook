@@ -1,13 +1,17 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let Modal = function () {
+let Modal = function (options) {
     this.active = false;
-    this.backdrop = null;
-    this.wrapper = null;
     this.listeners = [];
+    this.status = options && options.status || Modal.statuses.MINOR;
 };
 
-Modal.prototype.onElemClick = function(e) {
+Modal.statuses = {
+    MAJOR: 1,
+    MINOR: 2
+};
+
+Modal.prototype.onElemClick = function (e) {
     if (e.target.matches('.modal-close-button'))
         this.deactivate();
 };
@@ -18,25 +22,25 @@ Modal.prototype.setListeners = function () {
     });
 };
 
-Modal.prototype.setBackdrop = function () {
-    this.backdrop = document.getElementById('backdrop');
-    if (!this.backdrop)
-        this.backdrop = this.renderBackdrop();
+Modal.setBackdrop = function () {
+    Modal.backdrop = document.getElementById('backdrop');
+    if (!Modal.backdrop)
+        Modal.backdrop = Modal.renderBackdrop();
 };
 
-Modal.prototype.setWrapper = function () {
-    this.wrapper = document.getElementById('modal-wrapper');
+Modal.setWrapper = function () {
+    Modal.wrapper = document.getElementById('modal-wrapper');
 
-    if (!this.wrapper)
-        this.wrapper = this.renderWrapper();
+    if (!Modal.wrapper)
+        Modal.wrapper = Modal.renderWrapper();
 
-    this.wrapper.onclick = e => {
+    Modal.wrapper.onclick = e => {
         if (e.target && !e.target.classList.contains('modal-wrapper')) return;
         this.deactivate();
     };
 };
 
-Modal.prototype.renderBackdrop = function() {
+Modal.renderBackdrop = function () {
     let backdrop = document.createElement('DIV');
     backdrop.className = 'backdrop backdrop_invisible';
     backdrop.id = 'backdrop';
@@ -44,7 +48,7 @@ Modal.prototype.renderBackdrop = function() {
     return backdrop;
 };
 
-Modal.prototype.renderWrapper = function() {
+Modal.renderWrapper = function () {
     let wrapper = document.createElement('DIV');
     wrapper.className = 'modal-wrapper modal-wrapper_invisible';
     wrapper.id = 'modal-wrapper';
@@ -56,59 +60,118 @@ Modal.prototype.renderWindow = function (innerHTML) {
     let parent = document.createElement('DIV');
     parent.innerHTML = innerHTML;
     let wnd = parent.firstElementChild;
-    this.wrapper.appendChild(wnd);
+    Modal.wrapper.appendChild(wnd);
     return wnd;
 };
 
 Modal.prototype.show = function () {
-    if (!this.backdrop)
-        this.setBackdrop();
+    if (!Modal.backdrop)
+        Modal.setBackdrop();
 
-    if (!this.wrapper)
-        this.setWrapper();
+    if (!Modal.wrapper)
+        Modal.setWrapper();
 
     this.active = true;
 
-    this.backdrop.classList.remove('backdrop_invisible');
-    this.wrapper.classList.remove('modal-wrapper_invisible');
+    Modal.backdrop.classList.remove('backdrop_invisible');
+    Modal.wrapper.classList.remove('modal-wrapper_invisible');
 };
 
 Modal.prototype.activate = function () {
-    Modal.modalsQueue.push(this);
+
+
     return new Promise((resolve, reject) => {
-        if (!Modal.active)
-            Modal.show().then(() => {
+        if (this.status === Modal.statuses.MINOR) {
+            Modal.minorQueue.push(this);
+            console.log(Modal.minorQueue);
+            console.log(Modal.majorQueue);
+
+            if (!Modal.minorActive)
+                Modal.minorShow().then(() => {
+                    resolve();
+                });
+            else
                 resolve();
-            });
-        else
-            resolve();
+        }
+        else if (this.status === Modal.statuses.MAJOR) {
+            Modal.majorQueue.push(this);
+            console.log(Modal.minorQueue);
+            console.log(Modal.majorQueue);
+
+            if (!Modal.majorActive)
+                Modal.majorShow().then(() => {
+                    resolve();
+                });
+            else
+                resolve();
+        }
     });
 };
 
 Modal.prototype.deactivate = function () {
-    this.active = false;
 
-    this.backdrop.classList.add('backdrop_invisible');
-    this.wrapper.classList.add('modal-wrapper_invisible');
 
-    this.trigger('modal-window_deactivated');
+    if (this.status === Modal.statuses.MINOR) {
 
-    Modal.modalsQueue.shift();
-    Modal.show();
-};
+        if (!Modal.majorActive) {
+            Modal.backdrop.classList.add('backdrop_invisible');
+            Modal.wrapper.classList.add('modal-wrapper_invisible');
+        }
 
-Modal.active = false;
-Modal.modalsQueue = [];
-Modal.show = function () {
-    let nextModalWindow = Modal.modalsQueue[0];
-    if (nextModalWindow) {
-        Modal.active = true;
-        return nextModalWindow.show();
-    } else {
-        Modal.active = false;
-        return Promise.resolve();
+        this.active = false;
+        this.trigger('modal-window_deactivated');
+
+        Modal.minorQueue.shift();
+        Modal.minorShow();
+    }
+    else if (this.status === Modal.statuses.MAJOR) {
+
+        if (!Modal.minorActive) {
+            Modal.backdrop.classList.add('backdrop_invisible');
+            Modal.wrapper.classList.add('modal-wrapper_invisible');
+        }
+
+        Modal.majorQueue.shift();
+        Modal.majorShow();
     }
 
+};
+
+Modal.minorActive = false;
+Modal.majorActive = false;
+Modal.minorQueue = [];
+Modal.majorQueue = [];
+
+
+Modal.minorShow = function () {
+    let nextModalWindow = Modal.minorQueue[0];
+    if (nextModalWindow) {
+        Modal.minorActive = true;
+        let promise = nextModalWindow.show();
+        if (promise)
+            return promise;
+        else
+            return Promise.resolve();
+    } else {
+
+        Modal.minorActive = false;
+        return Promise.resolve();
+    }
+};
+
+Modal.majorShow = function () {
+    let nextModalWindow = Modal.majorQueue[0];
+    if (nextModalWindow) {
+        Modal.majorActive = true;
+        let promise = nextModalWindow.show();
+        if (promise)
+            return promise;
+        else
+            return Promise.resolve();
+    } else {
+        Modal.majorActive = false;
+        return Promise.resolve();
+    }
 };
 
 for (let key in eventMixin)

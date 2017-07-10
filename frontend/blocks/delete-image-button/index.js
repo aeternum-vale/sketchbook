@@ -32,12 +32,12 @@ let DeleteImageButton = function(options) {
                 return;
             }
             this.url = response.url;
-            this.successMessage.show();
+            this.successMessage.activate();
         });
     });
 
     this.elem.onclick = e => {
-        this.prompt.show();
+        this.prompt.activate();
         involvedImageId = this.imageId;
     };
 };

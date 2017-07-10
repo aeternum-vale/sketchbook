@@ -7,7 +7,7 @@ module.exports = function() {
             let error = e.detail;
             if (error instanceof ComponentError) {
                 let messageModalWindow = new MessageModalWindow({message: error.message});
-                messageModalWindow.show();
+                messageModalWindow.activate();
             } else
                 throw error;
         });

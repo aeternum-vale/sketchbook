@@ -5,6 +5,8 @@ let Modal = require(BLOCKS + 'modal');
 
 let Gallery = function (options) {
     Modal.apply(this, arguments);
+    this.status = Modal.statuses.MAJOR;
+
 
     this.gallery = options.gallery;
     this.elem = options.elem;
@@ -100,7 +102,6 @@ Gallery.prototype.setElem = function () {
 
     return new Promise((resolve, reject) => {
 
-        Modal.prototype.show.apply(this);
         if (!this.elem)
             this.elem = this.renderWindow(require(`html-loader!./window`));
 
@@ -231,8 +232,6 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 Gallery.prototype.show = function () {
     Modal.prototype.show.apply(this);
     return new Promise((resolve, reject) => {
-
-
 
         if (!this.elem)
             this.setElem().then(() => {
@@ -550,6 +549,8 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
                 this.setDeleteButton();
                 this.deleteButton.setImageId(newCurrentImageId);
             }
+
+            //TODO avatar change
 
             if (!noPushState)
                 this.pushImageState();

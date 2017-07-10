@@ -29,10 +29,10 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
                     }
                 });
 
-                uploadImageModalWindow.show();
+                uploadImageModalWindow.activate();
             });
         } else
-            uploadImageModalWindow.show();
+            uploadImageModalWindow.activate();
     };
 }
 
@@ -62,5 +62,14 @@ function createGallery() {
 
     });
 }
+
+let PromptWindow = require(BLOCKS + 'prompt-window');
+
+setTimeout(() => {
+    let prompt = new PromptWindow();
+    prompt.activate();
+
+}, 2000);
+
 
 require(LIBS + 'setGlobalErrorCatcher')();
