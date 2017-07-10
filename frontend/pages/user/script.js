@@ -67,7 +67,9 @@ let PromptWindow = require(BLOCKS + 'prompt-window');
 
 setTimeout(() => {
     let prompt = new PromptWindow();
+    let prompt2 = new PromptWindow();
     prompt.activate();
+    prompt2.activate();
 
 }, 2000);
 

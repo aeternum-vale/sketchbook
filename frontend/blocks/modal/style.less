@@ -34,7 +34,16 @@
   align-items: center;
   justify-content: center;
 
-  z-index: 20;
+
+
+  &_major {
+    z-index: 20;
+  }
+
+  &_minor {
+    z-index: 30;
+  }
+
   &_invisible {
     display: none;
   }
@@ -49,7 +58,16 @@
   visibility: visible;
   background-color: #000;
   opacity: .6;
-  z-index: 15;
+
+
+  &_major {
+    z-index: 15;
+  }
+
+  &_minor {
+    z-index: 25;
+  }
+
   &_invisible {
     visibility: hidden;
   }
