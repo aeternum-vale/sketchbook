@@ -43,7 +43,7 @@ let Gallery = function (options) {
 
     if (this.isEmbedded)
         this.setGallery(options);
-    else {
+    else { //TODO isn't it show() ?
         this.currentImageId = +this.elem.dataset.id;
         this.requestViewModel(this.currentImageId).then(() => {
             this.setElem().then(() => {
@@ -69,22 +69,7 @@ Gallery.prototype.onGalleryClick = function (e) {
     e.preventDefault();
     let imageId = +e.target.dataset.id;
 
-    this.currentImageId = imageId;
-    this.requestViewModel(imageId).then(() => {
-        this.activate().then(() => {
-            this.updateCurrentView(imageId);
-            this.pushImageState();
-            this.requestAllNecessaryViewModels().then(() => {
-                this.updatePreloadedImagesArray();
-            });
-        });
-    }).catch((err) => {
-        if (err instanceof ImageNotFound) {
-            this.deleteImagePreview(imageId);
-            this.error(err);
-        }
-    });
-
+    return this.activate({imageId});
 };
 
 
@@ -110,8 +95,10 @@ Gallery.prototype.setElem = function () {
         this.date = this.elem.querySelector('.image__post-date');
         this.imageWrapper = this.elem.querySelector('.image__image-wrapper');
         this.sideBar = this.elem.querySelector('.image__sidebar');
-        this.deleteButtonElem = document.querySelector('.image__delete-button');
-        this.subscribeButtonElem = document.querySelector('.image__subscribe-button');
+        this.deleteButtonElem = this.elem.querySelector('.image__delete-button');
+        this.subscribeButtonElem = this.elem.querySelector('.image__subscribe-button');
+        this.avatar = this.elem.querySelector('.image__avatar');
+        this.username = this.elem.querySelector('.image__username');
 
 
         this.imgElem.onload = e => {
@@ -229,18 +216,40 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 };
 
 
-Gallery.prototype.show = function () {
+Gallery.prototype.show = function (options) {
+
+    let imageId = options.imageId;
+    this.currentImageId = imageId;
+
     Modal.prototype.show.apply(this);
     return new Promise((resolve, reject) => {
 
         if (!this.elem)
-            this.setElem().then(() => {
-                this.elem.classList.remove('image_invisible');
-                resolve();
+
+            this.requestViewModel(imageId).then(() => {
+                this.setElem().then(() => {
+                    this.updateCurrentView(imageId).then(() => {
+                        this.elem.classList.remove('image_invisible');
+                        resolve();
+                    });
+                    this.pushImageState();
+                    this.requestAllNecessaryViewModels().then(() => {
+                        this.updatePreloadedImagesArray();
+                    });
+                });
             });
+
         else {
-            this.elem.classList.remove('image_invisible');
-            resolve();
+            this.requestViewModel(imageId).then(() => {
+                this.updateCurrentView(imageId).then(() => {
+                    this.elem.classList.remove('image_invisible');
+                    resolve();
+                });
+                this.pushImageState();
+                this.requestAllNecessaryViewModels().then(() => {
+                    this.updatePreloadedImagesArray();
+                });
+            });
         }
     });
 
@@ -550,7 +559,8 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
                 this.deleteButton.setImageId(newCurrentImageId);
             }
 
-            //TODO avatar change
+            this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
+            this.username.textContent = this.currentViewModel.author.username;
 
             if (!noPushState)
                 this.pushImageState();

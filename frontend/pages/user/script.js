@@ -2,7 +2,9 @@
 
 import './style.less';
 
+let Modal = require(BLOCKS + 'modal');
 let Dropdown = require(BLOCKS + 'dropdown');
+let Spinner = require(BLOCKS + 'spinner');
 
 let linksDropdown = new Dropdown({
     elem: document.getElementById('links-dropdown'),
@@ -14,7 +16,14 @@ let uploadImageModalWindow;
 
 if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller')) {
     uploadImageModalWindowCaller.onclick = function () {
+
         if (!uploadImageModalWindow) {
+
+            let spinner = new Spinner({
+                status: Modal.statuses.MAJOR
+            });
+            spinner.activate();
+
             require.ensure([BLOCKS + 'upload-image-modal-window'], function (require) {
                 let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
                 uploadImageModalWindow = new UploadImageModalWindow();
@@ -29,7 +38,7 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
                     }
                 });
 
-                uploadImageModalWindow.activate();
+                spinner.onHostLoaded(uploadImageModalWindow);
             });
         } else
             uploadImageModalWindow.activate();
@@ -39,10 +48,20 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
 let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
+
+    let spinner = new Spinner({
+        status: Modal.statuses.MAJOR
+    });
+    spinner.activate();
+
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
+
+    let imageId = +e.target.dataset.id;
     createGallery().then(() => {
-        gallery.onGalleryClick(e);
+        spinner.onHostLoaded(gallery, {
+            imageId
+        });
     });
 };
 
@@ -65,13 +84,13 @@ function createGallery() {
 
 let PromptWindow = require(BLOCKS + 'prompt-window');
 
-setTimeout(() => {
-    let prompt = new PromptWindow();
-    let prompt2 = new PromptWindow();
-    prompt.activate();
-    prompt2.activate();
-
-}, 2000);
+// setTimeout(() => {
+//     let prompt = new PromptWindow();
+//     let prompt2 = new PromptWindow();
+//     prompt.activate();
+//     prompt2.activate();
+//
+// }, 2000);
 
 
 require(LIBS + 'setGlobalErrorCatcher')();

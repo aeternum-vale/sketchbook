@@ -16,6 +16,8 @@ MessageModalWindow.prototype.setElem = function () {
     if (!this.elem)
         this.elem = this.renderWindow(this.windowInnerHtml);
     this.setListeners();
+    this.elem.querySelector('.header').textContent = this.caption;
+    this.elem.querySelector('.message-modal-window__message').textContent = this.message;
 
     this.elem.onclick = e => {
         this.onElemClick(e);
@@ -34,8 +36,6 @@ MessageModalWindow.prototype.show = function () {
     if (!this.elem)
         this.setElem();
 
-    this.elem.querySelector('.header').textContent = this.caption;
-    this.elem.querySelector('.message-modal-window__message').textContent = this.message;
     this.elem.classList.remove('window_invisible');
 };
 

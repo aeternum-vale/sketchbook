@@ -1,5 +1,6 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
+
 let Modal = function (options) {
     this.active = false;
     this.listeners = [];
@@ -115,7 +116,22 @@ Modal.prototype.show = function () {
 
 };
 
-Modal.prototype.activate = function () {
+
+Modal.prototype.activate = function (options) {
+
+    if (this.elemId === 'spinner') {
+        let spinner = this;
+        this.on('spinner_host-loaded', e => {
+            let newHost = e.detail.host;
+
+            if (this.status === Modal.statuses.MINOR)
+                Modal.minorQueue.splice(Modal.minorQueue.indexOf(spinner) + 1, 0, newHost);
+            else
+                Modal.majorQueue.splice(Modal.majorQueue.indexOf(spinner) + 1, 0, newHost);
+
+            spinner.deactivate(e.detail.options);
+        });
+    }
 
     return new Promise((resolve, reject) => {
         if (this.status === Modal.statuses.MINOR) {
@@ -124,7 +140,7 @@ Modal.prototype.activate = function () {
             console.log(Modal.majorQueue);
 
             if (!Modal.minorActive)
-                Modal.minorShow().then(() => {
+                Modal.minorShow(options).then(() => {
                     resolve();
                 });
             else
@@ -132,11 +148,13 @@ Modal.prototype.activate = function () {
         }
         else if (this.status === Modal.statuses.MAJOR) {
             Modal.majorQueue.push(this);
+
+
             console.log(Modal.minorQueue);
             console.log(Modal.majorQueue);
 
             if (!Modal.majorActive)
-                Modal.majorShow().then(() => {
+                Modal.majorShow(options).then(() => {
                     resolve();
                 });
             else
@@ -145,14 +163,15 @@ Modal.prototype.activate = function () {
     });
 };
 
-Modal.prototype.deactivate = function () {
-    if (this.status === Modal.statuses.MINOR) {
+Modal.prototype.deactivate = function (options) {
 
+    if (this.status === Modal.statuses.MINOR) {
+        //TODO not neccessary if queue is not empty
         Modal.minorWrapper.classList.add('modal-wrapper_invisible');
         Modal.minorBackdrop.classList.add('backdrop_invisible');
 
         Modal.minorQueue.shift();
-        Modal.minorShow();
+        Modal.minorShow(options);
     }
     else if (this.status === Modal.statuses.MAJOR) {
 
@@ -160,7 +179,7 @@ Modal.prototype.deactivate = function () {
         Modal.majorBackdrop.classList.add('backdrop_invisible');
 
         Modal.majorQueue.shift();
-        Modal.majorShow();
+        Modal.majorShow(options);
     }
 
     this.active = false;
@@ -172,11 +191,11 @@ Modal.majorActive = false;
 Modal.minorQueue = [];
 Modal.majorQueue = [];
 
-Modal.minorShow = function () {
+Modal.minorShow = function (options) {
     let nextModalWindow = Modal.minorQueue[0];
     if (nextModalWindow) {
         Modal.minorActive = true;
-        let promise = nextModalWindow.show();
+        let promise = nextModalWindow.show(options);
         if (promise)
             return promise;
         else
@@ -188,11 +207,11 @@ Modal.minorShow = function () {
     }
 };
 
-Modal.majorShow = function () {
+Modal.majorShow = function (options) {
     let nextModalWindow = Modal.majorQueue[0];
     if (nextModalWindow) {
         Modal.majorActive = true;
-        let promise = nextModalWindow.show();
+        let promise = nextModalWindow.show(options);
         if (promise)
             return promise;
         else
