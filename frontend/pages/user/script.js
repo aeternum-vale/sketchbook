@@ -4,7 +4,7 @@ import './style.less';
 
 let Modal = require(BLOCKS + 'modal');
 let Dropdown = require(BLOCKS + 'dropdown');
-let Spinner = require(BLOCKS + 'spinner');
+let ModalSpinner = require(BLOCKS + 'modal-spinner');
 
 let linksDropdown = new Dropdown({
     elem: document.getElementById('links-dropdown'),
@@ -19,7 +19,7 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
 
         if (!uploadImageModalWindow) {
 
-            let spinner = new Spinner({
+            let spinner = new ModalSpinner({
                 status: Modal.statuses.MAJOR
             });
             spinner.activate();
@@ -49,7 +49,7 @@ let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
 
-    let spinner = new Spinner({
+    let spinner = new ModalSpinner({
         status: Modal.statuses.MAJOR
     });
     spinner.activate();
@@ -82,15 +82,17 @@ function createGallery() {
     });
 }
 
-let PromptWindow = require(BLOCKS + 'prompt-window');
+let messageModalWindow = require(BLOCKS + 'message-modal-window');
 
-// setTimeout(() => {
-//     let prompt = new PromptWindow();
-//     let prompt2 = new PromptWindow();
-//     prompt.activate();
-//     prompt2.activate();
+
+// let count = 0;
+// setInterval(() => {
+//     let message = new messageModalWindow({message: ++count});
+//     message.activate();
 //
-// }, 2000);
+// }, 5000);
+//
+// //TODO TIME INTERVAL
 
 
 require(LIBS + 'setGlobalErrorCatcher')();

@@ -6,6 +6,8 @@ let MessageModalWindow = function (options) {
     this.elemId = 'message-modal-window';
     this.caption = options && options.caption || 'message';
     this.message = options && options.message || 'You were not suppose to see this! Seems like something is broken :(';
+
+    this.status = Modal.statuses.MAJOR;
 };
 MessageModalWindow.prototype = Object.create(Modal.prototype);
 MessageModalWindow.prototype.constructor = MessageModalWindow;
@@ -31,17 +33,28 @@ MessageModalWindow.prototype.setWindowInnerHtml = function () {
 };
 
 MessageModalWindow.prototype.show = function () {
-    Modal.prototype.show.apply(this);
 
-    if (!this.elem)
-        this.setElem();
 
-    this.elem.classList.remove('window_invisible');
+    return new Promise((resolve, reject) => {
+        console.log('start interval');
+        setTimeout(() => {
+            console.log('end interval');
+            Modal.prototype.show.apply(this);
+
+            if (!this.elem)
+                this.setElem();
+
+            this.elem.classList.remove('window_invisible');
+
+            resolve();
+
+        }, 5000);
+    });
 };
 
-MessageModalWindow.prototype.deactivate = function () {
+MessageModalWindow.prototype.hide = function () {
+    Modal.prototype.hide.apply(this);
     this.elem.classList.add('window_invisible');
-    Modal.prototype.deactivate.apply(this);
 };
 
 module.exports = MessageModalWindow;

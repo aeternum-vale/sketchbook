@@ -1,5 +1,5 @@
 let eventMixin = require(LIBS + 'eventMixin');
-
+let Spinner = require(BLOCKS + 'spinner');
 
 let Modal = function (options) {
     this.active = false;
@@ -33,9 +33,7 @@ Modal.setBackdrop = function (status) {
         if (!Modal.majorBackdrop)
             Modal.majorBackdrop = Modal.renderBackdrop('major');
     }
-
 };
-
 
 Modal.setWrapper = function (status) {
     if (status === Modal.statuses.MINOR) {
@@ -43,9 +41,7 @@ Modal.setWrapper = function (status) {
         if (!Modal.minorWrapper)
             Modal.minorWrapper = Modal.renderWrapper('minor');
         Modal.minorWrapper.onclick = e => {
-            console.log('i am trying 1');
             if (e.target && !e.target.classList.contains('modal-wrapper_minor')) return;
-            console.log('i am trying 2');
             if (Modal.minorActive)
                 Modal.minorQueue[0].deactivate();
         };
@@ -120,7 +116,7 @@ Modal.prototype.show = function () {
 Modal.prototype.activate = function (options) {
 
     if (this.elemId === 'spinner') {
-        let spinner = this;
+        let spinner = this; //TODO а он точно в замыкании сохраняется?
         this.on('spinner_host-loaded', e => {
             let newHost = e.detail.host;
 
@@ -146,14 +142,13 @@ Modal.prototype.activate = function (options) {
             else
                 resolve();
         }
-        else if (this.status === Modal.statuses.MAJOR) {
+        else {
             Modal.majorQueue.push(this);
-
-
             console.log(Modal.minorQueue);
             console.log(Modal.majorQueue);
 
             if (!Modal.majorActive)
+
                 Modal.majorShow(options).then(() => {
                     resolve();
                 });
@@ -163,26 +158,32 @@ Modal.prototype.activate = function (options) {
     });
 };
 
-Modal.prototype.deactivate = function (options) {
-
+Modal.prototype.hide = function () {
     if (this.status === Modal.statuses.MINOR) {
         //TODO not neccessary if queue is not empty
         Modal.minorWrapper.classList.add('modal-wrapper_invisible');
         Modal.minorBackdrop.classList.add('backdrop_invisible');
-
-        Modal.minorQueue.shift();
-        Modal.minorShow(options);
     }
-    else if (this.status === Modal.statuses.MAJOR) {
-
+    else {
         Modal.majorWrapper.classList.add('modal-wrapper_invisible');
         Modal.majorBackdrop.classList.add('backdrop_invisible');
+    }
+};
 
+
+Modal.prototype.deactivate = function (options) {
+
+    this.hide();
+    this.active = false;
+    if (this.status === Modal.statuses.MINOR) {
+        Modal.minorActive = false;
+        Modal.minorQueue.shift();
+        Modal.minorShow(options);
+    } else {
+        Modal.majorActive = false;
         Modal.majorQueue.shift();
         Modal.majorShow(options);
     }
-
-    this.active = false;
     this.trigger('modal-window_deactivated');
 };
 
@@ -191,7 +192,26 @@ Modal.majorActive = false;
 Modal.minorQueue = [];
 Modal.majorQueue = [];
 
-Modal.minorShow = function (options) {
+Modal.spinner = new Spinner();
+Modal.spinner.status = Modal.statuses.MAJOR;
+
+Modal.showSpinner = function () {
+    Modal.prototype.show.call(Modal.spinner);
+
+    if (!Modal.spinner.elem)
+        Modal.spinner.elem = Modal.prototype.renderWindow.call(Modal.spinner, Spinner.innerHtml);
+
+    Modal.spinner.show();
+};
+
+Modal.hideSpinner = function () {
+    Modal.spinner.hide();
+};
+
+
+Modal.minorShow = function (options) { //TODO не уверен что новое окно дождется ресолва у show() предыдущего. что-то с эктив?
+    console.log('minorShow called');
+
     let nextModalWindow = Modal.minorQueue[0];
     if (nextModalWindow) {
         Modal.minorActive = true;
@@ -208,14 +228,29 @@ Modal.minorShow = function (options) {
 };
 
 Modal.majorShow = function (options) {
+
     let nextModalWindow = Modal.majorQueue[0];
+
+    console.log('majorShow called nextModalWindow: ');
+    console.log(nextModalWindow);
+
     if (nextModalWindow) {
-        Modal.majorActive = true;
+
+
+        Modal.showSpinner();
         let promise = nextModalWindow.show(options);
+
         if (promise)
-            return promise;
-        else
+            return promise.then(() => {
+                Modal.majorActive = true;
+                Modal.hideSpinner();
+            });
+        else {
+            Modal.majorActive = true;
+            Modal.hideSpinner();
             return Promise.resolve();
+        }
+
     } else {
         Modal.majorActive = false;
         return Promise.resolve();
@@ -224,5 +259,6 @@ Modal.majorShow = function (options) {
 
 for (let key in eventMixin)
     Modal.prototype[key] = eventMixin[key];
+
 
 module.exports = Modal;

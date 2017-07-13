@@ -10,9 +10,7 @@ let Gallery = function (options) {
 
     this.gallery = options.gallery;
     this.elem = options.elem;
-
     this.isLogged = options.isLogged;
-
     this.preloadEntityCount = options.preloadEntityCount;
 
     this.viewModels = {};
@@ -43,6 +41,7 @@ let Gallery = function (options) {
 
     if (this.isEmbedded)
         this.setGallery(options);
+
     else { //TODO isn't it show() ?
         this.currentImageId = +this.elem.dataset.id;
         this.requestViewModel(this.currentImageId).then(() => {
@@ -89,6 +88,8 @@ Gallery.prototype.setElem = function () {
 
         if (!this.elem)
             this.elem = this.renderWindow(require(`html-loader!./window`));
+
+        //this.elem.onload = e => console.log('elem onload');
 
         this.imgElem = this.elem.querySelector('img.image__img-element');
         this.description = this.elem.querySelector('.image__description');
@@ -172,7 +173,7 @@ Gallery.prototype.setElem = function () {
                                 this.switchToNext();
                         });
                         resolve();
-
+                        console.log('phase 1');
                     });
                 } else {
                     this.setSubscribeButton();
@@ -217,18 +218,20 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 
 
 Gallery.prototype.show = function (options) {
-
-    let imageId = options.imageId;
-    this.currentImageId = imageId;
+    let imageId = options && options.imageId;
 
     Modal.prototype.show.apply(this);
     return new Promise((resolve, reject) => {
 
-        if (!this.elem)
+        if (!this.elem) {
 
+            this.currentImageId = imageId;
             this.requestViewModel(imageId).then(() => {
+
                 this.setElem().then(() => {
+                    console.log('phase 2');
                     this.updateCurrentView(imageId).then(() => {
+                        console.log('phase 4');
                         this.elem.classList.remove('image_invisible');
                         resolve();
                     });
@@ -238,7 +241,7 @@ Gallery.prototype.show = function (options) {
                     });
                 });
             });
-
+        }
         else {
             this.requestViewModel(imageId).then(() => {
                 this.updateCurrentView(imageId).then(() => {
@@ -255,16 +258,18 @@ Gallery.prototype.show = function (options) {
 
 };
 
-Gallery.prototype.deactivate = function (noPushState) {
+
+
+Gallery.prototype.hide = function (noPushState) {
     if (!this.isEmbedded)
         window.location = this.elem.dataset.authorUrl;
     else {
+        Modal.prototype.hide.apply(this);
+
         this.elem.classList.add('image_invisible');
 
         if (!noPushState)
             this.pushUserState();
-
-        Modal.prototype.deactivate.apply(this);
     }
 
 };
@@ -303,15 +308,15 @@ Gallery.prototype.resizeImage = function () {
         }
     }
 };
-
-Gallery.prototype.renderImageElem = function () {
-    return this.requestViewModel(this.currentImageId, true).then(response => {
-        let parent = document.createElement('DIV');
-        parent.innerHTML = response.html;
-        this.elem = parent.firstElementChild;
-        document.body.insertBefore(this.elem, document.body.firstElementChild);
-    });
-};
+//
+// Gallery.prototype.renderImageElem = function () {
+//     return this.requestViewModel(this.currentImageId, true).then(response => {
+//         let parent = document.createElement('DIV');
+//         parent.innerHTML = response.html;
+//         this.elem = parent.firstElementChild;
+//         document.body.insertBefore(this.elem, document.body.firstElementChild);
+//     });
+// };
 
 Gallery.prototype.requestViewModel = function (id) {
     return new Promise((resolve, reject) => {
@@ -540,6 +545,7 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
     this.currentImageId = newCurrentImageId;
     this.deactivateImgElem();
 
+    //TODO возможно нужно промисифицировать
     return this.requestViewModel(newCurrentImageId).then(() => {
 
         if (newCurrentImageId === this.currentImageId) {
@@ -564,6 +570,8 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
 
             if (!noPushState)
                 this.pushImageState();
+
+            console.log('phase 3');
         }
     });
 };
@@ -603,7 +611,7 @@ Gallery.prototype.onPopState = function (state) {
     if (state && state.type)
         switch (state.type) {
             case 'image':
-                this.show();
+                this.show(); //TODO bug
                 this.updateCurrentView(state.id, true);
                 break;
 

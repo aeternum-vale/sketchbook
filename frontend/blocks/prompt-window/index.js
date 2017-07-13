@@ -6,6 +6,7 @@ let PromptWindow = function (options) {
     this.elemId = 'prompt-window';
     this.caption = options && options.caption || 'decide';
     this.message = options && options.message || 'Are you sure?';
+
 };
 PromptWindow.prototype = Object.create(MessageModalWindow.prototype);
 PromptWindow.prototype.constructor = PromptWindow;
@@ -27,6 +28,8 @@ PromptWindow.prototype.setWindowInnerHtml = function () {
             </div>
         </div>`;
 };
+
+
 
 PromptWindow.prototype.setElem = function () {
     MessageModalWindow.prototype.setElem.apply(this, arguments);
