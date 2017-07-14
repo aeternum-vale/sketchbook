@@ -1,14 +1,17 @@
 let ServerError = require(LIBS + 'componentErrors').ServerError;
 let ClientError = require(LIBS + 'componentErrors').ClientError;
 
-module.exports = function(bodyObj, method, url, cb) {
+module.exports = function (bodyObj, method, url, cb) {
 
 
     let body = '';
     if (!(typeof bodyObj === 'string')) {
-        for (let key in bodyObj)
-            body += (body === '' ? '' : '&') +
-            key + '=' + encodeURIComponent((typeof bodyObj[key] === 'object') ? JSON.stringify(bodyObj[key]) : bodyObj[key]);
+        for (let key in bodyObj) {
+            let value = '';
+            if (bodyObj[key])
+                value = key + '=' + encodeURIComponent((typeof bodyObj[key] === 'object') ? JSON.stringify(bodyObj[key]) : bodyObj[key]);
+            body += (body === '' ? '' : '&') + value;
+        }
     } else
         body = bodyObj;
 
@@ -18,7 +21,7 @@ module.exports = function(bodyObj, method, url, cb) {
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (this.readyState != 4) return;
 
         let response;

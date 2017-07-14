@@ -2,8 +2,8 @@
 
 import './style.less';
 
-let Modal = require(BLOCKS + 'modal');
 let Dropdown = require(BLOCKS + 'dropdown');
+let Modal = require(BLOCKS + 'modal');
 let ModalSpinner = require(BLOCKS + 'modal-spinner');
 
 let linksDropdown = new Dropdown({
@@ -45,15 +45,15 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
     };
 }
 
+
+
 let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
-
     let spinner = new ModalSpinner({
         status: Modal.statuses.MAJOR
     });
     spinner.activate();
-
     if (!e.target.matches('.image-preview')) return;
     e.preventDefault();
 
@@ -82,9 +82,7 @@ function createGallery() {
     });
 }
 
-let messageModalWindow = require(BLOCKS + 'message-modal-window');
-
-
+//let messageModalWindow = require(BLOCKS + 'message-modal-window');
 // let count = 0;
 // setInterval(() => {
 //     let message = new messageModalWindow({message: ++count});
@@ -92,7 +90,5 @@ let messageModalWindow = require(BLOCKS + 'message-modal-window');
 //
 // }, 5000);
 //
-// //TODO TIME INTERVAL
-
 
 require(LIBS + 'setGlobalErrorCatcher')();

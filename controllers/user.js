@@ -33,7 +33,7 @@ form.uploadDir = uploadDir;
 function usersListRequestListener(req, res, next) {
     co(function*() {
         return new Promise((resolve, reject) => {
-            User.find({}, function(err, users) {
+            User.find({}, function (err, users) {
                 if (err) reject(err);
                 resolve(users);
             });
@@ -183,67 +183,8 @@ function authorizationRequestListener(req, res, next) {
 
 function subscribeRequestListener(req, res, next) {
 
-    // let index;
-    // if (req.refererParams.field === 'user') {
-    //     let username = req.refererParams.value;
-    //
-    //     co(function*() {
-    //
-    //         let user = yield User.findOne({
-    //             username
-    //         }).exec();
-    //
-    //         if (~user.subscribers.indexOf(res.loggedUser._id)) {
-    //
-    //             yield user.update({
-    //                 $pull: {
-    //                     subscribers: res.loggedUser._id
-    //                 }
-    //             }).exec();
-    //
-    //             yield res.loggedUser.update({
-    //                 $pull: {
-    //                     subscriptions: user._id
-    //                 }
-    //             }).exec();
-    //
-    //         } else {
-    //
-    //             yield user.update({
-    //                 $addToSet: {
-    //                     subscribers: res.loggedUser._id
-    //                 }
-    //             }).exec();
-    //
-    //             yield res.loggedUser.update({
-    //                 $addToSet: {
-    //                     subscriptions: user._id
-    //                 }
-    //             }).exec();
-    //         }
-    //
-    //     }).then(result => {
-    //         res.json({});
-    //     }).catch(err => {
-    //         next(err);
-    //     });
-    //
-    // } else if (req.refererParams.field === 'image') {
-
-        let imageId = req.body.id;//req.refererParams.value;
-
-        if (!imageId)
-            return next(404)
-
-        co(function*() {
-
-            let image = yield Image.findById(imageId).exec();
-
-            if (!image)
-                throw new HttpError(404);
-
-            let user = yield User.findById(image.author).exec();
-
+    function subscribe(user) {
+        return co(function*() {
 
             if (~user.subscribers.indexOf(res.loggedUser._id)) {
 
@@ -273,15 +214,38 @@ function subscribeRequestListener(req, res, next) {
                     }
                 }).exec();
             }
-
-        }).then(result => {
-            res.json({});
-        }).catch(err => {
-            next(err);
         });
+    }
 
-    // } else
-    //     next(404);
+    let imageId = req.body.id;
+    let username;
+    if (req.refererParams.field === 'user')
+        username = req.refererParams.value;
+
+    if (!imageId && !username)
+        return next(404);
+
+    co(function*() {
+
+        let user;
+        if (imageId) {
+            let image = yield Image.findById(imageId).exec();
+            if (!image)
+                throw new HttpError(404);
+            user = yield User.findById(image.author).exec();
+        } else if (username) {
+            user = yield User.findOne({
+                username
+            }).exec();
+        }
+        yield subscribe(user);
+
+    }).then(() => {
+        res.json({});
+    }).catch(err => {
+        next(err);
+    });
+
 }
 
 function homeRequestListener(req, res, next) {
@@ -315,7 +279,6 @@ function homeRequestListener(req, res, next) {
             let rawImages = yield Image.find({
                 author: reprUsers[i]._id
             }).limit(IMAGE_PREVIEW_COUNT).exec();
-
 
 
             let images = [];
@@ -368,11 +331,9 @@ function homeRequestListener(req, res, next) {
         }
 
 
-
         return cutaways;
 
     }).then(cutaways => {
-
 
 
         res.locals.cutaways = cutaways;
@@ -395,7 +356,7 @@ function avatarUploadRequestListener(req, res, next) {
     co(function*() {
 
         let formData = yield new Promise((resolve, reject) => {
-            form.parse(req, function(err, fields, files) {
+            form.parse(req, function (err, fields, files) {
                 if (err) reject(303);
 
                 resolve({
@@ -418,7 +379,7 @@ function avatarUploadRequestListener(req, res, next) {
             config.get('userdata:avatar:big:size'), config.get('userdata:avatar:big:size'));
 
         yield new Promise((resolve, reject) => {
-            fs.unlink(formPath, function(err) {
+            fs.unlink(formPath, function (err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -438,7 +399,7 @@ function avatarUploadRequestListener(req, res, next) {
 
 
         yield new Promise((resolve, reject) => {
-            fs.unlink(tempAvatarPath, function(err) {
+            fs.unlink(tempAvatarPath, function (err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -568,7 +529,7 @@ function setSettingsRequestListener(req, res, next) {
         if (err instanceof PropertyError)
             next(new HttpError(400, err.message, {
                 property: err.property
-            }))
+            }));
         else
             next(err);
     });
@@ -599,7 +560,7 @@ function deleteSettingsRequestListener(req, res, next) {
         deleteLink(req.body.link);
 }
 
-exports.registerRoutes = function(app) {
+exports.registerRoutes = function (app) {
     app.post('/join', joinRequestListener);
     app.post('/login', loginRequestListener);
     app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);

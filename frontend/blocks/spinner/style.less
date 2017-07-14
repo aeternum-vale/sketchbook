@@ -1,10 +1,50 @@
+@spinner-circle-count: 7;
+@spinner-size: 50px;
+@spinner-dist: @spinner-size / 2;
+
+
+.generate-circle(@i: 1) when (@i =< @spinner-circle-count) {
+
+  @_angle: pi() * 2 / @spinner-circle-count * @i;
+
+  @keyframes ~"moving@{i}" {
+    from {
+      //transform: translate(cos(@_angle) * @spinner-dist * -1, sin(@_angle) * @spinner-dist * -1);
+      transform: translate(0, 0);
+    }
+    to {
+      transform: translate(cos(@_angle) * @spinner-dist, sin(@_angle) * @spinner-dist);
+    }
+  }
+
+  .spinner__circle:nth-child(@{i}) {
+    animation: ~"moving@{i}" .3s ease-in-out 0s infinite alternate;
+
+  }
+
+  .generate-circle(@i + 1);
+}
+
 .spinner {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: #fff;
+  width: @spinner-size;
+  height: @spinner-size;
+
+  &__circle {
+    position: absolute;
+    width: @spinner-size;
+    height: @spinner-size;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 1 / @spinner-circle-count * 3;
+
+  }
 
   &_invisible {
     display: none;
   }
+
 }
+
+.generate-circle();
+

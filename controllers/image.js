@@ -24,7 +24,6 @@ let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 
 
-
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
 
@@ -54,7 +53,7 @@ function uploadImageListRequestListener(req, res, next) {
     co(function*() {
 
         let formData = yield new Promise((resolve, reject) => {
-            form.parse(req, function(err, fields, files) {
+            form.parse(req, function (err, fields, files) {
                 if (err) reject(303);
 
                 resolve({
@@ -70,14 +69,14 @@ function uploadImageListRequestListener(req, res, next) {
         let formPath = formData.files.image.path;
         let tempImagePath = `${formPath}.${config.get('userdata:image:ext')}`;
         let tempImagePreviewPath = `${formPath}${
-			config.get('userdata:preview:postfix')
-			}.${config.get('userdata:preview:ext')}`;
+            config.get('userdata:preview:postfix')
+            }.${config.get('userdata:preview:ext')}`;
 
         yield imageManipulation.copy(formPath, tempImagePath,
             config.get('userdata:image:minWidth'), config.get('userdata:image:minHeight'));
 
         yield new Promise((resolve, reject) => {
-            fs.unlink(formPath, function(err) {
+            fs.unlink(formPath, function (err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -99,14 +98,14 @@ function uploadImageListRequestListener(req, res, next) {
         let imagePreviewPath = path.join(uploadDir, imagePreviewFileName);
 
         yield new Promise((resolve, reject) => {
-            fs.rename(tempImagePath, imagePath, function(err) {
+            fs.rename(tempImagePath, imagePath, function (err) {
                 if (err) reject(err);
                 resolve();
             });
         });
 
         yield new Promise((resolve, reject) => {
-            fs.rename(tempImagePreviewPath, imagePreviewPath, function(err) {
+            fs.rename(tempImagePreviewPath, imagePreviewPath, function (err) {
                 if (err) reject(err);
                 resolve();
             });
@@ -134,7 +133,7 @@ function uploadImageListRequestListener(req, res, next) {
 function imageListRequestListener(req, res, next) {
     co(function*() {
         return new Promise((resolve, reject) => {
-            Image.find({}, function(err, images) {
+            Image.find({}, function (err, images) {
                 if (err) reject(err);
                 resolve(images);
             });
@@ -226,12 +225,11 @@ function likeRequestListener(req, res, next) {
 }
 
 
-function feedRequestListener(req, res, next) {
+function getFeed(loggedUser) {
+    return co(function*() {
+        let rawFeed = [];
 
-    co(function*() {
-        let feed = [];
-
-        let subs = res.loggedUser.subscriptions;
+        let subs = loggedUser.subscriptions;
 
         for (let i = 0; i < subs.length; i++) {
             let imageIds = (yield User.findById(subs[i], {
@@ -241,25 +239,25 @@ function feedRequestListener(req, res, next) {
             for (let j = 0; j < imageIds.length; j++) {
                 let image = yield Image.findById(imageIds[j]).exec();
                 if (image)
-                    feed.push(image);
+                    rawFeed.push(image);
             }
         }
 
-        feed.sort((a, b) => {
+        rawFeed.sort((a, b) => {
             return (a.created < b.created);
         });
 
-        return feed;
+        let feed = rawFeed.map(item => imagePreviewViewModel(item));
 
-    }).then(rawFeed => {
+        return feed;
+    });
+}
+
+
+function feedRequestListener(req, res, next) {
+    getFeed(res.loggedUser).then(feed => {
 
         res.locals.page = 'feed';
-
-        let feed = [];
-        rawFeed.forEach(item => {
-            feed.push(imagePreviewViewModel(item));
-        });
-
         res.locals.feed = feed;
         res.render('feed');
 
@@ -270,12 +268,15 @@ function feedRequestListener(req, res, next) {
 
 
 function galleryRequestListener(req, res, next) {
+    debug(req.body.isFeed);
+
     if (!req.body.id)
         return next(400);
 
     let preloadEntityCount = config.get('image:preloadEntityCount') || 1;
     let id = +req.body.id;
-    let requireHtml = !!req.body.requireHtml;
+    let isFeed = req.body.isFeed;
+
 
     let loggedUserId;
     if (res.loggedUser)
@@ -289,7 +290,15 @@ function galleryRequestListener(req, res, next) {
 
         let image = yield imageViewModel(rawImage, loggedUserId);
         let author = yield User.findById(image.author._id).exec();
-        let gallery = author.images;
+        let gallery;
+        if (!isFeed)
+            gallery = author.images;
+        else {
+            let feed = yield getFeed(res.loggedUser);
+            gallery = feed.map(item => item._id);
+        }
+
+
         let viewModels = {};
 
         viewModels[image._id] = image;
@@ -300,32 +309,19 @@ function galleryRequestListener(req, res, next) {
             gallery
         };
     }).then(result => {
-        if (requireHtml) {
 
-            res.locals.image = result.image;
-            res.render('partials/image', {
-                layout: null
-            }, function(err, html) {
-                res.json({
-                    html,
-                    viewModels: result.viewModels,
-                    gallery: result.gallery
-                })
-            });
+        res.json({
+            viewModels: result.viewModels,
+            gallery: result.gallery
+        });
 
-        } else {
-            res.json({
-                viewModels: result.viewModels,
-                gallery: result.gallery
-            })
-        }
     }).catch(err => {
         next(err);
     });
 }
 
-exports.registerRoutes = function(app) {
-    app.post('/gallery', addLoggedUser, galleryRequestListener);
+exports.registerRoutes = function (app) {
+    app.post('/gallery', addLoggedUser, addRefererParams, galleryRequestListener);
     app.post('/image', isAuth, uploadImageListRequestListener);
     app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
     app.get('/images', imageListRequestListener);

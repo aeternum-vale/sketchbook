@@ -1,0 +1,9 @@
+<div id="spinner" class="spinner">
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+    <div class="spinner__circle"></div>
+</div>

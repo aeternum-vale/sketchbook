@@ -1,22 +1,29 @@
 {{#section 'scripts'}}
-	<script defer src="/feed.js"></script>
+    <script defer src="/feed.js"></script>
 {{/section}}
 
 
 {{> page-header}}
 <div class="pseudo-header"></div>
-<div class="gallery">
-	<div class="gallery__wrapper">
+<div id="gallery" class="gallery">
+    <div class="gallery__wrapper">
 
-		{{#each feed}}
-			{{> image-preview
-				comments=comments.length
-				likes=likes.length
-				previewUrl=previewUrl
-				imageId=_id
-			}}
-		{{/each}}
+        {{#if feed}}
+            {{#each feed}}
+                {{> image-preview
+                        comments=comments.length
+                        likes=likes.length
+                        previewUrl=previewUrl
+                        imageId=_id
+                }}
+            {{/each}}
+        {{/if}}
+        {{> image-preview
+                ghost=true
+                comments='0'
+                likes='0'
+        }}
 
-	</div>
+    </div>
 </div>
 {{> footer}}

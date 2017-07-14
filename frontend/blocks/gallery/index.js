@@ -7,11 +7,11 @@ let Gallery = function (options) {
     Modal.apply(this, arguments);
     this.status = Modal.statuses.MAJOR;
 
-
     this.gallery = options.gallery;
     this.elem = options.elem;
     this.isLogged = options.isLogged;
     this.preloadEntityCount = options.preloadEntityCount;
+    this.isFeed = options.isFeed || false;
 
     this.viewModels = {};
     this.galleryArray = null;
@@ -34,7 +34,7 @@ let Gallery = function (options) {
         this.resizeImage();
     });
 
-    this.pushUserState();
+    this.pushGalleryState();
 
 
     this.isEmbedded = !!this.gallery;
@@ -52,7 +52,7 @@ let Gallery = function (options) {
                     this.updatePreloadedImagesArray();
                 });
 
-                this.activateImgElem();
+                this.showImgElem();
             });
         }).catch((err) => {
             this.error(err);
@@ -104,7 +104,7 @@ Gallery.prototype.setElem = function () {
 
         this.imgElem.onload = e => {
             this.resizeImage();
-            this.activateImgElem();
+            this.showImgElem();
         };
 
         this.elem.onclick = e => {
@@ -173,7 +173,6 @@ Gallery.prototype.setElem = function () {
                                 this.switchToNext();
                         });
                         resolve();
-                        console.log('phase 1');
                     });
                 } else {
                     this.setSubscribeButton();
@@ -219,6 +218,7 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 
 Gallery.prototype.show = function (options) {
     let imageId = options && options.imageId;
+    let noPushState = options && options.noPushState || false;
 
     Modal.prototype.show.apply(this);
     return new Promise((resolve, reject) => {
@@ -229,13 +229,11 @@ Gallery.prototype.show = function (options) {
             this.requestViewModel(imageId).then(() => {
 
                 this.setElem().then(() => {
-                    console.log('phase 2');
-                    this.updateCurrentView(imageId).then(() => {
-                        console.log('phase 4');
+                    this.updateCurrentView(imageId, noPushState).then(() => {
                         this.elem.classList.remove('image_invisible');
                         resolve();
                     });
-                    this.pushImageState();
+                    //this.pushImageState();
                     this.requestAllNecessaryViewModels().then(() => {
                         this.updatePreloadedImagesArray();
                     });
@@ -244,11 +242,11 @@ Gallery.prototype.show = function (options) {
         }
         else {
             this.requestViewModel(imageId).then(() => {
-                this.updateCurrentView(imageId).then(() => {
+                this.updateCurrentView(imageId, noPushState).then(() => {
                     this.elem.classList.remove('image_invisible');
                     resolve();
                 });
-                this.pushImageState();
+                //this.pushImageState(); //TODO пересмотреть полномочия апдейткуррентвью() и переделать свитчтунекст()
                 this.requestAllNecessaryViewModels().then(() => {
                     this.updatePreloadedImagesArray();
                 });
@@ -257,7 +255,6 @@ Gallery.prototype.show = function (options) {
     });
 
 };
-
 
 
 Gallery.prototype.hide = function (noPushState) {
@@ -269,16 +266,16 @@ Gallery.prototype.hide = function (noPushState) {
         this.elem.classList.add('image_invisible');
 
         if (!noPushState)
-            this.pushUserState();
+            this.pushGalleryState();
     }
 
 };
 
-Gallery.prototype.deactivateImgElem = function () {
+Gallery.prototype.hideImgElem = function () {
     this.elem.classList.add('image_img-element-invisible');
 };
 
-Gallery.prototype.activateImgElem = function () {
+Gallery.prototype.showImgElem = function () {
     this.elem.classList.remove('image_img-element-invisible');
 };
 
@@ -327,7 +324,8 @@ Gallery.prototype.requestViewModel = function (id) {
         }
 
         require(LIBS + 'sendRequest')({
-            id
+            id,
+            isFeed: this.isFeed
         }, 'POST', '/gallery', (err, response) => {
             if (err) {
                 if (err instanceof ClientError) {
@@ -543,9 +541,8 @@ Gallery.prototype.getPrevImageId = function (offset) {
 Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) {
     newCurrentImageId = newCurrentImageId || this.currentImageId;
     this.currentImageId = newCurrentImageId;
-    this.deactivateImgElem();
+    this.hideImgElem();
 
-    //TODO возможно нужно промисифицировать
     return this.requestViewModel(newCurrentImageId).then(() => {
 
         if (newCurrentImageId === this.currentImageId) {
@@ -568,10 +565,11 @@ Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) 
             this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
             this.username.textContent = this.currentViewModel.author.username;
 
-            if (!noPushState)
+            if (!noPushState) {
+                console.log('push state');
                 this.pushImageState();
+            }
 
-            console.log('phase 3');
         }
     });
 };
@@ -597,10 +595,12 @@ Gallery.prototype.pushImageState = function () {
     }, 'image #' + this.currentImageId, '/image/' + this.currentImageId);
 };
 
-Gallery.prototype.pushUserState = function () {
+Gallery.prototype.pushGalleryState = function () {
     let url = '';
-    if (this.currentViewModel)
-        url = this.currentViewModel.author.url;
+    if (!this.isFeed)
+        url = this.currentViewModel && this.currentViewModel.author.url;
+    else
+        url = '/feed';
 
     history.pushState({
         type: 'user'
@@ -608,11 +608,16 @@ Gallery.prototype.pushUserState = function () {
 };
 
 Gallery.prototype.onPopState = function (state) {
+    console.log('onpopstate:');
+    console.log(state);
+
     if (state && state.type)
         switch (state.type) {
             case 'image':
-                this.show(); //TODO bug
-                this.updateCurrentView(state.id, true);
+                this.show({
+                    imageId: state.id,
+                    noPushState: true
+                });
                 break;
 
             case 'user':

@@ -209,17 +209,18 @@ Modal.hideSpinner = function () {
 };
 
 
-Modal.minorShow = function (options) { //TODO не уверен что новое окно дождется ресолва у show() предыдущего. что-то с эктив?
-    console.log('minorShow called');
-
+Modal.minorShow = function (options) {
     let nextModalWindow = Modal.minorQueue[0];
     if (nextModalWindow) {
-        Modal.minorActive = true;
         let promise = nextModalWindow.show(options);
         if (promise)
-            return promise;
-        else
+            return promise.then(() => {
+                Modal.minorActive = true;
+            });
+        else {
+            Modal.minorActive = true;
             return Promise.resolve();
+        }
     } else {
 
         Modal.minorActive = false;
@@ -231,11 +232,7 @@ Modal.majorShow = function (options) {
 
     let nextModalWindow = Modal.majorQueue[0];
 
-    console.log('majorShow called nextModalWindow: ');
-    console.log(nextModalWindow);
-
     if (nextModalWindow) {
-
 
         Modal.showSpinner();
         let promise = nextModalWindow.show(options);

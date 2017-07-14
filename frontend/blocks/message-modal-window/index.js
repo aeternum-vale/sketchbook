@@ -7,7 +7,6 @@ let MessageModalWindow = function (options) {
     this.caption = options && options.caption || 'message';
     this.message = options && options.message || 'You were not suppose to see this! Seems like something is broken :(';
 
-    this.status = Modal.statuses.MAJOR;
 };
 MessageModalWindow.prototype = Object.create(Modal.prototype);
 MessageModalWindow.prototype.constructor = MessageModalWindow;
@@ -33,23 +32,12 @@ MessageModalWindow.prototype.setWindowInnerHtml = function () {
 };
 
 MessageModalWindow.prototype.show = function () {
+    Modal.prototype.show.apply(this);
 
+    if (!this.elem)
+        this.setElem();
 
-    return new Promise((resolve, reject) => {
-        console.log('start interval');
-        setTimeout(() => {
-            console.log('end interval');
-            Modal.prototype.show.apply(this);
-
-            if (!this.elem)
-                this.setElem();
-
-            this.elem.classList.remove('window_invisible');
-
-            resolve();
-
-        }, 5000);
-    });
+    this.elem.classList.remove('window_invisible');
 };
 
 MessageModalWindow.prototype.hide = function () {
