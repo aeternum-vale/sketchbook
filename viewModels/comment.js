@@ -16,7 +16,7 @@ module.exports = function(comment, loggedUserId) {
             createDateStr: getDateString(comment.created),
             text: comment.text,
             commentator: truncatedUserViewModel(yield User.findById(comment.author).exec(), loggedUserId),
-            isOwnComment: !!(loggedUserId === comment.author)
+            isOwnComment: (loggedUserId === comment.author)
         };
 
         return commentViewModel;

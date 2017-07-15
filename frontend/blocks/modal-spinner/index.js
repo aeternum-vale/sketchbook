@@ -17,6 +17,7 @@ for (let key in Spinner.prototype)
 
 
 ModalSpinner.prototype.setElem = function() {
+    //TODO два спиннера создаются, сделай проверку
     this.elem = this.renderWindow(Spinner.innerHtml);
 };
 
@@ -37,7 +38,7 @@ ModalSpinner.prototype.hide = function () {
 };
 
 
-ModalSpinner.prototype.deactivate = function (options) { //TODO должен грамотно деактивироваться
+ModalSpinner.prototype.deactivate = function (options) {
     Modal.prototype.deactivate.apply(this, arguments);
 };
 

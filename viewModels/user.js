@@ -1,5 +1,14 @@
 let imagePaths = require('libs/imagePaths');
 
+
+/**
+ * Returns viewModel for User
+ *
+ * @param {object} user
+ * @param {number} loggedUserId
+ * @return {object}
+ */
+
 module.exports = function(user, loggedUserId) {
 
 	let avatarFileNames;
@@ -25,7 +34,7 @@ module.exports = function(user, loggedUserId) {
 		subscribers: user.subscribers,
 		subscriptions: user.subscriptions,
 		isNarrator: !!(~user.subscribers.indexOf(loggedUserId)),
-		isLoggedUser: !!(user._id === loggedUserId),
+		isLoggedUser: (user._id === loggedUserId),
 		images: user.images,
 		likes: user.likes,
 		comments: user.comments,

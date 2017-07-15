@@ -1,6 +1,6 @@
 <div id="image" class="modal image" data-author-url={{image.author.url}} data-id={{image._id}}>
     <div class="image__image-wrapper">
-        <img class="image__img-element" src="{{image.imgUrl}}" alt="">
+        <img class="image__img-element" {{#if image}}src="{{image.imgUrl}}"{{/if}} alt="">
         <div class="image__controls">
             <div class="image__control image__control-prev">prev</div>
             <div class="image__control image__control-full">full</div>

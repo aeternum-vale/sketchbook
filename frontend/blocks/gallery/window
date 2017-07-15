@@ -1,6 +1,6 @@
 <div id="image" class="modal image" data-author-url= data-id=>
     <div class="image__image-wrapper">
-        <img class="image__img-element" src="" alt="">
+        <img class="image__img-element" alt="">
         <div class="image__controls">
             <div class="image__control image__control-prev">prev</div>
             <div class="image__control image__control-full">full</div>

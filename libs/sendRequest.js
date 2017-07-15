@@ -10,7 +10,8 @@ module.exports = function (bodyObj, method, url, cb) {
             let value = '';
             if (bodyObj[key])
                 value = key + '=' + encodeURIComponent((typeof bodyObj[key] === 'object') ? JSON.stringify(bodyObj[key]) : bodyObj[key]);
-            body += (body === '' ? '' : '&') + value;
+            if (value)
+                body += (body === '' ? '' : '&') + value; //TODO id=156&
         }
     } else
         body = bodyObj;

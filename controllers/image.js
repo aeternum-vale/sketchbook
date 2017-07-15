@@ -268,7 +268,6 @@ function feedRequestListener(req, res, next) {
 
 
 function galleryRequestListener(req, res, next) {
-    debug(req.body.isFeed);
 
     if (!req.body.id)
         return next(400);
@@ -276,11 +275,12 @@ function galleryRequestListener(req, res, next) {
     let preloadEntityCount = config.get('image:preloadEntityCount') || 1;
     let id = +req.body.id;
     let isFeed = req.body.isFeed;
+    let requireUserViewModel = req.body.requireUserViewModel;
 
 
     let loggedUserId;
     if (res.loggedUser)
-        loggedUserId = res.loggedUser._id;
+        loggedUserId = res.loggedUser && res.loggedUser._id;
 
     co(function*() {
 
@@ -298,23 +298,29 @@ function galleryRequestListener(req, res, next) {
             gallery = feed.map(item => item._id);
         }
 
+        let loggedUserViewModel;
+        if (res.loggedUser)
+            loggedUserViewModel = yield userViewModel(res.loggedUser, loggedUserId);
 
         let viewModels = {};
-
         viewModels[image._id] = image;
 
         return {
             image,
             viewModels,
-            gallery
+            gallery,
+            loggedUserViewModel
         };
     }).then(result => {
 
-        res.json({
+        let response = {
             viewModels: result.viewModels,
             gallery: result.gallery
-        });
+        };
+        if (requireUserViewModel)
+            response.loggedUserViewModel = result.loggedUserViewModel;
 
+        res.json(response);
     }).catch(err => {
         next(err);
     });

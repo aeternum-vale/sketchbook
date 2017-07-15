@@ -3,6 +3,7 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 let ImageNotFound = require(LIBS + 'componentErrors').ImageNotFound;
 let Modal = require(BLOCKS + 'modal');
 
+
 let Gallery = function (options) {
     Modal.apply(this, arguments);
     this.status = Modal.statuses.MAJOR;
@@ -16,11 +17,16 @@ let Gallery = function (options) {
     this.viewModels = {};
     this.galleryArray = null;
     this.currentImageId = null;
+
+    this.loggedUserViewModel = null;
+    this.isEmbedded = !!this.gallery;
+    this.preloadedImages = {};
+
     Object.defineProperty(this, 'currentViewModel', {
         get: () => this.viewModels[this.currentImageId]
     });
 
-    this.preloadedImages = {};
+
     for (let i = 1; i <= this.preloadEntityCount; i++) {
         this.preloadedImages[i] = new Image();
         this.preloadedImages[-i] = new Image();
@@ -34,30 +40,15 @@ let Gallery = function (options) {
         this.resizeImage();
     });
 
+
     this.pushGalleryState();
-
-
-    this.isEmbedded = !!this.gallery;
 
     if (this.isEmbedded)
         this.setGallery(options);
-
-    else { //TODO isn't it show() ?
-        this.currentImageId = +this.elem.dataset.id;
-        this.requestViewModel(this.currentImageId).then(() => {
-            this.setElem().then(() => {
-                this.pushImageState();
-
-                this.requestAllNecessaryViewModels().then(() => {
-                    this.updatePreloadedImagesArray();
-                });
-
-                this.showImgElem();
-            });
-        }).catch((err) => {
+    else
+        this.show(+this.elem.dataset.id).catch((err) => {
             this.error(err);
         });
-    }
 };
 
 Gallery.prototype = Object.create(Modal.prototype);
@@ -89,8 +80,6 @@ Gallery.prototype.setElem = function () {
         if (!this.elem)
             this.elem = this.renderWindow(require(`html-loader!./window`));
 
-        //this.elem.onload = e => console.log('elem onload');
-
         this.imgElem = this.elem.querySelector('img.image__img-element');
         this.description = this.elem.querySelector('.image__description');
         this.date = this.elem.querySelector('.image__post-date');
@@ -100,6 +89,7 @@ Gallery.prototype.setElem = function () {
         this.subscribeButtonElem = this.elem.querySelector('.image__subscribe-button');
         this.avatar = this.elem.querySelector('.image__avatar');
         this.username = this.elem.querySelector('.image__username');
+        this.headerLeftSide = this.elem.querySelector('.image__header-left-side');
 
 
         this.imgElem.onload = e => {
@@ -131,8 +121,10 @@ Gallery.prototype.setElem = function () {
                 this.commentSection = new CommentSection({
                     elem: document.querySelector('.comment-section'),
                     commentSenderElem: document.querySelector('.comment-send'),
-                    imageId: this.currentImageId
+                    imageId: this.currentImageId,
+                    loggedUserViewModel: this.loggedUserViewModel
                 });
+
 
                 this.commentSection.on('comment-section_changed', e => {
                     let imageId = e.detail.imageId;
@@ -217,47 +209,53 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 
 
 Gallery.prototype.show = function (options) {
-    let imageId = options && options.imageId;
-    let noPushState = options && options.noPushState || false;
+    let imageId;
+    let noPushState;
 
-    Modal.prototype.show.apply(this);
+    if (arguments.length === 1 && typeof arguments[0] === 'number') {
+        imageId = arguments[0];
+    } else {
+        imageId = options && options.imageId;
+        noPushState = options && options.noPushState || false;
+    }
+
     return new Promise((resolve, reject) => {
 
-        if (!this.elem) {
+        if (this.isEmbedded)
+            Modal.prototype.show.apply(this);
 
+        this.requestViewModel(imageId).then(() => {
             this.currentImageId = imageId;
-            this.requestViewModel(imageId).then(() => {
 
+            if (!this.elem || !this.isEmbedded)
                 this.setElem().then(() => {
-                    this.updateCurrentView(imageId, noPushState).then(() => {
-                        this.elem.classList.remove('image_invisible');
-                        resolve();
-                    });
-                    //this.pushImageState();
+                    this.updateCurrentView(imageId);
+                    this.elem.classList.remove('image_invisible');
+                    if (!noPushState && imageId === this.currentImageId)
+                        this.pushImageState();
+                    resolve();
                     this.requestAllNecessaryViewModels().then(() => {
                         this.updatePreloadedImagesArray();
                     });
                 });
-            });
-        }
-        else {
-            this.requestViewModel(imageId).then(() => {
-                this.updateCurrentView(imageId, noPushState).then(() => {
-                    this.elem.classList.remove('image_invisible');
-                    resolve();
-                });
-                //this.pushImageState(); //TODO пересмотреть полномочия апдейткуррентвью() и переделать свитчтунекст()
+            else {
+
+                this.updateCurrentView(imageId);
+                this.elem.classList.remove('image_invisible');
+                if (!noPushState && imageId === this.currentImageId)
+                    this.pushImageState();
+                resolve();
                 this.requestAllNecessaryViewModels().then(() => {
                     this.updatePreloadedImagesArray();
                 });
-            });
-        }
-    });
+            }
+        });
 
+    });
 };
 
-
-Gallery.prototype.hide = function (noPushState) {
+Gallery.prototype.hide = function (options) {
+    let noPushState = options && options.noPushState;
     if (!this.isEmbedded)
         window.location = this.elem.dataset.authorUrl;
     else {
@@ -268,7 +266,6 @@ Gallery.prototype.hide = function (noPushState) {
         if (!noPushState)
             this.pushGalleryState();
     }
-
 };
 
 Gallery.prototype.hideImgElem = function () {
@@ -279,10 +276,8 @@ Gallery.prototype.showImgElem = function () {
     this.elem.classList.remove('image_img-element-invisible');
 };
 
-
 Gallery.prototype.resizeImage = function () {
     if (this.elem) {
-
         this.imgElem.removeAttribute('width');
         this.imgElem.removeAttribute('height');
 
@@ -305,15 +300,6 @@ Gallery.prototype.resizeImage = function () {
         }
     }
 };
-//
-// Gallery.prototype.renderImageElem = function () {
-//     return this.requestViewModel(this.currentImageId, true).then(response => {
-//         let parent = document.createElement('DIV');
-//         parent.innerHTML = response.html;
-//         this.elem = parent.firstElementChild;
-//         document.body.insertBefore(this.elem, document.body.firstElementChild);
-//     });
-// };
 
 Gallery.prototype.requestViewModel = function (id) {
     return new Promise((resolve, reject) => {
@@ -323,10 +309,15 @@ Gallery.prototype.requestViewModel = function (id) {
             return;
         }
 
-        require(LIBS + 'sendRequest')({
+        let body = {
             id,
             isFeed: this.isFeed
-        }, 'POST', '/gallery', (err, response) => {
+        };
+
+        if (this.isLogged && !this.loggedUserViewModel)
+            body.requireUserViewModel = true;
+
+        require(LIBS + 'sendRequest')(body, 'POST', '/gallery', (err, response) => {
             if (err) {
                 if (err instanceof ClientError) {
                     if (this.galleryArray) {
@@ -343,15 +334,17 @@ Gallery.prototype.requestViewModel = function (id) {
             this.galleryArray = response.gallery;
             this.updateGallery();
 
-            let provided = false;
+            if (this.isLogged && !this.loggedUserViewModel && response.loggedUserViewModel)
+                this.loggedUserViewModel = response.loggedUserViewModel;
 
+
+            let provided = false;
             for (let key in response.viewModels) {
                 if (key == id)
                     provided = true;
 
                 this.viewModels[key] = response.viewModels[key];
             }
-
             if (provided)
                 resolve(response);
             else {
@@ -469,15 +462,7 @@ Gallery.prototype.switchToNext = function () {
     }
 
     let nextImageId = this.getNextImageId();
-    this.updateCurrentView(nextImageId).then(() => {
-        this.requestNextViewModels().then(() => {
-            this.updatePreloadedImagesArray();
-        }).catch((err) => {
-            if (!(err instanceof ImageNotFound))
-                this.error(err);
-
-        });
-    }).catch((err) => {
+    this.show(nextImageId).catch((err) => {
         if (err instanceof ImageNotFound) {
             if (this.galleryArray && this.galleryArray.length)
                 this.switchToNext();
@@ -496,21 +481,14 @@ Gallery.prototype.switchToPrev = function () {
     }
 
     let prevImageId = this.getPrevImageId();
-    this.updateCurrentView(prevImageId).then(() => {
-        this.requestPrevViewModels().then(() => {
-            this.updatePreloadedImagesArray();
-        }).catch((err) => {
-            if (!(err instanceof ImageNotFound))
-                this.error(err);
-        });
-    }).catch((err) => {
+    this.show(prevImageId).catch((err) => {
         if (err instanceof ImageNotFound) {
             if (this.galleryArray && this.galleryArray.length)
                 this.switchToPrev();
             else
                 this.deactivate();
         } else
-            throw err;
+            this.error(err);
     });
 };
 
@@ -538,40 +516,36 @@ Gallery.prototype.getPrevImageId = function (offset) {
     return this.galleryArray[galleryPrevIndex];
 };
 
-Gallery.prototype.updateCurrentView = function (newCurrentImageId, noPushState) {
-    newCurrentImageId = newCurrentImageId || this.currentImageId;
-    this.currentImageId = newCurrentImageId;
-    this.hideImgElem();
+//TODO data-author-url="data-id="
 
-    return this.requestViewModel(newCurrentImageId).then(() => {
 
-        if (newCurrentImageId === this.currentImageId) {
-            this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
+Gallery.prototype.updateCurrentView = function (involvedImageId) {
 
-            this.likeButton.setImageId(newCurrentImageId);
-            this.updateLikes(newCurrentImageId);
+    if (involvedImageId === this.currentImageId) {
+        this.hideImgElem();
 
-            this.commentSection.setImageId(newCurrentImageId);
-            this.updateComments(newCurrentImageId);
+        this.imgElem.setAttribute('src', this.currentViewModel.imgUrl);
 
-            this.description.textContent = this.currentViewModel.description;
-            this.date.textContent = this.currentViewModel.createDateStr;
+        this.likeButton.setImageId(this.currentImageId);
+        this.updateLikes(this.currentImageId);
 
-            if (this.currentViewModel.isOwnImage) {
-                this.setDeleteButton();
-                this.deleteButton.setImageId(newCurrentImageId);
-            }
+        this.commentSection.setImageId(this.currentImageId);
+        this.updateComments(this.currentImageId);
 
-            this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
-            this.username.textContent = this.currentViewModel.author.username;
+        this.description.textContent = this.currentViewModel.description;
+        this.date.textContent = this.currentViewModel.createDateStr;
 
-            if (!noPushState) {
-                console.log('push state');
-                this.pushImageState();
-            }
-
+        if (this.currentViewModel.isOwnImage) {
+            this.setDeleteButton();
+            this.deleteButton.setImageId(this.currentImageId);
         }
-    });
+
+        this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
+        this.username.textContent = this.currentViewModel.author.username;
+
+        this.headerLeftSide.setAttribute('href', this.currentViewModel.author.url);
+    }
+
 };
 
 Gallery.prototype.updateLikes = function (imageId) {
@@ -596,6 +570,7 @@ Gallery.prototype.pushImageState = function () {
 };
 
 Gallery.prototype.pushGalleryState = function () {
+
     let url = '';
     if (!this.isFeed)
         url = this.currentViewModel && this.currentViewModel.author.url;
@@ -603,13 +578,11 @@ Gallery.prototype.pushGalleryState = function () {
         url = '/feed';
 
     history.pushState({
-        type: 'user'
+        type: 'gallery'
     }, '', url);
 };
 
 Gallery.prototype.onPopState = function (state) {
-    console.log('onpopstate:');
-    console.log(state);
 
     if (state && state.type)
         switch (state.type) {
@@ -620,8 +593,10 @@ Gallery.prototype.onPopState = function (state) {
                 });
                 break;
 
-            case 'user':
-                this.deactivate(true);
+            case 'gallery':
+                this.deactivate(null, {
+                    noPushState: true
+                });
                 break;
         }
 };

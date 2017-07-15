@@ -4,11 +4,15 @@ let CommentSection = function(options) {
 
     this.elem = options.elem;
     this.imageId = options.imageId;
+    this.loggedUserViewModel = options.loggedUserViewModel;
 
     this.commentSenderElem = options.commentSenderElem;
     this.commentSendTextarea = this.commentSenderElem.querySelector('.comment-send__textarea');
 
     this.ghost = this.elem.querySelector('.comment');
+
+    this.commentSenderElem.querySelector('.comment__avatar').style.backgroundImage = `url('${this.loggedUserViewModel.avatarUrls.medium}')`;
+    this.commentSenderElem.querySelector('.comment__username').textContent = this.loggedUserViewModel.username;
 
     this.commentSenderElem.onclick = e => {
         if (!e.target.classList.contains('comment-send__send-button')) return;

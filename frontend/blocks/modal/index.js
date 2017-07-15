@@ -75,7 +75,7 @@ Modal.renderWrapper = function (type) {
     return wrapper;
 };
 
-Modal.prototype.renderWindow = function (innerHTML) {
+Modal.prototype.renderWindow = function (innerHTML) { //TODO this can't be right
     let parent = document.createElement('DIV');
     parent.innerHTML = innerHTML;
     let wnd = parent.firstElementChild;
@@ -116,7 +116,7 @@ Modal.prototype.show = function () {
 Modal.prototype.activate = function (options) {
 
     if (this.elemId === 'spinner') {
-        let spinner = this; //TODO а он точно в замыкании сохраняется?
+        let spinner = this;
         this.on('spinner_host-loaded', e => {
             let newHost = e.detail.host;
 
@@ -171,18 +171,18 @@ Modal.prototype.hide = function () {
 };
 
 
-Modal.prototype.deactivate = function (options) {
+Modal.prototype.deactivate = function (nextWindowOptions, hideOptions) {
 
-    this.hide();
+    this.hide(hideOptions);
     this.active = false;
     if (this.status === Modal.statuses.MINOR) {
         Modal.minorActive = false;
         Modal.minorQueue.shift();
-        Modal.minorShow(options);
+        Modal.minorShow(nextWindowOptions);
     } else {
         Modal.majorActive = false;
         Modal.majorQueue.shift();
-        Modal.majorShow(options);
+        Modal.majorShow(nextWindowOptions);
     }
     this.trigger('modal-window_deactivated');
 };
