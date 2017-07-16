@@ -7,36 +7,41 @@ let SubscribeButton = function (options) {
 
     this.active = !!this.elem.dataset.active;
     this.available = true;
+    this.counterElem = options.counterElem;
+
+    if (this.counterElem)
+        this.counterDefaultValue = parseInt(this.counterElem.textContent) - +this.active;
 
     this.elem.onclick = e => {
 
         let involvedImageId = this.imageId;
 
-        if (this.available) {
+            if (this.available) {
 
-            this.available = false;
-            this.toggle();
+                this.available = false;
+                this.toggle();
 
-            require(LIBS + 'sendRequest')({
-                id: involvedImageId
-            }, 'POST', '/subscribe', (err, response) => {
+                require(LIBS + 'sendRequest')({
+                    id: involvedImageId
+                }, 'POST', '/subscribe', (err, response) => {
 
-                if (!err) {
-                    this.available = true;
-                    this.trigger('subscribe-button_changed', {
-                        involvedImageId
-                    });
-                } else {
-                    this.error(err);
-
-                    if (this.imageId === involvedImageId) {
+                    if (!err) {
                         this.available = true;
-                        this.toggle();
-                    }
-                }
+                        this.trigger('subscribe-button_changed', {
+                            involvedImageId
+                        });
+                    } else {
+                        this.error(err);
 
-            });
-        }
+                        if (this.imageId === involvedImageId) {
+                            this.available = true;
+                            this.toggle();
+                        }
+                    }
+
+                });
+            }
+
     }
 };
 
@@ -44,9 +49,15 @@ SubscribeButton.prototype.toggle = function () {
     if (this.active) {
         this.elem.classList.remove('button_active');
         this.active = false;
+
+        if (this.counterElem)
+            this.counterElem.textContent = this.counterDefaultValue;
     } else {
         this.elem.classList.add('button_active');
         this.active = true;
+
+        if (this.counterElem)
+            this.counterElem.textContent = this.counterDefaultValue + 1;
     }
 };
 

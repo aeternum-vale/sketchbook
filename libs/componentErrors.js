@@ -11,16 +11,16 @@ CustomError.prototype = Object.create(Error.prototype);
 CustomError.prototype.constructor = CustomError;
 
 
-function ComponentError(message) {
+function ComponentError(message, status) {
 	CustomError.call(this, message || 'An error has occurred' );
 	this.name = "ComponentError";
+	this.status = status;
 }
 ComponentError.prototype = Object.create(CustomError.prototype);
 ComponentError.prototype.constructor = ComponentError;
 
-
-function ClientError(message, detail) {
-	ComponentError.call(this, message || 'An error has occurred. Check if javascript is enabled');
+function ClientError(message, detail, status) {
+	ComponentError.call(this, message || 'An error has occurred. Check if javascript is enabled', status);
 	this.name = "ClientError";
 	this.detail = detail;
 }
@@ -28,16 +28,15 @@ ClientError.prototype = Object.create(ComponentError.prototype);
 ClientError.prototype.constructor = ClientError;
 
 
-function ImageNotFound(message, detail) {
-    ClientError.call(this, message || 'Image not found. It probably has been removed');
+function ImageNotFound(message) {
+    ClientError.call(this, message || 'Image not found. It probably has been removed', null, 404);
     this.name = "ImageNotFound";
-    this.detail = detail;
 }
 ImageNotFound.prototype = Object.create(ClientError.prototype);
 ImageNotFound.prototype.constructor = ImageNotFound;
 
-function ServerError(message) {
-	ComponentError.call(this, message || 'There is some error on the server side');
+function ServerError(message, status) {
+	ComponentError.call(this, message || 'There is some error on the server side', status);
 	this.name = "ServerError";
 }
 ServerError.prototype = Object.create(ComponentError.prototype);

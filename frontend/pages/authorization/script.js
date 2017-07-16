@@ -2,6 +2,9 @@
 
 import './style.less';
 
+let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
+let globalErrorHandler = new GlobalErrorHandler();
+
 let AuthWidget = require(BLOCKS + 'auth-widget');
 
 let authWidget = new AuthWidget({
@@ -29,9 +32,6 @@ authWidget.on('switch', e => {
 
 });
 
-authWidget.on('authorized', e => {
-   window.location = e.detail.url || '/';
-});
 
 if ((history.state && history.state.type === 'join') || window.location.search === '?join') {
    history.pushState({
@@ -42,5 +42,3 @@ if ((history.state && history.state.type === 'join') || window.location.search =
    history.replaceState({
       type: 'login'
    }, "login", "?login");
-
-require(LIBS + 'setGlobalErrorCatcher')();

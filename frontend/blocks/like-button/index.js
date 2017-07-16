@@ -9,40 +9,40 @@ let LikeButton = function (options) {
     this.active = !!this.elem.dataset.active;
     this.available = true;
 
-
     this.elem.onclick = e => {
 
         let involvedImageId = this.imageId;
 
-        if (this.available) {
+            if (this.available) {
 
-            this.available = false;
-            this.toggle();
+                this.available = false;
+                this.toggle();
 
-            require(LIBS + 'sendRequest')({
-                id: involvedImageId
-            }, 'POST', '/like', (err, response) => {
+                require(LIBS + 'sendRequest')({
+                    id: involvedImageId
+                }, 'POST', '/like', (err, response) => {
 
 
-                if (!err) {
-                    this.available = true;
-                    this.trigger('like-button_changed', {
-                        imageId: involvedImageId,
-                        likeAmount: response.likeAmount
-                    });
-                } else {
-                    this.error(err);
-
-                    if (this.imageId === involvedImageId) {
+                    if (!err) {
                         this.available = true;
-                        this.toggle();
+                        this.trigger('like-button_changed', {
+                            imageId: involvedImageId,
+                            likeAmount: response.likeAmount
+                        });
+                    } else {
+                        this.error(err);
+
+                        if (this.imageId === involvedImageId) {
+                            this.available = true;
+                            this.toggle();
+                        }
                     }
-                }
 
 
-            });
+                });
 
-        }
+            }
+
 
     };
 

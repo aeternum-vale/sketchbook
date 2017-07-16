@@ -34,7 +34,7 @@ function imageRequestListener(req, res, next) {
         if (!rawImage)
             throw new HttpError(404, "Image not found");
 
-        let image = yield imageViewModel(rawImage, res.loggedUser._id);
+        let image = yield imageViewModel(rawImage, res.loggedUser && res.loggedUser._id);
         return image;
     }).then(image => {
 

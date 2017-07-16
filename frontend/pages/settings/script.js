@@ -2,6 +2,9 @@
 
 import './style.less';
 
+let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
+let globalErrorHandler = new GlobalErrorHandler();
+
 let Dropdown = require(BLOCKS + 'dropdown');
 let SocialCollection = require(BLOCKS + 'social-collection');
 let UploadAvatarSection = require(BLOCKS + 'upload-avatar-section');
@@ -50,7 +53,7 @@ let passwordChangeForm = new Form({
 });
 
 let messageModalWindow = new MessageModalWindow();
-passwordChangeForm.on('success', e => {
+passwordChangeForm.on('form_sent', e => {
     messageModalWindow.show('Password has been successfully changed');
 });
 
@@ -58,8 +61,6 @@ uploadAvatarSection.on('uploaded', e => {
     alert(e.detail.url);
 });
 
-descriptionAddSection.on('success', e => {
+descriptionAddSection.on('description-add-section_send', e => {
     messageModalWindow.show('Description has been successfully changed');
 });
-
-require(LIBS + 'setGlobalErrorCatcher')();

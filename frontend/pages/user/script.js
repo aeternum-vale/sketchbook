@@ -2,9 +2,16 @@
 
 import './style.less';
 
+let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
+let globalErrorHandler = new GlobalErrorHandler();
+
+let ClientError = require(LIBS + 'componentErrors').ClientError;
 let Dropdown = require(BLOCKS + 'dropdown');
 let Modal = require(BLOCKS + 'modal');
 let ModalSpinner = require(BLOCKS + 'modal-spinner');
+let eventMixin = require(LIBS + 'eventMixin');
+
+
 
 let linksDropdown = new Dropdown({
     elem: document.getElementById('links-dropdown'),
@@ -13,17 +20,14 @@ let linksDropdown = new Dropdown({
 
 let uploadImageModalWindowCaller;
 let uploadImageModalWindow;
-
 if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller')) {
     uploadImageModalWindowCaller.onclick = function () {
-
         if (!uploadImageModalWindow) {
 
             let spinner = new ModalSpinner({
                 status: Modal.statuses.MAJOR
             });
             spinner.activate();
-
             require.ensure([BLOCKS + 'upload-image-modal-window'], function (require) {
                 let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
                 uploadImageModalWindow = new UploadImageModalWindow();
@@ -44,8 +48,6 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
             uploadImageModalWindow.activate();
     };
 }
-
-
 
 let gallery;
 let galleryElem = document.getElementById('gallery');
@@ -89,6 +91,31 @@ function createGallery() {
 //     message.activate();
 //
 // }, 5000);
-//
 
-require(LIBS + 'setGlobalErrorCatcher')();
+let subscribeButtonElem;
+
+if (subscribeButtonElem = document.getElementById('subscribe-button')) {
+    if (window.isLogged) {
+        require.ensure([BLOCKS + 'subscribe-button'], function (require) {
+            let SubscribeButton = require(BLOCKS + 'subscribe-button');
+            let subscribeButton = new SubscribeButton({
+                elem: subscribeButtonElem,
+                counterElem: document.getElementById('subscribers-number')
+            });
+        });
+    } else
+        subscribeButtonElem.onclick = e => {
+            globalErrorHandler.call(new ClientError(null, null, 401));
+        };
+
+}
+
+if (window.isLogged) {
+    let userMenuDropdown = new Dropdown({
+        elem: document.getElementById('user-menu'),
+        className: 'header-element'
+    });
+}
+
+
+

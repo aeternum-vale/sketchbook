@@ -56,7 +56,7 @@ Form.prototype.send = function(body) {
         }
 
         this.clear();
-        this.trigger('success', {
+        this.trigger('form_sent', {
             response
         });
     });

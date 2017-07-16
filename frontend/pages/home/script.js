@@ -2,4 +2,5 @@
 
 import './style.less';
 
-require(LIBS + 'setGlobalErrorCatcher')();
+let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
+let globalErrorHandler = new GlobalErrorHandler();

@@ -23,10 +23,8 @@ let AuthWidget = function(options) {
         url: '/join'
     });
 
-    this.joinForm.on('success', e => {
-        this.trigger('authorized', {
-            url: e.detail.response.url
-        });
+    this.joinForm.on('form_sent', e => {
+        this.redirect();
     });
 
 	this.loginForm = new Form({
@@ -42,10 +40,8 @@ let AuthWidget = function(options) {
         url: '/login'
     });
 
-    this.loginForm.on('success', e => {
-        this.trigger('authorized', {
-            url: e.detail.response.url
-        });
+    this.loginForm.on('form_sent', e => {
+        this.redirect();
     });
 
     this.joinWindow = this.elem.querySelector('.join-window');
@@ -78,6 +74,13 @@ let AuthWidget = function(options) {
                 tb.classList.remove('textbox_focus');
         }
     }, true);
+};
+
+AuthWidget.prototype.redirect = function() {
+    let url = '/';
+    url = localStorage.getItem('redirected_url') || url;
+    localStorage.removeItem('redirected_url');
+    window.location = url;
 };
 
 AuthWidget.prototype.setJoin = function() {

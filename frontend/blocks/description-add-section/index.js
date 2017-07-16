@@ -30,7 +30,7 @@ DescriptionAddSection.prototype.sendDescription = function(description) {
             return;
         }
 
-        this.trigger('success');
+        this.trigger('description-add-section_sent');
     });
 };
 

@@ -1,6 +1,6 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let CommentSection = function(options) {
+let CommentSection = function (options) {
 
     this.elem = options.elem;
     this.imageId = options.imageId;
@@ -11,38 +11,40 @@ let CommentSection = function(options) {
 
     this.ghost = this.elem.querySelector('.comment');
 
-    this.commentSenderElem.querySelector('.comment__avatar').style.backgroundImage = `url('${this.loggedUserViewModel.avatarUrls.medium}')`;
-    this.commentSenderElem.querySelector('.comment__username').textContent = this.loggedUserViewModel.username;
+    if (this.loggedUserViewModel) {
+        this.commentSenderElem.querySelector('.comment__avatar').style.backgroundImage = `url('${this.loggedUserViewModel.avatarUrls.medium}')`;
+        this.commentSenderElem.querySelector('.comment__username').textContent = this.loggedUserViewModel.username;
+    }
 
     this.commentSenderElem.onclick = e => {
         if (!e.target.classList.contains('comment-send__send-button')) return;
 
-        let involvedImageId = this.imageId;
-        let text = this.commentSendTextarea.value;
-        if (text.length) {
+            let involvedImageId = this.imageId;
+            let text = this.commentSendTextarea.value;
+            if (text.length) {
 
-            require(LIBS + 'sendRequest')({
-                id: involvedImageId,
-                text
-            }, 'POST', '/comment', (err, response) => {
+                require(LIBS + 'sendRequest')({
+                    id: involvedImageId,
+                    text
+                }, 'POST', '/comment', (err, response) => {
 
-                if (err) {
-                    this.error(err);
-                    return;
-                }
+                    if (err) {
+                        this.error(err);
+                        return;
+                    }
 
-                this.commentSendTextarea.value = '';
-                if (this.imageId === involvedImageId) {
-                    this.insertNewComment(response.viewModel);
-                    this.scrollToBottom();
-                }
+                    this.commentSendTextarea.value = '';
+                    if (this.imageId === involvedImageId) {
+                        this.insertNewComment(response.viewModel);
+                        this.scrollToBottom();
+                    }
 
-                this.trigger('comment-section_changed', {
-                    imageId: involvedImageId
+                    this.trigger('comment-section_changed', {
+                        imageId: involvedImageId
+                    });
+
                 });
-
-            });
-        }
+            }
     };
 
     this.elem.onclick = e => {
@@ -69,11 +71,11 @@ let CommentSection = function(options) {
 
 };
 
-CommentSection.prototype.scrollToBottom = function() {
+CommentSection.prototype.scrollToBottom = function () {
     this.elem.scrollTop = this.elem.scrollHeight;
 };
 
-CommentSection.prototype.insertNewComment = function(viewModel) {
+CommentSection.prototype.insertNewComment = function (viewModel) {
     let newComment = this.ghost.cloneNode(true);
     newComment.classList.remove('comment_ghost');
     newComment.dataset.id = viewModel._id;
@@ -93,11 +95,11 @@ CommentSection.prototype.insertNewComment = function(viewModel) {
 };
 
 
-CommentSection.prototype.setImageId = function(imageId) {
+CommentSection.prototype.setImageId = function (imageId) {
     this.imageId = imageId;
 };
 
-CommentSection.prototype.set = function(viewModels) {
+CommentSection.prototype.set = function (viewModels) {
     this.clear();
 
     viewModels.forEach(viewModel => {
@@ -105,7 +107,7 @@ CommentSection.prototype.set = function(viewModels) {
     });
 };
 
-CommentSection.prototype.clear = function() {
+CommentSection.prototype.clear = function () {
     this.elem.innerHTML = '';
 };
 

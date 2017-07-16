@@ -38,10 +38,10 @@ module.exports = function (bodyObj, method, url, cb) {
             cb(null, response);
 
         if (this.status >= 400 && this.status < 500)
-            cb(new ClientError(response.message, response.detail));
+            cb(new ClientError(response.message, response.detail, this.status));
 
         if (this.status >= 500)
-            cb(new ServerError(response.message));
+            cb(new ServerError(response.message, this.status));
     };
 
     console.log(`sending next request: ${body}`);

@@ -43,19 +43,20 @@ DuplicatingUniquePropertyError.prototype.constructor = DuplicatingUniqueProperty
 
 
 function HttpError(status, message, detail) {
-	CustomError.call(this, "Not found")
+	CustomError.call(this, "Not found");
 	this.name = "HttpError";
 
 	this.status = status;
 	this.message = message || http.STATUS_CODES[status] || "Error";
 	this.detail = detail;
+
 }
 util.inherits(HttpError, CustomError);
 HttpError.prototype.constructor = HttpError;
 
 
 function InvalidImage(message) {
-	CustomError.call(this, message || "Invalid Image")
+	CustomError.call(this, message || "Invalid Image");
 	this.name = "InvalidImage";
 	//this.error = error;
 }

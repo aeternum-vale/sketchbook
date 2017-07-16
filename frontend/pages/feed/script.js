@@ -2,11 +2,12 @@
 
 import './style.less';
 
+let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
+let globalErrorHandler = new GlobalErrorHandler();
+
 let Dropdown = require(BLOCKS + 'dropdown');
 let Modal = require(BLOCKS + 'modal');
 let ModalSpinner = require(BLOCKS + 'modal-spinner');
-
-
 
 let userMenuDropdown = new Dropdown({
 	elem: document.getElementById('user-menu'),
@@ -54,7 +55,3 @@ function createGallery() {
 // let PromptWindow = require(BLOCKS + 'prompt-window');
 // let prompt = new PromptWindow();
 // prompt.activate();
-
-
-
-require(LIBS + 'setGlobalErrorCatcher')();

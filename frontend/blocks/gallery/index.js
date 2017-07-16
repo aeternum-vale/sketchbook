@@ -110,75 +110,69 @@ Gallery.prototype.setElem = function () {
                 this.deactivate();
         };
 
-        if (this.isLogged) {
-            require.ensure([
-                BLOCKS + 'comment-section',
-                BLOCKS + 'like-button'
-            ], require => {
-                let CommentSection = require(BLOCKS + 'comment-section');
-                let LikeButton = require(BLOCKS + 'like-button');
+        let CommentSection = require(BLOCKS + 'comment-section');
+        let LikeButton = require(BLOCKS + 'like-button');
 
-                this.commentSection = new CommentSection({
-                    elem: document.querySelector('.comment-section'),
-                    commentSenderElem: document.querySelector('.comment-send'),
-                    imageId: this.currentImageId,
-                    loggedUserViewModel: this.loggedUserViewModel
-                });
+        this.commentSection = new CommentSection({
+            elem: document.querySelector('.comment-section'),
+            commentSenderElem: document.querySelector('.comment-send'),
+            imageId: this.currentImageId,
+            loggedUserViewModel: this.loggedUserViewModel
+        });
 
 
-                this.commentSection.on('comment-section_changed', e => {
-                    let imageId = e.detail.imageId;
-                    this.deleteViewModel(imageId);
-                    this.requestViewModel(imageId).then(() => {
-                        this.updateComments(imageId);
-                    });
-                });
-
-                this.likeButton = new LikeButton({
-                    elem: document.querySelector('.like-button'),
-                    imageId: this.currentImageId
-                });
-
-                this.likeButton.on('like-button_changed', e => {
-                    let imageId = e.detail.imageId;
-                    this.deleteViewModel(imageId);
-                    this.requestViewModel(imageId).then(() => {
-                        this.updateLikes(imageId);
-                    });
-                });
-
-
-                if (this.currentViewModel.isOwnImage) {
-                    this.setDeleteButton();
-                    require.ensure([BLOCKS + 'delete-image-button'], require => {
-                        let DeleteImageButton = require(BLOCKS + 'delete-image-button');
-                        this.deleteButton = new DeleteImageButton({
-                            elem: this.deleteButtonElem,
-                            imageId: this.currentImageId
-                        });
-                        this.deleteButton.on('delete-image-button_image-deleted', e => {
-                            let involvedImageId = e.detail.imageId;
-                            this.deleteViewModel(involvedImageId);
-                            this.removeFromGalleryArray(involvedImageId);
-                            this.deleteImagePreview(involvedImageId);
-                            if (this.currentImageId === involvedImageId)
-                                this.switchToNext();
-                        });
-                        resolve();
-                    });
-                } else {
-                    this.setSubscribeButton();
-                    require.ensure([BLOCKS + 'subscribe-button'], require => {
-                        let SubscribeButton = require(BLOCKS + 'subscribe-button');
-                        this.subscribeButton = new SubscribeButton({
-                            elem: this.subscribeButtonElem,
-                            imageId: this.currentImageId
-                        });
-                        resolve();
-                    });
-                }
-
+        this.commentSection.on('comment-section_changed', e => {
+            let imageId = e.detail.imageId;
+            this.deleteViewModel(imageId);
+            this.requestViewModel(imageId).then(() => {
+                this.updateComments(imageId);
             });
+        });
+
+        this.likeButton = new LikeButton({
+            elem: document.querySelector('.like-button'),
+            imageId: this.currentImageId
+        });
+
+        this.likeButton.on('like-button_changed', e => {
+            let imageId = e.detail.imageId;
+            this.deleteViewModel(imageId);
+            this.requestViewModel(imageId).then(() => {
+                this.updateLikes(imageId);
+            });
+        });
+
+        if (this.isLogged) {
+            if (this.currentViewModel.isOwnImage) {
+                this.setDeleteButton();
+                require.ensure([BLOCKS + 'delete-image-button'], require => {
+                    let DeleteImageButton = require(BLOCKS + 'delete-image-button');
+                    this.deleteButton = new DeleteImageButton({
+                        elem: this.deleteButtonElem,
+                        imageId: this.currentImageId
+                    });
+                    this.deleteButton.on('delete-image-button_image-deleted', e => {
+                        let involvedImageId = e.detail.imageId;
+                        this.deleteViewModel(involvedImageId);
+                        this.removeFromGalleryArray(involvedImageId);
+                        this.deleteImagePreview(involvedImageId);
+                        if (this.currentImageId === involvedImageId)
+                            this.switchToNext();
+                    });
+                    resolve();
+                });
+            } else {
+                this.setSubscribeButton();
+                require.ensure([BLOCKS + 'subscribe-button'], require => {
+                    let SubscribeButton = require(BLOCKS + 'subscribe-button');
+                    this.subscribeButton = new SubscribeButton({
+                        elem: this.subscribeButtonElem,
+                        imageId: this.currentImageId
+                    });
+                    resolve();
+                });
+            }
+
         } else
             resolve();
     });
