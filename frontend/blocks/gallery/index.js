@@ -510,9 +510,6 @@ Gallery.prototype.getPrevImageId = function (offset) {
     return this.galleryArray[galleryPrevIndex];
 };
 
-//TODO data-author-url="data-id="
-
-
 Gallery.prototype.updateCurrentView = function (involvedImageId) {
 
     if (involvedImageId === this.currentImageId) {

@@ -17,8 +17,10 @@ for (let key in Spinner.prototype)
 
 
 ModalSpinner.prototype.setElem = function() {
-    //TODO два спиннера создаются, сделай проверку
-    this.elem = this.renderWindow(Spinner.innerHtml);
+    if (!this.elem)
+        this.elem = document.getElementById('spinner');
+    if (!this.elem)
+        this.elem = this.renderWindow(Spinner.innerHtml);
 };
 
 ModalSpinner.prototype.show = function () {

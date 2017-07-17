@@ -1,6 +1,6 @@
-<div id="image" class="modal image" data-author-url= data-id=>
+<div id="image" class="modal image">
     <div class="image__image-wrapper">
-        <img class="image__img-element" alt="">
+        <img class="image__img-element">
         <div class="image__controls">
             <div class="image__control image__control-prev">prev</div>
             <div class="image__control image__control-full">full</div>
@@ -31,7 +31,7 @@
 
             </div>
             <div class="image__info-board">
-                <div data-like-amount=""
+                <div
                      
                      class="button like-button image__like-button">
                     like 

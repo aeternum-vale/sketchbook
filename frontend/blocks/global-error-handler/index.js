@@ -1,7 +1,7 @@
 let GlobalErrorHandler = function (options) {
     document.addEventListener('error', e => {
         let error = e.detail;
-        call(error);
+        this.call(error);
     });
 };
 

@@ -1,6 +1,6 @@
-<div id="image" class="modal image" data-author-url={{image.author.url}} data-id={{image._id}}>
+<div id="image" class="modal image"{{#if image}} data-author-url={{image.author.url}} data-id={{image._id}}{{/if}}>
     <div class="image__image-wrapper">
-        <img class="image__img-element" {{#if image}}src="{{image.imgUrl}}"{{/if}} alt="">
+        <img class="image__img-element"{{#if image}} src="{{image.imgUrl}}"{{/if}}>
         <div class="image__controls">
             <div class="image__control image__control-prev">prev</div>
             <div class="image__control image__control-full">full</div>
@@ -36,7 +36,7 @@
 
             </div>
             <div class="image__info-board">
-                <div data-like-amount="{{image.likes.length}}"
+                <div{{#if image}} data-like-amount="{{image.likes.length}}"{{/if}}
                      {{#if image.isLiked}}data-active="true"{{/if}}
                      class="button like-button image__like-button{{#if image.isLiked}} button_active{{/if}}">
                     like {{image.likes.length}}
@@ -47,10 +47,12 @@
 
             </div>
             <div class="comment-section image__comment-section">
-                {{#if image.comments}}
-                    {{#each image.comments}}
-                        {{> comment}}
-                    {{/each}}
+                {{#if image}}
+                    {{#if comments}}
+                        {{#each image.comments}}
+                            {{> comment}}
+                        {{/each}}
+                    {{/if}}
                 {{else}}
                     {{> comment
                             ghost=true

@@ -199,6 +199,8 @@ Modal.showSpinner = function () {
     Modal.prototype.show.call(Modal.spinner);
 
     if (!Modal.spinner.elem)
+        Modal.spinner.elem = document.getElementById('spinner');
+    if (!Modal.spinner.elem)
         Modal.spinner.elem = Modal.prototype.renderWindow.call(Modal.spinner, Spinner.innerHtml);
 
     Modal.spinner.show();

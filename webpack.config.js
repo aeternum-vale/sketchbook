@@ -13,13 +13,10 @@ module.exports = {
     entry: {
         authorization: './authorization/script',
         user: './user/script',
-        'logged-user': './user/logged-script',
         image: './image/script',
-        'logged-image': './image/logged-script',
-        'feed': './feed/script',
-        'settings': './settings/script',
+        feed: './feed/script',
+        settings: './settings/script',
         home: './home/script',
-        'logged-home': './home/logged-script'
     },
 
     output: {
@@ -84,18 +81,10 @@ module.exports = {
             PRELOAD_IMAGE_COUNT: JSON.stringify(config.get('image:preloadEntityCount'))
         }),
 
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'common-user',
-            chunks: ['user', 'logged-user']
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'common-image',
-            chunks: ['image', 'logged-image']
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'common-home',
-            chunks: ['home', 'logged-home']
-        })
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'common-user',
+        //     chunks: ['user', 'logged-user']
+        // })
     ]
 
 };
