@@ -37,8 +37,9 @@
             </div>
             <div class="image__info-board">
                 <div{{#if image}} data-like-amount="{{image.likes.length}}"{{/if}}
-                     {{#if image.isLiked}}data-active="true"{{/if}}
-                     class="button like-button image__like-button{{#if image.isLiked}} button_active{{/if}}">
+                    {{#if image.isLiked}}data-active="true"{{/if}}
+                                  class="button like-button image__like-button{{#if
+                                          image.isLiked}} button_active{{/if}}">
                     like {{image.likes.length}}
                 </div>
                 <div class="image__description">
@@ -47,18 +48,17 @@
 
             </div>
             <div class="comment-section image__comment-section">
-                {{#if image}}
-                    {{#if comments}}
-                        {{#each image.comments}}
-                            {{> comment}}
-                        {{/each}}
-                    {{/if}}
+                {{#if image.comments}}
+                    {{#each image.comments}}
+                        {{> comment}}
+                    {{/each}}
                 {{else}}
                     {{> comment
                             ghost=true
                             isOwnComment=true
                     }}
                 {{/if}}
+
 
             </div>
         </div>

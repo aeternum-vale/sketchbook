@@ -12,10 +12,10 @@ MessageModalWindow.prototype = Object.create(Modal.prototype);
 MessageModalWindow.prototype.constructor = MessageModalWindow;
 
 MessageModalWindow.prototype.setElem = function () {
-    this.setWindowInnerHtml();
+    this.setWindowHtml();
     this.elem = document.getElementById(this.elemId);
     if (!this.elem)
-        this.elem = this.renderWindow(this.windowInnerHtml);
+        this.elem = this.renderWindow(this.windowHtml);
     this.setListeners();
     this.elem.querySelector('.header').textContent = this.caption;
     this.elem.querySelector('.message-modal-window__message').textContent = this.message;
@@ -27,8 +27,8 @@ MessageModalWindow.prototype.setElem = function () {
     };
 };
 
-MessageModalWindow.prototype.setWindowInnerHtml = function () {
-    this.windowInnerHtml = require(`html-loader!./window`);
+MessageModalWindow.prototype.setWindowHtml = function () {
+    this.windowHtml = require(`html-loader!./window`);
 };
 
 MessageModalWindow.prototype.show = function () {

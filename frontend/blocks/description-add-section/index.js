@@ -1,7 +1,9 @@
 let eventMixin = require(LIBS + 'eventMixin');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
+let MessageModalWindow = require(BLOCKS + 'message-modal-window');
 
-let DescriptionAddSection = function(options) {
+
+let DescriptionAddSection = function (options) {
     this.elem = options.elem;
     this.saveButton = this.elem.querySelector('.button');
     this.textarea = this.elem.querySelector('.textarea textarea');
@@ -21,7 +23,7 @@ let DescriptionAddSection = function(options) {
 };
 
 
-DescriptionAddSection.prototype.sendDescription = function(description) {
+DescriptionAddSection.prototype.sendDescription = function (description) {
     require(LIBS + 'sendRequest')({
         description
     }, 'POST', '/settings', (err, response) => {
@@ -30,7 +32,8 @@ DescriptionAddSection.prototype.sendDescription = function(description) {
             return;
         }
 
-        this.trigger('description-add-section_sent');
+        let messageModalWindow = new MessageModalWindow({message: 'Description has been successfully changed'});
+        messageModalWindow.show();
     });
 };
 

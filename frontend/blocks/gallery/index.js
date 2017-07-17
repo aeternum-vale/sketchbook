@@ -77,6 +77,8 @@ Gallery.prototype.setElem = function () {
 
     return new Promise((resolve, reject) => {
 
+        this.isElemSetted = true;
+
         if (!this.elem)
             this.elem = this.renderWindow(require(`html-loader!./window`));
 
@@ -110,6 +112,7 @@ Gallery.prototype.setElem = function () {
                 this.deactivate();
         };
 
+
         let CommentSection = require(BLOCKS + 'comment-section');
         let LikeButton = require(BLOCKS + 'like-button');
 
@@ -119,7 +122,6 @@ Gallery.prototype.setElem = function () {
             imageId: this.currentImageId,
             loggedUserViewModel: this.loggedUserViewModel
         });
-
 
         this.commentSection.on('comment-section_changed', e => {
             let imageId = e.detail.imageId;
@@ -221,7 +223,7 @@ Gallery.prototype.show = function (options) {
         this.requestViewModel(imageId).then(() => {
             this.currentImageId = imageId;
 
-            if (!this.elem || !this.isEmbedded)
+            if (!this.isElemSetted)
                 this.setElem().then(() => {
                     this.updateCurrentView(imageId);
                     this.elem.classList.remove('image_invisible');
@@ -233,7 +235,6 @@ Gallery.prototype.show = function (options) {
                     });
                 });
             else {
-
                 this.updateCurrentView(imageId);
                 this.elem.classList.remove('image_invisible');
                 if (!noPushState && imageId === this.currentImageId)

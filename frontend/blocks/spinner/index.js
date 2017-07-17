@@ -2,7 +2,7 @@ let Spinner = function (options) {
     this.elem = document.getElementById('spinner');
 };
 
-Spinner.innerHtml = require(`html-loader!./markup`);
+Spinner.html = require(`html-loader!./markup`);
 
 Spinner.prototype.show = function () {
     this.elem.classList.remove('spinner_invisible');

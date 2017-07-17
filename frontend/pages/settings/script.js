@@ -52,15 +52,7 @@ let passwordChangeForm = new Form({
     url: '/settings'
 });
 
-let messageModalWindow = new MessageModalWindow();
 passwordChangeForm.on('form_sent', e => {
-    messageModalWindow.show('Password has been successfully changed');
-});
-
-uploadAvatarSection.on('uploaded', e => {
-    alert(e.detail.url);
-});
-
-descriptionAddSection.on('description-add-section_send', e => {
-    messageModalWindow.show('Description has been successfully changed');
+    let messageModalWindow = new MessageModalWindow({message: 'Password has been successfully changed'});
+    messageModalWindow.show();
 });

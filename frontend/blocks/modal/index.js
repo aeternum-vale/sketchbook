@@ -75,14 +75,17 @@ Modal.renderWrapper = function (type) {
     return wrapper;
 };
 
-Modal.prototype.renderWindow = function (innerHTML) { //TODO this can't be right
+Modal.prototype.renderWindow = function (html) {
+
     let parent = document.createElement('DIV');
-    parent.innerHTML = innerHTML;
+    parent.innerHTML = html;
     let wnd = parent.firstElementChild;
     if (this.status === Modal.statuses.MINOR)
         Modal.minorWrapper.appendChild(wnd);
     else
         Modal.majorWrapper.appendChild(wnd);
+
+    parent.remove();
     return wnd;
 };
 
@@ -201,7 +204,7 @@ Modal.showSpinner = function () {
     if (!Modal.spinner.elem)
         Modal.spinner.elem = document.getElementById('spinner');
     if (!Modal.spinner.elem)
-        Modal.spinner.elem = Modal.prototype.renderWindow.call(Modal.spinner, Spinner.innerHtml);
+        Modal.spinner.elem = Modal.prototype.renderWindow.call(Modal.spinner, Spinner.html);
 
     Modal.spinner.show();
 };

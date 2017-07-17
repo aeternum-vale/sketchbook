@@ -11,8 +11,8 @@ let PromptWindow = function (options) {
 PromptWindow.prototype = Object.create(MessageModalWindow.prototype);
 PromptWindow.prototype.constructor = PromptWindow;
 
-PromptWindow.prototype.setWindowInnerHtml = function () {
-    this.windowInnerHtml =
+PromptWindow.prototype.setWindowHtml = function () {
+    this.windowHtml =
         `<div class='window window_invisible modal-window message-modal-window prompt-window' id='prompt'>
             <div class="header window__header">
             </div>

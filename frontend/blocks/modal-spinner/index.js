@@ -20,7 +20,7 @@ ModalSpinner.prototype.setElem = function() {
     if (!this.elem)
         this.elem = document.getElementById('spinner');
     if (!this.elem)
-        this.elem = this.renderWindow(Spinner.innerHtml);
+        this.elem = this.renderWindow(Spinner.html);
 };
 
 ModalSpinner.prototype.show = function () {

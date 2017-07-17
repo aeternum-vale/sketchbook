@@ -17,10 +17,12 @@ let SocialCollection = function(options) {
     };
 };
 
+//TODO make checking user's data on client side
+
 SocialCollection.prototype.sendSocial = function(link) {
     require(LIBS + 'sendRequest')({
         link
-    }, 'POST', '/userdata', (err, response) => {
+    }, 'POST', '/settings', (err, response) => {
 
         if (err) {
             this.error(err);

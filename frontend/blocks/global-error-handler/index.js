@@ -11,7 +11,6 @@ GlobalErrorHandler.prototype.call = function (error) {
         let MessageModalWindow = require(BLOCKS + 'message-modal-window');
 
         if (error instanceof ComponentError) {
-
             if (error.status === 401) {
                 localStorage.setItem('redirected_url', window.location.href);
                 window.location = '/authorization';
