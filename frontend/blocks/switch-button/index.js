@@ -1,13 +1,11 @@
 let eventMixin = require(LIBS + 'eventMixin');
 
-let SubscribeButton = function (options) {
-
+let SwitchButton = function (options) {
     this.elem = options.elem;
     this.imageId = options.imageId;
 
     this.active = !!this.elem.dataset.active;
     this.available = true;
-    this.counterElem = options.counterElem;
 
     this.elem.onclick = e => {
 
@@ -20,12 +18,13 @@ let SubscribeButton = function (options) {
 
             require(LIBS + 'sendRequest')({
                 id: involvedImageId
-            }, 'POST', '/subscribe', (err, response) => {
+            }, 'POST', this.url, (err, response) => {
 
                 if (!err) {
                     this.available = true;
-                    this.trigger('subscribe-button_changed', {
-                        imageId: involvedImageId
+                    this.trigger('switch-button_changed', {
+                        imageId: involvedImageId,
+                        response
                     });
                 } else {
                     this.error(err);
@@ -35,47 +34,45 @@ let SubscribeButton = function (options) {
                         this.toggle();
                     }
                 }
-
             });
         }
 
     }
 };
 
-
-SubscribeButton.prototype.set = function (active) {
+SwitchButton.prototype.set = function (active) {
     if (active)
         this.activate();
     else
         this.deactivate();
 };
 
-SubscribeButton.prototype.toggle = function () {
+SwitchButton.prototype.toggle = function () {
     if (this.active)
         this.set(false);
     else
         this.set(true);
 };
 
-SubscribeButton.prototype.activate = function () {
+SwitchButton.prototype.activate = function () {
     this.elem.classList.add('button_active');
     this.active = true;
     if (this.counterElem)
         this.counterElem.textContent = +this.counterElem.textContent + 1;
 };
 
-SubscribeButton.prototype.deactivate = function () {
+SwitchButton.prototype.deactivate = function () {
     this.elem.classList.remove('button_active');
     this.active = false;
     if (this.counterElem)
         this.counterElem.textContent = +this.counterElem.textContent - 1;
 };
 
-SubscribeButton.prototype.setImageId = function (id) {
+SwitchButton.prototype.setImageId = function (id) {
     this.imageId = id;
 };
 
 for (let key in eventMixin)
-    SubscribeButton.prototype[key] = eventMixin[key];
+    SwitchButton.prototype[key] = eventMixin[key];
 
-module.exports = SubscribeButton;
+module.exports = SwitchButton;

@@ -13,6 +13,7 @@ let Gallery = function (options) {
     this.isLogged = options.isLogged;
     this.preloadEntityCount = options.preloadEntityCount;
     this.isFeed = options.isFeed || false;
+    this.subscribeCounter = options.subscribeCounter;
 
     this.viewModels = {};
     this.galleryArray = null;
@@ -72,6 +73,10 @@ Gallery.prototype.setGallery = function (options) {
         this.onGalleryClick(e);
     };
 };
+
+//TODO REDIRECT ON UNLOGGED ACTIONS
+//TODO SUBSCRIBERS COUNT CHANGE
+//TODO ALERT IF IT DOESN'T ABLE TO DOWNLOAD MODAL MESSAGE WINDOW
 
 Gallery.prototype.setElem = function () {
 
@@ -169,14 +174,21 @@ Gallery.prototype.setElem = function () {
                     let SubscribeButton = require(BLOCKS + 'subscribe-button');
                     this.subscribeButton = new SubscribeButton({
                         elem: this.subscribeButtonElem,
-                        imageId: this.currentImageId
+                        imageId: this.currentImageId,
+                        counterElem: this.subscribeCounter
                     });
                     resolve();
                 });
             }
 
-        } else
+        } else {
+            this.subscribeButtonElem.onclick = e => {
+                this.error(new ClientError(null, null, 401));
+            };
+
             resolve();
+        }
+
     });
 
 };
@@ -530,6 +542,8 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
         if (this.currentViewModel.isOwnImage) {
             this.setDeleteButton();
             this.deleteButton.setImageId(this.currentImageId);
+        } else {
+            this.subscribeButton
         }
 
         this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;

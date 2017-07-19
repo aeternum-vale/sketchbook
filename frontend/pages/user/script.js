@@ -76,7 +76,8 @@ function createGallery() {
                 isLogged: window.isLogged,
                 preloadEntityCount: PRELOAD_IMAGE_COUNT,
                 isEmbedded: true,
-                publicationNumberElem: document.getElementById('publication-number')
+                publicationNumberElem: document.getElementById('publication-number'),
+                subscribeCounter: document.getElementById('subscribers-number')
             });
             resolve();
         });
