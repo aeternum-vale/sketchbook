@@ -74,7 +74,6 @@ Gallery.prototype.setGallery = function (options) {
     };
 };
 
-//TODO REDIRECT ON UNLOGGED ACTIONS
 //TODO SUBSCRIBERS COUNT CHANGE
 //TODO ALERT IF IT DOESN'T ABLE TO DOWNLOAD MODAL MESSAGE WINDOW
 
@@ -141,7 +140,7 @@ Gallery.prototype.setElem = function () {
             imageId: this.currentImageId
         });
 
-        this.likeButton.on('like-button_changed', e => {
+        this.likeButton.on('switch-button_changed', e => {
             let imageId = e.detail.imageId;
             this.deleteViewModel(imageId);
             this.requestViewModel(imageId).then(() => {
@@ -169,7 +168,6 @@ Gallery.prototype.setElem = function () {
                     resolve();
                 });
             } else {
-                this.setSubscribeButton();
                 require.ensure([BLOCKS + 'subscribe-button'], require => {
                     let SubscribeButton = require(BLOCKS + 'subscribe-button');
                     this.subscribeButton = new SubscribeButton({
@@ -177,6 +175,23 @@ Gallery.prototype.setElem = function () {
                         imageId: this.currentImageId,
                         counterElem: this.subscribeCounter
                     });
+                    this.subscribeButton.on('switch-button_changed', e => {
+                        let involvedImageId = e.detail.imageId;
+
+                        console.log(involvedImageId);
+                        console.log(this.currentImageId);
+                        if (this.isFeed && involvedImageId === this.currentImageId) {
+                            console.log('делаю как сказjhали');
+
+                            this.viewModels = {};
+
+                        }
+
+
+                    });
+
+                    this.setSubscribeButton();
+                    this.subscribeButton.set(this.currentViewModel.author.isNarrator);
                     resolve();
                 });
             }
@@ -190,6 +205,10 @@ Gallery.prototype.setElem = function () {
         }
 
     });
+
+};
+
+Gallery.prototype.unsubscribeDuringTheFeed = function (imageId) {
 
 };
 
@@ -256,6 +275,8 @@ Gallery.prototype.show = function (options) {
                     this.updatePreloadedImagesArray();
                 });
             }
+        }).catch(err => {
+            reject(err);
         });
 
     });
@@ -366,7 +387,10 @@ Gallery.prototype.requestViewModel = function (id) {
 };
 
 Gallery.prototype.removeFromGalleryArray = function (id) {
-    this.galleryArray && this.galleryArray.splice(this.galleryArray.indexOf(id), 1);
+
+    this.galleryArray &&
+    ~this.galleryArray.indexOf(id) &&
+    this.galleryArray.splice(this.galleryArray.indexOf(id), 1);
 };
 
 Gallery.prototype.addToGalleryArray = function (id) {
@@ -469,7 +493,7 @@ Gallery.prototype.switchToNext = function () {
     }
 
     let nextImageId = this.getNextImageId();
-    this.show(nextImageId).catch((err) => {
+    this.show(nextImageId).catch(err => {
         if (err instanceof ImageNotFound) {
             if (this.galleryArray && this.galleryArray.length)
                 this.switchToNext();
@@ -488,7 +512,7 @@ Gallery.prototype.switchToPrev = function () {
     }
 
     let prevImageId = this.getPrevImageId();
-    this.show(prevImageId).catch((err) => {
+    this.show(prevImageId).catch(err => {
         if (err instanceof ImageNotFound) {
             if (this.galleryArray && this.galleryArray.length)
                 this.switchToPrev();
@@ -539,12 +563,11 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
         this.description.textContent = this.currentViewModel.description;
         this.date.textContent = this.currentViewModel.createDateStr;
 
-        if (this.currentViewModel.isOwnImage) {
-            this.setDeleteButton();
+        if (this.currentViewModel.isOwnImage)
             this.deleteButton.setImageId(this.currentImageId);
-        } else {
-            this.subscribeButton
-        }
+        else
+            this.subscribeButton.setImageId(this.currentImageId);
+
 
         this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
         this.username.textContent = this.currentViewModel.author.username;
@@ -556,7 +579,7 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
 
 Gallery.prototype.updateLikes = function (imageId) {
     if (this.currentImageId === imageId)
-        this.likeButton.set(this.currentViewModel.likes.length, this.currentViewModel.isLiked);
+        this.likeButton.set(this.currentViewModel.isLiked, this.currentViewModel.likes.length);
     if (this.gallery)
         this.updateImagePreviewText(imageId);
 };

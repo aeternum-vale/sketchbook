@@ -57,15 +57,11 @@ SwitchButton.prototype.toggle = function () {
 SwitchButton.prototype.activate = function () {
     this.elem.classList.add('button_active');
     this.active = true;
-    if (this.counterElem)
-        this.counterElem.textContent = +this.counterElem.textContent + 1;
 };
 
 SwitchButton.prototype.deactivate = function () {
     this.elem.classList.remove('button_active');
     this.active = false;
-    if (this.counterElem)
-        this.counterElem.textContent = +this.counterElem.textContent - 1;
 };
 
 SwitchButton.prototype.setImageId = function (id) {

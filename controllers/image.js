@@ -303,7 +303,8 @@ function galleryRequestListener(req, res, next) {
             loggedUserViewModel = yield userViewModel(res.loggedUser, loggedUserId);
 
         let viewModels = {};
-        viewModels[image._id] = image;
+        if (~gallery.indexOf(image._id))
+            viewModels[image._id] = image;
 
         return {
             image,
