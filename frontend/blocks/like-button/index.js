@@ -15,16 +15,16 @@ LikeButton.prototype.setAmount = function (likeAmount) {
     this.elem.textContent = `like ${this.likeAmount}`;
 };
 
-LikeButton.prototype.set = function (active, likeAmount) {
-    this.setAmount(likeAmount);
-    SwitchButton.prototype.set.call(this, active);
+LikeButton.prototype.set = function (options) {
+    this.setAmount(options.likeAmount);
+    SwitchButton.prototype.set.call(this, options);
 };
 
 LikeButton.prototype.toggle = function () {
     if (this.active)
-        this.set(false, this.likeAmount - 1);
+        this.set({active: false, likeAmount: this.likeAmount - 1});
     else
-        this.set(true, this.likeAmount + 1);
+        this.set({active: true, likeAmount: this.likeAmount + 1});
 };
 
 module.exports = LikeButton;

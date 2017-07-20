@@ -215,7 +215,7 @@ function likeRequestListener(req, res, next) {
     }).then(result => {
 
         res.json({
-            isLiked: result.isLiked,
+            active: result.isLiked,
             likeAmount: result.likeAmount
         });
 

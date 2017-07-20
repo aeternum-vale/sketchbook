@@ -185,6 +185,7 @@ function subscribeRequestListener(req, res, next) {
 
     function subscribe(user) {
         return co(function*() {
+            let subscribed = false;
 
             if (~user.subscribers.indexOf(res.loggedUser._id)) {
 
@@ -213,7 +214,14 @@ function subscribeRequestListener(req, res, next) {
                         subscriptions: user._id
                     }
                 }).exec();
+
+                subscribed = true;
             }
+
+            return {
+                subscribed,
+                initialSubscribersAmount: user.subscribers.length
+            };
         });
     }
 
@@ -238,10 +246,13 @@ function subscribeRequestListener(req, res, next) {
                 username
             }).exec();
         }
-        yield subscribe(user);
+        return subscribe(user);
 
-    }).then(() => {
-        res.json({});
+    }).then(result => {
+        res.json({
+            active: result.subscribed,
+            subscribersAmount: result.initialSubscribersAmount + (result.subscribed ? 1 : -1)
+        });
     }).catch(err => {
         next(err);
     });

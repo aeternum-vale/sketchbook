@@ -21,6 +21,9 @@ let SwitchButton = function (options) {
             }, 'POST', this.url, (err, response) => {
 
                 if (!err) {
+                    console.log(response);
+
+                    this.set(response);
                     this.available = true;
                     this.trigger('switch-button_changed', {
                         imageId: involvedImageId,
@@ -40,8 +43,9 @@ let SwitchButton = function (options) {
     }
 };
 
-SwitchButton.prototype.set = function (active) {
-    if (active)
+
+SwitchButton.prototype.set = function (options) {
+    if (options.active)
         this.activate();
     else
         this.deactivate();
@@ -49,9 +53,9 @@ SwitchButton.prototype.set = function (active) {
 
 SwitchButton.prototype.toggle = function () {
     if (this.active)
-        this.set(false);
+        this.set({active: false});
     else
-        this.set(true);
+        this.set({active: true});
 };
 
 SwitchButton.prototype.activate = function () {

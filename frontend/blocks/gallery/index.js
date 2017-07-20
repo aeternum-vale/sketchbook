@@ -143,9 +143,9 @@ Gallery.prototype.setElem = function () {
         this.likeButton.on('switch-button_changed', e => {
             let imageId = e.detail.imageId;
             this.deleteViewModel(imageId);
-            this.requestViewModel(imageId).then(() => {
-                this.updateLikes(imageId);
-            });
+            //this.requestViewModel(imageId).then(() => {
+            //    this.updateLikes(imageId);
+            // });
         });
 
         if (this.isLogged) {
@@ -178,20 +178,20 @@ Gallery.prototype.setElem = function () {
                     this.subscribeButton.on('switch-button_changed', e => {
                         let involvedImageId = e.detail.imageId;
 
-                        console.log(involvedImageId);
-                        console.log(this.currentImageId);
-                        if (this.isFeed && involvedImageId === this.currentImageId) {
-                            console.log('делаю как сказjhали');
 
+                        if (this.isFeed && involvedImageId === this.currentImageId)
                             this.viewModels = {};
 
-                        }
 
+                        // this.deleteViewModel(involvedImageId);
+                        // this.requestViewModel(involvedImageId).then(() => {
+                        //     this.updateLikes(imageId);
+                        // });
 
                     });
 
                     this.setSubscribeButton();
-                    this.subscribeButton.set(this.currentViewModel.author.isNarrator);
+                    this.subscribeButton.set({active: this.currentViewModel.author.isNarrator});
                     resolve();
                 });
             }
@@ -208,9 +208,8 @@ Gallery.prototype.setElem = function () {
 
 };
 
-Gallery.prototype.unsubscribeDuringTheFeed = function (imageId) {
-
-};
+//TODO BUG ON CLICKING ON GALLERY NOT IMAGE PREVIEW
+//TODO bug on total unsubscribing
 
 Gallery.prototype.setDeleteButton = function () {
     this.deleteButtonElem.classList.remove('button_invisible');
@@ -388,8 +387,7 @@ Gallery.prototype.requestViewModel = function (id) {
 
 Gallery.prototype.removeFromGalleryArray = function (id) {
 
-    this.galleryArray &&
-    ~this.galleryArray.indexOf(id) &&
+    this.galleryArray && ~this.galleryArray.indexOf(id) &&
     this.galleryArray.splice(this.galleryArray.indexOf(id), 1);
 };
 
@@ -579,7 +577,10 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
 
 Gallery.prototype.updateLikes = function (imageId) {
     if (this.currentImageId === imageId)
-        this.likeButton.set(this.currentViewModel.isLiked, this.currentViewModel.likes.length);
+        this.likeButton.set({
+            active: this.currentViewModel.isLiked,
+            likeAmount: this.currentViewModel.likes.length
+        });
     if (this.gallery)
         this.updateImagePreviewText(imageId);
 };
