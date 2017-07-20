@@ -2,6 +2,7 @@ let eventMixin = require(LIBS + 'eventMixin');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
 let ImageNotFound = require(LIBS + 'componentErrors').ImageNotFound;
 let Modal = require(BLOCKS + 'modal');
+let SwitchButton = require(BLOCKS + 'switch-button');
 
 
 let Gallery = function (options) {
@@ -13,7 +14,7 @@ let Gallery = function (options) {
     this.isLogged = options.isLogged;
     this.preloadEntityCount = options.preloadEntityCount;
     this.isFeed = options.isFeed || false;
-    this.subscribeCounter = options.subscribeCounter;
+    this.userSubscribeButton = options.userSubscribeButton;
 
     this.viewModels = {};
     this.galleryArray = null;
@@ -143,9 +144,9 @@ Gallery.prototype.setElem = function () {
         this.likeButton.on('switch-button_changed', e => {
             let imageId = e.detail.imageId;
             this.deleteViewModel(imageId);
-            //this.requestViewModel(imageId).then(() => {
-            //    this.updateLikes(imageId);
-            // });
+            this.requestViewModel(imageId).then(() => {
+                this.updateLikes(imageId);
+            });
         });
 
         if (this.isLogged) {
@@ -173,20 +174,19 @@ Gallery.prototype.setElem = function () {
                     this.subscribeButton = new SubscribeButton({
                         elem: this.subscribeButtonElem,
                         imageId: this.currentImageId,
-                        counterElem: this.subscribeCounter
                     });
+
+                    console.log(this.userSubscribeButton);
+
+                    if (this.userSubscribeButton)
+                        SwitchButton.setRelation(this.subscribeButton, this.userSubscribeButton);
+
+
                     this.subscribeButton.on('switch-button_changed', e => {
                         let involvedImageId = e.detail.imageId;
 
-
                         if (this.isFeed && involvedImageId === this.currentImageId)
                             this.viewModels = {};
-
-
-                        // this.deleteViewModel(involvedImageId);
-                        // this.requestViewModel(involvedImageId).then(() => {
-                        //     this.updateLikes(imageId);
-                        // });
 
                     });
 

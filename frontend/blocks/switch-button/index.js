@@ -21,7 +21,6 @@ let SwitchButton = function (options) {
             }, 'POST', this.url, (err, response) => {
 
                 if (!err) {
-                    console.log(response);
 
                     this.set(response);
                     this.available = true;
@@ -43,12 +42,21 @@ let SwitchButton = function (options) {
     }
 };
 
+SwitchButton.setRelation = function (switchButton1, switchButton2) {
+    switchButton1.on('switch-button_changed', e => {
+        switchButton2.set(e.detail.response);
+    });
+
+    switchButton2.on('switch-button_changed', e => {
+        switchButton1.set(e.detail.response);
+    });
+};
 
 SwitchButton.prototype.set = function (options) {
     if (options.active)
-        this.activate();
+        this._activate();
     else
-        this.deactivate();
+        this._deactivate();
 };
 
 SwitchButton.prototype.toggle = function () {
@@ -58,12 +66,12 @@ SwitchButton.prototype.toggle = function () {
         this.set({active: true});
 };
 
-SwitchButton.prototype.activate = function () {
+SwitchButton.prototype._activate = function () {
     this.elem.classList.add('button_active');
     this.active = true;
 };
 
-SwitchButton.prototype.deactivate = function () {
+SwitchButton.prototype._deactivate = function () {
     this.elem.classList.remove('button_active');
     this.active = false;
 };

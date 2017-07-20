@@ -18,6 +18,25 @@ let linksDropdown = new Dropdown({
     className: 'links-dropdown'
 });
 
+let subscribeButtonElem;
+let subscribeButton;
+
+if (subscribeButtonElem = document.getElementById('subscribe-button')) {
+    if (window.isLogged) {
+        require.ensure([BLOCKS + 'subscribe-button'], function (require) {
+            let SubscribeButton = require(BLOCKS + 'subscribe-button');
+            subscribeButton = new SubscribeButton({
+                elem: subscribeButtonElem,
+                counterElem: document.getElementById('subscribers-number')
+            });
+        });
+    } else
+        subscribeButtonElem.onclick = e => {
+            globalErrorHandler.call(new ClientError(null, null, 401));
+        };
+}
+
+
 let uploadImageModalWindowCaller;
 let uploadImageModalWindow;
 if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller')) {
@@ -77,7 +96,7 @@ function createGallery() {
                 preloadEntityCount: PRELOAD_IMAGE_COUNT,
                 isEmbedded: true,
                 publicationNumberElem: document.getElementById('publication-number'),
-                subscribeCounter: document.getElementById('subscribers-number')
+                userSubscribeButton: subscribeButton
             });
             resolve();
         });
@@ -93,23 +112,7 @@ function createGallery() {
 //
 // }, 5000);
 
-let subscribeButtonElem;
 
-if (subscribeButtonElem = document.getElementById('subscribe-button')) {
-    if (window.isLogged) {
-        require.ensure([BLOCKS + 'subscribe-button'], function (require) {
-            let SubscribeButton = require(BLOCKS + 'subscribe-button');
-            let subscribeButton = new SubscribeButton({
-                elem: subscribeButtonElem,
-                counterElem: document.getElementById('subscribers-number')
-            });
-        });
-    } else
-        subscribeButtonElem.onclick = e => {
-            globalErrorHandler.call(new ClientError(null, null, 401));
-        };
-
-}
 
 if (window.isLogged) {
     let userMenuDropdown = new Dropdown({
