@@ -1,10 +1,10 @@
 <div class="window cutaway cutaway-wrapper__cutaway">
 	<div class="header window__header">
-		<a class="cutaway__header-left-side" href="{{userUrl}}">
+		<a class="cutaway__header-left-side" href="{{user.url}}">
 			<div class="cutaway__avatar" style="background-image: url('{{user.avatarUrls.medium}}')"></div>
 			<div class="cutaway__username">{{user.username}}</div>
 		</a>
-		<div class="button cutaway__subscribe-button">subscribe</div>
+        <div class="button cutaway__subscribe-button"{{#if user.isNarrator}} data-active="true"{{/if}} data-username="{{user.username}}">subscribe</div>
 	</div>
 	<div class="window__panel cutaway__outer-panel">
 		<div class="cutaway__preview-wrapper cutaway__top">

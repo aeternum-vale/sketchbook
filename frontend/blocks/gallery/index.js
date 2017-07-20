@@ -138,7 +138,7 @@ Gallery.prototype.setElem = function () {
 
         this.likeButton = new LikeButton({
             elem: document.querySelector('.like-button'),
-            imageId: this.currentImageId
+            data: this.currentImageId
         });
 
         this.likeButton.on('switch-button_changed', e => {
@@ -173,7 +173,7 @@ Gallery.prototype.setElem = function () {
                     let SubscribeButton = require(BLOCKS + 'subscribe-button');
                     this.subscribeButton = new SubscribeButton({
                         elem: this.subscribeButtonElem,
-                        imageId: this.currentImageId,
+                        data: this.currentImageId
                     });
 
                     console.log(this.userSubscribeButton);
@@ -561,10 +561,11 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
         this.description.textContent = this.currentViewModel.description;
         this.date.textContent = this.currentViewModel.createDateStr;
 
-        if (this.currentViewModel.isOwnImage)
-            this.deleteButton.setImageId(this.currentImageId);
-        else
-            this.subscribeButton.setImageId(this.currentImageId);
+        if (this.isLogged)
+            if (this.currentViewModel.isOwnImage)
+                this.deleteButton.setImageId(this.currentImageId);
+            else
+                this.subscribeButton.setImageId(this.currentImageId);
 
 
         this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;

@@ -47,13 +47,8 @@
 			</div>
 		{{else}}
 			<div id="subscribe-button"
-			{{#if pageUser.isNarrator}}
-				data-active="true"
-				class="button button_active extra-header__button"
-			{{else}}
-				class="button extra-header__button"
-			{{/if}}
-			>subscribe</div>
+                 class="button extra-header__button"
+                {{#if pageUser.isNarrator}} data-active="true"{{/if}}>subscribe</div>
 		{{/if}}
 	</div>
 </div>

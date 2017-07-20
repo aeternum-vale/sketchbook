@@ -175,7 +175,7 @@ function imageDeleteListRequestListener(req, res, next) {
 
 function likeRequestListener(req, res, next) {
 
-    let imageId = req.body.id;
+    let imageId = req.body.imageId;
     if (!imageId) return next(400);
 
     co(function*() {

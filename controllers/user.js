@@ -225,9 +225,10 @@ function subscribeRequestListener(req, res, next) {
         });
     }
 
-    let imageId = req.body.id;
-    let username;
-    if (req.refererParams.field === 'user')
+    let imageId = req.body.imageId;
+    let username = req.body.username;
+
+    if (!username && req.refererParams.field === 'user')
         username = req.refererParams.value;
 
     if (!imageId && !username)
@@ -333,7 +334,7 @@ function homeRequestListener(req, res, next) {
                 imagesBottom.push(images[j]);
 
             cutaways.push({
-                user: userViewModel(reprUsers[i]),
+                user: userViewModel(reprUsers[i], res.loggedUser && res.loggedUser._id),
                 imagesTop,
                 imagesBottom
             });
@@ -345,7 +346,6 @@ function homeRequestListener(req, res, next) {
         return cutaways;
 
     }).then(cutaways => {
-
 
         res.locals.cutaways = cutaways;
         res.locals.page = 'home';
