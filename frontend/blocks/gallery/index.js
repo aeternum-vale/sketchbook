@@ -75,7 +75,6 @@ Gallery.prototype.setGallery = function (options) {
     };
 };
 
-//TODO SUBSCRIBERS COUNT CHANGE
 //TODO ALERT IF IT DOESN'T ABLE TO DOWNLOAD MODAL MESSAGE WINDOW
 
 Gallery.prototype.setElem = function () {
@@ -207,9 +206,6 @@ Gallery.prototype.setElem = function () {
     });
 
 };
-
-//TODO BUG ON CLICKING ON GALLERY NOT IMAGE PREVIEW
-//TODO bug on total unsubscribing
 
 Gallery.prototype.setDeleteButton = function () {
     this.deleteButtonElem.classList.remove('button_invisible');
@@ -567,6 +563,8 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
             else
                 this.subscribeButton.setImageId(this.currentImageId);
 
+        if (this.isFeed)
+            this.subscribeButton.set({active: true});
 
         this.avatar.style.backgroundImage = `url('${this.currentViewModel.author.avatarUrls.medium}')`;
         this.username.textContent = this.currentViewModel.author.username;

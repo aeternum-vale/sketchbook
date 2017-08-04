@@ -85,7 +85,18 @@ module.exports = {
         //     name: 'common-user',
         //     chunks: ['user', 'logged-user']
         // })
-    ]
+
+        new webpack.HotModuleReplacementPlugin()
+    ],
+
+    devServer: {
+        hot: true,
+        proxy: {
+            '*': 'http://localhost:3000'
+        }
+    }
+
+
 
 };
 

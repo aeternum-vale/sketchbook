@@ -1,34 +1,61 @@
-<div id="auth-widget" class="auth-widget">
+<div id="authorization" class="authorization">
+    <div class="authorization__wrapper authorization__background-wrapper" data-images='["/image168.jpg", "/image41.jpg", "/image53.jpg", "/image21.jpg", "/image54.jpg"]'>
+        <div class="authorization__left-pic-wrapper">
+            <div class="authorization__left-pic"></div>
+            <div class="authorization__left-pic"></div>
+        </div>
+        <div class="authorization__right-pic-wrapper">
+            <div class="authorization__right-pic"></div>
+            <div class="authorization__right-pic"></div>
+        </div>
+    </div>
 
-	<div class="window auth-window join-window window_invisible">
-		<div class="header window__header">
-			signing up
-		</div>
-		<form class="panel window__panel" action="/join" method="POST" name="join" role="form">
-			{{> textbox name="username" caption="username" parent="window"}}
-			{{> textbox name="email" caption="e-mail" parent="window"}}
-			{{> textbox name="password" caption="password" type="password" parent="window"}}
-			{{> textbox name="password-again" caption="password again" type="password" parent="window"}}
-			<div class="button save-button window__button">join</div>
+    <div class="authorization__backdrop"></div>
 
-			<span class="window__message">
-				Already have an account? <span class="ref">Log in</span>
-			</span>
-		</form>
-	</div>
+    <div class="authorization__wrapper">
+        <div class="background authorization__vert-line"></div>
+    </div>
 
-	<div class="window auth-window login-window">
-		<div class="header window__header">
-			logging in
-		</div>
-		<form class="panel window__panel" action="/login" method="POST" name="login" role="form">
-			{{> textbox name="username" caption="username" parent="window"}}
-			{{> textbox name="password" caption="password" type="password" parent="window"}}
-			<div class="button save-button window__button">login</div>
-			<span class="window__message">
-				Don’t have an account? <span class="ref">Sign up</span>
-			</span>
-		</form>
-	</div>
+    <div class="authorization__wrapper authorization__wrapper_column">
+        <div class="authorization__auth-widget-shadow authorization__auth-widget-shadow_up"></div>
+        <div id="auth-widget" class="auth-widget authorization__auth-widget">
+            <!--<div class="window auth-window join-window window_invisible">-->
+            <!--<div class="header window__header">-->
+            <!--signing up-->
+            <!--</div>-->
+            <!--<form class="panel window__panel" action="/join" method="POST" name="join" role="form">-->
+            <!--{{> textbox name="username" caption="username" parent="window"}}-->
+            <!--{{> textbox name="email" caption="e-mail" parent="window"}}-->
+            <!--{{> textbox name="password" caption="password" type="password" parent="window"}}-->
+            <!--{{> textbox name="password-again" caption="password again" type="password" parent="window"}}-->
+            <!--<div class="button save-button window__button">join</div>-->
+
+            <!--<span class="window__message">-->
+            <!--Already have an account? <span class="ref">Log in</span>-->
+            <!--</span>-->
+            <!--</form>-->
+            <!--</div>-->
+
+            <div class="window auth-window login-window">
+                <div class="header window__header">
+                    logging in
+                </div>
+                <form class="panel window__panel" action="/login" method="POST" name="login" role="form">
+                    {{> textbox name="username" caption="username" parent="window"}}
+                    {{> textbox name="password" caption="password" type="password" parent="window"}}
+                    <div class="button save-button window__button">login</div>
+                    <span class="window__message">
+				        Don’t have an account? <span class="ref">Sign up</span>
+			        </span>
+                </form>
+            </div>
+        </div>
+        <div class="authorization__auth-widget-shadow"></div>
+        <div class="logo authorization__logo"></div>
+    </div>
 
 </div>
+
+
+
+

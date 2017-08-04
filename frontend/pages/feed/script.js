@@ -18,6 +18,9 @@ let userMenuDropdown = new Dropdown({
 let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
+    if (!e.target.classList.contains('image-preview')) return;
+
+
     let spinner = new ModalSpinner({
         status: Modal.statuses.MAJOR
     });
@@ -42,7 +45,6 @@ function createGallery() {
                 isLogged: window.isLogged,
                 preloadEntityCount: PRELOAD_IMAGE_COUNT,
                 isEmbedded: true,
-                publicationNumberElem: document.getElementById('publication-number'),
                 isFeed: true
             });
             resolve();

@@ -71,6 +71,8 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
 let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
+    if (!e.target.classList.contains('image-preview')) return;
+
     let spinner = new ModalSpinner({
         status: Modal.statuses.MAJOR
     });
