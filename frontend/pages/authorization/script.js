@@ -5,11 +5,11 @@ import './style.less';
 let GlobalErrorHandler = require(BLOCKS + 'global-error-handler');
 let globalErrorHandler = new GlobalErrorHandler();
 
-// let AuthWidget = require(BLOCKS + 'auth-widget');
-//
-// let authWidget = new AuthWidget({
-//    elem: document.getElementById('auth-widget')
-// });
+let AuthWindow = require(BLOCKS + 'auth-window');
+
+let authWindow = new AuthWindow({
+   elem: document.getElementById('auth-window')
+});
 
 window.onpopstate = e => {
     if (e.state)
@@ -77,6 +77,7 @@ let Authorization = function (options) {
             this.images[i].loaded = true;
 
             if (this.currentLeftPic1Index === -1 && this.currentLeftPic === 1) {
+                //TODO backdrop should decrease its opacity now
                 this.setLeftPicImage(1, this.images[i]);
                 return;
             }
@@ -127,7 +128,6 @@ let Authorization = function (options) {
 
 };
 
-
 Authorization.prototype.getNextLeftImage = function () {
     let currentVisibleIndex = (this.currentLeftPic === 1) ? this.currentLeftPic1Index : this.currentLeftPic2Index;
     let currentRightIndex = (this.currentRightPic === 1) ? this.currentRightPic1Index : this.currentRightPic2Index;
@@ -155,10 +155,8 @@ Authorization.prototype.getNextRightImage = function () {
         i = this.images.length - 1;
 
     do {
-        if (this.images[i].loaded === true && i !== currentLeftIndex) {
+        if (this.images[i].loaded === true && i !== currentLeftIndex)
             return this.images[i];
-        }
-
 
         i -= 1;
         if (i === -1)
@@ -192,9 +190,8 @@ Authorization.prototype.setLeftPicImage = function (pic, image) {
 };
 
 
-Authorization.prototype.setRightPicImage = function (pic, image, preventCur) {
-    if (!preventCur)
-        this.currentRightPic = pic;
+Authorization.prototype.setRightPicImage = function (pic, image) {
+    this.currentRightPic = pic;
 
     if (pic === 1) {
         if (image) {
@@ -218,26 +215,6 @@ Authorization.prototype.setUrl = function (elem, url) {
         elem.style.backgroundImage = 'none';
 };
 
-
 let page = new Authorization({
     elem: document.getElementById('authorization')
 });
-
-
-// leftPic1.addEventListener("animationstart", function (e) {
-//     console.log("leftPic1 start: " + performance.now());
-// }, false);
-//
-//
-// leftPic1.addEventListener("animationend",function(e){
-//     console.log("leftPic1 end: " + performance.now());
-// },false);
-//
-// leftPic2.addEventListener("animationstart", function (e) {
-//     console.log("leftPic2 start: " + performance.now());
-// }, false);
-//
-//
-// leftPic2.addEventListener("animationend",function(e){
-//     console.log("leftPic2 end: " + performance.now());
-// },false);

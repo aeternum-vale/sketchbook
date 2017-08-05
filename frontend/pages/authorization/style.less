@@ -1,10 +1,9 @@
 @import "../../style/global.less";
-@import "../../blocks/auth-widget/auth-widget.less";
-@import "../../blocks/auth-window/auth-window.less";
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window.less';
 @import '../../blocks/background/style.less';
 @import '../../blocks/logo/style.less';
+@import "../../blocks/auth-window/style.less";
 
 @authorization-vert-line-width: 300px;
 @authorization-logo-offset: 20px;
@@ -53,7 +52,6 @@
 
   &__wrapper_column {
     flex-direction: column;
-
   }
 
   &__left-pic-wrapper,
@@ -83,7 +81,6 @@
   }
 
 
-
   &__right-pic:nth-child(2) {
     animation: up-moving-right ~"@{authorization-ma-up-length}s" linear  ~"@{authorization-ma-right-up-delay}s" @authorization-big-number;
     opacity: 0;
@@ -99,19 +96,23 @@
     box-shadow: 0 0 51px 11px #000;
   }
 
-  &__auth-widget .window {
+  &__auth-window {
     box-shadow: none;
   }
 
-  &__auth-widget-shadow {
+  &__auth-window-shadow {
     width: @authorization-vert-line-width;
     height: @authorization-logo-offset;
     box-shadow: inset 0px 15px 12px -4px rgba(0, 0, 0, 0.30);
   }
 
-  &__auth-widget-shadow_up {
+  &__auth-window-shadow_up {
     margin-top: @logo-height;
     box-shadow: inset 0px -15px 12px -4px rgba(0, 0, 0, 0.30);
+  }
+
+  &__logo {
+    display: block;
   }
 }
 

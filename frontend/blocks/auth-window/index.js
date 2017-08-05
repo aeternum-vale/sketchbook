@@ -3,8 +3,9 @@ let eventMixin = require(LIBS + 'eventMixin');
 let ClientError = require(LIBS + 'componentErrors').ClientError;
 let Form = require(BLOCKS + 'form');
 
-let AuthWidget = function(options) {
+let AuthWindow = function(options) {
     this.elem = options.elem;
+
 
     this.joinForm = new Form({
         elem: this.elem.querySelector('form[name="join"]'),
@@ -44,8 +45,6 @@ let AuthWidget = function(options) {
         this.redirect();
     });
 
-    this.joinWindow = this.elem.querySelector('.join-window');
-    this.loginWindow = this.elem.querySelector('.login-window');
 
     this.loginWindowActive = true;
     this.elem.onclick = e => {
@@ -76,30 +75,32 @@ let AuthWidget = function(options) {
     }, true);
 };
 
-AuthWidget.prototype.redirect = function() {
+AuthWindow.prototype.redirect = function() {
     let url = '/';
     url = localStorage.getItem('redirected_url') || url;
     localStorage.removeItem('redirected_url');
     window.location = url;
 };
 
-AuthWidget.prototype.setJoin = function() {
-    this.joinForm.clear();
+AuthWindow.prototype.setJoin = function() {
+    //this.joinForm.clear();
 
-    this.loginWindow.classList.add('window_invisible');
-    this.joinWindow.classList.remove('window_invisible');
+    this.loginForm.elem.classList.add('auth-window__form_invisible');
+    this.joinForm.elem.classList.remove('auth-window__form_invisible');
 
     this.loginWindowActive = false;
 };
 
-AuthWidget.prototype.setLogin = function() {
-    this.joinWindow.classList.add('window_invisible');
-    this.loginWindow.classList.remove('window_invisible');
+AuthWindow.prototype.setLogin = function() {
+    //this.loginForm.clear();
+
+    this.joinForm.elem.classList.add('auth-window__form_invisible');
+    this.loginForm.elem.classList.remove('auth-window__form_invisible');
 
     this.loginWindowActive = true;
 };
 
-AuthWidget.prototype.toggle = function() {
+AuthWindow.prototype.toggle = function() {
     if (this.loginWindowActive)
         this.setJoin();
     else
@@ -107,7 +108,7 @@ AuthWidget.prototype.toggle = function() {
 };
 
 for (let key in eventMixin) {
-    AuthWidget.prototype[key] = eventMixin[key];
+    AuthWindow.prototype[key] = eventMixin[key];
 }
 
-module.exports = AuthWidget;
+module.exports = AuthWindow;

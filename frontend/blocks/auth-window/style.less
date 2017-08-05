@@ -1,5 +1,7 @@
-@import "../../blocks/window/window.less";
+@import "../window/window.less";
 .auth-window {
+    transition: height 3s linear;
+
     & .window__panel {
         padding: 20px 0;
     }
@@ -16,4 +18,9 @@
         margin-top: 40px;
         width: 334px;
     }
+
+    &__form_invisible {
+      display: none;
+    }
 }
+
