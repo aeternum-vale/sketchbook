@@ -6,10 +6,13 @@ let Form = function(options) {
     this.elem = options.elem;
     this.fields = options.fields;
     this.url = options.url;
+    this.isAvailable = true;
 
     this.saveButton = this.elem.querySelector('.save-button');
 
     this.elem.onclick = e => {
+        if (!this.isAvailable) return;
+
         if (e.target !== this.saveButton) return;
 
         this.clearErrorBoxes();
@@ -27,6 +30,10 @@ Form.prototype.setPropertyError = function(property, message) {
 
 Form.prototype.getErrorBox = function(fieldName) {
     return this.elem[fieldName].parentElement.querySelector('.textbox__error');
+};
+
+Form.prototype.setAvailable = function(isAvailable) {
+    this.isAvailable = isAvailable;
 };
 
 Form.prototype.getDataObj = function() {
