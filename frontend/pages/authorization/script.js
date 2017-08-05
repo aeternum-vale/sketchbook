@@ -8,16 +8,17 @@ let globalErrorHandler = new GlobalErrorHandler();
 let AuthWindow = require(BLOCKS + 'auth-window');
 
 let authWindow = new AuthWindow({
-   elem: document.getElementById('auth-window')
+    elem: document.getElementById('auth-window'),
+    isLoginFormActive: true
 });
 
-window.onpopstate = e => {
-    if (e.state)
-        if (e.state.type === 'join')
-            authWidget.setJoin();
-        else
-            authWidget.setLogin();
-};
+// window.onpopstate = e => {
+//     if (e.state)
+//         if (e.state.type === 'join')
+//             authWidget.setJoin();
+//         else
+//             authWidget.setLogin();
+// };
 
 // authWidget.on('switch', e => {
 //    if (e.detail.loginWindowActive)

@@ -5,10 +5,25 @@ let Form = require(BLOCKS + 'form');
 
 let AuthWindow = function(options) {
     this.elem = options.elem;
+    this.isLoginFormActive = options.isLoginFormActive;
+
+
+    this.panel = this.elem.querySelector('div.window__panel');
+    this.loginFormElem = this.elem.querySelector('form[name="login"]');
+    this.joinFormElem = this.elem.querySelector('form[name="join"]');
+
+
+
+
+    if (!this.isLoginFormActive)
+        this.setJoin();
+    else
+        this.setLogin();
+
 
 
     this.joinForm = new Form({
-        elem: this.elem.querySelector('form[name="join"]'),
+        elem: this.joinFormElem,
         fields: {
             'username': {},
             'email': {
@@ -29,7 +44,7 @@ let AuthWindow = function(options) {
     });
 
 	this.loginForm = new Form({
-        elem: this.elem.querySelector('form[name="login"]'),
+        elem: this.loginFormElem,
         fields: {
             'username': {
 				validator: 'non-empty'
@@ -46,13 +61,13 @@ let AuthWindow = function(options) {
     });
 
 
-    this.loginWindowActive = true;
+
     this.elem.onclick = e => {
 
         if (e.target.matches('.window__message .ref')) {
             this.toggle();
             this.trigger('switch', {
-                loginWindowActive: this.loginWindowActive
+                isLoginFormActive: this.isLoginFormActive
             });
         }
 
@@ -85,23 +100,27 @@ AuthWindow.prototype.redirect = function() {
 AuthWindow.prototype.setJoin = function() {
     //this.joinForm.clear();
 
-    this.loginForm.elem.classList.add('auth-window__form_invisible');
-    this.joinForm.elem.classList.remove('auth-window__form_invisible');
+    this.joinFormElem.classList.remove('auth-window__form_invisible');
+    this.loginFormElem.classList.add('auth-window__form_invisible');
+    this.joinFormElemHeight = this.joinFormElemHeight || this.joinFormElem.scrollHeight;
+    this.panel.style.height = `${this.joinFormElemHeight}px`;
 
-    this.loginWindowActive = false;
+    this.isLoginFormActive = false;
 };
 
 AuthWindow.prototype.setLogin = function() {
     //this.loginForm.clear();
 
-    this.joinForm.elem.classList.add('auth-window__form_invisible');
-    this.loginForm.elem.classList.remove('auth-window__form_invisible');
+    this.loginFormElem.classList.remove('auth-window__form_invisible');
+    this.joinFormElem.classList.add('auth-window__form_invisible');
+    this.loginFormElemHeight = this.loginFormElemHeight || this.loginFormElem.scrollHeight;
+    this.panel.style.height = `${this.loginFormElemHeight}px`;
 
-    this.loginWindowActive = true;
+    this.isLoginFormActive = true;
 };
 
 AuthWindow.prototype.toggle = function() {
-    if (this.loginWindowActive)
+    if (this.isLoginFormActive)
         this.setJoin();
     else
         this.setLogin();

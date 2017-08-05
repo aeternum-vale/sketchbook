@@ -3,3 +3,4 @@ public/
 userdata/
 start.bat
 .idea/*
+npm-debug.log.*

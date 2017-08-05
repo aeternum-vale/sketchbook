@@ -24,27 +24,32 @@
             <div class="header window__header">
                 logging in
             </div>
+            <div class="panel window__panel">
+                <form class="window__panel auth-window__form auth-window__form_invisible" action="/join" method="POST" name="join" role="form">
+                    {{> textbox name="username" caption="username" parent="window"}}
+                    {{> textbox name="email" caption="e-mail" parent="window"}}
+                    {{> textbox name="password" caption="password" type="password" parent="window"}}
+                    {{> textbox name="password-again" caption="password again" type="password" parent="window"}}
+                    <div class="button save-button window__button">join</div>
 
-            <form class="panel window__panel auth-window__form_invisible" action="/join" method="POST" name="join" role="form">
-                {{> textbox name="username" caption="username" parent="window"}}
-                {{> textbox name="email" caption="e-mail" parent="window"}}
-                {{> textbox name="password" caption="password" type="password" parent="window"}}
-                {{> textbox name="password-again" caption="password again" type="password" parent="window"}}
-                <div class="button save-button window__button">join</div>
-
-                <span class="window__message">
+                    <span class="window__message">
                 Already have an account? <span class="ref">Log in</span>
                 </span>
-            </form>
+                </form>
 
-            <form class="panel window__panel" action="/login" method="POST" name="login" role="form">
-                {{> textbox name="username" caption="username" parent="window"}}
-                {{> textbox name="password" caption="password" type="password" parent="window"}}
-                <div class="button save-button window__button">login</div>
-                <span class="window__message">
+                <form class="window__panel auth-window__form auth-window__form_invisible" action="/login" method="POST" name="login" role="form">
+                    {{> textbox name="username" caption="username" parent="window"}}
+                    {{> textbox name="password" caption="password" type="password" parent="window"}}
+                    <div class="button save-button window__button">login</div>
+                    <span class="window__message">
                     Don’t have an account? <span class="ref">Sign up</span>
                 </span>
-            </form>
+                </form>
+
+            </div>
+
+
+
         </div>
         <div class="authorization__auth-window-shadow"></div>
         <a href="/" class="logo authorization__logo"></a>
