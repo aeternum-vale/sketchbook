@@ -153,7 +153,6 @@ AuthWindow.prototype.setLoginAEHandler = function () {
     this.isLoginFormActive = true;
     this.joinFormElem.removeEventListener('animationend', this.setLoginAEHandler);
 
-
 };
 
 AuthWindow.prototype.toggle = function () {

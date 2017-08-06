@@ -176,9 +176,34 @@ function logoutRequestListener(req, res, next) {
 }
 
 function authorizationRequestListener(req, res, next) {
-    res.render('authorization', {
-        page: 'authorization'
+
+    function random(min, max) {
+        let rand = min + Math.random() * (max + 1 - min);
+        rand = Math.floor(rand);
+        return rand;
+    }
+
+    co(function*() {
+        const BACKGROUND_IMAGES_PREFERABLE_COUNT = 6;
+
+        let imageCollectionSize = (yield Image.find().exec()).length;
+
+        let backgroundImageCount = (imageCollectionSize < BACKGROUND_IMAGES_PREFERABLE_COUNT)
+            ? imageCollectionSize : BACKGROUND_IMAGES_PREFERABLE_COUNT;
+        let backgroundRawImages = yield Image.find().skip(random(0, imageCollectionSize - backgroundImageCount)).limit(backgroundImageCount).exec();
+
+        return backgroundRawImages.map(item => imagePaths.getImageUrl(item._id));
+        //TODO not very random
+
+
+    }).then(backgroundImagesUrls => {
+        res.locals.images = JSON.stringify(backgroundImagesUrls);
+        res.locals.page = 'authorization';
+        res.render('authorization');
+    }).catch(err => {
+        next(err);
     });
+
 }
 
 function subscribeRequestListener(req, res, next) {

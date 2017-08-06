@@ -37,7 +37,7 @@ module.exports = function(image, loggedUserId) {
 
         let imageViewModel = {
             _id: image._id,
-            imgUrl: '/' + imagePaths.getImageFileNameById(image._id),
+            imgUrl: imagePaths.getImageUrl(image._id),
             isOwnImage: (loggedUserId === image.author),
             isLiked: !!(~image.likes.indexOf(loggedUserId)),
             description: image.description,

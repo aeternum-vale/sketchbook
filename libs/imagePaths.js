@@ -40,10 +40,15 @@ function getAvatarFileNamesById(id) {
 	}
 }
 
+function getImageUrl(id) {
+    return `/${getImageFileNameById(id)}`;
+}
+
 module.exports = {
 	getImageFileNameById,
 	getImagePreviewFileNameById,
 	getImageFileNameByPath,
 	getAvatarPathsById,
-	getAvatarFileNamesById
+	getAvatarFileNamesById,
+    getImageUrl
 };
