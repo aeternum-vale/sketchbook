@@ -190,7 +190,11 @@ function authorizationRequestListener(req, res, next) {
 
         let backgroundImageCount = (imageCollectionSize < BACKGROUND_IMAGES_PREFERABLE_COUNT)
             ? imageCollectionSize : BACKGROUND_IMAGES_PREFERABLE_COUNT;
-        let backgroundRawImages = yield Image.find().skip(random(0, imageCollectionSize - backgroundImageCount)).limit(backgroundImageCount).exec();
+        let backgroundRawImages = yield Image
+            .find()
+            .skip(random(0, imageCollectionSize - backgroundImageCount))
+            .limit(backgroundImageCount)
+            .exec();
 
         return backgroundRawImages.map(item => imagePaths.getImageUrl(item._id));
         //TODO not very random

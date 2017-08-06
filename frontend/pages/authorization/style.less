@@ -1,7 +1,6 @@
 @import "../../style/global.less";
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window.less';
-@import '../../blocks/background/style.less';
 @import '../../blocks/logo/style.less';
 @import "../../blocks/auth-window/style.less";
 
@@ -29,7 +28,7 @@
 
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: @global-background-color;
 
   &__backdrop {
 
@@ -54,6 +53,10 @@
     flex-direction: column;
   }
 
+  &__vert-line {
+    .background();
+  }
+
   &__left-pic-wrapper,
   &__right-pic-wrapper {
     overflow: hidden;
@@ -68,7 +71,7 @@
     height: calc(~"100% + @{authorization-pic-offset}");
     background-size: cover;
     background-position: center;
-    background-color: #4b4848;
+    background-color: @global-background-color;
   }
 
   &__left-pic:nth-child(2) {

@@ -1,18 +1,19 @@
 @import "../../style/global.less";
-@import "../../blocks/page-header/page-header.less";
-@import "../../blocks/footer/footer.less";
-@import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/window/window.less";
 @import "../../blocks/button/button.less";
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window';
+@import "../../blocks/page-header/page-header.less";
+@import "../../blocks/footer/footer.less";
+@import "../../blocks/user-menu/user-menu.less";
+
 
 @cutaway-header-padding: 6px;
 @cutaway-avatar-size: 54px;
 @cutaway-button-font-size: 21px;
 @cutaway-button-height: @cutaway-button-font-size + (@cutaway-button-font-size / @button-padding-reduc-rate) * 2;
 @cutaway-header-padding-right: (@cutaway-avatar-size + @cutaway-header-padding * 2 - @cutaway-button-height) / 2;
-@cutaway-width: 450px;
+@cutaway-width: 500px;
 @cutaway-panel-width: @cutaway-width - @window-border-width * 2;
 @cutaway-panel-height: 290px;
 @cutaway-image-preview-margin: 10px;
@@ -20,6 +21,8 @@
 @cutaway-image-preview-count: 6;
 @cutaway-image-preview-wrapper-width: @cutaway-image-preview-size * @cutaway-image-preview-count + @cutaway-image-preview-margin * (@cutaway-image-preview-count + 1);
 @cutaway-image-preview-wrapper-offset: (@cutaway-image-preview-size + @cutaway-image-preview-margin) * @cutaway-image-preview-count;
+
+
 .cutaway-wrapper {
   position: relative;
   display: flex;
@@ -49,7 +52,10 @@
   }
   &__avatar {
     .avatar(@cutaway-avatar-size);
+
+    border-width: 2px;
     margin-right: @cutaway-header-padding;
+    box-shadow: inset 0 -4px 7px rgba(0, 0, 0, .3);
   }
   &__header-left-side {
     display: flex;
@@ -58,6 +64,8 @@
   &__subscribe-button {
     .button(@cutaway-button-font-size);
   }
+
+  &__subscribe-button:active,
   &__subscribe-button.button_active {
     .button-active(@cutaway-button-font-size);
   }
