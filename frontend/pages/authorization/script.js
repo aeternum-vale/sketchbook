@@ -7,42 +7,48 @@ let globalErrorHandler = new GlobalErrorHandler();
 
 let AuthWindow = require(BLOCKS + 'auth-window');
 
+let isLoginFormActive = true;
+if (!history.state && window.location.search === '?join')
+    isLoginFormActive = false;
+
 let authWindow = new AuthWindow({
     elem: document.getElementById('auth-window'),
-    isLoginFormActive: true
+    isLoginFormActive
 });
 
-// window.onpopstate = e => {
-//     if (e.state)
-//         if (e.state.type === 'join')
-//             authWidget.setJoin();
-//         else
-//             authWidget.setLogin();
-// };
+let state = isLoginFormActive ? 'login' : 'join';
 
-// authWidget.on('switch', e => {
-//    if (e.detail.loginWindowActive)
-//
-//       history.pushState({
-//       type: 'login'
-//    }, "login", "?login");
-//    else
-//       history.pushState({
-//          type: 'join'
-//       }, "join", "?join");
-//
-// });
+history.replaceState({
+    type: state
+}, state, `?${state}`);
+
+window.onpopstate = e => {
+
+    if (e.state)
+        if (e.state.type === 'join')
+            authWindow.setJoin(true);
+        else
+            authWindow.setLogin(true);
+};
+
+authWindow.on('auth-window_switched', e => {
 
 
-// if ((history.state && history.state.type === 'join') || window.location.search === '?join') {
-//    history.pushState({
-//       type: 'join'
-//    }, "join", "?join");
-//    authWidget.setJoin();
-// } else
-//    history.replaceState({
-//       type: 'login'
-//    }, "login", "?login");
+    if (!e.detail.isPopState) {
+        console.log('пушстейтим!');
+
+        if (e.detail.isLoginFormActive) {
+            history.pushState({
+                type: 'login'
+            }, 'login', '?login');
+        }
+        else
+            history.pushState({
+                type: 'join'
+            }, 'join', '?join');
+    }
+
+});
 
 
 let Authorization = function (options) {

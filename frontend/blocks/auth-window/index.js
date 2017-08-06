@@ -63,13 +63,8 @@ let AuthWindow = function (options) {
     this.elem.onclick = e => {
 
         if (this.isAvailable)
-            if (e.target.matches('.window__message .ref')) {
+            if (e.target.matches('.window__message .ref'))
                 this.toggle();
-                this.trigger('switch', {
-                    isLoginFormActive: this.isLoginFormActive
-                });
-            }
-
     };
 
     this.elem.addEventListener('focus', e => {
@@ -96,11 +91,19 @@ AuthWindow.prototype.redirect = function () {
     window.location = url;
 };
 
-AuthWindow.prototype.setJoin = function () {
+AuthWindow.prototype.setJoin = function (isPopState) {
     this.joinForm.clear();
     this.isAvailable = false;
     this.loginForm.setAvailable(false);
     this.loginFormElem.classList.add('auth-window__form-fading-out');
+
+    console.log('setJoin ' + isPopState);
+
+    this.trigger('auth-window_switched', {
+        isLoginFormActive: false,
+        isPopState
+    });
+
     this.loginFormElem.addEventListener('animationend', this.setJoinAEHandler, false);
 };
 
@@ -116,13 +119,24 @@ AuthWindow.prototype.setJoinAEHandler = function () {
     this.panel.style.height = `${this.joinFormElemHeight}px`;
     this.isLoginFormActive = false;
     this.loginFormElem.removeEventListener('animationend', this.setJoinAEHandler);
+
+
+
 };
 
-AuthWindow.prototype.setLogin = function () {
+AuthWindow.prototype.setLogin = function (isPopState) {
     this.loginForm.clear();
     this.isAvailable = false;
     this.joinForm.setAvailable(false);
     this.joinFormElem.classList.add('auth-window__form-fading-out');
+
+    console.log('setLogin ' + isPopState);
+
+    this.trigger('auth-window_switched', {
+        isLoginFormActive: true,
+        isPopState
+    });
+
     this.joinFormElem.addEventListener('animationend', this.setLoginAEHandler, false);
 };
 
@@ -138,6 +152,8 @@ AuthWindow.prototype.setLoginAEHandler = function () {
     this.panel.style.height = `${this.loginFormElemHeight}px`;
     this.isLoginFormActive = true;
     this.joinFormElem.removeEventListener('animationend', this.setLoginAEHandler);
+
+
 };
 
 AuthWindow.prototype.toggle = function () {
