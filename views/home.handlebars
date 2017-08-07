@@ -1,12 +1,25 @@
 {{> page-header}}
 
-<div class="cutaway-wrapper">
-    {{#each cutaways}}
-        {{> cutaway
-                imagesTop=imagesTop
-                imagesBottom=imagesBottom
-        }}
-    {{/each}}
+<div id="home" class="home">
+    <div class="hint home__hint">
+        This is where you can find some new artists you may like. Feel free to subscribe.
+    </div>
+
+    <div class="home__cutaways-wrapper">
+        {{#each cutaways}}
+            {{> cutaway
+                    imagesTop=imagesTop
+                    imagesBottom=imagesBottom
+                    parent="home"
+            }}
+        {{/each}}
+    </div>
+
+    {{> spinner
+        parent="home"
+        invisible=true
+    }}
+
 </div>
 
 {{> footer}}

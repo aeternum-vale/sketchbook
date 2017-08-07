@@ -7,6 +7,8 @@ let globalErrorHandler = new GlobalErrorHandler();
 
 let AuthWindow = require(BLOCKS + 'auth-window');
 
+//TODO this logic should be in Auth class
+
 let isLoginFormActive = true;
 if (!history.state && window.location.search === '?join')
     isLoginFormActive = false;

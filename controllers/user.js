@@ -291,7 +291,7 @@ function subscribeRequestListener(req, res, next) {
 
 function homeRequestListener(req, res, next) {
 
-    const MAX_CUTAWAY_COUNT = 3;
+    const MAX_CUTAWAY_COUNT = 4;
     let cutawayCount = MAX_CUTAWAY_COUNT;
 
 

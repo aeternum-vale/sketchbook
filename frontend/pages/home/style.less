@@ -6,7 +6,8 @@
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
-
+@import "../../blocks/hint/style.less";
+@import "../../blocks/spinner/style.less";
 
 @cutaway-header-padding: 6px;
 @cutaway-avatar-size: 54px;
@@ -21,22 +22,57 @@
 @cutaway-image-preview-count: 6;
 @cutaway-image-preview-wrapper-width: @cutaway-image-preview-size * @cutaway-image-preview-count + @cutaway-image-preview-margin * (@cutaway-image-preview-count + 1);
 @cutaway-image-preview-wrapper-offset: (@cutaway-image-preview-size + @cutaway-image-preview-margin) * @cutaway-image-preview-count;
+@cutaway-preferable-distance: 30px;
+
+@cutaway-two-columns-width: (@cutaway-preferable-distance + @cutaway-width * 2);
+@cutaway-media: (@cutaway-two-columns-width + @global-content-padding * 2);
 
 
-.cutaway-wrapper {
-  position: relative;
-  display: flex;
+.home {
+  //position: relative;
+  //display: flex;
+  //flex-direction: column;
+  //align-items: center; // flex-flow: row wrap;
+  //// justify-content: space-around;
+  //padding: 20px 10px;
+
+
+  .screen-wrapper();
   flex-direction: column;
-  align-items: center; // flex-flow: row wrap;
-  // justify-content: space-around;
-  padding: 20px 10px;
+  align-items: center;
+
+
+  &__cutaways-wrapper {
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: @cutaway-width;
+
+    @media (min-width: @cutaway-media) {
+      width: @cutaway-two-columns-width;
+    }
+
+  }
+
+  &__spinner {
+    position: relative;
+  }
+
   &__cutaway {
-    margin-bottom: 30px;
+    margin-bottom: @cutaway-preferable-distance;
   }
   &__cutaway:last-child {
-    margin-bottom: 0;
+    //margin-bottom: 0;
+  }
+
+  &__hint {
+    margin: 20px 0;
   }
 }
+
+
 
 .cutaway {
   position: relative;
@@ -82,6 +118,8 @@
     height: 100%;
     background-color: transparent;
     background-image: linear-gradient(to top, #1c1618, transparent);
+
+    box-shadow: inset 0 5px 6px -5px rgba(255, 255, 255, 0.50), inset 0 -5px 6px -5px rgba(0, 0, 0, 0.55), inset -5px 0 6px -5px rgba(0, 0, 0, 0.55), inset 5px 0px 6px -5px rgba(0, 0, 0, 0.55);
   }
   &__preview-wrapper {
     position: relative;
@@ -115,6 +153,10 @@
   &__image-preview:first-child {
     margin-left: @cutaway-image-preview-margin;
   }
+
+  &_new {
+    animation: fading-in .5s ease-out 0s;
+  }
 }
 
 @keyframes top-scrolling {
@@ -132,5 +174,16 @@
   }
   to {
     transform: translateX(@cutaway-image-preview-wrapper-offset);
+  }
+}
+
+@keyframes fading-in {
+  from {
+    opacity: 0;
+    transform: scale(.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

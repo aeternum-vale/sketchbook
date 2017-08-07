@@ -2,6 +2,7 @@
 @import "../logo/style.less";
 
 @page-header-height: 42px;
+@page-header-border-width: 2px;
 
 .page-header {
 	display: flex;
@@ -14,7 +15,7 @@
 	height: @page-header-height;
 	z-index: 10;
 
-    border-bottom: solid 2px #000;
+    border-bottom: solid @page-header-border-width #000;
 
 
 	&__wrapper {
@@ -35,7 +36,7 @@
 .pseudo-header {
 	position: relative;
 	width: 100%;
-	height: @page-header-height;
+	height: @page-header-height + @page-header-border-width;
 }
 
 .header-element {

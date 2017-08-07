@@ -36,3 +36,41 @@ if (window.isLogged) {
             globalErrorHandler.call(new ClientError(null, null, 401));
     });
 }
+
+let Home = function (options) {
+    this.elem = options.elem;
+    this.cutawaysWrapper = this.elem.querySelector('.home__cutaways-wrapper');
+    this.spinner = this.elem.querySelector('.home__spinner');
+    this.testCutaway = this.elem.querySelector('.home__cutaway');
+
+    this.isAvailable = true;
+
+    window.onscroll = e => {
+        if (this.isAvailable)
+            if (document.body.scrollHeight === document.body.scrollTop + document.body.offsetHeight)
+                this.getNewCutaway();
+
+    };
+
+};
+
+Home.prototype.getNewCutaway = function () {
+    this.spinner.classList.remove('spinner_invisible');
+    this.isAvailable = false;
+
+    setTimeout(() => {
+        this.spinner.classList.add('spinner_invisible');
+        this.isAvailable = true;
+
+        let newCutaway = this.testCutaway.cloneNode(true);
+        newCutaway.classList.add('cutaway_new');
+        let newCutaway2 = this.testCutaway.cloneNode(true);
+        newCutaway2.classList.add('cutaway_new');
+        this.cutawaysWrapper.appendChild(newCutaway);
+        this.cutawaysWrapper.appendChild(newCutaway2);
+    }, 2000);
+};
+
+let home = new Home({
+    elem: document.getElementById('home')
+});
