@@ -317,28 +317,40 @@ function getCutaway(user, res) {
         let imagePreviewSideCount = ~~(IMAGE_PREVIEW_COUNT / 2);
 
         //4 5 6
-        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; i < imagePreviewSideCount; i++)
+        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT;
+             i < imagePreviewSideCount;
+             i++)
             imagesTop.push(images[i]);
         //1 2 3
-        for (i = 0; i < IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+        for (i = 0; i < IMAGE_PREVIEW_VISIBLE_COUNT;
+             i++)
             imagesTop.push(images[i]);
         //4 5 6
-        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; i < imagePreviewSideCount; i++)
+        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT;
+             i < imagePreviewSideCount;
+             i++)
             imagesTop.push(images[i]);
 
 
         //7 8 9
-        for (i = imagePreviewSideCount; i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+        for (i = imagePreviewSideCount;
+             i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT;
+             i++)
             imagesBottom.push(images[i]);
         //10 11 12
-        for (i = imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i < IMAGE_PREVIEW_COUNT; i++)
+        for (i = imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT;
+             i < IMAGE_PREVIEW_COUNT;
+             i++)
             imagesBottom.push(images[i]);
         //7 8 9
-        for (i = imagePreviewSideCount; i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+        for (i = imagePreviewSideCount;
+             i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT;
+             i++)
             imagesBottom.push(images[i]);
 
         return {
-            user:  truncatedUserViewModel(userViewModel(user, res.loggedUser && res.loggedUser._id)),
+            user: truncatedUserViewModel(user,
+                res.loggedUser && res.loggedUser._id),
             imagesTop,
             imagesBottom
         }
@@ -598,7 +610,7 @@ function setSettingsRequestListener(req, res, next) {
     function changePassword(oldPassword, newPassword) {
         return co(function*() {
             if (!res.loggedUser.checkPassword(oldPassword))
-                throw new PropertyError('old-password', 'incorrect password')
+                throw new PropertyError('old-password', 'incorrect password');
 
             res.loggedUser.password = newPassword;
             yield res.loggedUser.save();

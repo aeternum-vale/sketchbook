@@ -6,6 +6,7 @@ let SwitchButton = function (options) {
     this.dataStr = options.dataStr || 'imageId';
 
     SwitchButton.prototype.set.call(this, {active: !!this.elem.dataset.active});
+    console.log('switch button active:', !!this.elem.dataset.active);
     this.available = true;
 
     this.elem.onclick = e => this.onClick(e);
