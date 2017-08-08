@@ -1,4 +1,4 @@
-<div class="window cutaway {{parent}}__cutaway">
+<div data-user-id="{{userId}}" class="window cutaway {{parent}}__cutaway">
 	<div class="header window__header">
 		<a class="cutaway__header-left-side" href="{{user.url}}">
 			<div class="cutaway__avatar" style="background-image: url('{{user.avatarUrls.medium}}')"></div>
@@ -10,13 +10,13 @@
 		<div class="cutaway__preview-wrapper cutaway__top">
 
 			{{#each imagesTop}}
-				<div class="cutaway__image-preview" style="background-image: url('/{{previewUrl}}')"></div>
+				<div class="cutaway__image-preview" style="background-image: url('{{previewUrl}}')"></div>
 			{{/each}}
 
 		</div>
 		<div class="cutaway__preview-wrapper cutaway__bottom">
 			{{#each imagesBottom}}
-				<div class="cutaway__image-preview" style="background-image: url('/{{previewUrl}}')"></div>
+				<div class="cutaway__image-preview" style="background-image: url('{{previewUrl}}')"></div>
 			{{/each}}
 
 		</div>

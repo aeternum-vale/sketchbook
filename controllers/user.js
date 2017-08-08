@@ -3,6 +3,7 @@ let Image = require('models/image');
 let userViewModel = require('viewModels/user');
 let imageViewModel = require('viewModels/image');
 let imagePreviewViewModel = require('viewModels/imagePreview');
+let truncatedUserViewModel = require('viewModels/truncatedUser');
 
 let co = require('co');
 let checkUserData = require('libs/checkUserData');
@@ -28,6 +29,12 @@ let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
 form.uploadDir = uploadDir;
+
+function random(min, max) {
+    let rand = min + Math.random() * (max + 1 - min);
+    rand = Math.floor(rand);
+    return rand;
+}
 
 
 function usersListRequestListener(req, res, next) {
@@ -177,16 +184,10 @@ function logoutRequestListener(req, res, next) {
 
 function authorizationRequestListener(req, res, next) {
 
-    function random(min, max) {
-        let rand = min + Math.random() * (max + 1 - min);
-        rand = Math.floor(rand);
-        return rand;
-    }
-
     co(function*() {
         const BACKGROUND_IMAGES_PREFERABLE_COUNT = 6;
 
-        let imageCollectionSize = (yield Image.find().exec()).length;
+        let imageCollectionSize = yield Image.find().count().exec();
 
         let backgroundImageCount = (imageCollectionSize < BACKGROUND_IMAGES_PREFERABLE_COUNT)
             ? imageCollectionSize : BACKGROUND_IMAGES_PREFERABLE_COUNT;
@@ -289,23 +290,132 @@ function subscribeRequestListener(req, res, next) {
 
 }
 
-function homeRequestListener(req, res, next) {
 
-    const MAX_CUTAWAY_COUNT = 4;
-    let cutawayCount = MAX_CUTAWAY_COUNT;
-
+function getCutaway(user, res) {
 
     const IMAGE_PREVIEW_COUNT = 12;
     const IMAGE_PREVIEW_VISIBLE_COUNT = 3;
 
-    co(function*() {
-
-        let cutaways = [];
+    return co(function*() {
         let i = 0;
-        let j = 0;
 
-        //for (let i = 0; i < cutawayCount; i++)
-        //	cutaways.push({});
+        let rawImages = yield Image.find({
+            author: user._id
+        }).limit(IMAGE_PREVIEW_COUNT).exec();
+
+        let images = rawImages.map(item => imagePreviewViewModel(item));
+
+        while (images.length < IMAGE_PREVIEW_COUNT) {
+            let curLength = images.length;
+            for (i = 0; i < curLength; i++)
+                if (images.length < IMAGE_PREVIEW_COUNT)
+                    images.push(images[i]);
+        }
+
+        let imagesTop = [];
+        let imagesBottom = [];
+        let imagePreviewSideCount = ~~(IMAGE_PREVIEW_COUNT / 2);
+
+        //4 5 6
+        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; i < imagePreviewSideCount; i++)
+            imagesTop.push(images[i]);
+        //1 2 3
+        for (i = 0; i < IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+            imagesTop.push(images[i]);
+        //4 5 6
+        for (i = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; i < imagePreviewSideCount; i++)
+            imagesTop.push(images[i]);
+
+
+        //7 8 9
+        for (i = imagePreviewSideCount; i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+            imagesBottom.push(images[i]);
+        //10 11 12
+        for (i = imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i < IMAGE_PREVIEW_COUNT; i++)
+            imagesBottom.push(images[i]);
+        //7 8 9
+        for (i = imagePreviewSideCount; i < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; i++)
+            imagesBottom.push(images[i]);
+
+        return {
+            user:  truncatedUserViewModel(userViewModel(user, res.loggedUser && res.loggedUser._id)),
+            imagesTop,
+            imagesBottom
+        }
+    });
+
+}
+
+function cutawayRequestListener(req, res, next) {
+
+
+    let reportedCutaways = JSON.parse(req.body.reportedCutaways) || [];
+
+    const CUTAWAYS_TO_SEND_COUNT = 2;
+
+    co(function*() {
+        let cutaways = [];
+
+        let properUsersCount = yield User.find({
+            _id: {$nin: reportedCutaways},
+            'images.0': {
+                $exists: true
+            }
+        }).count().exec();
+
+        let isLastSet = properUsersCount <= CUTAWAYS_TO_SEND_COUNT;
+
+        let cutawaysLeftToFind = properUsersCount;
+        cutawaysLeftToFind = (cutawaysLeftToFind > CUTAWAYS_TO_SEND_COUNT)
+            ? CUTAWAYS_TO_SEND_COUNT
+            : cutawaysLeftToFind;
+
+        while (cutawaysLeftToFind-- > 0) {
+
+            properUsersCount = yield User.find({
+                _id: {$nin: reportedCutaways},
+                'images.0': {
+                    $exists: true
+                }
+            }).count().exec();
+
+            let nextProperUser = yield User.findOne({
+                _id: {$nin: reportedCutaways},
+                'images.0': {
+                    $exists: true
+                }
+            }).skip(random(0, properUsersCount - 1)).exec();
+
+            reportedCutaways.push(nextProperUser._id);
+            cutaways.push(yield getCutaway(nextProperUser, res));
+        }
+
+        return {
+            cutaways,
+            isLastSet
+        };
+    }).then(result => {
+
+        // let cutaways = rawCutaways.map(rawCutaway=>{return {
+        //
+        // }});
+
+
+        res.send(result);
+
+    }).catch(err => {
+        next(err);
+    });
+
+}
+
+function homeRequestListener(req, res, next) {
+
+    const PREFERABLE_PAGE_CUTAWAY_COUNT = 2;
+    let cutawayCount = PREFERABLE_PAGE_CUTAWAY_COUNT;
+
+    co(function*() {
+        let cutaways = [];
 
         let reprUsers = yield User.find({
             'images.0': {
@@ -315,62 +425,8 @@ function homeRequestListener(req, res, next) {
 
         cutawayCount = reprUsers.length;
 
-        for (i = 0; i < cutawayCount; i++) {
-
-            let rawImages = yield Image.find({
-                author: reprUsers[i]._id
-            }).limit(IMAGE_PREVIEW_COUNT).exec();
-
-
-            let images = [];
-            rawImages.forEach(item => {
-                images.push(imagePreviewViewModel(item));
-            });
-
-
-            while (images.length < IMAGE_PREVIEW_COUNT) {
-
-                let curLength = images.length;
-                for (j = 0; j < curLength; j++)
-                    if (images.length < IMAGE_PREVIEW_COUNT)
-                        images.push(images[j]);
-            }
-
-
-            let imagesTop = [];
-            let imagesBottom = [];
-            let imagePreviewSideCount = ~~(IMAGE_PREVIEW_COUNT / 2);
-
-            //4 5 6
-            for (j = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; j < imagePreviewSideCount; j++)
-                imagesTop.push(images[j]);
-            //1 2 3
-            for (j = 0; j < IMAGE_PREVIEW_VISIBLE_COUNT; j++)
-                imagesTop.push(images[j]);
-            //4 5 6
-            for (j = imagePreviewSideCount - IMAGE_PREVIEW_VISIBLE_COUNT; j < imagePreviewSideCount; j++)
-                imagesTop.push(images[j]);
-
-
-            //7 8 9
-            for (j = imagePreviewSideCount; j < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j++)
-                imagesBottom.push(images[j]);
-            //10 11 12
-            for (j = imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j < IMAGE_PREVIEW_COUNT; j++)
-                imagesBottom.push(images[j]);
-            //7 8 9
-            for (j = imagePreviewSideCount; j < imagePreviewSideCount + IMAGE_PREVIEW_VISIBLE_COUNT; j++)
-                imagesBottom.push(images[j]);
-
-            cutaways.push({
-                user: userViewModel(reprUsers[i], res.loggedUser && res.loggedUser._id),
-                imagesTop,
-                imagesBottom
-            });
-
-
-        }
-
+        for (let i = 0; i < cutawayCount; i++)
+            cutaways.push(yield getCutaway(reprUsers[i], res));
 
         return cutaways;
 
@@ -606,6 +662,7 @@ exports.registerRoutes = function (app) {
     app.post('/subscribe', isAuth, addLoggedUser, addRefererParams, subscribeRequestListener);
     app.post('/avatar', isAuth, addLoggedUser, avatarUploadRequestListener);
     app.post('/settings', isAuth, addLoggedUser, setSettingsRequestListener);
+    app.post('/cutaway', addLoggedUser, cutawayRequestListener);
     app.delete('/settings', isAuth, addLoggedUser, deleteSettingsRequestListener);
     app.delete('/avatar', isAuth, addLoggedUser, avatarDeleteRequestListener);
     app.get('/logout', logoutRequestListener);

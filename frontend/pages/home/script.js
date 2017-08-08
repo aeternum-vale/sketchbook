@@ -41,15 +41,28 @@ let Home = function (options) {
     this.elem = options.elem;
     this.cutawaysWrapper = this.elem.querySelector('.home__cutaways-wrapper');
     this.spinner = this.elem.querySelector('.home__spinner');
-    this.testCutaway = this.elem.querySelector('.home__cutaway');
+    this.ghostCutaway = this.elem.querySelector('.home__cutaway');
 
     this.isAvailable = true;
+    this.reportedCutaways = Array.prototype.map.call(this.elem.querySelectorAll('.home__cutaway'),
+        item => +item.dataset.userId);
+
+    this.noMoreCutaways = !this.ghostCutaway;
+
+    this.timerId = setInterval(() => {
+        if (!this.noMoreCutaways) {
+            if (this.isAvailable)
+                if (document.body.scrollHeight === document.body.offsetHeight)
+                    this.getNewCutaway();
+        } else
+            clearInterval(this.timerId);
+    }, 3000);
+
 
     window.onscroll = e => {
-        if (this.isAvailable)
+        if (this.isAvailable && !this.noMoreCutaways)
             if (document.body.scrollHeight === document.body.scrollTop + document.body.offsetHeight)
                 this.getNewCutaway();
-
     };
 
 };
@@ -58,17 +71,55 @@ Home.prototype.getNewCutaway = function () {
     this.spinner.classList.remove('spinner_invisible');
     this.isAvailable = false;
 
-    setTimeout(() => {
-        this.spinner.classList.add('spinner_invisible');
-        this.isAvailable = true;
+    require(LIBS + 'sendRequest')({
+            reportedCutaways: this.reportedCutaways
+        }, 'POST', '/cutaway', (err, response) => {
+            if (err) {
+                globalErrorHandler.call(err);
+                return;
+            }
 
-        let newCutaway = this.testCutaway.cloneNode(true);
-        newCutaway.classList.add('cutaway_new');
-        let newCutaway2 = this.testCutaway.cloneNode(true);
-        newCutaway2.classList.add('cutaway_new');
-        this.cutawaysWrapper.appendChild(newCutaway);
-        this.cutawaysWrapper.appendChild(newCutaway2);
-    }, 2000);
+            console.log('response:', response);
+
+            if (response.isLastSet || response.cutaways.length === 0)
+                this.noMoreCutaways = true;
+
+            response.cutaways.forEach(cutaway => {
+                this.reportedCutaways.push(cutaway.user._id);
+                this.cutawaysWrapper.appendChild(this.getCutawayElem(cutaway));
+            });
+
+
+            this.spinner.classList.add('spinner_invisible');
+            this.isAvailable = true;
+
+        }
+    );
+
+};
+
+Home.prototype.getCutawayElem = function (cutaway) {
+    let cutawayElem = this.ghostCutaway.cloneNode(true);
+    cutawayElem.dataset.userId = cutaway.user._id;
+    cutawayElem.querySelector('.cutaway__header-left-side').href = cutaway.user.url;
+    cutawayElem.querySelector('.cutaway__username').textContent = cutaway.user.username;
+    cutawayElem.querySelector('.cutaway__avatar').style.backgroundImage = `url('${cutaway.user.avatarUrls.medium}')`;
+
+    cutawayElem.querySelector('.cutaway__subscribe-button').dataset.username = cutaway.user.username;
+    if (cutaway.user.isNarrator)
+        cutawayElem.querySelector('.cutaway__subscribe-button').dataset.active = "true";
+
+    let cutawayTop = cutawayElem.querySelector('.cutaway__top');
+    let cutawayBottom = cutawayElem.querySelector('.cutaway__bottom');
+
+    for (let i = 0; i < cutawayTop.children.length; i++)
+        cutawayTop.children[i].style.backgroundImage = `url('${cutaway.imagesTop[i].previewUrl}')`;
+
+    for (let i = 0; i < cutawayBottom.children.length; i++)
+        cutawayBottom.children[i].style.backgroundImage = `url('${cutaway.imagesBottom[i].previewUrl}')`;
+
+    return cutawayElem;
+
 };
 
 let home = new Home({
