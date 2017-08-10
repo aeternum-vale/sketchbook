@@ -37,12 +37,12 @@
 		</div>
 
 		{{#if pageUser.isLoggedUser}}
-			<div class="button extra-header__button" id="upload-window-caller">
+			<div class="button extra-header__button  button_header-style" id="upload-window-caller">
 				upload image
 			</div>
 		{{else}}
 			<div id="subscribe-button"
-                 class="button extra-header__button"
+                 class="button extra-header__button  button_header-style"
                 {{#if pageUser.isNarrator}} data-active="true"{{/if}}>subscribe</div>
 		{{/if}}
 	</div>
@@ -68,8 +68,9 @@
 	</div>
 </div>
 
-{{!--
+
     {{> footer}}
+{{!--
     {{> backdrop}}
      <div class="modal-wrapper">
             {{> spinner}}

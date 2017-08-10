@@ -5,10 +5,10 @@
 @image-preview-space-size: @image-preview-size + @image-preview-margin-value * 2;
 
 @gallery-ver-margin: @global-content-padding - @image-preview-margin-value;
-@gallery-max-image-preview-columns: 20;
+@gallery-max-image-preview-columns: ceil(@global-content-width / @image-preview-space-size);
 
 
-@gallery-content-margin: @image-preview-margin-value;//@global-content-padding;
+@gallery-content-margin: @global-content-padding;
 
 .gallery {
   position: relative;
@@ -22,7 +22,6 @@
   &__wrapper {
     .screen-wrapper();
 
-    max-width: none;
     min-width: 230px;
     padding: 0;
     margin: 0 @gallery-content-margin;
@@ -39,19 +38,17 @@
       .generate-media(@i + 1);
     }
     .generate-media();
-
   }
 
   &__image-preview {
     margin: @image-preview-margin-value;
   }
 
-  &__obj {
-    display: none;
-  }
 }
 
 
+@image-preview-info-board-height: 50px;
+@image-preview-transition-length: .18s;
 
 .image-preview {
   display: block;
@@ -60,22 +57,25 @@
   box-sizing: border-box;
   position: relative;
 
+  overflow: hidden;
+
   width: @image-preview-size;
   height: @image-preview-size;
 
-  border: solid 1px #000;
+  border: solid 2px #000;
   background-color: #fff;
   background-size: cover;
-  background-position: center;
-
   cursor: pointer;
+  background-position: 0 0;
+
+  transition: background-position @image-preview-transition-length linear 0s;
 
   &:hover {
-    border: solid 6px @global-main-color;
+    background-position: 0 -@image-preview-info-board-height/2;
   }
 
   &:hover &__info-board {
-    visibility: visible;
+    transform: translateY(0);
   }
 
   &__info-board {
@@ -84,17 +84,20 @@
     align-items: center;
 
     position: absolute;
-    visibility: hidden;
+    //visibility: hidden;
 
     bottom: 0;
+    transform: translateY(@image-preview-info-board-height);
     width: 100%;
-    height: 50px;
+    height: @image-preview-info-board-height;
 
     background-color: #000;
 
-    &_active {
-      visibility: visible;
-    }
+    transition: transform @image-preview-transition-length linear 0s;
+
+    //&_active {
+    //  visibility: visible;
+    //}
   }
 
   &__text {
