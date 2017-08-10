@@ -1,25 +1,52 @@
-@spinner-circle-count: 7;
-@spinner-size: 50px;
-@spinner-dist: @spinner-size / 2;
+@spinner-circle-count: 6;
+@spinner-size: 100px;
+@spinner-circle-size: @spinner-size / 5;
+@spinner-start-angle: -(pi() / 2);
+@spinner-radius: @spinner-size / 2 - @spinner-circle-size / 2;
+@spinner-start-angle-1: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 0;
+@spinner-start-angle-2: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 1;
+@spinner-start-angle-3: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 2;
 
+@spinner-end-angle-1: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 0 + pi();
+@spinner-end-angle-2: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 1 + pi();
+@spinner-end-angle-3: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 2 + pi();
+
+@_main: 0;
+@_right: 0;
+@_left: 0;
+
+.get-next-angles(@_angle) {
+  @_main: @_angle + pi();
+  @_right: @_angle + pi() / 6;
+  @_left: @_angle - pi() / 6;
+}
 
 .generate-circle(@i: 1) when (@i =< @spinner-circle-count) {
+  @_start-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * (@i - 1);
+  @j: mod(@i + 2, @spinner-circle-count);
 
-  @_angle: pi() * 2 / @spinner-circle-count * @i;
+  @keyframes ~"spinner-circle-@{i}-moving" {
 
-  @keyframes ~"moving@{i}" {
-    from {
-      //transform: translate(cos(@_angle) * @spinner-dist * -1, sin(@_angle) * @spinner-dist * -1);
-      transform: translate(0, 0);
+    0% {
+      transform: translate(@spinner-radius + cos(@_start-angle) * @spinner-radius,
+        @spinner-radius +  sin(@_start-angle) * @spinner-radius);
+
     }
-    to {
-      transform: translate(cos(@_angle) * @spinner-dist, sin(@_angle) * @spinner-dist);
+
+    50% {
+      transform: translate(@spinner-radius + cos(@spinner-end-angle-3) * @spinner-radius,
+        @spinner-radius +  sin(@spinner-end-angle-3) * @spinner-radius);
+    }
+
+    100% {
+      transform: translate(@spinner-radius + cos(@spinner-start-angle-1) * @spinner-radius,
+        @spinner-radius +  sin(@spinner-start-angle-1) * @spinner-radius);
     }
   }
 
   .spinner__circle:nth-child(@{i}) {
-    animation: ~"moving@{i}" .3s ease-in-out 0s infinite alternate;
-
+    transform: translate(@spinner-radius + cos(@_start-angle) * @spinner-radius, @spinner-radius +  sin(@_start-angle) * @spinner-radius);
+    animation: ~"spinner-circle-@{i}-moving" 3s linear 0s infinite;
   }
 
   .generate-circle(@i + 1);
@@ -32,12 +59,10 @@
 
   &__circle {
     position: absolute;
-    width: @spinner-size;
-    height: @spinner-size;
+    width: @spinner-circle-size;
+    height: @spinner-circle-size;
     background-color: white;
     border-radius: 50%;
-    opacity: 1 / @spinner-circle-count * 3;
-
   }
 
   &_invisible {

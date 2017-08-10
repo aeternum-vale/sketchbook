@@ -1,28 +1,23 @@
 {{> page-header}}
-<div class="panel info-panel">
-	<div class="info-panel__wrapper">
-		<div class="person info-panel__person">
-			<div class="person__avatar" style="background-image: url('{{pageUser.avatarUrls.big}}')"></div>
-			<div class="person__username">{{pageUser.username}}</div>
-		</div>
-		<div class="description">
-			<div class="description__text">{{#if pageUser.description}}{{pageUser.description}}{{else}}Colors are split into their red, green, blue and alpha dimensions. The operation is applied to each color dimension separately. E.g., if the user added two colors, then the green dimension of the result is equal to sum of green dimensions of input colors. If the user multiplied a color by a number, each color dimension will get multiplied.{{/if}}</div>
-			<div id="links-dropdown" class="dropdown links-dropdown description__links-dropdown">
-				<ul class="dropdown__item-list links-dropdown__item-list">
+<div class="passport">
+	<div class="passport__wrapper">
+        <div class="passport__avatar" style="background-image: url('{{pageUser.avatarUrls.big}}')"></div>
+            <div class="passport__data">
+                <div class="passport__username"><span class="passport__username-text">{{pageUser.username}}</span></div>
+                <div class="passport__description"><span class="passport__description-text">{{pageUser.description}}</span></div>
 
-                    {{#each pageUser.links}}
-                        {{> dropdown-item
-                                caption=host
-                                link=href
-                                icon="true"
-                        }}
-                    {{/each}}
+                {{#if pageUser.links}}
+                    <div class="passport__links">
+                        {{#each pageUser.links}}
+                            <a class="passport__link" href="{{href}}">{{host}} </a>
+                        {{/each}}
+                    </div>
+                {{/if}}
 
-				</ul>
-			</div>
+            </div>
 
-		</div>
-	</div>
+
+    </div>
 </div>
 <div class="header page-header extra-header">
 	<div class="extra-header__wrapper">

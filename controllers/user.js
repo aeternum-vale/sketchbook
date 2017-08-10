@@ -77,7 +77,7 @@ function userProfileRequestListener(req, res, next) {
         res.locals.page = 'user';
 
         res.locals.pageUser.images.forEach(item => {
-            item.previewUrl = imagePaths.getImagePreviewFileNameById(item._id);
+            item.previewUrl = imagePaths.getImagePreviewUrl(item._id);
         });
 
         res.render('user');

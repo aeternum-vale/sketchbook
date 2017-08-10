@@ -1,90 +1,109 @@
 @import "../image/image.less";
 
-@image-preview-margin: 15px;
-@gallery-ver-margin: @global-content-padding - @image-preview-margin;
+@image-preview-margin-value: 5px;
+@image-preview-size: 200px;
+@image-preview-space-size: @image-preview-size + @image-preview-margin-value * 2;
+
+@gallery-ver-margin: @global-content-padding - @image-preview-margin-value;
+@gallery-max-image-preview-columns: 20;
+
+
+@gallery-content-margin: @image-preview-margin-value;//@global-content-padding;
 
 .gallery {
-	position: relative;
-	display: flex;
-	justify-content: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 
+  width: 100%;
 
-	width: 100%;
+  margin: @gallery-ver-margin 0;
 
-	margin: @gallery-ver-margin 0;
+  &__wrapper {
+    .screen-wrapper();
 
-	&__wrapper {
-		.screen-wrapper();
+    max-width: none;
+    min-width: 230px;
+    padding: 0;
+    margin: 0 @gallery-content-margin;
 
-		position: relative;
-		flex-flow: row wrap;
-		justify-content: space-around;
-	}
+    position: relative;
+    flex-flow: row wrap;
+    justify-content: center;
+    width: @image-preview-space-size;
 
-	&__image-preview {
-		margin: @image-preview-margin;
-	}
+    .generate-media(@i: 1) when (@i =< @gallery-max-image-preview-columns) {
+      @media (min-width: (@i * @image-preview-space-size  + @gallery-content-margin * 2)) and (max-width: ((@i + 1) * @image-preview-space-size  + @gallery-content-margin * 2)) {
+        width: (@i * @image-preview-space-size);
+      }
+      .generate-media(@i + 1);
+    }
+    .generate-media();
 
-	&__obj {
-		display: none;
-	}
+  }
+
+  &__image-preview {
+    margin: @image-preview-margin-value;
+  }
+
+  &__obj {
+    display: none;
+  }
 }
 
 
+
 .image-preview {
-	display: block;
+  display: block;
 
-	flex-shrink: 0;
-	box-sizing: border-box;
-	position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  position: relative;
 
-	width: 200px;
-	height: 200px;
-	
-	border: solid 1px #000;
-	background-color: #fff;
-	background-size: cover;
-	background-position: center;
+  width: @image-preview-size;
+  height: @image-preview-size;
 
+  border: solid 1px #000;
+  background-color: #fff;
+  background-size: cover;
+  background-position: center;
 
-	cursor: pointer;
+  cursor: pointer;
 
-	&:hover {
-		border: solid 6px @global-main-color;
-	}
+  &:hover {
+    border: solid 6px @global-main-color;
+  }
 
-	&:hover &__info-board {
-		visibility: visible;
-	}
+  &:hover &__info-board {
+    visibility: visible;
+  }
 
-	&__info-board {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+  &__info-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-		position: absolute;
-		visibility: hidden;
+    position: absolute;
+    visibility: hidden;
 
-		bottom: 0;
-		width: 100%;
-		height: 50px;
-		
-		background-color: #000;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
 
-		&_active {
-			visibility: visible;
-		}
-	}
+    background-color: #000;
 
-	&__text {
-		font-size: 14px;
-		line-height: 14px;
-	}
+    &_active {
+      visibility: visible;
+    }
+  }
 
-	&_ghost {
-		display: none;
-	}
+  &__text {
+    font-size: 14px;
+    line-height: 14px;
+  }
 
-
+  &_ghost {
+    display: none;
+  }
 
 }

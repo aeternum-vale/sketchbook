@@ -56,7 +56,7 @@
 
 			"big": {
 				"postfix": "_big",
-				"size": 250
+				"size": 300
 			},
 
 			"medium": {

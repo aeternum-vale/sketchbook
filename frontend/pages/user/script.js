@@ -12,11 +12,10 @@ let ModalSpinner = require(BLOCKS + 'modal-spinner');
 let eventMixin = require(LIBS + 'eventMixin');
 
 
-
-let linksDropdown = new Dropdown({
-    elem: document.getElementById('links-dropdown'),
-    className: 'links-dropdown'
-});
+// let linksDropdown = new Dropdown({
+//     elem: document.getElementById('links-dropdown'),
+//     className: 'links-dropdown'
+// });
 
 let subscribeButtonElem;
 let subscribeButton;
@@ -47,22 +46,27 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
                 status: Modal.statuses.MAJOR
             });
             spinner.activate();
-            require.ensure([BLOCKS + 'upload-image-modal-window'], function (require) {
-                let UploadImageModalWindow = require(BLOCKS + 'upload-image-modal-window');
-                uploadImageModalWindow = new UploadImageModalWindow();
+            require.ensure([BLOCKS + 'upload-image-modal-window'],
+                function (require) {
+                    let UploadImageModalWindow = require(BLOCKS +
+                        'upload-image-modal-window');
+                    uploadImageModalWindow = new UploadImageModalWindow();
 
-                uploadImageModalWindow.on('upload-image-modal-window__image-uploaded', e => {
-                    if (gallery)
-                        gallery.insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
-                    else {
-                        createGallery().then(() => {
-                            gallery.insertNewImagePreview(e.detail.imageId, e.detail.previewUrl);
+                    uploadImageModalWindow.on('upload-image-modal-window__image-uploaded',
+                        e => {
+                            if (gallery)
+                                gallery.insertNewImagePreview(e.detail.imageId,
+                                    e.detail.previewUrl);
+                            else {
+                                createGallery().then(() => {
+                                    gallery.insertNewImagePreview(e.detail.imageId,
+                                        e.detail.previewUrl);
+                                });
+                            }
                         });
-                    }
-                });
 
-                spinner.onHostLoaded(uploadImageModalWindow);
-            });
+                    spinner.onHostLoaded(uploadImageModalWindow);
+                });
         } else
             uploadImageModalWindow.activate();
     };
@@ -113,7 +117,6 @@ function createGallery() {
 //     message.activate();
 //
 // }, 5000);
-
 
 
 if (window.isLogged) {

@@ -44,11 +44,17 @@ function getImageUrl(id) {
     return `/${getImageFileNameById(id)}`;
 }
 
+
+function getImagePreviewUrl(id) {
+    return `/${getImagePreviewFileNameById(id)}`;
+}
+
 module.exports = {
 	getImageFileNameById,
 	getImagePreviewFileNameById,
 	getImageFileNameByPath,
 	getAvatarPathsById,
 	getAvatarFileNamesById,
-    getImageUrl
+    getImageUrl,
+    getImagePreviewUrl
 };

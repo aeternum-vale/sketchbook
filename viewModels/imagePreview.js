@@ -6,6 +6,6 @@ module.exports = function(image) {
 		author: image.author,
 		comments: image.comments,
 		likes: image.likes,
-		previewUrl: `/${imagePaths.getImagePreviewFileNameById(image._id)}`
+		previewUrl: imagePaths.getImagePreviewUrl(image._id)
 	};
 };

@@ -86,15 +86,15 @@ module.exports = {
         //     chunks: ['user', 'logged-user']
         // })
 
-        new webpack.HotModuleReplacementPlugin()
+        //new webpack.HotModuleReplacementPlugin()
     ],
 
-    devServer: {
-        hot: true,
-        proxy: {
-            '*': 'http://localhost:3000'
-        }
-    }
+    // devServer: {
+    //     hot: true,
+    //     proxy: {
+    //         '*': 'http://localhost:3000'
+    //     }
+    // }
 
 
 

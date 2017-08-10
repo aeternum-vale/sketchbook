@@ -1,6 +1,4 @@
 @import "../../style/global.less";
-
-
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/button/button.less";
@@ -8,132 +6,156 @@
 @import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/file-picker/file-picker.less";
 @import "../../blocks/gallery/gallery.less";
-
 @import "../../blocks/spinner/style.less";
-
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window';
 @import "../../blocks/upload-image-modal-window/upload-image-modal-window.less";
 
+@passport-avatar-size: 300px;
+@passport-height: @passport-avatar-size;
+@passport-data-max-height: @passport-avatar-size;
+@passport-text-gap: 16px;
 
-
-@avatar-size: 245px;
-@avatar-border-size: 8px;
-@username-offset: 10px;
-@username-font-size: @large-font-size;
-@info-panel-height: @avatar-size  + @avatar-border-size * 2 + @username-font-size + @username-offset + @global-content-padding * 2;
-@link-list-switch-size: 42px;
-@link-list-switch-offset: 10px;
-@description-wrapper-height: @avatar-size + @avatar-border-size * 2 + @username-font-size + @username-offset;
-@description-height: @description-wrapper-height - @link-list-switch-size - @link-list-switch-offset;
 @stat-number-font-size: 30px;
 @stat-caption-font-size: 12px;
 @image-preview-margin: 15px;
 @gallery-ver-margin: @global-content-padding - @image-preview-margin;
-.info-panel {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: @info-panel-height;
-    &__wrapper {
-        .screen-wrapper();
-    }
-    &__person {
-        margin-right: @global-content-padding;
-    }
-}
 
-.person {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.passport {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: @passport-height;
+
+  background-color: #383838;
+  box-shadow: inset 0 -40px 60px rgba(0, 0, 0, .35);
+
+  &__wrapper {
+    .screen-wrapper();
+    align-items: flex-start;
+  }
+
+  &__avatar {
     flex-shrink: 0;
-    &__avatar {
-        width: @avatar-size;
-        height: @avatar-size;
-        border-radius: @avatar-border-size;
-        border: solid @avatar-border-size @global-attention-color;
-        background-color: #fff;
-    }
-    &__username {
-        margin-top: @username-offset;
-        font-size: @large-font-size;
-        line-height: @large-font-size;
-    }
-}
 
-.description {
+    width: @passport-avatar-size;
+    height: @passport-avatar-size;
+
+    background-color: #fff;
+
+    background-size: cover;
+    background-position: center;
+  }
+
+  &__data {
+
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    max-height: @description-wrapper-height;
-    &__text {
-        max-height: @description-height;
-        overflow: hidden;
-        font-size: @large-font-size;
-        text-align: right;
-    }
-    &__links-dropdown {
-        margin-top: 10px;
-    }
-}
+    align-items: flex-start;
 
-.links-dropdown {
+    max-height: @passport-data-max-height;
+    margin-top: 20px;
+    padding: @passport-text-gap * 2;
+
+    border-radius: 0 @global-border-radius @global-border-radius 0;
+    background-color: @global-hint-color;
+
+  }
+
+  &__username {
+    height: 26px;
+    line-height: 26px;
+    font-size: 26px;
+
+    white-space: nowrap;
+    font-weight: bold;
+
+  }
+
+  &__description {
+    display: table-cell;
+    vertical-align: text-bottom;
+
+    height: 12px;
+    line-height: 12px;
+    font-size: 12px;
+
+    margin-top: @passport-text-gap;
+
+  }
+
+  &__links {
+    margin-top: @passport-text-gap;
+    font-size: 7px;
+    height: 7px;
+    line-height: 7px;
+  }
+
+  &__username-text,
+  &__description-text,
+  &__link {
     position: relative;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    cursor: pointer;
-    background-image: url('images/link-list-switch.png');
-    &_active {
-        background-image: url('images/link-list-switch-active.png');
-    }
-    &__item-list {
-        top: 42px;
-        right: 42px;
-    }
+    top: -17%;
+    font-size: 170%;
+  }
+
+  &__link:hover {
+    color: @global-main-color-light;
+  }
+
+  &__link::after {
+    content: '\00B7';
+  }
+
+  &__link:hover::after {
+    color: #fff;
+  }
+
+  &__link:last-child::after {
+    content: none;
+  }
+
 }
 
 .extra-header {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    &__wrapper {
-        .screen-wrapper();
-        justify-content: space-between;
-    }
-    &__button {
-        .button(16px);
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    &__button.button_active {
-        .button-active(16px);
-    }
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  &__wrapper {
+    .screen-wrapper();
+    justify-content: space-between;
+  }
+  &__button {
+    .button(16px);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  &__button.button_active {
+    .button-active(16px);
+  }
 }
 
 .stat-list {
-    display: flex;
-    &__stat {
-        margin-right: 20px;
-    }
+  display: flex;
+  &__stat {
+    margin-right: 20px;
+  }
 }
 
 .stat {
-    display: flex;
-    align-items: flex-start;
-    &__number {
-        margin-right: 5px;
-        font-size: @stat-number-font-size;
-        line-height: @stat-number-font-size;
-        font-weight: bold;
-    }
-    &__caption {
-        font-size: @stat-caption-font-size;
-        line-height: @stat-caption-font-size;
-    }
+  display: flex;
+  align-items: flex-start;
+  &__number {
+    margin-right: 5px;
+    font-size: @stat-number-font-size;
+    line-height: @stat-number-font-size;
+    font-weight: bold;
+  }
+  &__caption {
+    font-size: @stat-caption-font-size;
+    line-height: @stat-caption-font-size;
+  }
 }
