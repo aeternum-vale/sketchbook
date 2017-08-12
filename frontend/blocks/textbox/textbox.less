@@ -3,6 +3,8 @@
 @textbox-field-border: 3px;
 @textbox-field-border-radius: 8px;
 @textbox-caption-gap: 10px;
+@textbox-caption-font-size: @medium-font-size;
+
 
 .textbox {
   position: relative;
@@ -28,6 +30,10 @@
     background-image: linear-gradient(to top, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
     transition: background-color .3s;
 
+  }
+
+  &_no-caption::before {
+    top: -@textbox-field-border - @textbox-caption-font-size;
   }
 
   &__field {
@@ -59,8 +65,8 @@
   }
 
   &__caption {
-    font-size: @medium-font-size;
-    line-height: @medium-font-size;
+    font-size: @textbox-caption-font-size;
+    line-height: @textbox-caption-font-size;
     color: #fff;
   }
 
@@ -70,6 +76,8 @@
     font-size: @small-font-size;
     color: #e61b05;
   }
+
+
 
   &_focus::before {
     background-color: #76d2ff;

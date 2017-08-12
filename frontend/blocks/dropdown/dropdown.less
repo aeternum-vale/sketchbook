@@ -1,93 +1,94 @@
 @dropdown-main-color: #78bce9;
-@dropdown-item-ver-padding: 5px;
-@dropdown-item-hor-padding: 8px;
+@dropdown-item-ver-padding: 6px;
+@dropdown-item-hor-padding: 12px;
 
 @dropdown-border-size: 2px;
 
-
 .dropdown {
 
-	&__item-list {
-		position: absolute;
-		display: block;
-		z-index: 5;
-		visibility: hidden;
+  text-shadow: none;
 
-		overflow: hidden;
+  &__item-list {
+    position: absolute;
+    display: block;
+    z-index: 5;
+    visibility: hidden;
 
-		right: 0;
-		top: 0;
-		margin: @dropdown-border-size;
-		padding: 0;
+    overflow: hidden;
 
-		list-style-type: none;
+    right: 0;
+    top: 0;
+    //margin: @dropdown-border-size;
+    padding: 0;
 
-		border-radius: 6px;
-		border: solid 1px #000;//@dropdown-main-color;
+    list-style-type: none;
 
-		background-color: #000;
-		box-shadow: 0 0 0px @dropdown-border-size @dropdown-main-color, 0 0 10px 4px #000;
-		color: @dropdown-main-color;
+    border-radius: 0 0 @global-border-radius @global-border-radius;
+    box-shadow: 0 0 12px 4px rgba(0,0,0,.4), inset 0 -1px 4px rgba(0,0,0,.39);
+    background-image: linear-gradient(to top, #2975a7, #86c3eb);
+  }
 
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-	}
+    padding: @dropdown-item-ver-padding @dropdown-item-hor-padding;
+    cursor: pointer;
 
-	&__item {
+    font-size: 16px;
+    line-height: 16px;
+    white-space: nowrap;
+  }
 
-	}
+  &__item:hover {
 
-	&_active &__item-list {
-		visibility: visible;
-	}
+    background-color: rgba(0, 0, 0, .2);
+
+  }
+
+  &__item:hover &__icon {
+    background-color: #000;
+
+  }
+
+  &__item:hover &__text {
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    width: 18px;
+    height: 18px;
+    margin-right: @dropdown-item-hor-padding;
+
+    border-radius: 50%;
+
+    background-color: @dropdown-main-color;
+  }
+
+  &__text,
+  a&__text {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  //---
+
+  &_active &__item-list {
+    visibility: visible;
+  }
+
+  &_regular-style {
+    box-shadow: 0 0 0 @dropdown-border-size @dropdown-main-color, 0 0 10px 4px #000;
+    border: solid 1px #000;
+    color: @dropdown-main-color;
+    background-color: #000;
+  }
 
 }
 
-.dropdown-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	padding: @dropdown-item-ver-padding @dropdown-item-hor-padding;
-	cursor: pointer;
-
-	font-size: 16px;
-	line-height: 16px;
-	white-space: nowrap;
-
-	&:hover {
-		background-image: linear-gradient(to top, #2c78aa, #90d2fd);
-		color: #000;
-	}
-
-	&:hover &__icon {
-		background-color: #000;
-
-	}
-
-	&:hover &__text {
-		color: #000;
-	}
-
-	&__icon {
-		flex-shrink: 0;
-		flex-grow: 0;
-
-		width: 18px;
-		height: 18px;
-		margin-right: @dropdown-item-hor-padding;
-
-		border-radius: 50%;
-
-		background-color: @dropdown-main-color;
-	}
-
-	&__text,
-	a&__text {
-		display: block;
-		width: 100%;
-		height: 100%;
-		text-decoration: none;
-		color: @dropdown-main-color;
-	}
-
-}

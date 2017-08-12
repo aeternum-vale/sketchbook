@@ -1,59 +1,56 @@
 .social-collection {
-	&__add-section {
-		display: flex;
-		align-items: center;
 
-	}
+  &:hover .social__close {
+    opacity: .1;
+  }
 
-	&__social {
+  &__add-section {
+    display: flex;
+    align-items: center;
+  }
+  &__social {
+    margin-bottom: 20px;
+  }
 
+  &__protocol {
+    width: 80px;
+  }
 
-
-		margin-bottom: 20px;
-	}
-
-
-
-	&__protocol {
-		width: 80px;
-	}
-
-	&__textbox-button {
-		flex-shrink: 1;
-	}
-
-
-
+  &__textbox-button {
+    flex-shrink: 1;
+  }
 
 }
 
 .social {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	&__close {
-		width: 10px;
-		height: 10px;
-		cursor: pointer;
-	}
+  &__close {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    background-image: url('./cross.svg');
+    opacity: 0;
 
-	&:hover &__close {
-		background-color: red;
-	}
+    transition: opacity .3s linear 0s;
+  }
 
-	&__link {
-		display: flex;
-		align-items: center;
+  &:hover &__close {
+    //background-color: red;
+    opacity: 1;
+  }
 
-	}
+  &__link {
+    display: flex;
+    align-items: center;
+  }
 
-	&__icon {
-		width: 30px;
-		height: 30px;
-
-		margin-right: 10px;
-
-		background-color: white;
-	}
+  &__icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    background-image: url('./globe.svg');
+  }
 }

@@ -1,69 +1,72 @@
-@spinner-circle-count: 6;
 @spinner-size: 100px;
-@spinner-circle-size: @spinner-size / 5;
-@spinner-start-angle: -(pi() / 2);
-@spinner-radius: @spinner-size / 2 - @spinner-circle-size / 2;
-@spinner-start-angle-1: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 0;
-@spinner-start-angle-2: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 1;
-@spinner-start-angle-3: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 2;
 
-@spinner-end-angle-1: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 0 + pi();
-@spinner-end-angle-2: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 1 + pi();
-@spinner-end-angle-3: @spinner-start-angle + pi() * 2 / @spinner-circle-count * 2 + pi();
+//@spinner-circle-count: 10;
+//@spinner-circle-size: 30px;
+//@spinner-start-angle: -(pi() / 2);
+//@spinner-radius: @spinner-size / 2 - @spinner-circle-size / 2;
 
-@_main: 0;
-@_right: 0;
-@_left: 0;
-
-.get-next-angles(@_angle) {
-  @_main: @_angle + pi();
-  @_right: @_angle + pi() / 6;
-  @_left: @_angle - pi() / 6;
-}
-
-.generate-circle(@i: 1) when (@i =< @spinner-circle-count) {
-  @_start-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * (@i - 1);
-  @j: mod(@i + 2, @spinner-circle-count);
-
-  @keyframes ~"spinner-circle-@{i}-moving" {
-
-    0% {
-      transform: translate(@spinner-radius + cos(@_start-angle) * @spinner-radius,
-        @spinner-radius +  sin(@_start-angle) * @spinner-radius);
-
-    }
-
-    50% {
-      transform: translate(@spinner-radius + cos(@spinner-end-angle-3) * @spinner-radius,
-        @spinner-radius +  sin(@spinner-end-angle-3) * @spinner-radius);
-    }
-
-    100% {
-      transform: translate(@spinner-radius + cos(@spinner-start-angle-1) * @spinner-radius,
-        @spinner-radius +  sin(@spinner-start-angle-1) * @spinner-radius);
-    }
-  }
-
-  .spinner__circle:nth-child(@{i}) {
-    transform: translate(@spinner-radius + cos(@_start-angle) * @spinner-radius, @spinner-radius +  sin(@_start-angle) * @spinner-radius);
-    animation: ~"spinner-circle-@{i}-moving" 3s linear 0s infinite;
-  }
-
-  .generate-circle(@i + 1);
-}
+//.generate-circle(@i: 0) when (@i =< @spinner-circle-count) {
+//  @first-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * @i;
+//  @j: mod(@i + 3, @spinner-circle-count);
+//  @second-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * @j;
+//
+//  @child: @i + 1;
+//  @sign: 2 * mod(@i, 2) - 1;
+//
+//  @sx1: @spinner-radius + cos(@first-angle) * @spinner-radius + @spinner-circle-size / 2;
+//  @sy1: @spinner-radius + sin(@first-angle) * @spinner-radius + @spinner-circle-size / 2;
+//
+//  @sx2: @spinner-radius + cos(@second-angle) * @spinner-radius + @spinner-circle-size / 2;
+//  @sy2: @spinner-radius + sin(@second-angle) * @spinner-radius + @spinner-circle-size / 2;
+//
+//  @tox: (@sx1 + @sx2) / 2 - (@spinner-radius + cos(@first-angle) * @spinner-radius);
+//  @toy: (@sy1 + @sy2) / 2 - (@spinner-radius + sin(@first-angle) * @spinner-radius);
+//
+//
+//
+//  @keyframes ~"spinner-circle-@{i}-moving" {
+//
+//    0% {
+//      transform: rotate(0)
+//    }
+//
+//
+//    50% {
+//      transform: rotate(180deg * @sign)
+//    }
+//
+//
+//    100% {
+//      transform: rotate(360deg * @sign)
+//    }
+//  }
+//
+//  .spinner__circle:nth-child(@{child}) {
+//
+//    transform-origin: @tox @toy;
+//
+//    left: @spinner-radius + cos(@first-angle) * @spinner-radius;
+//    top: @spinner-radius +  sin(@first-angle) * @spinner-radius;
+//
+//    @delay: 0s;//@i * .1s;
+//    //cubic-bezier(0.5, 0, 0.5, 1)
+//    animation: ~"spinner-circle-@{i}-moving" 4s cubic-bezier(0.5, 0, 0.5, 1) @delay infinite;
+//  }
+//
+//  .generate-circle(@i + 1);
+//}
+//.generate-circle();
 
 .spinner {
   position: absolute;
   width: @spinner-size;
   height: @spinner-size;
 
-  &__circle {
-    position: absolute;
-    width: @spinner-circle-size;
-    height: @spinner-circle-size;
-    background-color: white;
-    border-radius: 50%;
-  }
+  background-image: url('./spinner.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  animation: rotate 1s linear infinite;
 
   &_invisible {
     display: none;
@@ -71,5 +74,12 @@
 
 }
 
-.generate-circle();
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+  100% {
+    transform: rotate(360deg)
+  }
+}
 

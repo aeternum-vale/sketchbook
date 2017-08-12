@@ -1,6 +1,6 @@
-<div class="textbox{{#if parent}} {{parent}}__textarea{{/if}} textarea">
+<div class="textbox{{#if parent}} {{parent}}__textarea{{/if}} textarea{{#unless caption}} textbox_no-caption{{/unless}}">
 	<div class="textbox__info">
-		<span class="textbox__caption">{{caption}}</span>
+		{{#if caption}}<span class="textbox__caption">{{caption}}</span>{{/if}}
 		<span class="textbox__error"></span>
 	</div>
 	<textarea name="{{name}}" class="textbox__field" placeholder="{{placeholder}}"></textarea>

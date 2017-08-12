@@ -16,17 +16,17 @@
         {{/each}}
     </div>
 
-    {{> spinner
-        parent="home"
-        invisible=true
-    }}
+    <div class="home__spinner-wrapper">
+        {{> spinner
+                parent="home"
+                invisible=true
+        }}
+    </div>
+
 
 </div>
 
 {{> footer}}
-
-<div class="backdrop"></div>
-<div class="modal-wrapper">{{> spinner}}</div>
 
 
 
