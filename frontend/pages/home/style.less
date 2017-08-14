@@ -85,8 +85,6 @@
   }
 }
 
-
-
 .cutaway {
   position: relative;
   flex-shrink: 0;
@@ -144,12 +142,12 @@
   &__top {
     align-self: flex-start;
     justify-content: flex-start;
-    animation: top-scrolling 40s infinite linear;
+    animation: home-top-scrolling 40s infinite linear;
   }
   &__bottom {
     align-self: flex-end;
     justify-content: flex-end;
-    animation: bottom-scrolling 35s infinite linear;
+    animation: home-bottom-scrolling 35s infinite linear;
   }
   &__image-preview {
     flex-shrink: 0;
@@ -167,11 +165,11 @@
   }
 
   &_new {
-    animation: fading-in .5s ease-out 0s;
+    animation: home-fading-in .5s ease-out 0s;
   }
 }
 
-@keyframes top-scrolling {
+@keyframes home-top-scrolling {
   from {
     transform: translateX(0);
   }
@@ -180,7 +178,7 @@
   }
 }
 
-@keyframes bottom-scrolling {
+@keyframes home-bottom-scrolling {
   from {
     transform: translateX(0);
   }
@@ -189,7 +187,7 @@
   }
 }
 
-@keyframes fading-in {
+@keyframes home-fading-in {
   from {
     opacity: 0;
     transform: scale(.9);

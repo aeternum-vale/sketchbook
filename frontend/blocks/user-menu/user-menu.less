@@ -4,12 +4,16 @@
 @user-menu-avatar-border-size: 2px;
 @user-menu-dropdown-arrow-width: 16px;
 @user-menu-dropdown-arrow-height: 10px;
+
+
+
 .user-menu {
   position: relative;
   display: flex;
   align-items: center;
   height: 100%;
   cursor: pointer;
+
   &__username {
     margin: 0 10px;
     font-size: @medium-font-size;
@@ -27,40 +31,38 @@
   &__arrow {
     width: 0;
     height: 0;
-    margin: 0 5px;
+    margin: 0 10px;
     border-style: solid;
     border-width: 6px 6px 0 6px;
     border-color: @global-main-color-light transparent transparent transparent;
   }
 
-  &__dropdown-shadow {
-    height: 10px;
-    width: 100%;
-    box-shadow: inset 0px 35px 14px -36px #000
+  &__item-list {
+    top: @page-header-height + @user-menu-dropdown-arrow-height - @page-header-border-width;
   }
 
-  &__item-list {
-    top: @page-header-height + @page-header-border-width;
+  .dropdown_active &__avatar::before {
+    animation: @dropdown-animation;
   }
+
+
   .header-element_active &__arrow {
     border-color: #fff transparent transparent transparent;
   }
 
-  .header-element:hover &__arrow {
-    border-color: #fff transparent transparent transparent;
+  .header-element_active &__avatar::before {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 6;
+    left: (@user-menu-avatar-size - @user-menu-avatar-border-size * 2) / 2 - @user-menu-dropdown-arrow-width / 2;
+    bottom: -( (@page-header-height - @user-menu-avatar-size) / 2 + @user-menu-dropdown-arrow-height + @page-header-border-width);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 10px 8px; //16 x 10
+    border-color: transparent transparent @global-main-color-light transparent;
   }
-
-  //.header-element_active &__avatar::before {
-  //  content: "";
-  //  display: block;
-  //  position: absolute;
-  //  z-index: 6;
-  //  left: (@user-menu-avatar-size - @user-menu-avatar-border-size * 2)/2 - @user-menu-dropdown-arrow-width/2;
-  //  bottom: -( (@page-header-height - @user-menu-avatar-size)/2 + @user-menu-dropdown-arrow-height + 2px);
-  //  width: 0;
-  //  height: 0;
-  //  border-style: solid;
-  //  border-width: 0 8px 10px 8px; //16 x 10
-  //  border-color: transparent transparent @dropdown-main-color transparent;
-  //}
 }
+
+

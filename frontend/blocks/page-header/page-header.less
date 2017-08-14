@@ -1,58 +1,65 @@
 @import "../header/header.less";
 @import "../logo/style.less";
 
-@page-header-height: 42px;
+@page-header-height: 44px;
 @page-header-border-width: 2px;
 
 .page-header {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: @page-header-height;
-	z-index: 10;
-
-    border-bottom: solid @page-header-border-width #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 
 
-	&__wrapper {
-		.screen-wrapper();
-		justify-content: space-between;
-		align-items: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: @page-header-height;
+  z-index: 10;
 
-		height: 100%;
-		//height: @header-height;
-	}
+  border-bottom: solid @page-header-border-width #000;
+  border-top: solid @page-header-border-width #000;
 
-	&__logo {
+  &__wrapper {
+    .screen-wrapper();
+    justify-content: space-between;
+    align-items: center;
 
-	}
+    height: 100%;
+    //height: @header-height;
+  }
 
+  &__logo {
+
+  }
 }
 
 .pseudo-header {
-	position: relative;
-	width: 100%;
-	height: @page-header-height + @page-header-border-width;
+  position: relative;
+  width: 100%;
+  height: @page-header-height;
 }
 
 .header-element {
-	
-	&_active,
-	&:hover {
-		background-color: #58a4d6;
-      background-image: linear-gradient(to top, #3a86b8 1%, #2975a7 47%, #58a4d6 52%, #90d2fd);
-	}
+  &_active,
+  &:hover {
+    @_dark-rate: 10%;
 
-	&_ref {
-		padding: 0 10px;
-		line-height: @page-header-height;
+    background-color: @global-main-color-dark;
 
-		display: block;
-		text-decoration: none;
-		color: #fff;
-	}
+    background-image: linear-gradient(to top,
+    darken(@global-main-color-dark, @_dark-rate),
+    darken(@global-main-color-medium-dark, @_dark-rate) 47%,
+    darken(@global-main-color, @_dark-rate) 52%,
+    darken(@global-main-color-light, @_dark-rate));
+  }
+
+  &_ref {
+    padding: 0 10px;
+    line-height: @page-header-height;
+
+    display: block;
+    text-decoration: none;
+    color: #fff;
+  }
 }

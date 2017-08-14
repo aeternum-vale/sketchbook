@@ -18,7 +18,7 @@
     margin-top: 10px;
   }
   & .window__textbox:first-child {
-    margin-top: 0px;
+    margin-top: 0;
   }
   & .window__message {
     margin-top: 20px;
@@ -30,20 +30,19 @@
   &__form {
     opacity: 1;
     flex-shrink: 0;
-    animation: fading-in .3s ease-in-out 0s both;
+    animation: auth-window-fading-in .3s ease-in-out 0s both;
   }
 
   &__form-fading-out {
-    animation: fading-out .3s ease-in-out 0s;
+    animation: auth-window-fading-out .3s ease-in-out 0s;
   }
-
 
   &__form_invisible {
     display: none;
   }
 }
 
-@keyframes fading-out {
+@keyframes auth-window-fading-out {
   from {
     opacity: 1;
   }
@@ -53,7 +52,7 @@
   }
 }
 
-@keyframes fading-in {
+@keyframes auth-window-fading-in {
   from {
     opacity: 0;
     transform: translate(@auth-window-width, 0);
