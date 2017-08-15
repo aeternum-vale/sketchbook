@@ -11,10 +11,11 @@
 @import '../../blocks/message-modal-window/message-modal-window';
 @import "../../blocks/upload-image-modal-window/upload-image-modal-window.less";
 
-@passport-avatar-size: 300px;
-@passport-height: @passport-avatar-size;
+@passport-avatar-size: 150px;
+//@passport-height: @passport-avatar-size;
 @passport-data-max-height: @passport-avatar-size;
 @passport-text-gap: 16px;
+@passport-avatar-gap: 40px;
 
 @stat-number-font-size: 30px;
 @stat-caption-font-size: 12px;
@@ -25,42 +26,45 @@
   position: relative;
   display: flex;
   justify-content: center;
+
   width: 100%;
-  height: @passport-height;
 
   background-color: #383838;
   box-shadow: inset 0 -40px 60px rgba(0, 0, 0, .35);
 
   &__wrapper {
     .screen-wrapper();
-    align-items: flex-start;
+    align-items: center;
   }
 
   &__avatar {
-    flex-shrink: 0;
-
-    width: @passport-avatar-size;
-    height: @passport-avatar-size;
-
-    background-color: #fff;
-
-    background-size: cover;
-    background-position: center;
+    .avatar(@passport-avatar-size);
+    margin: @passport-avatar-gap;
   }
 
   &__data {
-
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
 
-    max-height: @passport-data-max-height;
-    margin-top: 20px;
-    padding: @passport-text-gap * 2;
+    //max-height: @passport-data-max-height;
+    margin-bottom: @passport-avatar-gap;
+    max-width: 400px;
+  }
 
-    border-radius: 0 @global-border-radius @global-border-radius 0;
+  &__backdrop {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
     background-color: @global-hint-color;
+  }
 
+  &__backdrop-side {
+    height: 100%;
+    width: @passport-avatar-gap;
+    background-color: @global-hint-color;
   }
 
   &__username {
@@ -74,16 +78,17 @@
   }
 
   &__description {
-    display: table-cell;
-    vertical-align: text-bottom;
 
-    height: 12px;
-    line-height: 12px;
+    //height: 12px;
+    //line-height: 12px;
     font-size: 12px;
-
     margin-top: @passport-text-gap;
 
   }
+  &__description:first-line {
+    line-height: 12px;
+  }
+
 
   &__links {
     margin-top: @passport-text-gap;

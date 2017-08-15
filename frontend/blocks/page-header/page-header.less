@@ -43,15 +43,14 @@
 .header-element {
   &_active,
   &:hover {
-    @_dark-rate: 10%;
+    background-color: @global-hint-color;
 
-    background-color: @global-main-color-dark;
-
-    background-image: linear-gradient(to top,
-    darken(@global-main-color-dark, @_dark-rate),
-    darken(@global-main-color-medium-dark, @_dark-rate) 47%,
-    darken(@global-main-color, @_dark-rate) 52%,
-    darken(@global-main-color-light, @_dark-rate));
+    //@_dark-rate: 10%;
+    //background-image: linear-gradient(to top,
+    //darken(@global-main-color-dark, @_dark-rate),
+    //darken(@global-main-color-medium-dark, @_dark-rate) 47%,
+    //darken(@global-main-color, @_dark-rate) 52%,
+    //darken(@global-main-color-light, @_dark-rate));
   }
 
   &_ref {
