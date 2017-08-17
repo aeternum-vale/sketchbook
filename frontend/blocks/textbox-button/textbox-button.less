@@ -1,33 +1,29 @@
 @import "../textbox/textbox.less";
+@import "../button/button.less";
 
-
-@textbox-button-button-width: 30px;
-@textbox-button-field-width: @textbox-field-width - @textbox-field-border - @textbox-button-button-width;
-
-@textbox-button-offset: @textbox-button-button-width + 3 * @textbox-field-border;
+@textbox-button-button-width: 70px;
 
 .textbox-button {
-	display: flex;
+  display: flex;
 
-	&.textbox::before {
-		margin-top: 0;
-		width: 100%;
-	}
-	
-	& .textbox__field {
-		width: ~"calc(100% - @{textbox-button-offset})";
-		//width: @textbox-button-field-width;
-		margin-top: 0;
+  &__textbox .textbox__field {
+    width: @textbox-field-width - @textbox-button-button-width;
+    border-radius: @textbox-field-border-radius 0 0 @textbox-field-border-radius;
 
-	}
+  }
 
-	&__button {
-		width: @textbox-button-button-width;
-		height: @textbox-field-height;
-		margin-left: @textbox-field-border;
+  &__textbox::before {
+    width: @textbox-field-width - @textbox-button-button-width + @textbox-field-border * 2;
+    border-radius: @textbox-field-border-radius 0 0 @textbox-field-border-radius;
 
-		background-color: white;
-		z-index: 5;
-		cursor: pointer;
-	}
+  }
+
+  &__button {
+    .button(@medium-font-size);
+    width: @textbox-button-button-width;
+    height: @textbox-field-height + @textbox-field-border * 2;
+    margin-top: @textbox-caption-gap - @textbox-field-border;
+
+    border-radius: 0 @textbox-field-border-radius @textbox-field-border-radius 0;
+  }
 }

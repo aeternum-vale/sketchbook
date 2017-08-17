@@ -113,7 +113,10 @@
     width: 100%;
     height: 100%;
 
-    text-shadow:  0 0 @image-preview-text-shadow-blur #000;
+    text-shadow: 0 0 @image-preview-text-shadow-blur #000;
+
+    transition: text-shadow @image-preview-transition-duration linear 0s;
+
   }
 
   &__attainments {
@@ -198,6 +201,10 @@
 
   &__username {
     margin-top: @image-preview-text-shadow-blur * 2;
+  }
+
+  &:hover &__info-board {
+    text-shadow: none;
   }
 
   &:hover &__designation-text {

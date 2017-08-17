@@ -1,4 +1,16 @@
-<div class="textbox textbox-button{{#if parent}} {{parent}}__textbox-button{{/if}}">
-	<input placeholder="{{placeholder}}" type="text" class="textbox__field" />
-	<div class="textbox-button__button"></div>
+<!--<div class="textbox textbox-button{{#if parent}} {{parent}}__textbox-button{{/if}}{{#unless caption}} textbox_no-caption{{/unless}}">-->
+    <!--<input placeholder="{{placeholder}}" type="text" class="textbox__field" />-->
+	<!--<div class="textbox-button__button button">add</div>-->
+<!--</div>-->
+
+
+<div class="textbox-button{{#if parent}} {{parent}}__textbox-button{{/if}}">
+    <div class="textbox-button__textbox-wrapper">
+        {{> textbox
+                parent="textbox-button"
+        }}
+    </div>
+
+    <div class="textbox-button__button button">add</div>
 </div>
+
