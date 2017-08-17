@@ -76,9 +76,9 @@ function userProfileRequestListener(req, res, next) {
         res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser && res.loggedUser._id);
         res.locals.page = 'user';
 
-        res.locals.pageUser.images.forEach(item => {
-            item.previewUrl = imagePaths.getImagePreviewUrl(item._id);
-        });
+        res.locals.pageUser.images = res.locals.pageUser.images.map(
+            image => imagePreviewViewModel(image)
+        );
 
         res.render('user');
     }).catch(err => {

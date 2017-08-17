@@ -49,6 +49,7 @@
 @image-preview-transition-duration: .18s;
 @image-preview-designation-size: 14px;
 @image-preview-info-board-padding: 20px;
+@image-preview-text-shadow-blur: 4px;
 
 .image-preview {
   display: block;
@@ -64,28 +65,25 @@
 
   border: solid 2px #000;
   background-color: #fff;
-  background-size: cover;
   cursor: pointer;
-  background-position: center;
 
-  transition: background @image-preview-transition-duration linear 0s;
+  font-size: @image-preview-designation-size;
+  line-height: @image-preview-designation-size;
 
-  &:hover {
-    background-size: 110%;
-  }
+  &__picture {
+    position: absolute;
 
-  &__info-board {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    box-sizing: border-box;
-
-    padding: @image-preview-info-board-padding;
     width: 100%;
     height: 100%;
+
+    background-size: 100%;
+    background-position: center;
+
+    transition: transform @image-preview-transition-duration linear 0s;
+
   }
 
-  &__info-board::before {
+  &__picture::before {
     content: "";
     display: block;
     position: absolute;
@@ -101,34 +99,83 @@
     transition: opacity @image-preview-transition-duration linear 0s;
   }
 
+  &__info-board {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+
+    padding: @image-preview-info-board-padding;
+    width: 100%;
+    height: 100%;
+
+    text-shadow:  0 0 @image-preview-text-shadow-blur #000;
+  }
+
+  &__attainments {
+  }
+
+  &__metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: flex-end;
+  }
+
+  &__upload-date-section {
+    overflow: hidden;
+  }
+
+  &__upload-date-text {
+    transform: translate(0, @image-preview-designation-size);
+    transition: transform @image-preview-transition-duration linear 0s;
+  }
+
   &__like-section,
   &__comment-section {
     position: relative;
-    font-size: @image-preview-designation-size;
-    line-height: @image-preview-designation-size;
-
     display: flex;
   }
 
   &__comment-section {
-    margin-bottom: 5px;
+
   }
 
   &__designation {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: flex-start;
 
     height: @image-preview-designation-size;
+
+    padding: @image-preview-text-shadow-blur;
+
     overflow: hidden;
   }
 
   &__designation-text {
+    margin-top: @image-preview-text-shadow-blur;
+  }
+
+  &__like-number,
+  &__comment-number {
+    padding: @image-preview-text-shadow-blur 0;
+    margin-right: 1px;
+  }
+
+  &__designation-symbol::before {
+    position: relative;
+    width: @image-preview-designation-size;
+    height: @image-preview-designation-size;
   }
 
   &__designation-symbol {
-    width: @image-preview-designation-size;
-    height: @image-preview-designation-size;
+    margin-bottom: @image-preview-text-shadow-blur;
   }
 
   &__designation-text,
@@ -137,22 +184,39 @@
     transition: transform @image-preview-transition-duration linear 0s;
   }
 
-  &__comment-section &__designation-symbol {
-    background-image: url('./bubble.svg');
+  //&__comment-section &__designation-symbol {
+  //  background-image: url('./bubble.svg');
+  //}
+  //&__like-section &__designation-symbol {
+  //  background-image: url('./heart.svg');
+  //}
+
+  &__upload-date-text,
+  &__username {
+    white-space: nowrap;
   }
-  &__like-section &__designation-symbol {
-    background-image: url('./heart.svg');
+
+  &__username {
+    margin-top: @image-preview-text-shadow-blur * 2;
   }
 
   &:hover &__designation-text {
-    transform: translateY(-@image-preview-designation-size);
+    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-blur);
   }
   &:hover &__designation-symbol {
-    transform: translateY(-@image-preview-designation-size);
+    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-blur);
   }
 
-  &:hover &__info-board::before {
+  &:hover &__picture {
+    transform: scale(1.1);
+  }
+
+  &:hover &__picture::before {
     opacity: .5;
+  }
+
+  &:hover &__upload-date-text {
+    transform: translate(0, 0);
   }
 
   &_ghost {

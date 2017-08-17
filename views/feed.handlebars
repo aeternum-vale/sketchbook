@@ -6,10 +6,7 @@
         {{#if feed}}
             {{#each feed}}
                 {{> image-preview
-                        comments=comments.length
-                        likes=likes.length
-                        previewUrl=previewUrl
-                        imageId=_id
+                    isFeed=true
                 }}
             {{/each}}
         {{/if}}

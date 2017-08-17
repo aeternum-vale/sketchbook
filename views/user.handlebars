@@ -56,12 +56,7 @@
     <div class="gallery__wrapper">
         {{#if pageUser.images}}
             {{#each pageUser.images}}
-                {{> image-preview
-                        comments=comments.length
-                        likes=likes.length
-                        previewUrl=previewUrl
-                        imageId=_id
-                }}
+                {{> image-preview}}
             {{/each}}
         {{/if}}
         {{> image-preview

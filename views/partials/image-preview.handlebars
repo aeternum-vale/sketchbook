@@ -1,24 +1,43 @@
 {{#unless ghost}}
-    <a data-id="{{imageId}}"
-       data-like-amount="{{likes}}"
-       data-comment-amount="{{comments}}"
-       href="/image/{{imageId}}" class="image-preview gallery__image-preview"
-       style="background-image: url('{{previewUrl}}')">
+    <a data-id="{{_id}}"
+       data-like-amount="{{likes.length}}"
+       data-comment-amount="{{comments.length}}"
+       href="/image/{{_id}}" class="image-preview gallery__image-preview">
 {{else}}
     <a class="image-preview gallery__image-preview image-preview_ghost">
 {{/unless}}
+
+    <div class="image-preview__picture" style="background-image: url('{{previewUrl}}')">
+    </div>
     <div class="image-preview__info-board">
-        <div class="image-preview__comment-section">{{comments}}&nbsp;
-            <div class="image-preview__designation">
-                <div class="image-preview__designation-symbol"></div>
-                <div class="image-preview__designation-text">comments</div>
+
+        <div class="image-preview__attainments">
+            <div class="image-preview__comment-section">
+                <span class="image-preview__comment-number">{{comments.length}}</span>
+                <div class="image-preview__designation">
+                    <div class="image-preview__designation-symbol icon-bubble"></div>
+                    <div class="image-preview__designation-text">comments</div>
+                </div>
+            </div>
+            <div class="image-preview__like-section">
+                <span class="image-preview__like-number">{{likes.length}}</span>
+                <div class="image-preview__designation">
+                    <div class="image-preview__designation-symbol icon-heart"></div>
+                    <div class="image-preview__designation-text">likes</div>
+                </div>
             </div>
         </div>
-        <div class="image-preview__like-section">{{likes}}&nbsp;
-            <div class="image-preview__designation">
-                <div class="image-preview__designation-symbol"></div>
-                <div class="image-preview__designation-text">likes</div>
+
+
+        <div class="image-preview__metadata">
+            <div class="image-preview__upload-date-section">
+                <div class="image-preview__upload-date-text">{{createDateStr}}</div>
             </div>
+            {{#if isFeed}}
+                <div class="image-preview__username">by {{authorUsername}}</div>
+            {{/if}}
         </div>
+
+
     </div>
 </a>

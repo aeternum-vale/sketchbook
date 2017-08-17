@@ -249,6 +249,9 @@ function getFeed(loggedUser) {
 
         let feed = rawFeed.map(item => imagePreviewViewModel(item));
 
+        for (let i = 0; i < feed.length; i++)
+            feed[i].authorUsername = (yield User.findById(feed[i].author).exec()).username;
+
         return feed;
     });
 }

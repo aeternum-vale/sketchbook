@@ -57,9 +57,11 @@ Gallery.prototype = Object.create(Modal.prototype);
 Gallery.prototype.constructor = Gallery;
 
 Gallery.prototype.onGalleryClick = function (e) {
-    if (!e.target.matches('.image-preview')) return;
+    let target;
+    if (!(target = e.target.closest('.image-preview'))) return;
+
     e.preventDefault();
-    let imageId = +e.target.dataset.id;
+    let imageId = +target.dataset.id;
 
     return this.activate({imageId});
 };
@@ -412,7 +414,9 @@ Gallery.prototype.updateImagePreviewText = function (id) {
     let previewImageElem = this.getImagePreviewById(id);
     previewImageElem.dataset.likeAmount = likeAmount;
     previewImageElem.dataset.commentAmount = commentAmount;
-    previewImageElem.querySelector('.image-preview__text').textContent = `${commentAmount} comments ${likeAmount} likes`;
+
+    previewImageElem.querySelector('.image-preview__comment-number').textContent = commentAmount;
+    previewImageElem.querySelector('.image-preview__like-number').textContent = likeAmount;
 };
 
 Gallery.prototype.deleteImagePreview = function (id) {
@@ -429,10 +433,11 @@ Gallery.prototype.insertNewImagePreview = function (imageId, previewUrl) {
 
     newImagePreview.dataset.id = imageId;
     newImagePreview.href = `/image/${imageId}`;
-    newImagePreview.style.backgroundImage = `url('/${previewUrl}')`;
+    newImagePreview.querySelector('.image-preview__picture').style.backgroundImage = `url('/${previewUrl}')`;
 
-    newImagePreview.querySelector('.image-preview__text')
-        .textContent = '0 comments 0 likes';
+    previewImageElem.querySelector('.image-preview__comment-number').textContent = 0;
+    previewImageElem.querySelector('.image-preview__like-number').textContent = 0;
+
 
     this.galleryWrapper.appendChild(newImagePreview);
 

@@ -1,4 +1,5 @@
 let imagePaths = require('libs/imagePaths');
+let getDateString = require('libs/getDateString');
 
 module.exports = function(image) {
 	return {
@@ -6,6 +7,7 @@ module.exports = function(image) {
 		author: image.author,
 		comments: image.comments,
 		likes: image.likes,
-		previewUrl: imagePaths.getImagePreviewUrl(image._id)
+		previewUrl: imagePaths.getImagePreviewUrl(image._id),
+        createDateStr: getDateString(image.created)
 	};
 };

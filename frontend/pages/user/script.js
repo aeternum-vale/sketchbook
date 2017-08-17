@@ -75,16 +75,17 @@ if (uploadImageModalWindowCaller = document.getElementById('upload-window-caller
 let gallery;
 let galleryElem = document.getElementById('gallery');
 galleryElem.onclick = function (e) {
-    if (!e.target.classList.contains('image-preview')) return;
+    let target;
+    if (!(target = e.target.closest('.image-preview'))) return;
 
     let spinner = new ModalSpinner({
         status: Modal.statuses.MAJOR
     });
     spinner.activate();
-    if (!e.target.matches('.image-preview')) return;
+
     e.preventDefault();
 
-    let imageId = +e.target.dataset.id;
+    let imageId = +target.dataset.id;
     createGallery().then(() => {
         spinner.onHostLoaded(gallery, {
             imageId
