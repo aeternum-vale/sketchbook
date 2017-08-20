@@ -1,4 +1,4 @@
-@import "../../blocks/modal/style.less";
+@import "../../blocks/modal-window/modal-window.less";
 @import "../../blocks/header/header.less";
 @import "../../blocks/button/button.less";
 @import "../../blocks/panel/panel.less";
@@ -19,6 +19,8 @@
 @image-close-button-size: 20px;
 @image-modal-close-button-gap: @modal-close-button-gap;
 
+@image-sidebar-width: 340px;
+
 .image {
   position: relative;
   display: flex;
@@ -26,7 +28,7 @@
   width: calc(~"100% - @{image-gap} - @{image-close-button-size} - 2 * @{image-modal-close-button-gap}");
   height: calc(~"100% - 2 * @{image-gap}"); //min-width: 90%;
   margin-right: -@image-gap + @image-close-button-size + 2 * @image-modal-close-button-gap;
- // margin-right:  @image-close-button-size + 2 * @image-modal-close-button-gap;
+  // margin-right:  @image-close-button-size + 2 * @image-modal-close-button-gap;
 
   flex-shrink: 0;
   flex-grow: 0;
@@ -36,6 +38,7 @@
     right: -(@image-close-button-size + @image-modal-close-button-gap);
     width: @image-close-button-size;
     height: @image-close-button-size;
+    font-size: @image-close-button-size;
   }
 
   &__controls {
@@ -46,16 +49,39 @@
     bottom: 10px;
   }
   &__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     box-sizing: border-box;
     width: 70px;
     height: 70px;
     margin-right: 10px;
-    border: solid 3px #555;
-    border-radius: 4px;
+    border: solid 2px #fff;
+    border-radius: @global-border-radius;
     cursor: pointer;
     //background-image: linear-gradient(to bottom, #868989, transparent);
-    background-color: rgb(73, 73, 73);
+    background-color: #000;
+
+    font-size: 50px;
+
+    opacity: 0;
+
+    transition: opacity .1s linear 0s;
   }
+
+  &__image-wrapper:hover &__control {
+    opacity: .3;
+  }
+
+  &__image-wrapper &__controls:hover &__control {
+    opacity: .45;
+  }
+
+  &__image-wrapper &__controls &__control:hover {
+    opacity: .6;
+  }
+
   &__control:last-child {
     margin-right: 0;
   }
@@ -86,17 +112,22 @@
 
   &__sidebar {
     position: relative;
-    box-sizing: border-box;
+
+    // box-sizing: border-box;
+
     height: 100%; // display: flex;
     // flex-direction: column;
     // justify-content: space-between;
     flex-shrink: 0;
     flex-grow: 0;
-    width: 340px;
-    min-width: 340px;
+    width: @image-sidebar-width;
+    min-width: @image-sidebar-width;
 
     border-left: solid @image-border-size #000;
     background-color: @global-panel-color;
+
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
   &__top-side {
     position: relative;
@@ -129,10 +160,15 @@
     justify-content: center;
   }
   &__username {
+    font-size: @medium-font-size;
+    height: @medium-font-size;
+    line-height: @medium-font-size;
   }
   &__post-date {
     font-size: 10px;
     line-height: 10px;
+    height: 10px;
+
   }
   &__top-side-button {
     .button(14px);
@@ -151,14 +187,79 @@
     background-color: @global-panel-color;
   }
   &__like-button {
-    margin-bottom: @image-padding;
+
   }
   &__description {
+    margin-top: @image-padding;
   }
-  &__comment-section {
+
+  &_no-description &__description {
+    display: none;
+  }
+
+  &__comment-section-wrapper {
     position: relative;
     flex-grow: 1;
+
+    min-width: @image-sidebar-width + @comment-section-native-scrollbar-offset;
+    height: 100%;
+
+    overflow-y: scroll;
   }
+
+  &__comment-section {
+    position: relative;
+    width: @image-sidebar-width;
+
+  }
+
+  &__comment-section-scrollbar-wrapper {
+    position: absolute;
+    right: 0;
+    top: @image-header-height + @image-border-size;
+    height: calc(~"100% - @{image-header-height} - @{image-border-size}");
+    width: @comment-section-scrollbar-width;
+
+    max-height: 100%;
+  }
+
+
+
+  &__comment-section-scrollbar {
+    position: relative;
+
+
+    width: @comment-section-scrollbar-width;
+    //background-color: red;
+  }
+
+  &__comment-section-scrollbar-offset {
+    position: relative;
+    top: 0;
+
+    width: 100%;
+    //height: 67px;
+
+  }
+
+  &__comment-section-slider {
+    position: relative;
+    top: 0;
+
+    width: 100%;
+    height: 20px;
+    background-color: lighten(@global-panel-color, 20%);
+  }
+
+  &__comment-section-slider&_invisible-scrollbar {
+    display: none;
+  }
+
+  &__comment-section .comment {
+    max-width: @image-sidebar-width - @comment-section-scrollbar-width;
+    min-width: @image-sidebar-width - @comment-section-scrollbar-width;
+  }
+
   &__comment-send {
     flex-shrink: 0;
     border-bottom-right-radius: @image-border-radius;

@@ -1,8 +1,32 @@
 @import "../window/window.less";
 @import "../modal/style.less";
 
+@modal-close-button-size: 30px;
+@modal-close-button-gap: (@window-header-height / 2 - @modal-close-button-size / 2) / 2;
+
 .modal-window {
 	.panel {
 		padding: 20px;
 	}
+}
+
+.modal-close-button {
+  position: absolute;
+  width: @modal-close-button-size;
+  height: @modal-close-button-size;
+  top: @window-header-height / 2 - @modal-close-button-size / 2;
+  right: -@modal-close-button-size - @modal-close-button-gap;
+
+
+  font-size: @modal-close-button-size;
+  opacity: .66;
+  cursor: pointer;
+
+  .modal:hover & {
+    opacity: .33;
+  }
+
+  .modal:hover &:hover {
+    opacity: 1;
+  }
 }

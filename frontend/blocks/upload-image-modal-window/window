@@ -16,4 +16,4 @@
 		</div>		<span class="window__error-message"></span>
 		<div class="button upload-image-modal-window__button">upload</div>
 	</div>
-    <div class="modal-close-button"></div></div>
+    <div class="icon-cross modal-close-button"></div></div>

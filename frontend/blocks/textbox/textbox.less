@@ -4,12 +4,14 @@
 @textbox-field-border-radius: 8px;
 @textbox-caption-gap: 10px;
 @textbox-caption-font-size: @medium-font-size;
-
+@textbox-width: @textbox-field-width + @textbox-field-border * 2;
 
 .textbox {
   position: relative;
-
   margin-bottom: @textbox-field-border;
+
+  width: @textbox-width;
+  height: @textbox-field-height + @textbox-field-border + @textbox-caption-gap + @textbox-caption-font-size;
 
   &::before {
     content: "";
@@ -17,7 +19,7 @@
     display: block;
     position: absolute;
     top: -@textbox-field-border;
-    left: -@textbox-field-border;
+    left: 0;
 
     width: @textbox-field-width + @textbox-field-border * 2;
     height: @textbox-field-height + @textbox-field-border * 2;
@@ -32,52 +34,71 @@
 
   }
 
-  &_no-caption::before {
-    top: -@textbox-field-border - @textbox-caption-font-size;
-  }
-
   &__field {
     position: relative;
     width: @textbox-field-width;
     height: @textbox-field-height;
+    left: @textbox-field-border;
 
     box-sizing: border-box;
     margin-top: @textbox-caption-gap;
-    padding-left: @textbox-field-border-radius;
+    padding: @textbox-field-border-radius;
 
     border-width: 0;
     border-radius: @textbox-field-border-radius;
 
     background-color: #9eadb4;
-    box-shadow: inset 0 6px 13px rgba(0, 0, 0, .61);
+    box-shadow: inset 0 6px 13px rgba(0, 0, 0, .6);
     font-size: @large-font-size;
   }
 
   &__info {
     position: relative;
 
-    height: 100%;
+    height: @textbox-caption-font-size;
     padding-left: @textbox-field-border-radius;
 
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+
+    white-space: nowrap;
+  }
+
+  &_no-caption {
+    height: auto;
+  }
+
+  &_no-caption::before {
+    top: 0;
+    margin-top: 0;
+  }
+
+  &_no-caption &__field {
+    margin-top: @textbox-field-border;
+  }
+
+  &_no-caption &__info {
+    height: auto;
   }
 
   &__caption {
+
     font-size: @textbox-caption-font-size;
     line-height: @textbox-caption-font-size;
     color: #fff;
+
+    margin-right: 5px;
+
   }
 
   &__error {
     overflow: hidden;
-
-    font-size: @small-font-size;
+    text-overflow: ellipsis;
+    font-size: 11px;
     color: #e61b05;
+
   }
-
-
 
   &_focus::before {
     background-color: #76d2ff;

@@ -11,34 +11,42 @@
 @import "../../blocks/upload-avatar-section/upload-avatar-section.less";
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window';
+
 .settings-wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .settings {
-    .screen-wrapper();
+  .screen-wrapper();
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  &__caption {
+    font-size: @large-font-size;
+  }
+  &__section {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    &__caption {
-        font-size: @large-font-size;
-    }
-    &__section {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 30px 0;
-    }
-    &__save-button {
-        .button(20px);
-    }
-    &__add-button {
-        margin-bottom: 10px;
-    }
-    &__textarea,
-    &__textbox {
-        margin-bottom: 20px;
-    }
+    //justify-content: center;
+    padding: 30px 0;
+
+    width: @textbox-width;
+    max-width: @textbox-width;
+  }
+  &__save-button {
+    .button(20px);
+    align-self: flex-start;
+  }
+  &__add-button {
+    margin-bottom: 10px;
+    align-self: flex-start;
+
+  }
+  &__textarea,
+  &__textbox {
+    margin-bottom: 20px;
+  }
 }

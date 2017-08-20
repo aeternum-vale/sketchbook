@@ -2,37 +2,44 @@
 
 .upload-avatar-section {
 
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 
-	&__avatar {
-		flex-shrink: 0;
-		flex-grow: 0;
+  max-width: inherit;
 
-		.avatar(120px);
-	}
+  &__avatar {
+    .avatar(120px);
+    flex-shrink: 1;
+    position: relative;
+    height: auto;
+  }
 
-	&__controls {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
+  &__avatar:before{
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
 
-		margin-left: 20px;
-	}
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
-	&__file-picker {
-		margin-bottom: 10px;
-	}
+    margin-left: 20px;
+  }
 
-	&__upload-button {
-		.button(16px);
-		margin-bottom: 10px;
-	}
+  &__file-picker {
+    margin-bottom: 10px;
+  }
 
-	&__delete-button {
-		.button(13px);
-	}
+  &__upload-button {
+    .button(16px);
+    margin-bottom: 10px;
+  }
 
+  &__delete-button {
+    .button(13px);
+  }
 
 }

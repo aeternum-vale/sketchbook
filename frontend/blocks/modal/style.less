@@ -1,28 +1,8 @@
 @import "../spinner/style.less";
 
-@modal-close-button-size: 30px;
-@modal-close-button-gap: 5px;
 
 .modal {
   position: absolute;
-}
-
-.modal-close-button {
-  position: absolute;
-  right: -(@modal-close-button-size + @modal-close-button-gap);
-  width: @modal-close-button-size;
-  height: @modal-close-button-size;
-  background-color: red;
-  opacity: .66;
-  cursor: pointer;
-
-  .modal:hover & {
-    opacity: .33;
-  }
-
-  .modal:hover &:hover {
-    opacity: 1;
-  }
 }
 
 .modal-wrapper {
@@ -35,8 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-
 
   &_major {
     z-index: 20;
@@ -60,7 +38,6 @@
   visibility: visible;
   background-color: #000;
   opacity: .6;
-
 
   &_major {
     z-index: 15;

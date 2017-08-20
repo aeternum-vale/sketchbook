@@ -98,6 +98,7 @@ Gallery.prototype.setElem = function () {
         this.avatar = this.elem.querySelector('.image__avatar');
         this.username = this.elem.querySelector('.image__username');
         this.headerLeftSide = this.elem.querySelector('.image__header-left-side');
+        this.fullscreenButton = this.elem.querySelector('.image__control-full');
 
 
         this.imgElem.onload = e => {
@@ -114,19 +115,26 @@ Gallery.prototype.setElem = function () {
             if (e.target.matches('.image__control-next'))
                 this.switchToNext();
 
+            if (e.target === this.fullscreenButton)
+                this.switchFullscreen();
+
             if (e.target.matches('.image__close-space') || e.target.matches('.image__close-button'))
                 this.deactivate();
         };
 
 
-        let CommentSection = require(BLOCKS + 'comment-section');
+        let CommentSection = require(BLOCKS + 'image-comment-section');
         let LikeButton = require(BLOCKS + 'like-button');
 
         this.commentSection = new CommentSection({
-            elem: document.querySelector('.comment-section'),
-            commentSenderElem: document.querySelector('.comment-send'),
+            elem: this.elem.querySelector('.comment-section'),
+            commentSenderElem: this.elem.querySelector('.comment-send'),
             imageId: this.currentImageId,
-            loggedUserViewModel: this.loggedUserViewModel
+            loggedUserViewModel: this.loggedUserViewModel,
+
+            commentSectionWrapper: this.elem.querySelector('.image__comment-section-wrapper'),
+            infoBoard: this.elem.querySelector('.image__info-board'),
+            scrollbarWrapper: this.elem.querySelector('.image__comment-section-scrollbar-wrapper')
         });
 
         this.commentSection.on('comment-section_changed', e => {
@@ -138,7 +146,7 @@ Gallery.prototype.setElem = function () {
         });
 
         this.likeButton = new LikeButton({
-            elem: document.querySelector('.like-button'),
+            elem: this.elem.querySelector('.like-button'),
             data: this.currentImageId
         });
 
@@ -208,6 +216,46 @@ Gallery.prototype.setElem = function () {
     });
 
 };
+
+
+Gallery.prototype.switchFullscreen = function () {
+
+    function goFullscreen(element) {
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen();
+        } else if (element.mozRequestFullscreen) {
+            element.mozRequestFullscreen();
+        }
+    }
+
+    function cancelFullscreen() {
+        if(document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if(document.webkitExitFullscreen ) {
+            document.webkitExitFullscreen();
+        } else if(document.mozExitFullscreen) {
+            document.mozExitFullscreen();
+        }
+    }
+
+
+    if (!this.isFullscreen) {
+        goFullscreen(this.imageWrapper);
+        this.isFullscreen = true;
+        this.fullscreenButton.classList.remove('icon-arrow-maximise');
+        this.fullscreenButton.classList.add('icon-arrow-minimise');
+
+    } else {
+        cancelFullscreen();
+        this.isFullscreen = false;
+        this.fullscreenButton.classList.add('icon-arrow-maximise');
+        this.fullscreenButton.classList.remove('icon-arrow-minimise');
+    }
+
+};
+
 
 Gallery.prototype.setDeleteButton = function () {
     this.deleteButtonElem.classList.remove('button_invisible');
@@ -560,6 +608,11 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
         this.updateComments(this.currentImageId);
 
         this.description.textContent = this.currentViewModel.description;
+        if (this.description.textContent === '')
+            this.elem.classList.add('image_no-description');
+        else
+            this.elem.classList.remove('image_no-description');
+
         this.date.textContent = this.currentViewModel.createDateStr;
 
         if (this.isLogged)

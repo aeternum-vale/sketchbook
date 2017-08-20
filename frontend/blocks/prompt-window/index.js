@@ -12,29 +12,16 @@ PromptWindow.prototype = Object.create(MessageModalWindow.prototype);
 PromptWindow.prototype.constructor = PromptWindow;
 
 PromptWindow.prototype.setWindowHtml = function () {
-    this.windowHtml =
-        `<div class='window window_invisible modal-window message-modal-window prompt-window' id='prompt'>
-            <div class="header window__header">
-            </div>
-        
-            <div class="panel window__panel">
-                <div class="message-modal-window__message">
-                </div>
-        
-                <div class="prompt-window__buttons">
-                    <div class="button prompt-window__button prompt-window__yes">yes</div>
-                    <div class="button prompt-window__button prompt-window__no">no</div>
-                </div>
-            </div>
-        </div>`;
+    this.windowHtml = require(`html-loader!./window`);
 };
-
 
 
 PromptWindow.prototype.setElem = function () {
     MessageModalWindow.prototype.setElem.apply(this, arguments);
 
     this.elem.onclick = e => {
+        this.onElemClick(e);
+
         if (!e.target.matches('.prompt-window__button')) return;
 
         if (e.target.matches('.prompt-window__yes'))

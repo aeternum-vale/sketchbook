@@ -1,4 +1,4 @@
-<div class='window window_invisible modal-window message-modal-window' id='message-modal-window'>
+<div class='window modal window_invisible modal-window message-modal-window' id='message-modal-window'>
     <div class="header window__header">
     </div>
 
@@ -7,4 +7,4 @@
         </div>
         <div class="button message-modal-window__ok-button">OK</div>
     </div>
-</div>
+    <div class="icon-cross modal-close-button"></div></div>

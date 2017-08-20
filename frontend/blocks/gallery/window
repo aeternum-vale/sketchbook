@@ -1,10 +1,10 @@
-<div id="image" class="modal image">
+<div id="image" class="modal image image_no-description">
     <div class="image__image-wrapper">
         <img class="image__img-element">
         <div class="image__controls">
-            <div class="image__control image__control-prev">prev</div>
-            <div class="image__control image__control-full">full</div>
-            <div class="image__control image__control-next">next</div>
+            <div class="image__control image__control-prev icon-arrow-left"></div>
+            <div class="image__control image__control-full icon-arrow-maximise"></div>
+            <div class="image__control image__control-next icon-arrow-right"></div>
         </div>
     </div>
     <div class="image__sidebar">
@@ -19,11 +19,11 @@
                     </div>
                 </a>
 
-                <div class="button button_invisible image__top-side-button image__delete-button">
+                <div class="button button_invisible image__top-side-button image__delete-button button_header-style">
                     delete
                 </div>
                 <div
-                    class="button image__top-side-button image__subscribe-button"
+                    class="button image__top-side-button image__subscribe-button button_header-style"
                 >
                     subscribe
                 </div>
@@ -35,27 +35,30 @@
                      class="button like-button image__like-button">
                     like 
                 </div>
+
                 <div class="image__description">
                     
                 </div>
 
             </div>
             <div class="comment-section image__comment-section">
-                    <div class="panel comment comment-section__comment comment_ghost" data-id="">
-                        <div class="comment__top-side">
-                            <a class="comment__ref" href="">
-                                <div class="comment__avatar" style="background-image: url('')"></div>
-                                <div class="comment__metadata">
-                                    <div class="comment__username"></div>
-                                    <div class="comment__date"></div>
-                                </div>
-                            </a>
-                            <div class="comment__close-button"></div>
+
+                <div class="comment-section__comments-wrapper">
+                        <div class="panel comment comment-section__comment comment_ghost" data-id="">
+                            <div class="comment__top-side">
+                                <a class="comment__ref" href="">
+                                    <div class="comment__avatar" style="background-image: url('')"></div>
+                                    <div class="comment__metadata">
+                                        <div class="comment__username"></div>
+                                        <div class="comment__date"></div>
+                                    </div>
+                                </a>
+                                <div class="comment__close-button icon-cross"></div>
+                            </div>
+                            <div class="comment__text"></div>
                         </div>
-                        <div class="comment__text"></div>
-                    </div>
-
-
+                </div>
+                <div class="comment-section__scrollbar"></div>
             </div>
         </div>
 
@@ -71,5 +74,5 @@
             <div class="button comment-send__send-button">send</div>
         </div>
     </div>
-    <div class="modal-close-button image__modal-close-button"></div></div>
+    <div class="icon-cross modal-close-button image__modal-close-button"></div></div>
 

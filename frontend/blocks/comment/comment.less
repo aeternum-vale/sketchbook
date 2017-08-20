@@ -1,10 +1,14 @@
 .comment {
+
+
   position: relative;
   box-sizing: border-box;
 
+
   padding: @image-padding;
-  border-radius: 2px;
   border-bottom: solid @image-border-size #000;
+  border-right: solid @image-border-size #000;
+
 
   &__avatar {
     .avatar(42px);
@@ -33,25 +37,30 @@
   &__date {
     font-size: 10px;
     line-height: 10px;
+    color: rgba(255, 255, 255, .5);
   }
 
   &__close-button {
     position: absolute;
-    visibility: hidden;
-
     right: @image-padding;
     top: @image-padding;
 
-    width: 20px;
-    height: 20px;
-
-    background-color: red;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
 
     cursor: pointer;
+
+    opacity: 0;
+    transition: opacity .1s linear 0s;
   }
 
   &:hover &__close-button {
-    visibility: visible;
+    opacity: .5;
+  }
+
+  & &__close-button:hover {
+    opacity: 1;
   }
 
   &_not-own &__close-button {
