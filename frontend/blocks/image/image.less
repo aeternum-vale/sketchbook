@@ -34,12 +34,30 @@
   flex-grow: 0;
   border-radius: @image-border-radius;
   box-shadow: 0 0 8px 10px rgba(0, 0, 0, .3);
-  &__modal-close-button {
-    right: -(@image-close-button-size + @image-modal-close-button-gap);
-    width: @image-close-button-size;
-    height: @image-close-button-size;
-    font-size: @image-close-button-size;
+
+  &__modal-close-button-wrapper {
+    position: absolute;
+   //top: @window-header-height / 2 - @modal-close-button-size / 2;
+    right: -@modal-close-button-size - @modal-close-button-gap;
+
+    width: @image-close-button-size + @image-modal-close-button-gap * 2;
+    height: 100%;
   }
+
+  &__modal-close-button {
+    position: relative;
+    left: @image-modal-close-button-gap;
+    font-size: @image-close-button-size;
+
+  }
+
+  &__modal-close-button-wrapper:hover &__modal-close-button  {
+    opacity: .66;
+  }
+  //
+  //&__modal-close-button::before:hover {
+  //  opacity: 1;
+  //}
 
   &__controls {
     position: absolute;
@@ -223,14 +241,13 @@
     max-height: 100%;
   }
 
-
-
   &__comment-section-scrollbar {
     position: relative;
-
-
+    left: 0;
     width: @comment-section-scrollbar-width;
-    //background-color: red;
+    box-sizing: border-box;
+    border-left: solid @image-border-size #000;
+
   }
 
   &__comment-section-scrollbar-offset {
@@ -238,8 +255,6 @@
     top: 0;
 
     width: 100%;
-    //height: 67px;
-
   }
 
   &__comment-section-slider {
@@ -251,13 +266,18 @@
     background-color: lighten(@global-panel-color, 20%);
   }
 
-  &__comment-section-slider&_invisible-scrollbar {
-    display: none;
-  }
-
   &__comment-section .comment {
     max-width: @image-sidebar-width - @comment-section-scrollbar-width;
     min-width: @image-sidebar-width - @comment-section-scrollbar-width;
+  }
+
+  &_no-scrollbar .comment {
+    max-width: none;
+    min-width: 0;
+  }
+
+  &_no-scrollbar&__comment-section-scrollbar-wrapper {
+    display: none;
   }
 
   &__comment-send {

@@ -11,24 +11,15 @@ let ImageCommentSection = function (options) {
     this.scrollbarSlider = this.scrollbarWrapper.querySelector('.image__comment-section-slider');
 
     this.commentSectionWrapper.onscroll = e => {
-
-        let scrollRate = (this.commentSectionWrapper.scrollTop) /
-            (this.commentSectionWrapper.scrollHeight - this.commentSectionWrapper.offsetHeight) * 100;
-
         if (!this.onDragging)
-            this.scrollbarSlider.style.top = `${(1 - this.sliderSizeRate) * scrollRate}%`;
+            this.setTop();
     };
-
 
     this.scrollbarSlider.onmousedown = e => {
 
-        console.log('this.scrollbarSlider.onmousedown');
-
         this.onDragging = true;
-
         let sliderCoords = getCoords(this.scrollbarSlider);
         let shiftY = e.pageY - sliderCoords.top;
-
         let scrollbarCoords = getCoords(this.scrollbar);
         let newTop;
 
@@ -41,8 +32,6 @@ let ImageCommentSection = function (options) {
             this.scrollbarSlider.style.top = newTop + 'px';
 
             this.commentSectionWrapper.scrollTop = (newTop / this.scrollbar.offsetHeight) / (1 - this.sliderSizeRate) *
-
-
                 (this.commentSectionWrapper.scrollHeight - this.commentSectionWrapper.offsetHeight);
         };
 
@@ -76,16 +65,36 @@ ImageCommentSection.prototype.constructor = ImageCommentSection;
 
 ImageCommentSection.prototype.set = function () {
     CommentSection.prototype.set.apply(this, arguments);
+    this.update();
+};
+
+ImageCommentSection.prototype.setTop = function () {
+    let scrollRate = (this.commentSectionWrapper.scrollTop) /
+        (this.commentSectionWrapper.scrollHeight - this.commentSectionWrapper.offsetHeight) * 100;
+
+    this.scrollbarSlider.style.top = `${(1 - this.sliderSizeRate) * scrollRate}%`;
+
+};
+
+ImageCommentSection.prototype.update = function () {
+    this.commentSectionWrapper.classList.add('image_no-scrollbar');
+    this.scrollbarWrapper.classList.add('image_no-scrollbar');
 
     this.infoBoardHeight = this.infoBoard.offsetHeight;
     this.scrollbarOffset.style.height = `${this.infoBoardHeight}px`;
     this.scrollbar.style.height = `calc(100% - ${this.infoBoardHeight}px)`;
 
-    this.sliderSizeRate = this.scrollbar.offsetHeight / this.commentsWrapper.scrollHeight;
-    this.scrollbarSlider.style.height = `${this.sliderSizeRate * 100}%`;
+    if (this.commentSectionWrapper.offsetHeight < this.commentsWrapper.scrollHeight) {
+        this.sliderSizeRate = this.commentSectionWrapper.offsetHeight / this.commentsWrapper.scrollHeight;
+        this.scrollbarSlider.style.height = `${this.sliderSizeRate * 100}%`;
 
-    this.scrollbarSlider.classList.remove('image_invisible-scrollbar');
+        this.setTop();
+
+        this.commentSectionWrapper.classList.remove('image_no-scrollbar');
+        this.scrollbarWrapper.classList.remove('image_no-scrollbar');
+    }
+
+
 };
-
 
 module.exports = ImageCommentSection;

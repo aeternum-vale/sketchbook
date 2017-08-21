@@ -40,6 +40,8 @@ let Gallery = function (options) {
 
     window.addEventListener('resize', e => {
         this.resizeImage();
+
+        this.commentSection && this.commentSection.update();
     });
 
 
@@ -107,7 +109,11 @@ Gallery.prototype.setElem = function () {
         };
 
         this.elem.onclick = e => {
+
             this.onElemClick(e);
+
+            if (e.target.matches('.image__modal-close-button-wrapper'))
+                this.deactivate();
 
             if (e.target.matches('.image__control-prev'))
                 this.switchToPrev();
