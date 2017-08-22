@@ -41,6 +41,7 @@ app.set('port', config.get('port'));
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/userdata'));
+app.use(express.static(__dirname + '/static'));
 
 app.use(require('body-parser').urlencoded({
     extended: true

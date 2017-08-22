@@ -38,6 +38,7 @@ function imageRequestListener(req, res, next) {
         return image;
     }).then(image => {
 
+        res.locals.anonAvatar = `/${config.get('static:anonAvatar')}`;
         res.locals.image = image;
         res.locals.page = 'image';
 

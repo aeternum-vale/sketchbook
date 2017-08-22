@@ -1,4 +1,4 @@
-<div class="stat stat-list__stat">
+<div class="stat stat-list__stat ">
 	<div class="stat__number" {{#if id}}id="{{id}}"{{/if}}>
 	{{#if number}}
 		{{number}}
@@ -6,5 +6,6 @@
 		0
 	{{/if}}
 	</div>
+    <div class="stat__icon {{icon}}"></div>
 	<div class="stat__caption">{{property}}</div>
 </div>

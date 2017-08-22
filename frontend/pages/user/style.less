@@ -11,8 +11,6 @@
 @import "../../blocks/gallery/gallery.less";
 @import "../../blocks/spinner/style.less";
 
-
-
 @passport-avatar-size: 150px;
 //@passport-height: @passport-avatar-size;
 @passport-data-max-height: @passport-avatar-size;
@@ -91,7 +89,6 @@
     line-height: 12px;
   }
 
-
   &__links {
     margin-top: @passport-text-gap;
     font-size: 7px;
@@ -123,6 +120,26 @@
     content: none;
   }
 
+
+  @media (max-width: @global-small-screen-width) {
+
+    &__wrapper {
+      margin: 0;
+      padding: 0;
+      max-width: none;
+      min-width: 0;
+    }
+
+    &__backdrop {
+      width: 100%
+    }
+
+    &__backdrop-side {
+      display: none;
+    }
+
+  }
+
 }
 
 .extra-header {
@@ -143,6 +160,12 @@
   }
   &__button.button_active {
     .button-active(16px);
+  }
+
+  @media (max-width: @global-small-screen-width) {
+    &__wrapper {
+      min-width: 0;
+    }
   }
 }
 
@@ -166,4 +189,24 @@
     font-size: @stat-caption-font-size;
     line-height: @stat-caption-font-size;
   }
+
+  &__icon {
+    display: none;
+    font-size: @stat-number-font-size * .8;
+    align-self: center;
+  }
+
+
+  @media (max-width: @global-small-screen-width) {
+
+    &__caption {
+      display: none;
+    }
+
+    &__icon {
+      display: block;
+    }
+
+  }
+
 }

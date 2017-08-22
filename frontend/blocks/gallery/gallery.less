@@ -9,41 +9,6 @@
 
 @gallery-content-margin: @global-content-padding;
 
-.gallery {
-  position: relative;
-  display: flex;
-  justify-content: center;
-
-  width: 100%;
-
-  margin: @gallery-ver-margin 0;
-
-  &__wrapper {
-    .screen-wrapper();
-
-    min-width: 230px;
-    padding: 0;
-    margin: 0 @gallery-content-margin;
-
-    position: relative;
-    flex-flow: row wrap;
-    justify-content: center;
-    width: @image-preview-space-size;
-
-    .generate-media(@i: 1) when (@i =< @gallery-max-image-preview-columns) {
-      @media (min-width: (@i * @image-preview-space-size  + @gallery-content-margin * 2)) and (max-width: ((@i + 1) * @image-preview-space-size  + @gallery-content-margin * 2)) {
-        width: (@i * @image-preview-space-size);
-      }
-      .generate-media(@i + 1);
-    }
-    .generate-media();
-  }
-
-  &__image-preview {
-    margin: @image-preview-margin-value;
-  }
-
-}
 
 //@image-preview-info-board-height: 30px;
 @image-preview-transition-duration: .18s;
@@ -73,6 +38,7 @@
   &__picture {
     position: absolute;
 
+    top: 0;
     width: 100%;
     height: 100%;
 
@@ -101,6 +67,7 @@
 
   &__info-board {
     position: absolute;
+    top: 0;
 
     display: flex;
     flex-direction: column;
@@ -228,6 +195,81 @@
 
   &_ghost {
     display: none;
+  }
+
+
+}
+
+
+.gallery {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+
+  margin: @gallery-ver-margin 0;
+
+  &__wrapper {
+    .screen-wrapper();
+
+    min-width: 230px;
+    padding: 0;
+    margin: 0 @gallery-content-margin;
+
+    position: relative;
+    flex-flow: row wrap;
+    justify-content: center;
+    width: @image-preview-space-size;
+    max-width: @global-content-width - @gallery-content-margin;
+
+    .generate-media(@i: 1) when (@i =< @gallery-max-image-preview-columns) {
+      @media (min-width: (@i * @image-preview-space-size  + @gallery-content-margin * 2)) and (max-width: ((@i + 1) * @image-preview-space-size  + @gallery-content-margin * 2)) {
+        width: (@i * @image-preview-space-size);
+
+      }
+      .generate-media(@i + 1);
+    }
+    .generate-media();
+
+  }
+
+  &__image-preview {
+    margin: @image-preview-margin-value;
+  }
+
+
+  @media (max-width: @global-small-screen-width) {
+
+    margin: 0;
+
+    &__wrapper {
+      width: 100%;
+      margin: 0;
+    }
+
+    &__image-preview {
+      width: 50%;
+      margin: 0;
+      border: 0;
+      height: auto;
+    }
+
+    &__image-preview::before{
+      content: "";
+      display: block;
+      padding-top: 100%;
+      background-color: transparent;
+    }
+
+  }
+
+  @media (max-width: 400px) {
+
+    &__image-preview {
+      width: 100%;
+    }
+
   }
 
 }

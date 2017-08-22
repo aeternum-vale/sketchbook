@@ -1,4 +1,5 @@
 let imagePaths = require('libs/imagePaths');
+let config = require('config');
 
 
 /**
@@ -12,13 +13,16 @@ let imagePaths = require('libs/imagePaths');
 module.exports = function(user, loggedUserId) {
 
 	let avatarFileNames;
+	let anonAvatarFileName = config.get('static:anonAvatar');
+
+
 	if (user.hasAvatar)
 		avatarFileNames = imagePaths.getAvatarFileNamesById(user._id);
 	else
         avatarFileNames = {
-			big: '',
-			medium: '',
-			small: ''
+			big: anonAvatarFileName,
+			medium: anonAvatarFileName,
+			small: anonAvatarFileName
 		};
 
 	let userViewModel = {

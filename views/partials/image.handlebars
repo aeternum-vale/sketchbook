@@ -82,9 +82,8 @@
         <div class="panel comment comment-send image__comment-send"
              data-image-id="{{image._id}}">
             <div class="comment__top-side">
-                <div class="comment__avatar"
-                     style="background-image: url('{{loggedUser.avatarUrls.medium}}')"></div>
-                <div class="comment__username">{{loggedUser.username}}</div>
+                <div class="comment__avatar" style="background-image: url('{{#if loggedUser}}{{loggedUser.avatarUrls.medium}} {{else}}{{anonAvatar}}{{/if}}')"></div>
+                <div class="comment__username">{{#if loggedUser}}{{loggedUser.username}}{{else}}anonym{{/if}}</div>
             </div>
 
             <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>

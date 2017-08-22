@@ -1,75 +1,65 @@
 {
-	"port": 3000,
-
-	"env": "development",
-
-	"mongo": {
-		"uri": "mongodb://localhost/test",
-		"options": {
-			"server": {
-				"socketOptions": {
-					"keepAlive": 1
-				}
-			}
-		}
-	},
-
-	"cookie": {
-		"options": {
-			"signed": true,
-			"httpOnly": true
-		},
-		"secret": "/L/c8%*[Mo]-n(#R*G}4U7g33P-a4J*",
-		"session": {
-			"key": "session_id"
-		}
-	},
-
-	"image": {
-		"preloadEntityCount": 1,
-		"relativeTimeLimitDays": 3
-	},
-
-	"userdata": {
-		"dir": "./userdata",
-
-		"image": {
-			"ext": "jpg",
-			"prefix": "image",
-			"minWidth": 300,
-			"minHeight": 300
-		},
-
-		"preview": {
-			"ext": "jpg",
-			"postfix": "_preview",
-			"size": 300,
-			"quality": 50
-		},
-
-		"avatar": {
-			"ext": "jpg",
-
-			"quality": 100,
-
-			"prefix": "avatar",
-
-			"big": {
-				"postfix": "_big",
-				"size": 300
-			},
-
-			"medium": {
-				"postfix": "_medium",
-				"size": 100
-			},
-
-			"small": {
-				"postfix": "_small",
-				"size": 30
-			}
-		}
-
-	}
-
+  "port": 3000,
+  "env": "development",
+  "mongo": {
+    "uri": "mongodb://localhost/test",
+    "options": {
+      "server": {
+        "socketOptions": {
+          "keepAlive": 1
+        }
+      }
+    }
+  },
+  "cookie": {
+    "options": {
+      "signed": true,
+      "httpOnly": true
+    },
+    "secret": "/L/c8%*[Mo]-n(#R*G}4U7g33P-a4J*",
+    "session": {
+      "key": "session_id"
+    }
+  },
+  "image": {
+    "preloadEntityCount": 1,
+    "relativeTimeLimitDays": 3
+  },
+  "userdata": {
+    "dir": "./userdata",
+    "image": {
+      "ext": "jpg",
+      "prefix": "image",
+      "minWidth": 300,
+      "minHeight": 300
+    },
+    "preview": {
+      "ext": "jpg",
+      "postfix": "_preview",
+      "size": 300,
+      "quality": 50
+    },
+    "avatar": {
+      "ext": "jpg",
+      "quality": 100,
+      "prefix": "avatar",
+      "big": {
+        "postfix": "_big",
+        "size": 300
+      },
+      "medium": {
+        "postfix": "_medium",
+        "size": 100
+      },
+      "small": {
+        "postfix": "_small",
+        "size": 30
+      }
+    }
+  },
+  "static": {
+    "dir": "./static",
+    "anonAvatar": "anon.svg",
+    "favicon": "favicon.ico"
+  }
 }

@@ -27,9 +27,9 @@
                 >
                     subscribe
                 </div>
-
-
             </div>
+
+
             <div class="image__info-board">
                 <div
                      class="button like-button image__like-button">
@@ -41,25 +41,38 @@
                 </div>
 
             </div>
-            <div class="comment-section image__comment-section">
 
-                <div class="comment-section__comments-wrapper">
-                        <div class="panel comment comment-section__comment comment_ghost" data-id="">
-                            <div class="comment__top-side">
-                                <a class="comment__ref" href="">
-                                    <div class="comment__avatar" style="background-image: url('')"></div>
-                                    <div class="comment__metadata">
-                                        <div class="comment__username"></div>
-                                        <div class="comment__date"></div>
-                                    </div>
-                                </a>
-                                <div class="comment__close-button icon-cross"></div>
+
+            <div class="image__comment-section-wrapper image_no-scrollbar">
+                <div class="comment-section image__comment-section">
+                    <div class="comment-section__comments-wrapper">
+                            <div class="panel comment comment-section__comment comment_ghost" data-id="">
+                                <div class="comment__top-side">
+                                    <a class="comment__ref" href="">
+                                        <div class="comment__avatar" style="background-image: url('')"></div>
+                                        <div class="comment__metadata">
+                                            <div class="comment__username"></div>
+                                            <div class="comment__date"></div>
+                                        </div>
+                                    </a>
+                                    <div class="comment__close-button icon-cross"></div>
+                                </div>
+                                <div class="comment__text"></div>
                             </div>
-                            <div class="comment__text"></div>
-                        </div>
+
+                    </div>
                 </div>
-                <div class="comment-section__scrollbar"></div>
             </div>
+
+            <div class="image__comment-section-scrollbar-wrapper image_no-scrollbar">
+                <div class="image__comment-section-scrollbar-offset"></div>
+                <div class="image__comment-section-scrollbar">
+                    <div class="image__comment-section-slider"></div>
+                </div>
+
+            </div>
+
+
         </div>
 
         <div class="panel comment comment-send image__comment-send"
@@ -74,5 +87,8 @@
             <div class="button comment-send__send-button">send</div>
         </div>
     </div>
-    <div class="icon-cross modal-close-button image__modal-close-button"></div></div>
+    <div class="image__modal-close-button-wrapper">
+        <div class="icon-cross modal-close-button image__modal-close-button"></div>    </div>
+
+</div>
 
