@@ -5,10 +5,8 @@
         <div class="passport__backdrop">
             <div class="passport__avatar" style="background-image: url('{{pageUser.avatarUrls.big}}')"></div>
             <div class="passport__data">
-                <div class="passport__username"><span class="passport__username-text">{{pageUser.username}}</span></div>
-                <div class="passport__description"><span class="passport__description-text">{{pageUser.description}}</span>
-                </div>
-
+                <div class="passport__username">{{pageUser.username}}</div>
+                <div class="passport__description">{{pageUser.description}}</div>
                 {{#if pageUser.links}}
                     <div class="passport__links">
                         {{#each pageUser.links}}

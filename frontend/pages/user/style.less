@@ -14,13 +14,25 @@
 @passport-avatar-size: 150px;
 //@passport-height: @passport-avatar-size;
 @passport-data-max-height: @passport-avatar-size;
-@passport-text-gap: 16px;
+
 @passport-avatar-gap: 40px;
 
 @stat-number-font-size: 30px;
 @stat-caption-font-size: 12px;
 @image-preview-margin: 15px;
 @gallery-ver-margin: @global-content-padding - @image-preview-margin;
+
+
+@passport-standart-font-size: 40px;
+@passport-standart-small-font-size: 8vw;
+
+@passport-username-font-size-ratio: 1;
+@passport-description-font-size-ratio: .5;
+@passport-links-font-size-ratio: .35;
+
+
+@passport-text-gap: @passport-standart-font-size / 2;
+@passport-small-text-gap: @passport-standart-small-font-size / 2;
 
 .passport {
   position: relative;
@@ -68,9 +80,10 @@
   }
 
   &__username {
-    height: 26px;
-    line-height: 26px;
-    font-size: 26px;
+    @_font-size: @passport-standart-font-size * @passport-username-font-size-ratio;
+    height: @_font-size;
+    line-height: @_font-size;
+    font-size: @_font-size;
 
     white-space: nowrap;
     font-weight: bold;
@@ -78,31 +91,21 @@
   }
 
   &__description {
-
-    //height: 12px;
-    //line-height: 12px;
-    font-size: 12px;
+    @_font-size: @passport-standart-font-size * @passport-description-font-size-ratio;
+    height: @_font-size;
+    line-height: @_font-size;
+    font-size: @_font-size;
     margin-top: @passport-text-gap;
-
-  }
-  &__description:first-line {
-    line-height: 12px;
   }
 
   &__links {
+    @_font-size: @passport-standart-font-size * @passport-links-font-size-ratio;
+    height: @_font-size;
+    line-height: @_font-size;
+    font-size: @_font-size;
     margin-top: @passport-text-gap;
-    font-size: 7px;
-    height: 7px;
-    line-height: 7px;
   }
 
-  &__username-text,
-  &__description-text,
-  &__link {
-    position: relative;
-    top: -17%;
-    font-size: 170%;
-  }
 
   &__link:hover {
     color: @global-main-color-light;
@@ -122,18 +125,45 @@
 
   @media (max-width: @global-small-screen-width) {
 
-    &__wrapper {
-      margin: 0;
-      padding: 0;
-      max-width: none;
-    }
-
     &__backdrop {
       width: 100%
     }
 
     &__backdrop-side {
       display: none;
+    }
+
+
+    &__avatar {
+      margin: @passport-small-text-gap;
+    }
+
+    &__data {
+      margin-bottom: @passport-small-text-gap * 2;
+    }
+
+    &__username {
+      @_font-size: @passport-standart-small-font-size * @passport-username-font-size-ratio;
+      height: @_font-size;
+      line-height: @_font-size;
+      font-size: @_font-size;
+    }
+
+    &__description {
+      @_font-size: @passport-standart-small-font-size * @passport-description-font-size-ratio;
+      height: @_font-size;
+      line-height: @_font-size;
+      font-size: @_font-size;
+      margin-top: @passport-small-text-gap;
+    }
+
+    &__links {
+      @_font-size: @passport-standart-small-font-size * @passport-links-font-size-ratio;
+      height: @_font-size;
+      line-height: @_font-size;
+      font-size: @_font-size;
+      margin-top: @passport-small-text-gap;
+
     }
 
   }
@@ -173,11 +203,22 @@
   &__stat {
     margin-right: 20px;
   }
+
+  @media (max-width: @global-small-screen-width) {
+    &__stat {
+      margin-right: 2vw;
+    }
+  }
+
 }
+
+
+@stat-number-small-font-size: 5vw;
+@stat-number-icon-size-ratio: .8;
 
 .stat {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   &__number {
     margin-right: 5px;
     font-size: @stat-number-font-size;
@@ -191,11 +232,21 @@
 
   &__icon {
     display: none;
-    font-size: @stat-number-font-size * .8;
+    font-size: @stat-number-font-size * @stat-number-icon-size-ratio;
     align-self: center;
   }
 
   @media (max-width: @global-small-screen-width) {
+
+    &__number {
+      margin-right: 1vw;
+      font-size: @stat-number-small-font-size;
+      line-height: @stat-number-small-font-size;
+    }
+
+    &__icon {
+      font-size: @stat-number-small-font-size * @stat-number-icon-size-ratio;
+    }
 
     &__caption {
       display: none;

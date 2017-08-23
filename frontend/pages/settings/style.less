@@ -1,4 +1,6 @@
 @import "../../style/global.less";
+@import "../../blocks/prompt-window/prompt-window.less";
+@import '../../blocks/message-modal-window/message-modal-window';
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
@@ -9,13 +11,14 @@
 @import "../../blocks/textbox-button/textbox-button.less";
 @import "../../blocks/social-collection/social-collection.less";
 @import "../../blocks/upload-avatar-section/upload-avatar-section.less";
-@import "../../blocks/prompt-window/prompt-window.less";
-@import '../../blocks/message-modal-window/message-modal-window';
 
 .settings-wrapper {
   display: flex;
   justify-content: center;
 }
+
+@settings-small-offset: 20px;
+@settings-section-padding: 30px;
 
 .settings {
   .screen-wrapper();
@@ -25,13 +28,20 @@
   padding-bottom: 20px;
   &__caption {
     font-size: @large-font-size;
+    text-align: center;
   }
+
+  &__caption:first-child {
+    margin-top: @settings-section-padding;
+    padding-top: 0;
+  }
+
   &__section {
     display: flex;
     flex-direction: column;
     align-items: center;
     //justify-content: center;
-    padding: 30px 0;
+    padding: @settings-section-padding 0;
 
     width: @textbox-width;
     max-width: @textbox-width;
@@ -43,10 +53,74 @@
   &__add-button {
     margin-bottom: 10px;
     align-self: flex-start;
-
   }
   &__textarea,
   &__textbox {
     margin-bottom: 20px;
+  }
+
+  @media (max-width: @global-xsmall-screen-width) {
+    &__section {
+      width: 100%;
+      max-width: none;
+    }
+
+
+    &__caption {
+      padding-right: @settings-small-offset;
+      padding-left: @settings-small-offset;
+    }
+
+
+    .textbox {
+      width: 100%;
+      border-radius: 0;
+    }
+
+    .textbox::before {
+      width: 100%;
+      border-radius: 0;
+
+    }
+
+    .textbox__field {
+      width: calc(~"100% - 2 * @{textbox-field-border}");
+    }
+
+    &__social-collection {
+      width: 100%;
+
+    }
+
+    &__social-collection .social__close {
+      opacity: @global-opacity-low;
+    }
+
+    &__social-collection .social {
+      margin-left: @settings-small-offset;
+      margin-right: @settings-small-offset;
+    }
+
+    &__social-collection .textbox {
+      width: 100%;
+    }
+
+    &__social-collection .button {
+      border-radius: 0;
+    }
+
+    &__social-collection .textbox-button__textbox-wrapper {
+      width: calc(~"100% - @{textbox-button-button-width}");
+    }
+
+    .social-collection__textbox-button {
+      width: 100%;
+    }
+
+    &__add-button,
+    &__save-button {
+      margin-left: @settings-small-offset;
+    }
+
   }
 }

@@ -46,16 +46,13 @@
 }
 
 .header-element {
+
+  font-size: @medium-font-size;
+  line-height: @medium-font-size;
+
   &_active,
   &:hover {
     background-color: @global-hint-color;
-
-    //@_dark-rate: 10%;
-    //background-image: linear-gradient(to top,
-    //darken(@global-main-color-dark, @_dark-rate),
-    //darken(@global-main-color-medium-dark, @_dark-rate) 47%,
-    //darken(@global-main-color, @_dark-rate) 52%,
-    //darken(@global-main-color-light, @_dark-rate));
   }
 
   &_ref {
@@ -65,5 +62,10 @@
     display: block;
     text-decoration: none;
     color: #fff;
+  }
+
+  @media (max-width: @global-xsmall-screen-width) {
+    font-size: @medium-font-size-xsmall-screen;
+    line-height: @medium-font-size-xsmall-screen;
   }
 }

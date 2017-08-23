@@ -21,7 +21,7 @@
 
 @image-sidebar-width: 340px;
 
-@image-scrollbar-width: 40px;
+@image-scrollbar-width: 10px;
 @image-native-scrollbar-offset: 150px;
 
 .image {
@@ -294,9 +294,7 @@
   @media (max-width: @global-small-screen-width) {
 
     position: absolute;
-
     flex-direction: column;
-
     top: 0;
     bottom: 0;
     left: 0;
@@ -346,7 +344,8 @@
     }
 
     &__comment-section-scrollbar-wrapper {
-      top: @image-header-height + @image-border-size * 2;
+      display: none;
+      // top: @image-header-height + @image-border-size * 2;
     }
 
     &__sidebar {
@@ -358,10 +357,6 @@
       border: none;
     }
 
-    &__top-side {
-      overflow: hidden;
-    }
-
     &__header {
       border-top-right-radius: 0;
       border-top: solid @image-border-size #000;
@@ -369,54 +364,28 @@
     }
 
     &__comment-section-wrapper {
-      position: static;
+      max-height: 400px;
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+    }
 
-      overflow-y: scroll;
+    &__comment-section {
+      width: 100%;
+      min-height: 100%;
+    }
 
-
-      /* Pick an arbitrary margin/padding that should be bigger
-       * than the max width of all the scroll bars across
-       * the devices you are targeting.
-       * padding = -margin
-       */
-
-      width: auto;
+    .comment {
+      width: 100%;
       max-width: none;
       min-width: 0;
 
-      margin-right: -@image-native-scrollbar-offset;
-      padding-right: @image-native-scrollbar-offset;
-
-
-      //max-height: 400px;
-      height: 400px;
     }
-
-
-
-    &__comment-section {
-      position: absolute;
-
-      width: 100%;
-      min-height: 100%;
-
-    }
-
-
-    .comment {
-      //@_offset: -@comment-section-native-scrollbar-offset + @comment-section-scrollbar-width - @image-border-size;
-      @_offset: -@image-scrollbar-width;
-      max-width: calc(~"100% + @{_offset}");
-      min-width: calc(~"100% + @{_offset}");
-
-    }
-
-
 
     &_no-scrollbar .comment {
-      @_offset: -@image-native-scrollbar-offset + @image-scrollbar-width * 2 - @image-border-size;
-      max-width: calc(~"100% + @{_offset}");
-      min-width: calc(~"100% + @{_offset}");
+      width: 100%;
+      max-width: none;
+      min-width: 0;
     }
 
     .comment__close-button {

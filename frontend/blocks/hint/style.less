@@ -6,4 +6,11 @@
   background-color: @global-hint-color;
   font-size: @medium-font-size;
   color: #fff;
+
+  @media (max-width: @global-small-screen-width) {
+
+      margin: 0;
+      border-radius: 0;
+      width: calc(~"100% - @{hint-padding} * 2");
+  }
 }

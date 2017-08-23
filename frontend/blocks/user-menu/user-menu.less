@@ -16,8 +16,7 @@
 
   &__username {
     margin: 0 10px;
-    font-size: @medium-font-size;
-    line-height: @medium-font-size;
+
   }
   &__avatar {
     .avatar(@user-menu-avatar-size);
@@ -37,6 +36,7 @@
     top: @page-header-height + @user-menu-dropdown-arrow-height - @page-header-border-width;
   }
 
+
   .header-element_active &__arrow {
     border-color: #fff transparent transparent transparent;
   }
@@ -54,12 +54,15 @@
     border-width: 0 8px 10px 8px; //16 x 10
     border-color: transparent transparent @global-main-color-light transparent;
 
+
+
     animation: @dropdown-animation;
   }
 
   .dropdown_fading-out &__avatar::before {
     animation: @dropdown-backward-animation;
   }
+
 }
 
 
