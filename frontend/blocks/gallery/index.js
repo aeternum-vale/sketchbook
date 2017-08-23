@@ -57,13 +57,13 @@ Gallery.prototype = Object.create(Modal.prototype);
 Gallery.prototype.constructor = Gallery;
 
 Gallery.prototype.onResize = function() {
-    const GLOBAL_SMALL_SCREEN_WIDTH = 700;
-    if (document.documentElement.clientWidth <= GLOBAL_SMALL_SCREEN_WIDTH)
-        this.elem.classList.add('image_small');
-    else
-        this.elem.classList.remove('image_small');
-
-    this.resizeImage();
+    // const GLOBAL_SMALL_SCREEN_WIDTH = 700;
+    // if (document.documentElement.clientWidth <= GLOBAL_SMALL_SCREEN_WIDTH)
+    //     this.elem.classList.add('image_small');
+    // else
+    //     this.elem.classList.remove('image_small');
+    //
+    // this.resizeImage();
     this.commentSection && this.commentSection.update();
 };
 
@@ -367,39 +367,39 @@ Gallery.prototype.showImgElem = function () {
 };
 
 Gallery.prototype.resizeImage = function () {
-    if (this.elem) {
-
-        this.imgElem.removeAttribute('width');
-        this.imgElem.removeAttribute('height');
-
-        if (!this.elem.classList.contains('image_small')) {
-
-            if (this.imgElem.offsetWidth >= this.imgElem.offsetHeight) {
-                if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight)
-                    this.imgElem.height = this.imageWrapper.offsetHeight;
-
-                if (this.imageWrapper.offsetWidth > this.elem.offsetWidth) {
-                    this.imgElem.removeAttribute('height');
-                    this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
-                }
-            } else {
-                if (this.imageWrapper.offsetWidth > this.elem.offsetWidth)
-                    this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
-
-                if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight) {
-                    this.imgElem.removeAttribute('width');
-                    this.imgElem.height = this.imageWrapper.offsetHeight;
-                }
-            }
-        } else {
-            if (this.imageWrapper.offsetWidth > this.elem.offsetWidth) {
-                this.imgElem.removeAttribute('height');
-                this.imgElem.width = this.elem.offsetWidth;
-            }
-        }
-
-
-    }
+    // if (this.elem) {
+    //
+    //     this.imgElem.removeAttribute('width');
+    //     this.imgElem.removeAttribute('height');
+    //
+    //     if (!this.elem.classList.contains('image_small')) {
+    //
+    //         if (this.imgElem.offsetWidth >= this.imgElem.offsetHeight) {
+    //             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight)
+    //                 this.imgElem.height = this.imageWrapper.offsetHeight;
+    //
+    //             if (this.imageWrapper.offsetWidth > this.elem.offsetWidth) {
+    //                 this.imgElem.removeAttribute('height');
+    //                 this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
+    //             }
+    //         } else {
+    //             if (this.imageWrapper.offsetWidth > this.elem.offsetWidth)
+    //                 this.imgElem.width = this.elem.offsetWidth - this.sideBar.offsetWidth;
+    //
+    //             if (this.imageWrapper.offsetHeight < this.imgElem.offsetHeight) {
+    //                 this.imgElem.removeAttribute('width');
+    //                 this.imgElem.height = this.imageWrapper.offsetHeight;
+    //             }
+    //         }
+    //     } else {
+    //         if (this.imageWrapper.offsetWidth > this.elem.offsetWidth) {
+    //             this.imgElem.removeAttribute('height');
+    //             this.imgElem.width = this.elem.offsetWidth;
+    //         }
+    //     }
+    //
+    //
+    // }
 };
 
 Gallery.prototype.requestViewModel = function (id) {

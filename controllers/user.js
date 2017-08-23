@@ -277,6 +277,10 @@ function subscribeRequestListener(req, res, next) {
                 username
             }).exec();
         }
+
+        if (user._id === res.loggedUser._id)
+            throw new HttpError(400, 'You\'re pathetic');
+
         return subscribe(user);
 
     }).then(result => {

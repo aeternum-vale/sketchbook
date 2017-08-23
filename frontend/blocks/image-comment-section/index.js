@@ -81,10 +81,15 @@ ImageCommentSection.prototype.update = function () {
     this.scrollbarWrapper.classList.add('image_no-scrollbar');
 
     this.infoBoardHeight = this.infoBoard.offsetHeight;
+
+
+    let computedStyle = getComputedStyle(this.infoBoard);
+    parseFloat(computedStyle.height) && (this.infoBoardHeight = parseFloat(computedStyle.height));
+
     this.scrollbarOffset.style.height = `${this.infoBoardHeight}px`;
     this.scrollbar.style.height = `calc(100% - ${this.infoBoardHeight}px)`;
 
-    if (this.commentSectionWrapper.offsetHeight < this.commentsWrapper.scrollHeight) {
+    if (this.commentSectionWrapper.offsetHeight - this.commentsWrapper.scrollHeight < -1) {
         this.sliderSizeRate = this.commentSectionWrapper.offsetHeight / this.commentsWrapper.scrollHeight;
         this.scrollbarSlider.style.height = `${this.sliderSizeRate * 100}%`;
 

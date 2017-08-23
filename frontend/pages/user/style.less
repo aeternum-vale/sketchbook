@@ -120,14 +120,12 @@
     content: none;
   }
 
-
   @media (max-width: @global-small-screen-width) {
 
     &__wrapper {
       margin: 0;
       padding: 0;
       max-width: none;
-      min-width: 0;
     }
 
     &__backdrop {
@@ -164,9 +162,10 @@
 
   @media (max-width: @global-small-screen-width) {
     &__wrapper {
-      min-width: 0;
+      padding: 0 @global-small-screen-content-padding;
     }
   }
+
 }
 
 .stat-list {
@@ -195,7 +194,6 @@
     font-size: @stat-number-font-size * .8;
     align-self: center;
   }
-
 
   @media (max-width: @global-small-screen-width) {
 

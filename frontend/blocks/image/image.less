@@ -21,6 +21,9 @@
 
 @image-sidebar-width: 340px;
 
+@image-scrollbar-width: 40px;
+@image-native-scrollbar-offset: 150px;
+
 .image {
   position: relative;
   display: flex;
@@ -198,6 +201,7 @@
     padding: @image-padding;
     border-bottom: solid @image-border-size #000;
     background-color: @global-panel-color;
+    box-sizing: border-box;
 
   }
   &__like-button {
@@ -215,7 +219,7 @@
     position: relative;
     flex-grow: 1;
 
-    min-width: @image-sidebar-width + @comment-section-native-scrollbar-offset;
+    min-width: @image-sidebar-width + @image-native-scrollbar-offset;
     height: 100%;
 
     overflow-y: scroll;
@@ -232,7 +236,7 @@
     right: 0;
     top: @image-header-height + @image-border-size;
     height: calc(~"100% - @{image-header-height} - @{image-border-size}");
-    width: @comment-section-scrollbar-width;
+    width: @image-scrollbar-width;
 
     max-height: 100%;
   }
@@ -240,7 +244,7 @@
   &__comment-section-scrollbar {
     position: relative;
     left: 0;
-    width: @comment-section-scrollbar-width;
+    width: @image-scrollbar-width;
     box-sizing: border-box;
     border-left: solid @image-border-size #000;
 
@@ -263,8 +267,8 @@
   }
 
   &__comment-section .comment {
-    max-width: @image-sidebar-width - @comment-section-scrollbar-width;
-    min-width: @image-sidebar-width - @comment-section-scrollbar-width;
+    max-width: @image-sidebar-width - @image-scrollbar-width;
+    min-width: @image-sidebar-width - @image-scrollbar-width;
   }
 
   &_no-scrollbar .comment {
@@ -287,7 +291,8 @@
 
   //small-------------------
 
-  &_small {
+  @media (max-width: @global-small-screen-width) {
+
     position: absolute;
 
     flex-direction: column;
@@ -301,90 +306,130 @@
     height: auto;
 
     flex-shrink: 0;
+
+    &__controls {
+      padding-bottom: 0;
+    }
+
+    &__control {
+      height: 50px;
+      margin-right: 0;
+      border-top: solid 2px #fff;
+      border-left: solid 2px #fff;
+      border-bottom: 0;
+      border-right: 0;
+      border-radius: 0;
+      opacity: .3;
+
+      font-size: 25px;
+    }
+
+    &__control:last-child {
+      border-right: solid 2px #fff;
+    }
+
+    &__modal-close-button-wrapper {
+      right: @image-close-button-size;
+      top: @image-close-button-size;
+      width: auto;
+      height: auto;
+    }
+
+    &__modal-close-button {
+      left: 0;
+      top: 0;
+    }
+
+    &__image-wrapper {
+      flex-shrink: 0;
+      height: auto;
+    }
+
+    &__comment-section-scrollbar-wrapper {
+      top: @image-header-height + @image-border-size * 2;
+    }
+
+    &__sidebar {
+      width: 100%;
+      height: auto;
+
+      min-width: 0;
+      border-top-right-radius: 0;
+      border: none;
+    }
+
+    &__top-side {
+      overflow: hidden;
+    }
+
+    &__header {
+      border-top-right-radius: 0;
+      border-top: solid @image-border-size #000;
+
+    }
+
+    &__comment-section-wrapper {
+      position: static;
+
+      overflow-y: scroll;
+
+
+      /* Pick an arbitrary margin/padding that should be bigger
+       * than the max width of all the scroll bars across
+       * the devices you are targeting.
+       * padding = -margin
+       */
+
+      width: auto;
+      max-width: none;
+      min-width: 0;
+
+      margin-right: -@image-native-scrollbar-offset;
+      padding-right: @image-native-scrollbar-offset;
+
+
+      //max-height: 400px;
+      height: 400px;
+    }
+
+
+
+    &__comment-section {
+      position: absolute;
+
+      width: 100%;
+      min-height: 100%;
+
+    }
+
+
+    .comment {
+      //@_offset: -@comment-section-native-scrollbar-offset + @comment-section-scrollbar-width - @image-border-size;
+      @_offset: -@image-scrollbar-width;
+      max-width: calc(~"100% + @{_offset}");
+      min-width: calc(~"100% + @{_offset}");
+
+    }
+
+
+
+    &_no-scrollbar .comment {
+      @_offset: -@image-native-scrollbar-offset + @image-scrollbar-width * 2 - @image-border-size;
+      max-width: calc(~"100% + @{_offset}");
+      min-width: calc(~"100% + @{_offset}");
+    }
+
+    .comment__close-button {
+      opacity: .5;
+    }
+
+    &__comment-send.comment {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      border-radius: 0;
+    }
+
   }
 
-
-  &_small &__controls {
-    padding-bottom: 0;
-  }
-  &_small &__control {
-    height: 50px;
-    margin-right: 0;
-    border-top: solid 2px #fff;
-    border-left: solid 2px #fff;
-    border-bottom: 0;
-    border-right: 0;
-    border-radius: 0;
-    opacity: .3;
-
-    font-size: 25px;
-  }
-
-  &_small &__control:last-child {
-    border-right: solid 2px #fff;
-  }
-
-  &_small &__modal-close-button-wrapper {
-    right: @image-close-button-size;
-    top: @image-close-button-size;
-    width: auto;
-    height: auto;
-  }
-
-  &_small &__modal-close-button {
-    left: 0;
-    top: 0;
-  }
-
-  &_small &__image-wrapper {
-    flex-shrink: 0;
-    height: auto;
-  }
-
-  &_small &__comment-section-scrollbar-wrapper {
-    top: @image-header-height + @image-border-size * 2;
-  }
-
-  &_small &__sidebar {
-    width: 100%;
-    height: 700px;
-    max-height: 700px;
-    min-width: 0;
-    border-top-right-radius: 0;
-    border: none;
-  }
-
-  &_small &__header {
-    border-top-right-radius: 0;
-    border-top: solid @image-border-size #000;
-
-  }
-
-  &_small &__comment-section-wrapper {
-    min-width: calc(~"100% + @{comment-section-native-scrollbar-offset}");
-  }
-
-  &_small &__comment-section {
-    width: 100%;
-  }
-
-  &_small .comment {
-    @_offset: -@comment-section-native-scrollbar-offset + @comment-section-scrollbar-width - @image-border-size;
-    max-width: calc(~"100% + @{_offset}");
-    min-width: calc(~"100% + @{_offset}");
-  }
-
-  &_small &_no-scrollbar .comment {
-    max-width: 100%;
-    min-width: 100%;
-  }
-
-  &_small .comment__close-button {
-    opacity: .5;
-  }
-
-  &_small &__comment-send {
-    width: 100%;
-    max-width: none;
-  }
 }

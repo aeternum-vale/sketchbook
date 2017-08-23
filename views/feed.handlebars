@@ -1,21 +1,29 @@
 {{> page-header}}
-<div class="pseudo-header"></div>
-<div id="gallery" class="gallery">
-    <div class="gallery__wrapper">
 
-        {{#if feed}}
-            {{#each feed}}
-                {{> image-preview
-                    isFeed=true
-                }}
-            {{/each}}
-        {{/if}}
-        {{> image-preview
-                ghost=true
-                comments='0'
-                likes='0'
-        }}
+<div class="feed">
+    <div class="hint feed__hint">
+        This is your feed. Subscribe to other users and their works would appear here.
+    </div>
 
+    <div id="gallery" class="gallery feed__gallery">
+        <div class="gallery__wrapper">
+
+            {{#if feed}}
+                {{#each feed}}
+                    {{> image-preview
+                            isFeed=true
+                    }}
+                {{/each}}
+            {{/if}}
+            {{> image-preview
+                    ghost=true
+                    comments='0'
+                    likes='0'
+            }}
+
+        </div>
     </div>
 </div>
+
+
 {{> footer}}

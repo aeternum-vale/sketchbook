@@ -8,5 +8,29 @@
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
 @import "../../blocks/gallery/gallery.less";
+@import "../../blocks/hint/style.less";
 
+.feed {
+  .screen-wrapper();
+  flex-direction: column;
+  align-items: center;
 
+  &__hint {
+    margin: @global-vertical-distance 0 @global-vertical-distance 0;
+  }
+
+  &__gallery {
+    margin-top: 0;
+  }
+
+  @media (max-width: @global-small-screen-width) {
+    margin: 0;
+    padding: 0;
+
+    &__hint {
+      margin: 0;
+      border-radius: 0;
+      width: calc(~"100% - @{hint-padding} * 2");
+    }
+  }
+}
