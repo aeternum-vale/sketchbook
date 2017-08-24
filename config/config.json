@@ -3,59 +3,60 @@
   "env": "development",
   "mongo": {
     "uri": "mongodb://admin:YgRAbXfz9nNBE6VQV3TCD5VSb29VG39@ds149763.mlab.com:49763/sketchbook",
-    "keepAlive": 120,
-    "useMongoClient": true
+    "options": {
+      "keepAlive": 120,
+      "useMongoClient": true
+    }
+  },
+  "cookie": {
+    "options": {
+      "signed": true,
+      "httpOnly": true
+    },
+    "secret": "/L/c8%*[Mo]-n(#R*G}4U7g33P-a4J*",
+    "session": {
+      "key": "session_id"
+    }
+  },
+  "image": {
+    "preloadEntityCount": 1,
+    "relativeTimeLimitDays": 3
+  },
+  "userdata": {
+    "dir": "./userdata",
+    "image": {
+      "ext": "jpg",
+      "prefix": "image",
+      "minWidth": 300,
+      "minHeight": 300
+    },
+    "preview": {
+      "ext": "jpg",
+      "postfix": "_preview",
+      "size": 300,
+      "quality": 50
+    },
+    "avatar": {
+      "ext": "jpg",
+      "quality": 100,
+      "prefix": "avatar",
+      "big": {
+        "postfix": "_big",
+        "size": 300
+      },
+      "medium": {
+        "postfix": "_medium",
+        "size": 100
+      },
+      "small": {
+        "postfix": "_small",
+        "size": 30
+      }
+    }
+  },
+  "static": {
+    "dir": "./static",
+    "anonAvatar": "anon.svg",
+    "favicon": "favicon.ico"
   }
-},
-"cookie": {
-"options": {
-"signed": true,
-"httpOnly": true
-},
-"secret": "/L/c8%*[Mo]-n(#R*G}4U7g33P-a4J*",
-"session": {
-"key": "session_id"
-}
-},
-"image": {
-"preloadEntityCount": 1,
-"relativeTimeLimitDays": 3
-},
-"userdata": {
-"dir": "./userdata",
-"image": {
-"ext": "jpg",
-"prefix": "image",
-"minWidth": 300,
-"minHeight": 300
-},
-"preview": {
-"ext": "jpg",
-"postfix": "_preview",
-"size": 300,
-"quality": 50
-},
-"avatar": {
-"ext": "jpg",
-"quality": 100,
-"prefix": "avatar",
-"big": {
-"postfix": "_big",
-"size": 300
-},
-"medium": {
-"postfix": "_medium",
-"size": 100
-},
-"small": {
-"postfix": "_small",
-"size": 30
-}
-}
-},
-"static": {
-"dir": "./static",
-"anonAvatar": "anon.svg",
-"favicon": "favicon.ico"
-}
 }
