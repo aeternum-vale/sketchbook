@@ -78,9 +78,8 @@
         <div class="panel comment comment-send image__comment-send"
              data-image-id="">
             <div class="comment__top-side">
-                <div class="comment__avatar"
-                     style="background-image: url('')"></div>
-                <div class="comment__username"></div>
+                <div class="comment__avatar" style="background-image: url('')"></div>
+                <div class="comment__username">anonym</div>
             </div>
 
             <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>
