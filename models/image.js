@@ -55,18 +55,22 @@ imageSchema.post('save', function(doc) {
 
 	co(function*() {
 
-		return new Promise((resolve, reject) => {
-			db.collection('users').update({
-				_id: doc.author
-			}, {
-				$addToSet: {
-					images: doc._id
-				}
-			}, err => {
-				if (err) reject(err);
-				resolve();
-			})
-		});
+        mongoose.connection.on('open', ()=>{
+            return new Promise((resolve, reject) => {
+                db.collection('users').update({
+                    _id: doc.author
+                }, {
+                    $addToSet: {
+                        images: doc._id
+                    }
+                }, err => {
+                    if (err) reject(err);
+                    resolve();
+                })
+            });
+        });
+
+
 
 	}).catch(err => {
 		debug(err);
