@@ -3,7 +3,7 @@
   "env": "development",
   "mongo": {
     "uri": "mongodb://admin:YgRAbXfz9nNBE6VQV3TCD5VSb29VG39@ds149763.mlab.com:49763/sketchbook",
-    "keepAlive": true,
+    "keepAlive": 120,
     "useMongoClient": true
   }
 },
