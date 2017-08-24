@@ -3,9 +3,9 @@
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
 const path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HandlebarsPlugin = require('handlebars-webpack-plugin');
-var config = require('./config');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let HandlebarsPlugin = require('handlebars-webpack-plugin');
+let config = require('./config');
 
 module.exports = {
     context: path.resolve(__dirname, 'frontend', 'pages'),
@@ -97,29 +97,28 @@ module.exports = {
     // }
 
 
-
 };
 
 // KRAKEN
 //
-// module.exports.plugins.push(
-//     new HandlebarsPlugin({
-//         entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
-//         partials: [
-//             path.join(__dirname, "views", "partials", "*.handlebars")
-//         ],
-//         onBeforeAddPartials: function (Handlebars, partialsMap) {
-//             for (let key in partialsMap) {
-//                 let newKey = key.substring(key.indexOf('/') + 1);
-//                 partialsMap[newKey] = partialsMap[key];
-//                 delete partialsMap[key];
-//             }
-//         }
-//     })
-// );
-
 
 if (NODE_ENV == 'production') {
+    module.exports.plugins.push(
+        new HandlebarsPlugin({
+            entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
+            partials: [
+                path.join(__dirname, "views", "partials", "*.handlebars")
+            ],
+            onBeforeAddPartials: function (Handlebars, partialsMap) {
+                for (let key in partialsMap) {
+                    let newKey = key.substring(key.indexOf('/') + 1);
+                    partialsMap[newKey] = partialsMap[key];
+                    delete partialsMap[key];
+                }
+            }
+        })
+    );
+
     module.exports.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {
