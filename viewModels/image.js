@@ -1,5 +1,5 @@
-let Comment = require('models/Comment');
-let User = require('models/User');
+let Comment = require('models/comment');
+let User = require('models/user');
 
 
 let truncatedUserViewModel = require('viewModels/truncatedUser');

@@ -1,6 +1,6 @@
 let getDateString = require('libs/getDateString');
 
-let User = require('models/User');
+let User = require('models/user');
 let co = require('co');
 let truncatedUserViewModel = require('viewModels/truncatedUser');
 
