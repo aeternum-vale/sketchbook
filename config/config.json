@@ -8,7 +8,8 @@
         "socketOptions": {
           "keepAlive": 1
         }
-      }
+      },
+	"useMongoClient": true
     }
   },
   "cookie": {
