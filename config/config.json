@@ -1,5 +1,5 @@
 {
-  "port": 8080,
+  "port": 3000,
   "mongo": {
     "uri": "mongodb://admin:YgRAbXfz9nNBE6VQV3TCD5VSb29VG39@ds149763.mlab.com:49763/sketchbook",
     "options": {
@@ -22,6 +22,7 @@
     "relativeTimeLimitDays": 3
   },
   "userdata": {
+    "accessToken": "ebZ8IBRQcHAAAAAAAAAAhsvtVOy5p1-09XtgRrQztUSjXZ8g5s_9uz-lvlsCSpq4",
     "dir": "./userdata",
     "image": {
       "ext": "jpg",

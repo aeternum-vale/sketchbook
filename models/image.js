@@ -80,6 +80,7 @@ imageSchema.post('save', function (doc) {
 
 imageSchema.post('remove', function (doc) {
     debug('remove: %o', doc);
+    let db = mongoose.connection.db;
 
     co(function*() {
 

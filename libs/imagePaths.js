@@ -1,5 +1,26 @@
 let config = require('config');
 let path = require('path');
+let rp = require('request-promise');
+
+function getTemporaryLink(fileName) {
+    const accessToken = config.get('userdata:accessToken');
+    let options = {
+        method: 'POST',
+        uri: 'https://api.dropboxapi.com/2/files/get_temporary_link',
+        headers: {
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json"
+        },
+        body: {
+            path: `/${fileName}`
+        },
+        json: true
+    };
+
+    return rp(options).then(response => {
+        return response.link;
+    });
+}
 
 function getImageFileNameById(id) {
     return `${config.get('userdata:image:prefix')}${id}.${config.get('userdata:image:ext')}`;
@@ -41,16 +62,15 @@ function getAvatarFileNamesById(id) {
 }
 
 function getImageUrl(id) {
-    return `/${getImageFileNameById(id)}`;
-}
 
+    return getTemporaryLink(getImageFileNameById(id));
+    //return `/${getImageFileNameById(id)}`;
+}
 
 function getImagePreviewUrl(id) {
-
-
-    return `/${getImagePreviewFileNameById(id)}`;
+    return getTemporaryLink(getImagePreviewFileNameById(id));
+   // return `/${getImagePreviewFileNameById(id)}`;
 }
-
 
 module.exports = {
     getImageFileNameById,

@@ -10,7 +10,7 @@ let imagePaths = require('libs/imagePaths');
 let getDateString = require('libs/getDateString');
 let getObjectParticularClone = require('libs/getObjectParticularClone');
 let co = require('co');
-let debug = require('debug')('app:viewModels:image')
+let debug = require('debug')('app:viewModels:image');
 
 module.exports = function(image, loggedUserId) {
     return co(function*() {
@@ -35,9 +35,9 @@ module.exports = function(image, loggedUserId) {
             'username': true
         }).exec();
 
-        let imageViewModel = {
+        return {
             _id: image._id,
-            imgUrl: imagePaths.getImageUrl(image._id),
+            imgUrl: yield imagePaths.getImageUrl(image._id),
             isOwnImage: (loggedUserId === image.author),
             isLiked: !!(~image.likes.indexOf(loggedUserId)),
             description: image.description,
@@ -47,7 +47,5 @@ module.exports = function(image, loggedUserId) {
             comments,
             likes
         };
-
-        return imageViewModel;
     });
 };

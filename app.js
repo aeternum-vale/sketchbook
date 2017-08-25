@@ -88,7 +88,7 @@ app.use(function(err, req, res, next) {
 
 
 insureAllIndexes().then(() => {
-    app.listen(process.env.PORT || app.get('port'), function() {
+    app.listen(process.env.PORT || config.get('port'), function() {
         debug('Express is running on port ' + config.get('port'));
     });
 });

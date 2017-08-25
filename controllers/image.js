@@ -23,8 +23,9 @@ let InvalidImage = require('error').InvalidImage;
 let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 
-
 let uploadDir = path.resolve(config.get('userdata:dir'));
+
+let sendImageToServer = require('libs/sendImageToServer');
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {
@@ -111,6 +112,9 @@ function uploadImageListRequestListener(req, res, next) {
                 resolve();
             });
         });
+
+        yield sendImageToServer(imagePath, imageFileName);
+        yield sendImageToServer(imagePreviewPath, imagePreviewFileName);
 
         return {
             imagePreviewFileName,
@@ -248,7 +252,7 @@ function getFeed(loggedUser) {
             return (a.created < b.created);
         });
 
-        let feed = rawFeed.map(item => imagePreviewViewModel(item));
+        let feed = rawFeed.map(item => yield imagePreviewViewModel(item));
 
         for (let i = 0; i < feed.length; i++)
             feed[i].authorUsername = (yield User.findById(feed[i].author).exec()).username;
