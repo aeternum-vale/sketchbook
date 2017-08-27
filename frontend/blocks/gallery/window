@@ -1,6 +1,8 @@
-<div id="image" class="modal image image_no-description">
+<div id="image" class="modal image_img-element-invisible image image_no-description">
     <div class="image__image-wrapper">
-        <img class="image__img-element">
+        <div id="spinner" class="spinner image__spinner">
+        
+        </div>        <img class="image__img-element">
         <div class="image__controls">
             <div class="image__control image__control-prev icon-arrow-left"></div>
             <div class="image__control image__control-full icon-arrow-maximise"></div>
@@ -79,7 +81,7 @@
              data-image-id="">
             <div class="comment__top-side">
                 <div class="comment__avatar" style="background-image: url('')"></div>
-                <div class="comment__username">anonym</div>
+                <div class="comment__username"></div>
             </div>
 
             <textarea placeholder="share your opinion…" class="comment-send__textarea"></textarea>

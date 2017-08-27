@@ -1,4 +1,5 @@
 node_modules/
+userdata
 start.bat
 .idea/*
 npm-debug.log.*

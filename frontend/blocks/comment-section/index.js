@@ -15,6 +15,9 @@ let CommentSection = function (options) {
     if (this.loggedUserViewModel) {
         this.commentSenderElem.querySelector('.comment__avatar').style.backgroundImage = `url('${this.loggedUserViewModel.avatarUrls.medium}')`;
         this.commentSenderElem.querySelector('.comment__username').textContent = this.loggedUserViewModel.username;
+    } else {
+        this.commentSenderElem.querySelector('.comment__avatar').style.backgroundImage = `url('${ANON_AVATAR_URL}')`;
+        this.commentSenderElem.querySelector('.comment__username').textContent = ANON_NAME;
     }
 
     this.commentSenderElem.onclick = e => {

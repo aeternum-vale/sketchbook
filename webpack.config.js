@@ -78,8 +78,10 @@ module.exports = {
             BLOCKS: JSON.stringify(__dirname + '/frontend/blocks/'),
             LIBS: JSON.stringify(__dirname + '/libs/'),
             PUBLIC: JSON.stringify(__dirname + '/public/'),
-            PRELOAD_IMAGE_COUNT: JSON.stringify(config.get('image:preloadEntityCount'))
-        }),
+            PRELOAD_IMAGE_COUNT: JSON.stringify(config.get('image:preloadEntityCount')),
+            ANON_AVATAR_URL: JSON.stringify(config.get('static:anonAvatarUrl')),
+            ANON_NAME: JSON.stringify(config.get('anonName'))
+        })
 
         // new webpack.optimize.CommonsChunkPlugin({
         //     name: 'common-user',
@@ -87,7 +89,7 @@ module.exports = {
         // })
 
         //new webpack.HotModuleReplacementPlugin()
-    ],
+    ]
 
     // devServer: {
     //     hot: true,
@@ -102,23 +104,23 @@ module.exports = {
 // KRAKEN
 //
 
-if (NODE_ENV == 'production') {
-    module.exports.plugins.push(
-        new HandlebarsPlugin({
-            entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
-            partials: [
-                path.join(__dirname, "views", "partials", "*.handlebars")
-            ],
-            onBeforeAddPartials: function (Handlebars, partialsMap) {
-                for (let key in partialsMap) {
-                    let newKey = key.substring(key.indexOf('/') + 1);
-                    partialsMap[newKey] = partialsMap[key];
-                    delete partialsMap[key];
-                }
-            }
-        })
-    );
 
+    // module.exports.plugins.push(
+    //     new HandlebarsPlugin({
+    //         entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),
+    //         partials: [
+    //             path.join(__dirname, "views", "partials", "*.handlebars")
+    //         ],
+    //         onBeforeAddPartials: function (Handlebars, partialsMap) {
+    //             for (let key in partialsMap) {
+    //                 let newKey = key.substring(key.indexOf('/') + 1);
+    //                 partialsMap[newKey] = partialsMap[key];
+    //                 delete partialsMap[key];
+    //             }
+    //         }
+    //     })
+    // );
+if (NODE_ENV == 'production') {
     module.exports.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
             compress: {

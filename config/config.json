@@ -56,7 +56,8 @@
   },
   "static": {
     "dir": "./static",
-    "anonAvatar": "anon.svg",
-    "favicon": "favicon.ico"
-  }
+    "anonAvatarUrl": "/anon.svg",
+    "faviconUrl": "/favicon.ico"
+  },
+  "anonName": "anonym"
 }

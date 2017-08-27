@@ -34,12 +34,12 @@ UploadAvatarSection.prototype.deleteAvatar = function () {
             this.error(err);
             return;
         }
-        this.avatar.style.backgroundImage = '';
+        this.avatar.style.backgroundImage = `url('${ANON_AVATAR_URL}')`;
     });
 };
 
 UploadAvatarSection.prototype.uploadAvatar = function (file) {
-    var formData = new FormData();
+    let formData = new FormData();
     formData.append("avatar", file);
 
     require(LIBS + 'sendFormData')("/avatar", formData, (err, response) => {
@@ -47,8 +47,6 @@ UploadAvatarSection.prototype.uploadAvatar = function (file) {
             this.error(err);
             return;
         }
-        console.log('done');
-
         this.avatar.style.backgroundImage = `url('${response.url}?${new Date().getTime()}')`;
 
     });

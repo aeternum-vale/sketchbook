@@ -10,45 +10,42 @@ let config = require('config');
  * @return {object}
  */
 
-module.exports = function(user, loggedUserId) {
+module.exports = function (user, loggedUserId) {
 
-	let avatarFileNames;
-	let anonAvatarFileName = config.get('static:anonAvatar');
+    let avatarFileNames;
+    let anonAvatarUrl = config.get('static:anonAvatarUrl');
 
+    if (user.hasAvatar)
+        avatarFileNames = imagePaths.getAvatarFileNamesById(user._id);
 
-	if (user.hasAvatar)
-		avatarFileNames = imagePaths.getAvatarFileNamesById(user._id);
-	else
-        avatarFileNames = {
-			big: anonAvatarFileName,
-			medium: anonAvatarFileName,
-			small: anonAvatarFileName
-		};
-
-	let userViewModel = {
+    let userViewModel = {
         _id: user._id,
-		username: user.username,
-    	name: user.name,
-		surname: user.surname,
-		country: user.country,
-		hasAvatar: user.hasAvatar,
-		description: user.description,
-		created: user.created,
-		links: user.links,
-		subscribers: user.subscribers,
-		subscriptions: user.subscriptions,
-		isNarrator: !!(~user.subscribers.indexOf(loggedUserId)),
-		isLoggedUser: (user._id === loggedUserId),
-		images: user.images,
-		likes: user.likes,
-		comments: user.comments,
-		avatarUrls: {
-			big: `/${avatarFileNames.big}`,
-			medium: `/${avatarFileNames.medium}`,
-			small: `/${avatarFileNames.small}`
-		},
-		url: `/user/${user.username}`
-	};
+        username: user.username,
+        name: user.name,
+        surname: user.surname,
+        country: user.country,
+        hasAvatar: user.hasAvatar,
+        description: user.description,
+        created: user.created,
+        links: user.links,
+        subscribers: user.subscribers,
+        subscriptions: user.subscriptions,
+        isNarrator: !!(~user.subscribers.indexOf(loggedUserId)),
+        isLoggedUser: (user._id === loggedUserId),
+        images: user.images,
+        likes: user.likes,
+        comments: user.comments,
+        avatarUrls: (user.hasAvatar) ? {
+                big: `/${avatarFileNames.big}`,
+                medium: `/${avatarFileNames.medium}`,
+                small: `/${avatarFileNames.small}`
+            } : {
+                big: anonAvatarUrl,
+                medium: anonAvatarUrl,
+                small: anonAvatarUrl
+            },
+        url: `/user/${user.username}`
+    };
 
-	return userViewModel;
+    return userViewModel;
 };

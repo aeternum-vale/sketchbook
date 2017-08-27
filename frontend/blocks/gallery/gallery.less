@@ -14,7 +14,7 @@
 @image-preview-transition-duration: .18s;
 @image-preview-designation-size: 14px;
 @image-preview-info-board-padding: 20px;
-@image-preview-text-shadow-blur: @global-notable-blur-size;
+@image-preview-text-shadow-space: @global-notable-blur-size;
 
 .image-preview {
   display: block;
@@ -102,10 +102,12 @@
 
   &__upload-date-section {
     overflow: hidden;
+    padding-top: @image-preview-text-shadow-space;
+    padding-bottom: @image-preview-text-shadow-space;
   }
 
   &__upload-date-text {
-    transform: translate(0, @image-preview-designation-size);
+    transform: translate(0, @image-preview-designation-size + 2 * @image-preview-text-shadow-space);
     transition: transform @image-preview-transition-duration linear 0s;
   }
 
@@ -126,19 +128,18 @@
     justify-content: flex-start;
 
     height: @image-preview-designation-size;
-
-    padding: @image-preview-text-shadow-blur;
+    padding: @image-preview-text-shadow-space;
 
     overflow: hidden;
   }
 
   &__designation-text {
-    margin-top: @image-preview-text-shadow-blur;
+    margin-top: @image-preview-text-shadow-space;
   }
 
   &__like-number,
   &__comment-number {
-    padding: @image-preview-text-shadow-blur 0;
+    padding: @image-preview-text-shadow-space 0;
     margin-right: 1px;
   }
 
@@ -149,7 +150,7 @@
   }
 
   &__designation-symbol {
-    margin-bottom: @image-preview-text-shadow-blur;
+    margin-bottom: @image-preview-text-shadow-space;
   }
 
   &__designation-text,
@@ -171,7 +172,7 @@
   }
 
   &__username {
-    margin-top: @image-preview-text-shadow-blur * 2;
+    margin-top: @image-preview-text-shadow-space;
   }
 
   &:hover &__info-board {
@@ -179,10 +180,10 @@
   }
 
   &:hover &__designation-text {
-    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-blur);
+    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-space);
   }
   &:hover &__designation-symbol {
-    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-blur);
+    transform: translateY(-@image-preview-designation-size - 2 * @image-preview-text-shadow-space);
   }
 
   &:hover &__picture {

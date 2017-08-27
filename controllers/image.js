@@ -35,11 +35,9 @@ function imageRequestListener(req, res, next) {
         if (!rawImage)
             throw new HttpError(404, "Image not found");
 
-        let image = yield imageViewModel(rawImage, res.loggedUser && res.loggedUser._id);
-        return image;
+        return imageViewModel(rawImage, res.loggedUser && res.loggedUser._id);
     }).then(image => {
 
-        res.locals.anonAvatar = `/${config.get('static:anonAvatar')}`;
         res.locals.image = image;
         res.locals.page = 'image';
 

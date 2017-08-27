@@ -202,11 +202,8 @@ Gallery.prototype.setElem = function () {
                         data: this.currentImageId
                     });
 
-                    console.log(this.userSubscribeButton);
-
                     if (this.userSubscribeButton)
                         SwitchButton.setRelation(this.subscribeButton, this.userSubscribeButton);
-
 
                     this.subscribeButton.on('switch-button_changed', e => {
                         let involvedImageId = e.detail.imageId;
