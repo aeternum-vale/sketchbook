@@ -31,11 +31,6 @@
     text-align: center;
   }
 
-  &__caption:first-child {
-    margin-top: @settings-section-padding;
-    padding-top: 0;
-  }
-
   &__section {
     display: flex;
     flex-direction: column;
@@ -59,28 +54,62 @@
     margin-bottom: 20px;
   }
 
+  @media (max-width: @global-small-screen-width) {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
   @media (max-width: @global-xsmall-screen-width) {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .upload-avatar-section {
+      align-items: center;
+    }
+
+    .upload-avatar-section__controls {
+      justify-content: space-between;
+      height: @upload-avatar-section-avatar-size;
+      margin: 0;
+    }
+
+    .upload-avatar-section .upload-avatar-section__avatar {
+      .avatar(@global-small-size-ratio * @upload-avatar-section-avatar-size);
+    }
+
+    .upload-avatar-section .file-picker {
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 0;
+      width: 100%;
+    }
+
+    .upload-avatar-section .button {
+      margin: 0;
+      width: 100%;
+    }
+
     &__section {
       width: 100%;
       max-width: none;
     }
-
 
     &__caption {
       padding-right: @settings-small-offset;
       padding-left: @settings-small-offset;
     }
 
+    &__section:first-child {
+      margin-top: @settings-section-padding;
+      padding-top: 0;
+    }
 
     .textbox {
       width: 100%;
-      border-radius: 0;
     }
 
     .textbox::before {
       width: 100%;
-      border-radius: 0;
-
     }
 
     .textbox__field {
@@ -89,7 +118,6 @@
 
     &__social-collection {
       width: 100%;
-
     }
 
     &__social-collection .social__close {
@@ -105,21 +133,12 @@
       width: 100%;
     }
 
-    &__social-collection .button {
-      border-radius: 0;
-    }
-
     &__social-collection .textbox-button__textbox-wrapper {
       width: calc(~"100% - @{textbox-button-button-width}");
     }
 
     .social-collection__textbox-button {
       width: 100%;
-    }
-
-    &__add-button,
-    &__save-button {
-      margin-left: @settings-small-offset;
     }
 
   }

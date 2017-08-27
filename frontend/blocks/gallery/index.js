@@ -511,9 +511,8 @@ Gallery.prototype.insertNewImagePreview = function (imageId, previewUrl) {
     newImagePreview.href = `/image/${imageId}`;
     newImagePreview.querySelector('.image-preview__picture').style.backgroundImage = `url('/${previewUrl}')`;
 
-    previewImageElem.querySelector('.image-preview__comment-number').textContent = 0;
-    previewImageElem.querySelector('.image-preview__like-number').textContent = 0;
-
+    newImagePreview.querySelector('.image-preview__comment-number').textContent = 0;
+    newImagePreview.querySelector('.image-preview__like-number').textContent = 0;
 
     this.galleryWrapper.appendChild(newImagePreview);
 

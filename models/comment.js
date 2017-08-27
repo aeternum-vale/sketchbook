@@ -8,7 +8,6 @@ let path = require('path');
 
 let debug = require('debug')('app:comment:model');
 
-let db = mongoose.connection.db;
 
 let commentSchema = new Schema({
 
@@ -44,7 +43,10 @@ commentSchema.plugin(autoIncrement.plugin, {
 });
 
 commentSchema.post('save', function(doc) {
-	co(function*() {
+
+    let db = mongoose.connection.db;
+
+    co(function*() {
 		debug('save: %o', doc);
 
 		yield new Promise((resolve, reject) => {
@@ -81,7 +83,10 @@ commentSchema.post('save', function(doc) {
 });
 
 commentSchema.post('remove', function(doc) {
-	co(function*() {
+    let db = mongoose.connection.db;
+
+
+    co(function*() {
 		debug('remove: %o', doc);
 
 		yield new Promise((resolve, reject) => {

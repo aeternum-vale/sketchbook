@@ -23,6 +23,7 @@
 
 @authorization-big-number: 1000;
 @authorization-logotype-height: 37px;
+@authorization-logotype-ratio: 6.97;
 
 .authorization {
 
@@ -83,9 +84,8 @@
     animation: authorization-down-moving-left ~"@{authorization-ma-down-length}s" linear 0s @authorization-big-number;
   }
 
-
   &__right-pic:nth-child(2) {
-    animation: authorization-up-moving-right ~"@{authorization-ma-up-length}s" linear  ~"@{authorization-ma-right-up-delay}s" @authorization-big-number;
+    animation: authorization-up-moving-right ~"@{authorization-ma-up-length}s" linear ~"@{authorization-ma-right-up-delay}s" @authorization-big-number;
     opacity: 0;
   }
 
@@ -115,16 +115,115 @@
   }
 
   &__logo {
-    @_ratio: 6.97;
 
     display: block;
     height: @authorization-logotype-height;
-    width: @_ratio * @authorization-logotype-height;
+    width: @authorization-logotype-ratio * @authorization-logotype-height;
 
     background-image: url('./logotype.png');
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
   }
+
+  @media (max-width: @global-small-screen-width) {
+    position: relative;
+
+    display: table;
+    width: 100%;
+    height: 100%;
+
+
+
+    &__wrapper:first-child {
+      display: none;
+    }
+
+    &__wrapper:last-child {
+      display: table-cell;
+      vertical-align: middle;
+
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      flex-shrink: 0;
+
+      box-sizing: border-box;
+      padding: @global-small-screen-content-padding;
+    }
+
+    &__auth-window {
+      // width: calc(~"100% - 2 * @{global-small-screen-content-padding}");
+      width: 100%;
+      min-width: 0;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    &__auth-window div.window__panel {
+      //overflow: auto;
+    }
+
+    &__vert-line {
+      width: 100%;
+    }
+
+    &__auth-window-shadow,
+    &__auth-window-shadow_up,
+    &__left-pic-wrapper,
+    &__right-pic-wrapper {
+      display: none;
+    }
+
+    &__logo {
+      flex-shrink: 0;
+      position: relative;
+      width: @global-small-size-ratio * (@authorization-logotype-ratio * @authorization-logotype-height);
+      margin-top: @global-small-size-ratio * @authorization-logo-offset;
+      margin-right: auto;
+      margin-left: auto;
+      background-size: contain;
+    }
+
+    .textbox {
+      width: 100%;
+    }
+
+    .textbox::before {
+      width: 100%;
+    }
+
+    .textbox__field {
+      width: calc(~"100% - 2 * @{textbox-field-border}");
+    }
+
+    form.window__panel {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      //height: 100%;
+      padding: @auth-window-panel-padding;
+    }
+
+  }
+
+  @media (max-width: @global-xsmall-screen-width) {
+
+    .textbox__caption {
+      font-size: @global-small-size-ratio * @textbox-caption-font-size;
+      line-height: @global-small-size-ratio * @textbox-caption-font-size;
+    }
+    .textbox__error {
+      //position: absolute;
+      //right: 0;
+      //max-width: 50%;
+      font-size: @global-small-size-ratio * @textbox-caption-font-size;
+    }
+
+  }
+
 }
 
 @keyframes authorization-up-moving-left {

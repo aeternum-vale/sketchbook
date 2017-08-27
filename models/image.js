@@ -10,8 +10,6 @@ let path = require('path');
 let debug = require('debug')('app:image:model');
 let imagePaths = require('libs/imagePaths');
 
-let db = mongoose.connection.db;
-
 let imageSchema = new Schema({
 
     description: {

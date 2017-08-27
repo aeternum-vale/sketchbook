@@ -26,7 +26,8 @@
   &__arrow {
     width: 0;
     height: 0;
-    margin: 0 10px;
+    margin-right: 10px;
+    margin-left: 5px;
     border-style: solid;
     border-width: 6px 6px 0 6px;
     border-color: @global-main-color-light transparent transparent transparent;
@@ -45,7 +46,7 @@
     content: "";
     display: block;
     position: absolute;
-    z-index: 6;
+    //z-index: 6;
     left: (@user-menu-avatar-size - @user-menu-avatar-border-size * 2) / 2 - @user-menu-dropdown-arrow-width / 2;
     bottom: -( (@page-header-height - @user-menu-avatar-size) / 2 + @user-menu-dropdown-arrow-height + @page-header-border-width);
     width: 0;
@@ -53,8 +54,6 @@
     border-style: solid;
     border-width: 0 8px 10px 8px; //16 x 10
     border-color: transparent transparent @global-main-color-light transparent;
-
-
 
     animation: @dropdown-animation;
   }

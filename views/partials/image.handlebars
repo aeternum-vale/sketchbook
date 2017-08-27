@@ -1,6 +1,9 @@
-<div id="image" class="modal image{{#unless image.description}} image_no-description{{/unless}}"{{#if image}}
+<div id="image" class="modal image_img-element-invisible image{{#unless image.description}} image_no-description{{/unless}}"{{#if image}}
      data-author-url={{image.author.url}} data-id={{image._id}}{{/if}}>
     <div class="image__image-wrapper">
+        {{> spinner
+                parent="image"
+        }}
         <img class="image__img-element"{{#if image}} src="{{image.imgUrl}}"{{/if}}>
         <div class="image__controls">
             <div class="image__control image__control-prev icon-arrow-left"></div>
@@ -82,7 +85,8 @@
         <div class="panel comment comment-send image__comment-send"
              data-image-id="{{image._id}}">
             <div class="comment__top-side">
-                <div class="comment__avatar" style="background-image: url('{{#if loggedUser}}{{loggedUser.avatarUrls.medium}} {{else}}{{anonAvatar}}{{/if}}')"></div>
+                <div class="comment__avatar" style="background-image: url('{{#if
+                        loggedUser}}{{loggedUser.avatarUrls.medium}} {{else}}{{anonAvatar}}{{/if}}')"></div>
                 <div class="comment__username">{{#if loggedUser}}{{loggedUser.username}}{{else}}anonym{{/if}}</div>
             </div>
 

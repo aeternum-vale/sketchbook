@@ -675,39 +675,6 @@ a:hover {
   color: red;
   font-size: 18px;
 }
-.spinner {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background-image: url(/e879d7f68ad5a26a62e5cfb21afde1f5.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  -webkit-animation: spinner-rotating 1s linear infinite;
-          animation: spinner-rotating 1s linear infinite;
-}
-.spinner_invisible {
-  display: none;
-}
-@-webkit-keyframes spinner-rotating {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-@keyframes spinner-rotating {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .modal {
   position: absolute;
 }
@@ -767,11 +734,12 @@ a:hover {
   top: 20px;
   right: -40px;
   font-size: 30px;
-  opacity: .66;
+  opacity: 0.33;
   cursor: pointer;
+  transition: opacity 0.1s linear 0s;
 }
 .modal:hover .modal-close-button {
-  opacity: .33;
+  opacity: 0.33;
 }
 .modal:hover .modal-close-button:hover {
   opacity: 1;
@@ -939,7 +907,7 @@ a:hover {
   font-size: 14px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity .1s linear 0s;
+  transition: opacity 0.1s linear 0s;
 }
 .comment:hover .comment__close-button {
   opacity: .5;
@@ -1032,6 +1000,95 @@ a:hover {
   padding-top: 10px;
   padding-bottom: 6px;
 }
+/*//@spinner-circle-count: 10;
+//@spinner-circle-size: 30px;
+//@spinner-start-angle: -(pi() / 2);
+//@spinner-radius: @spinner-size / 2 - @spinner-circle-size / 2;
+
+//.generate-circle(@i: 0) when (@i =< @spinner-circle-count) {
+//  @first-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * @i;
+//  @j: mod(@i + 3, @spinner-circle-count);
+//  @second-angle: @spinner-start-angle + pi() * 2 / @spinner-circle-count * @j;
+//
+//  @child: @i + 1;
+//  @sign: 2 * mod(@i, 2) - 1;
+//
+//  @sx1: @spinner-radius + cos(@first-angle) * @spinner-radius + @spinner-circle-size / 2;
+//  @sy1: @spinner-radius + sin(@first-angle) * @spinner-radius + @spinner-circle-size / 2;
+//
+//  @sx2: @spinner-radius + cos(@second-angle) * @spinner-radius + @spinner-circle-size / 2;
+//  @sy2: @spinner-radius + sin(@second-angle) * @spinner-radius + @spinner-circle-size / 2;
+//
+//  @tox: (@sx1 + @sx2) / 2 - (@spinner-radius + cos(@first-angle) * @spinner-radius);
+//  @toy: (@sy1 + @sy2) / 2 - (@spinner-radius + sin(@first-angle) * @spinner-radius);
+//
+//
+//
+//  @keyframes ~"spinner-circle-@{i}-moving" {
+//
+//    0% {
+//      transform: rotate(0)
+//    }
+//
+//
+//    50% {
+//      transform: rotate(180deg * @sign)
+//    }
+//
+//
+//    100% {
+//      transform: rotate(360deg * @sign)
+//    }
+//  }
+//
+//  .spinner__circle:nth-child(@{child}) {
+//
+//    transform-origin: @tox @toy;
+//
+//    left: @spinner-radius + cos(@first-angle) * @spinner-radius;
+//    top: @spinner-radius +  sin(@first-angle) * @spinner-radius;
+//
+//    @delay: 0s;//@i * .1s;
+//    //cubic-bezier(0.5, 0, 0.5, 1)
+//    animation: ~"spinner-circle-@{i}-moving" 4s cubic-bezier(0.5, 0, 0.5, 1) @delay infinite;
+//  }
+//
+//  .generate-circle(@i + 1);
+//}
+//.generate-circle();*/
+.spinner {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-image: url(/e879d7f68ad5a26a62e5cfb21afde1f5.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-animation: spinner-rotating 1s linear infinite;
+          animation: spinner-rotating 1s linear infinite;
+}
+.spinner_invisible {
+  display: none;
+}
+@-webkit-keyframes spinner-rotating {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes spinner-rotating {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .image {
   position: relative;
   display: -webkit-box;
@@ -1054,20 +1111,20 @@ a:hover {
 .image__modal-close-button-wrapper {
   position: absolute;
   top: 0;
-  right: -30px;
-  width: auto;
+  right: -40px;
+  width: 40px;
   max-width: 40px;
   height: 100%;
 }
 .image__modal-close-button {
   position: relative;
-  left: 0;
+  left: 10px;
   font-size: 20px;
   width: 20px;
   height: 20px;
 }
 .image__modal-close-button-wrapper:hover .image__modal-close-button {
-  opacity: .66;
+  opacity: 0.66;
 }
 .image__controls {
   position: absolute;
@@ -1081,6 +1138,7 @@ a:hover {
   -ms-flex-item-align: end;
       align-self: flex-end;
   padding-bottom: 10px;
+  z-index: 3;
 }
 .image__control {
   display: -webkit-box;
@@ -1102,16 +1160,16 @@ a:hover {
   background-color: #000;
   font-size: 50px;
   opacity: 0;
-  transition: opacity .1s linear 0s;
+  transition: opacity 0.1s linear 0s;
 }
 .image__image-wrapper:hover .image__control {
-  opacity: .3;
+  opacity: 0.33;
 }
 .image__image-wrapper .image__controls:hover .image__control {
-  opacity: .45;
+  opacity: 0.495;
 }
 .image__image-wrapper .image__controls .image__control:hover {
-  opacity: .6;
+  opacity: 0.66;
 }
 .image__control:last-child {
   margin-right: 0;
@@ -1143,6 +1201,7 @@ a:hover {
           flex-grow: 0;
   max-width: 100%;
   max-height: 100%;
+  z-index: 2;
 }
 .image_img-element-invisible .image__img-element {
   visibility: hidden;
@@ -1337,6 +1396,11 @@ a:hover {
       flex-shrink: 0;
   border-bottom-right-radius: 10px;
 }
+.image__spinner {
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+}
 .image_invisible {
   display: none;
 }
@@ -1356,22 +1420,29 @@ a:hover {
     -ms-flex-negative: 0;
         flex-shrink: 0;
   }
+  .image__image-wrapper:hover .image__control {
+    opacity: 1;
+  }
+  .image__image-wrapper .image__controls:hover .image__control {
+    opacity: 1;
+  }
+  .image__image-wrapper .image__controls .image__control:hover {
+    opacity: 1;
+  }
   .image__controls {
     padding-bottom: 0;
   }
   .image__control {
     height: 50px;
     margin-right: 0;
-    border-top: solid 2px #fff;
-    border-left: solid 2px #fff;
     border-bottom: 0;
     border-right: 0;
     border-radius: 0;
-    opacity: .3;
+    opacity: 1;
     font-size: 25px;
-  }
-  .image__control:last-child {
-    border-right: solid 2px #fff;
+    background-color: transparent;
+    border: none;
+    text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.18), 0 -1px 2px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.18), -1px 0 2px rgba(0, 0, 0, 0.18), 1px 0 2px rgba(0, 0, 0, 0.18), -1px 0 2px rgba(0, 0, 0, 0.18), 1px 0 2px rgba(0, 0, 0, 0.18), -1px -1px 2px rgba(0, 0, 0, 0.18), 1px -1px 2px rgba(0, 0, 0, 0.18), -1px 1px 2px rgba(0, 0, 0, 0.18), 1px 1px 2px rgba(0, 0, 0, 0.18), -1px -1px 2px rgba(0, 0, 0, 0.18), 1px -1px 2px rgba(0, 0, 0, 0.18), -1px 1px 2px rgba(0, 0, 0, 0.18), 1px 1px 2px rgba(0, 0, 0, 0.18);
   }
   .image__modal-close-button-wrapper {
     right: 20px;
@@ -1382,6 +1453,15 @@ a:hover {
   .image__modal-close-button {
     left: 0;
     top: 0;
+    z-index: 3;
+    text-shadow: 0 -1px 2px rgba(0, 0, 0, 0.18), 0 -1px 2px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.18), 0 1px 2px rgba(0, 0, 0, 0.18), -1px 0 2px rgba(0, 0, 0, 0.18), 1px 0 2px rgba(0, 0, 0, 0.18), -1px 0 2px rgba(0, 0, 0, 0.18), 1px 0 2px rgba(0, 0, 0, 0.18), -1px -1px 2px rgba(0, 0, 0, 0.18), 1px -1px 2px rgba(0, 0, 0, 0.18), -1px 1px 2px rgba(0, 0, 0, 0.18), 1px 1px 2px rgba(0, 0, 0, 0.18), -1px -1px 2px rgba(0, 0, 0, 0.18), 1px -1px 2px rgba(0, 0, 0, 0.18), -1px 1px 2px rgba(0, 0, 0, 0.18), 1px 1px 2px rgba(0, 0, 0, 0.18);
+    opacity: 1;
+  }
+  .image:hover .image__modal-close-button {
+    opacity: 1;
+  }
+  .image__modal-close-button-wrapper:hover .image__modal-close-button {
+    opacity: 1;
   }
   .image__image-wrapper {
     -ms-flex-negative: 0;
@@ -1433,4 +1513,4 @@ a:hover {
   }
 }
 
-/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW1hZ2UuY3NzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Iiwic291cmNlUm9vdCI6IiJ9*/
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW1hZ2UuY3NzIiwic291cmNlcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OzsiLCJzb3VyY2VSb290IjoiIn0=*/

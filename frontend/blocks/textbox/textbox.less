@@ -2,6 +2,7 @@
 @textbox-field-height: 42px;
 @textbox-field-border: 3px;
 @textbox-field-border-radius: 8px;
+@textbox-error-font-size: 11px;
 @textbox-caption-gap: 10px;
 @textbox-caption-font-size: @medium-font-size;
 @textbox-width: @textbox-field-width + @textbox-field-border * 2;
@@ -63,6 +64,7 @@
     align-items: flex-end;
 
     white-space: nowrap;
+
   }
 
   &_no-caption {
@@ -95,7 +97,7 @@
   &__error {
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 11px;
+    font-size: @textbox-error-font-size;
     color: #e61b05;
 
   }

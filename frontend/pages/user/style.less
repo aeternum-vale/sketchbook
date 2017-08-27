@@ -106,7 +106,6 @@
     margin-top: @passport-text-gap;
   }
 
-
   &__link:hover {
     color: @global-main-color-light;
   }
@@ -125,6 +124,10 @@
 
   @media (max-width: @global-small-screen-width) {
 
+    &__wrapper {
+      padding: 0;
+    }
+
     &__backdrop {
       width: 100%
     }
@@ -132,7 +135,6 @@
     &__backdrop-side {
       display: none;
     }
-
 
     &__avatar {
       margin: @passport-small-text-gap;
@@ -175,7 +177,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  //z-index: 2;
 
   border-top: solid @page-header-border-width #000;
 
@@ -191,8 +193,12 @@
   }
 
   @media (max-width: @global-small-screen-width) {
-    &__wrapper {
-      padding: 0 @global-small-screen-content-padding;
+
+  }
+
+  @media (max-width: @global-xsmall-screen-width) {
+    &__button {
+      .button(@global-small-size-ratio * 16px);
     }
   }
 

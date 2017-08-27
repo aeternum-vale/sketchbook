@@ -16,17 +16,17 @@
   height: @modal-close-button-size;
   top: @window-header-height / 2 - @modal-close-button-size / 2;
   right: -@modal-close-button-size - @modal-close-button-gap;
-
-
   font-size: @modal-close-button-size;
-  opacity: .66;
+  opacity: @global-opacity-low;
   cursor: pointer;
+  transition: @global-close-button-transition;
+
 
   .modal:hover & {
-    opacity: .33;
+    opacity: @global-opacity-low;
   }
 
   .modal:hover &:hover {
-    opacity: 1;
+    opacity: @global-opacity-high;
   }
 }

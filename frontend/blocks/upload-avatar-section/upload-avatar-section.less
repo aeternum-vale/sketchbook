@@ -1,15 +1,19 @@
 @import "../button/button.less";
 
+@upload-avatar-section-avatar-size: 120px;
+
 .upload-avatar-section {
 
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  justify-content: space-around;
 
   max-width: inherit;
+  width: 100%;
 
   &__avatar {
-    .avatar(120px);
+    .avatar(@upload-avatar-section-avatar-size);
     flex-shrink: 1;
     position: relative;
     height: auto;

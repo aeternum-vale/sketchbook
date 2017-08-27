@@ -82,7 +82,6 @@ ImageCommentSection.prototype.update = function () {
 
     this.infoBoardHeight = this.infoBoard.offsetHeight;
 
-
     let computedStyle = getComputedStyle(this.infoBoard);
     parseFloat(computedStyle.height) && (this.infoBoardHeight = parseFloat(computedStyle.height));
 

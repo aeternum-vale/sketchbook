@@ -252,7 +252,13 @@ function getFeed(loggedUser) {
             return (a.created < b.created);
         });
 
-        let feed = rawFeed.map(item => yield imagePreviewViewModel(item));
+        let feed = [];
+        for (let i = 0; i < rawFeed.length; i++)
+            feed.push(yield imagePreviewViewModel(rawFeed[i]));
+
+        //     rawFeed.map(item => {
+        //     return (yield imagePreviewViewModel(item));
+        // });
 
         for (let i = 0; i < feed.length; i++)
             feed[i].authorUsername = (yield User.findById(feed[i].author).exec()).username;

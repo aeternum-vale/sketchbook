@@ -62,23 +62,26 @@ function userProfileRequestListener(req, res, next) {
         if (!pageUser)
             throw new HttpError(404, 'this user doesn\'t exist');
 
-        let gallery = [];
+        let previewGalleryPromises = [];
 
+        // for (let i = 0; i < pageUser.images.length; i++)
+        //     previewGallery.push(yield imagePreviewViewModel(pageUser.images[i]));
         for (let i = 0; i < pageUser.images.length; i++)
-            gallery.push(yield imageViewModel(pageUser.images[i], res.loggedUser && res.loggedUser._id));
+            previewGalleryPromises.push(imagePreviewViewModel(pageUser.images[i]));
+
+        let previewGallery = yield Promise.all(previewGalleryPromises);
+
 
         return {
             pageUser,
-            gallery
+            previewGallery
         };
 
     }).then(result => {
         res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser && res.loggedUser._id);
         res.locals.page = 'user';
 
-        res.locals.pageUser.images = res.locals.pageUser.images.map(
-            image => imagePreviewViewModel(image)
-        );
+        res.locals.pageUser.images = result.previewGallery;
 
         res.render('user');
     }).catch(err => {
@@ -197,9 +200,12 @@ function authorizationRequestListener(req, res, next) {
             .limit(backgroundImageCount)
             .exec();
 
-        return backgroundRawImages.map(item => imagePaths.getImageUrl(item._id));
-        //TODO not very random
+        let backgroundImagesUrlPromises = [];
+        for (let i = 0; i < backgroundRawImages.length; i++)
+            backgroundImagesUrlPromises.push(imagePaths.getImageUrl(backgroundRawImages[i]._id));
 
+        return Promise.all(backgroundImagesUrlPromises);
+        //TODO this is not very random
 
     }).then(backgroundImagesUrls => {
         res.locals.images = JSON.stringify(backgroundImagesUrls);
@@ -424,8 +430,6 @@ function cutawayRequestListener(req, res, next) {
     });
 
 }
-
-
 
 
 function homeRequestListener(req, res, next) {

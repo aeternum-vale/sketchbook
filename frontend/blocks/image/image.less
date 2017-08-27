@@ -4,6 +4,7 @@
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/comment-section/comment-section.less";
 @import "../../blocks/like-button/like-button.less";
+@import "../../blocks/spinner/style.less";
 
 @image-owner-avatar-size: 45px;
 @image-header-height: 70px;
@@ -42,15 +43,15 @@
     position: absolute;
     //top: @window-header-height / 2 - @modal-close-button-size / 2;
     top: 0;
-    right: -@modal-close-button-size;
-    width: auto;
+    right: -(@image-close-button-size + @image-modal-close-button-gap * 2);
+    width: @image-close-button-size + @image-modal-close-button-gap * 2;
     max-width: @image-close-button-size + @image-modal-close-button-gap * 2;
     height: 100%;
   }
 
   &__modal-close-button {
     position: relative;
-    left: 0;
+    left: @image-modal-close-button-gap;
     font-size: @image-close-button-size;
     width: @image-close-button-size;
     height: @image-close-button-size;
@@ -58,7 +59,7 @@
   }
 
   &__modal-close-button-wrapper:hover &__modal-close-button {
-    opacity: .66;
+    opacity: @global-opacity-medium;
   }
 
   &__controls {
@@ -67,6 +68,7 @@
     flex-direction: row;
     align-self: flex-end;
     padding-bottom: 10px;
+    z-index: 3;
   }
   &__control {
     display: flex;
@@ -87,19 +89,19 @@
 
     opacity: 0;
 
-    transition: opacity .1s linear 0s;
+    transition: @global-close-button-transition;;
   }
 
   &__image-wrapper:hover &__control {
-    opacity: .3;
+    opacity: @global-opacity-low;
   }
 
   &__image-wrapper &__controls:hover &__control {
-    opacity: .45;
+    opacity: (@global-opacity-low + @global-opacity-medium) / 2;
   }
 
   &__image-wrapper &__controls &__control:hover {
-    opacity: .6;
+    opacity: @global-opacity-medium;
   }
 
   &__control:last-child {
@@ -119,11 +121,14 @@
     background-color: #000;
   }
   &__img-element {
+    //position: absolute;
     flex-shrink: 0;
     flex-grow: 0;
 
     max-width: 100%;
     max-height: 100%;
+
+    z-index: 2;
   }
 
   &_img-element-invisible &__img-element {
@@ -285,9 +290,18 @@
     border-bottom-right-radius: @image-border-radius;
   }
 
+  &__spinner {
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+  }
+
+
   &_invisible {
     display: none;
   }
+
+
 
   //small-------------------
 
@@ -305,6 +319,19 @@
 
     flex-shrink: 0;
 
+
+    &__image-wrapper:hover &__control {
+      opacity: @global-opacity-high;
+    }
+
+    &__image-wrapper &__controls:hover &__control {
+      opacity: @global-opacity-high;
+    }
+
+    &__image-wrapper &__controls &__control:hover {
+      opacity: @global-opacity-high;
+    }
+
     &__controls {
       padding-bottom: 0;
     }
@@ -312,18 +339,16 @@
     &__control {
       height: 50px;
       margin-right: 0;
-      border-top: solid 2px #fff;
-      border-left: solid 2px #fff;
       border-bottom: 0;
       border-right: 0;
       border-radius: 0;
-      opacity: .3;
+      opacity: @global-opacity-high;
 
       font-size: 25px;
-    }
+      background-color: transparent;
+      border: none;
 
-    &__control:last-child {
-      border-right: solid 2px #fff;
+      .notable();
     }
 
     &__modal-close-button-wrapper {
@@ -336,7 +361,21 @@
     &__modal-close-button {
       left: 0;
       top: 0;
+      z-index: 3;
+      .notable();
+
+      opacity: @global-opacity-high;
     }
+
+
+    &:hover &__modal-close-button {
+      opacity: @global-opacity-high;
+    }
+
+    &__modal-close-button-wrapper:hover &__modal-close-button {
+      opacity: @global-opacity-high;
+    }
+
 
     &__image-wrapper {
       flex-shrink: 0;
@@ -398,6 +437,7 @@
       min-width: 0;
       border-radius: 0;
     }
+
 
   }
 

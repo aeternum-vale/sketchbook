@@ -12,6 +12,7 @@
 @cutaway-header-padding: 6px;
 @cutaway-avatar-size: 54px;
 @cutaway-button-font-size: 21px;
+@cutaway-button-small-font-size: @global-small-size-ratio * @cutaway-button-font-size;
 @cutaway-button-height: @cutaway-button-font-size + (@cutaway-button-font-size / @button-padding-reduc-rate) * 2;
 @cutaway-header-padding-right: (@cutaway-avatar-size + @cutaway-header-padding * 2 - @cutaway-button-height) / 2;
 @cutaway-width: 500px;
@@ -92,6 +93,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    overflow: hidden;
   }
   &__avatar {
     .avatar(@cutaway-avatar-size);
@@ -174,26 +177,22 @@
     width: 100%;
     flex-shrink: 1;
     min-width: 0;
-
-    border-radius: 0;
-    & .header {
-      border-top-right-radius: 0;
-      border-top-left-radius: 0;
-    }
-
-    &__outer-panel,
-    &__inner-panel,
-    & .panel {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
   }
 
   @media (max-width: @global-xsmall-screen-width) {
     &__username {
       font-size: @large-font-size-xsmall-screen;
     }
+
+    &__subscribe-button {
+      .button(@cutaway-button-small-font-size);
+    }
+
+    &__avatar {
+      .avatar(@global-small-size-ratio * @cutaway-avatar-size);
+      margin-right: @global-small-size-ratio *  @cutaway-header-padding;
+    }
+
   }
 
 }
