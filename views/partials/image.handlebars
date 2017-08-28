@@ -40,10 +40,8 @@
 
 
             <div class="image__info-board">
-                <div{{#if image}} data-like-amount="{{image.likes.length}}"{{/if}}
-                    {{#if image.isLiked}} data-active="true"{{/if}} class="button like-button image__like-button">
-                    like {{image.likes.length}}
-                </div>
+
+                {{> like-button}}
 
                 <div class="image__description">
                     {{image.description}}
@@ -54,7 +52,11 @@
 
             <div class="image__comment-section-wrapper image_no-scrollbar">
                 <div class="comment-section image__comment-section">
+                    <div class="comment-section__no-comments-block">
+                        There are no comments yet
+                    </div>
                     <div class="comment-section__comments-wrapper">
+
                         {{#if image.comments}}
                             {{#each image.comments}}
                                 {{> comment
@@ -78,7 +80,6 @@
                 </div>
 
             </div>
-
 
         </div>
 

@@ -33,11 +33,15 @@
 
 
             <div class="image__info-board">
-                <div
-                     class="button like-button image__like-button">
-                    like 
-                </div>
 
+                <div
+                
+                     class="button like-button image__like-button">
+                    <div class="like-button__heart icon-heart"></div>
+                    <div class="like-button__heart icon-heart-outlined"></div>
+                    &nbsp;like&nbsp;
+                    <span class="like-button__like-amount"></span>
+                </div>
                 <div class="image__description">
                     
                 </div>
@@ -47,7 +51,11 @@
 
             <div class="image__comment-section-wrapper image_no-scrollbar">
                 <div class="comment-section image__comment-section">
+                    <div class="comment-section__no-comments-block">
+                        There are no comments yet
+                    </div>
                     <div class="comment-section__comments-wrapper">
+
                             <div class="panel comment comment-section__comment comment_ghost" data-id="">
                                 <div class="comment__top-side">
                                     <a class="comment__ref" href="">
@@ -74,13 +82,12 @@
 
             </div>
 
-
         </div>
 
         <div class="panel comment comment-send image__comment-send"
              data-image-id="">
             <div class="comment__top-side">
-                <div class="comment__avatar" style="background-image: url('')"></div>
+                <div class="comment__avatar"></div>
                 <div class="comment__username"></div>
             </div>
 

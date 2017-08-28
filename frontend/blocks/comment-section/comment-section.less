@@ -10,6 +10,18 @@
   &__comment:last-child {
     border-bottom: none;
   }
+
+  &__no-comments-block {
+    display: none;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: @small-font-size;
+  }
+
+  &_no-comments &__no-comments-block {
+    display: block;
+  }
+
 }
 
 .comment-send {

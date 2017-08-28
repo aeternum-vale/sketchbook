@@ -1,0 +1,14 @@
+<div
+    {{#if image}}
+        data-like-amount="{{image.likes.length}}"
+    {{/if}}
+
+    {{#if image.isLiked}}
+        data-active="true"
+    {{/if}}
+     class="button like-button image__like-button">
+    <div class="like-button__heart icon-heart"></div>
+    <div class="like-button__heart icon-heart-outlined"></div>
+    &nbsp;like&nbsp;
+    <span class="like-button__like-amount">{{image.likes.length}}</span>
+</div>

@@ -254,6 +254,8 @@ function getFeed(loggedUser) {
         for (let i = 0; i < rawFeed.length; i++)
             feed.push(yield imagePreviewViewModel(rawFeed[i]));
 
+        debug('feed:', feed );
+
         //     rawFeed.map(item => {
         //     return (yield imagePreviewViewModel(item));
         // });

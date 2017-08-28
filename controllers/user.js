@@ -313,7 +313,15 @@ function getCutaway(user, res) {
             author: user._id
         }).limit(IMAGE_PREVIEW_COUNT).exec();
 
-        let images = rawImages.map(item => imagePreviewViewModel(item));
+        //let images = rawImages.map(item => imagePreviewViewModel(item));
+
+        let imagesPromises = [];
+        for (let i = 0; i < rawImages.length; i++)
+            imagesPromises.push(imagePreviewViewModel(rawImages[i]));
+
+        let images = yield Promise.all(imagesPromises);
+
+
 
         while (images.length < IMAGE_PREVIEW_COUNT) {
             let curLength = images.length;

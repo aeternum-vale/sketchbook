@@ -82,7 +82,7 @@ let validators = {
     'username': {
         checks: [
             checks.nonEmpty(),
-            checks.max(30),
+            checks.max(16),
             checks.min(5), {
                 errorMessage: 'must only contain alphanumeric symbols',
                 test: tests.regExp.bind(null, /^[A-Z0-9-]+$/i)

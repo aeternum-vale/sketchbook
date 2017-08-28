@@ -4,7 +4,12 @@ let LikeButton = function (options) {
     SwitchButton.apply(this, arguments);
 
     this.likeAmount = +this.elem.dataset.likeAmount;
+    this.likeAmountElem = this.elem.querySelector('.like-button__like-amount');
+
+
     this.url = '/like';
+
+
 
 };
 LikeButton.prototype = Object.create(SwitchButton.prototype);
@@ -12,7 +17,7 @@ LikeButton.prototype.constructor = LikeButton;
 
 LikeButton.prototype.setAmount = function (likeAmount) {
     this.likeAmount = likeAmount;
-    this.elem.textContent = `like ${this.likeAmount}`;
+    this.likeAmountElem.textContent = likeAmount;
 };
 
 LikeButton.prototype.set = function (options) {

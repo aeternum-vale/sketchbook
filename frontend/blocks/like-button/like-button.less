@@ -1,9 +1,27 @@
 @import "../button/button.less";
 
 .like-button {
-	.button(@large-font-size);
 
-	&.button_active {
-		.button-active(@large-font-size);
-	} 
+  .button(@large-font-size);
+
+  &.button_active {
+    .button-active(@large-font-size);
+  }
+
+  .icon-heart {
+    display: none;
+  }
+
+  .icon-heart-outlined {
+    display: block;
+  }
+
+  &.button_active .icon-heart-outlined {
+    display: none;
+  }
+
+  &.button_active .icon-heart {
+    display: block;
+  }
+
 }

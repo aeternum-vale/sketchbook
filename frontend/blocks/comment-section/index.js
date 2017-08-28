@@ -106,13 +106,19 @@ CommentSection.prototype.setImageId = function (imageId) {
 CommentSection.prototype.set = function (viewModels) {
     this.clear();
 
+    if (viewModels.length > 0)
+        this.elem.classList.remove('comment-section_no-comments');
+
     viewModels.forEach(viewModel => {
         this.insertNewComment(viewModel);
     });
+
 };
 
 CommentSection.prototype.clear = function () {
+
     this.commentsWrapper.innerHTML = '';
+    this.elem.classList.add('comment-section_no-comments');
 };
 
 

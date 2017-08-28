@@ -4,10 +4,18 @@
 @modal-close-button-size: 30px;
 @modal-close-button-gap: (@window-header-height / 2 - @modal-close-button-size / 2) / 2;
 
+
+@modal-window-small-padding: @global-small-screen-content-padding / 2;
 .modal-window {
-	.panel {
-		padding: 20px;
-	}
+  .panel {
+    padding: 20px;
+  }
+
+  @media (max-width: @global-small-screen-width) {
+    width: calc(~"100% - @{modal-window-small-padding}");
+    min-width: 0;
+  }
+
 }
 
 .modal-close-button {
@@ -21,7 +29,6 @@
   cursor: pointer;
   transition: @global-close-button-transition;
 
-
   .modal:hover & {
     opacity: @global-opacity-low;
   }
@@ -29,4 +36,5 @@
   .modal:hover &:hover {
     opacity: @global-opacity-high;
   }
+
 }
