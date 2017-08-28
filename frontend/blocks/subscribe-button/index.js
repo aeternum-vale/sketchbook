@@ -1,9 +1,14 @@
 let SwitchButton = require(BLOCKS + 'switch-button');
+let getCorrectNounForm = require(LIBS + 'getCorrectNounForm');
 
 let SubscribeButton = function (options) {
     SwitchButton.apply(this, arguments);
 
-    this.counterElem = options.counterElem;
+    this.outerStatElem = options.outerStatElem;
+
+    this.counterElem = this.outerStatElem && this.outerStatElem.querySelector('.stat__number');
+    this.counterDesignationElem = this.outerStatElem && this.outerStatElem.querySelector('.stat__caption');
+
     this.subscribersAmount = 0;
     if (this.counterElem)
         this.subscribersAmount = +this.counterElem.textContent;
@@ -17,6 +22,9 @@ SubscribeButton.prototype.setAmount = function (subscribersAmount) {
     this.subscribersAmount = subscribersAmount;
     if (this.counterElem)
         this.counterElem.textContent = subscribersAmount;
+
+    if (this.counterDesignationElem)
+        this.counterDesignationElem.textContent = getCorrectNounForm('subscriber', subscribersAmount);
 };
 
 SubscribeButton.prototype.set = function (options) {

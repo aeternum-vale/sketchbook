@@ -9,9 +9,9 @@ module.exports = function(image) {
             _id: image._id,
             author: image.author,
             comments: image.comments,
-            commentsDesignationText: (image.comments.length === 1) ? 'comment' : 'comments',
+            //commentsDesignationText: (image.comments.length === 1) ? 'comment' : 'comments',
             likes: image.likes,
-            likesDesignationText: (image.likes.length === 1) ? 'like' : 'likes',
+            //likesDesignationText: (image.likes.length === 1) ? 'like' : 'likes',
             previewUrl: yield imagePaths.getImagePreviewUrl(image._id),
             createDateStr: getDateString(image.created)
         };

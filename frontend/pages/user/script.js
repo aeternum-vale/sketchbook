@@ -26,7 +26,7 @@ if (subscribeButtonElem = document.getElementById('subscribe-button')) {
             let SubscribeButton = require(BLOCKS + 'subscribe-button');
             subscribeButton = new SubscribeButton({
                 elem: subscribeButtonElem,
-                counterElem: document.getElementById('subscribers-number')
+                outerStatElem: document.getElementById('subscribers-stat')
             });
         });
     } else

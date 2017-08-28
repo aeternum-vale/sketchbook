@@ -26,17 +26,18 @@
         <div class="stat-list">
             {{> stat
                     number=pageUser.subscribers.length
-                    property="subscribers"
-                    id="subscribers-number"
+                    property="subscriber"
+                    id="subscribers-stat"
                     icon="icon-user-circle-o"
             }}
             {{> stat number=pageUser.subscriptions.length
-                    property="subscriptions"
+                    property="subscription"
+                    id="subscriptions-stat"
                     icon="icon-user-circle"
             }}
             {{> stat number=pageUser.images.length
-                    property="publications"
-                    id="publication-number"
+                    property="publication"
+                    id="publications-stat"
                     icon="icon-paint-brush"
             }}
         </div>

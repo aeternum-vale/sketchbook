@@ -4,7 +4,6 @@
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/comment-section/comment-section.less";
 @import "../../blocks/like-button/like-button.less";
-
 @import "../../blocks/modal-window/modal-window.less";
 
 @image-owner-avatar-size: 45px;
@@ -79,9 +78,11 @@
     box-sizing: border-box;
     width: 70px;
     height: 70px;
-    margin-right: 10px;
-    border: solid 2px #fff;
-    border-radius: @global-border-radius;
+    //margin-right: 10px;
+    border-top: solid 2px #fff;
+    border-bottom: solid 2px #fff;
+
+    //border-radius: @global-border-radius;
     cursor: pointer;
     //background-image: linear-gradient(to bottom, #868989, transparent);
     background-color: #000;
@@ -91,6 +92,16 @@
     opacity: 0;
 
     transition: @global-close-button-transition;;
+  }
+
+  &__control:first-child {
+    border-radius: @global-border-radius 0 0 @global-border-radius;
+    border-left: solid 2px #fff;
+  }
+
+  &__control:last-child {
+    border-radius: 0 @global-border-radius @global-border-radius 0;
+    border-right: solid 2px #fff;
   }
 
   &__image-wrapper:hover &__control {
@@ -340,16 +351,22 @@
     &__control {
       height: 50px;
       margin-right: 0;
-      border-bottom: 0;
-      border-right: 0;
+      border: 0;
       border-radius: 0;
       opacity: @global-opacity-high;
 
       font-size: 25px;
       background-color: transparent;
       border: none;
-
       .notable();
+    }
+
+    &__control:first-child {
+      border-left: 0;
+    }
+
+    &__control:last-child {
+      border-right: 0;
     }
 
     &__modal-close-button-wrapper {
