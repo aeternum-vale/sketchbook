@@ -106,4 +106,25 @@
     background-color: #76d2ff;
     //background-image: linear-gradient(to top, #0e78ac, #76d2ff);
   }
+
+
+
+
+
+
+}
+
+
+.flex-textbox() {
+  .textbox {
+    width: 100%;
+  }
+
+  .textbox::before {
+    width: 100%;
+  }
+
+  .textbox__field {
+    width: calc(~"100% - 2 * @{textbox-field-border}");
+  }
 }

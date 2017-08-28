@@ -3,15 +3,30 @@
 
 @modal-close-button-size: 30px;
 @modal-close-button-gap: (@window-header-height / 2 - @modal-close-button-size / 2) / 2;
+@modal-window-small-padding: @global-small-screen-content-padding * 2 *  1.5;
+@modal-window-button-size: 18px;
 
-
-@modal-window-small-padding: @global-small-screen-content-padding / 2;
 .modal-window {
+
+
+  .header {
+    text-align: left;
+  }
+
   .panel {
     padding: 20px;
   }
 
+  .button {
+    .button(@modal-window-button-size);
+  }
+
   @media (max-width: @global-small-screen-width) {
+
+    display: inline-block;
+    vertical-align: middle;
+
+
     width: calc(~"100% - @{modal-window-small-padding}");
     min-width: 0;
   }
@@ -35,6 +50,11 @@
 
   .modal:hover &:hover {
     opacity: @global-opacity-high;
+  }
+
+  @media (max-width: @global-small-screen-width) {
+    top: -@modal-close-button-size - @modal-close-button-gap;
+    right: 0;
   }
 
 }

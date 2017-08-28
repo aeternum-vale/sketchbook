@@ -3,7 +3,11 @@
 @import "../button/button.less";
 
 .upload-image-modal-window {
-  & .window__panel {
+  &__file-picker {
+    margin-bottom: 20px;
+  }
+
+  .window__panel {
     justify-content: space-between;
     padding: 20px;
   }
@@ -15,4 +19,22 @@
   &__textarea {
     margin-bottom: 20px;
   }
+
+  @media (max-width: @global-small-screen-width) {
+    .flex-textbox();
+  }
+
+  @media (max-width: @global-xsmall-screen-width) {
+    &__file-picker {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+
+
+      .button {
+        margin-left: 0;
+      }
+    }
+  }
+
 }

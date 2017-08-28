@@ -82,7 +82,9 @@ let Authorization = function (options) {
             loaded: false
         };
 
-        preloadedImg.onload = e => {
+        preloadedImg.onload = preloadedImg.onerror = e => {
+            console.log('onload');
+
             this.images[i].loaded = true;
 
             if (this.currentLeftPic1Index === -1 && this.currentLeftPic === 1) {
@@ -105,8 +107,9 @@ let Authorization = function (options) {
                 this.setRightPicImage(2, this.images[i]);
                 return;
             }
-
         };
+
+
         preloadedImg.src = imageUrls[i];
     }
 
