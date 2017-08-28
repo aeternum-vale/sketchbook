@@ -698,7 +698,15 @@ a:hover {
 @media (max-width: 650px) {
   .modal {
     position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 30px);
+    min-width: 0;
   }
+}
+.modal-spinner {
+  width: 100px;
+  height: 100px;
 }
 .modal-wrapper {
   position: fixed;
@@ -775,14 +783,6 @@ a:hover {
 .modal-window .button:active {
   padding-top: 7.5px;
   padding-bottom: 4.5px;
-}
-@media (max-width: 650px) {
-  .modal-window {
-    display: inline-block;
-    vertical-align: middle;
-    width: calc(100% - 30px);
-    min-width: 0;
-  }
 }
 .modal-close-button {
   position: absolute;

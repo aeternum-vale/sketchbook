@@ -1,5 +1,3 @@
-@import "../image/image.less";
-
 @image-preview-margin-value: 5px;
 @image-preview-size: 200px;
 @image-preview-space-size: @image-preview-size + @image-preview-margin-value * 2;
@@ -8,7 +6,6 @@
 @gallery-max-image-preview-columns: ceil(@global-content-width / @image-preview-space-size);
 
 @gallery-content-margin: @global-content-padding;
-
 
 //@image-preview-info-board-height: 30px;
 @image-preview-transition-duration: .18s;
@@ -84,11 +81,8 @@
 
     transition: text-shadow @image-preview-transition-duration linear 0s;
 
-
     .notable();
   }
-
-
 
   &__attainments {
   }
@@ -202,9 +196,7 @@
     display: none;
   }
 
-
 }
-
 
 .gallery {
   position: relative;
@@ -218,31 +210,31 @@
   &__wrapper {
     .screen-wrapper();
 
-    min-width: 230px;
-    padding: 0;
-    margin: 0 @gallery-content-margin;
+    //min-width: 230px;
+    //padding: 0;
+    // margin: 0 @gallery-content-margin;
 
     position: relative;
     flex-flow: row wrap;
     justify-content: center;
-    width: @image-preview-space-size;
-    max-width: @global-content-width - @gallery-content-margin;
+    // width: @image-preview-space-size;
+    //max-width: @global-content-width - @gallery-content-margin;
 
-    .generate-media(@i: 1) when (@i =< @gallery-max-image-preview-columns) {
-      //(min-width: (@i * @image-preview-space-size  + @gallery-content-margin * 2)) and
-      @media  (max-width: ((@i + 1) * @image-preview-space-size  + @gallery-content-margin * 2)) {
-        width: (@i * @image-preview-space-size);
-      }
-      .generate-media(@i + 1);
-    }
-    .generate-media();
+    //.generate-media(@i: 1) when (@i =< @gallery-max-image-preview-columns) {
+    //  //(min-width: (@i * @image-preview-space-size  + @gallery-content-margin * 2)) and
+    //  @media  (max-width: ((@i + 1) * @image-preview-space-size  + @gallery-content-margin * 2)) {
+    //    width: (@i * @image-preview-space-size);
+    //  }
+    //  .generate-media(@i + 1);
+    //}
+    //.generate-media();
 
+    width: 100%;
   }
 
   &__image-preview {
     margin: @image-preview-margin-value;
   }
-
 
   @media (max-width: @global-small-screen-width) {
 
@@ -261,7 +253,7 @@
       height: auto;
     }
 
-    &__image-preview::before{
+    &__image-preview::before {
       content: "";
       display: block;
       padding-top: 100%;

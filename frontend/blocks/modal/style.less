@@ -1,5 +1,6 @@
 @import "../spinner/style.less";
 
+@modal-spinner-size: 100px;
 
 .modal {
   position: absolute;
@@ -8,7 +9,17 @@
   @media (max-width: @global-small-screen-width) {
 
     position: relative;
+    display: inline-block;
+    vertical-align: middle;
+
+    width: calc(~"100% - @{modal-window-small-padding}");
+    min-width: 0;
   }
+}
+
+.modal-spinner {
+  width: @modal-spinner-size;
+  height: @modal-spinner-size;
 }
 
 .modal-wrapper {
@@ -19,8 +30,8 @@
   left: 0;
   right: 0;
 
- // width: 100%;
-//  height: 100%;
+  // width: 100%;
+  //  height: 100%;
 
   display: flex;
   align-items: center;
@@ -36,7 +47,6 @@
   &_minor {
     z-index: 30;
   }
-
 
   @media (max-width: @global-small-screen-width) {
 
@@ -60,8 +70,6 @@
     display: none;
   }
 
-
-
 }
 
 .backdrop {
@@ -73,7 +81,6 @@
   visibility: visible;
   background-color: #000;
   opacity: .6;
-
 
   &_major {
     z-index: 15;

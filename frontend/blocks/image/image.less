@@ -1,10 +1,11 @@
-@import "../../blocks/modal-window/modal-window.less";
+@import "../../blocks/spinner/style.less";
 @import "../../blocks/header/header.less";
 @import "../../blocks/button/button.less";
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/comment-section/comment-section.less";
 @import "../../blocks/like-button/like-button.less";
-@import "../../blocks/spinner/style.less";
+
+@import "../../blocks/modal-window/modal-window.less";
 
 @image-owner-avatar-size: 45px;
 @image-header-height: 70px;
@@ -38,7 +39,6 @@
   flex-grow: 0;
   border-radius: @image-border-radius;
   box-shadow: 0 0 8px 10px rgba(0, 0, 0, .3);
-
 
   &__modal-close-button-wrapper {
     position: absolute;
@@ -131,10 +131,7 @@
     max-width: 100%;
     max-height: 100%;
 
-
-
     z-index: 2;
-
 
   }
 
@@ -303,7 +300,6 @@
     height: 30px;
   }
 
-
   &_invisible {
     display: none;
   }
@@ -372,7 +368,6 @@
       opacity: @global-opacity-high;
     }
 
-
     &:hover &__modal-close-button {
       opacity: @global-opacity-high;
     }
@@ -380,7 +375,6 @@
     &__modal-close-button-wrapper:hover &__modal-close-button {
       opacity: @global-opacity-high;
     }
-
 
     &__image-wrapper {
       flex-shrink: 0;
@@ -442,7 +436,6 @@
       min-width: 0;
       border-radius: 0;
     }
-
 
   }
 

@@ -21,6 +21,8 @@ ModalSpinner.prototype.setElem = function() {
         this.elem = document.getElementById('spinner');
     if (!this.elem)
         this.elem = this.renderWindow(Spinner.html);
+
+    this.elem.classList.add('modal', 'modal-spinner');
 };
 
 ModalSpinner.prototype.show = function () {

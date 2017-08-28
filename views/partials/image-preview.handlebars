@@ -16,14 +16,21 @@
                 <span class="image-preview__comment-number">{{comments.length}}</span>
                 <div class="image-preview__designation">
                     <div class="image-preview__designation-symbol icon-bubble"></div>
-                    <div class="image-preview__designation-text">comments</div>
+                    <div class="image-preview__designation-text">
+                        {{#if commentsDesignationText}}
+                            {{commentsDesignationText}}
+                        {{else}}comments{{/if}}
+                    </div>
                 </div>
             </div>
             <div class="image-preview__like-section">
                 <span class="image-preview__like-number">{{likes.length}}</span>
                 <div class="image-preview__designation">
                     <div class="image-preview__designation-symbol icon-heart"></div>
-                    <div class="image-preview__designation-text">likes</div>
+                    <div class="image-preview__designation-text">
+                        {{#if likesDesignationText}}
+                            {{likesDesignationText}}
+                        {{else}}likes{{/if}}</div>
                 </div>
             </div>
         </div>

@@ -295,6 +295,9 @@ Gallery.prototype.updatePreloadedImagesArray = function () {
 
 
 Gallery.prototype.show = function (options) {
+
+    document.body.style.overflow = 'hidden'; // :\
+
     let imageId;
     let noPushState;
 
@@ -342,6 +345,10 @@ Gallery.prototype.show = function (options) {
 };
 
 Gallery.prototype.hide = function (options) {
+
+    document.body.style.overflow = 'auto';
+
+
     let noPushState = options && options.noPushState;
     if (!this.isEmbedded)
         window.location = this.elem.dataset.authorUrl;
@@ -490,6 +497,11 @@ Gallery.prototype.updateImagePreviewText = function (id) {
 
     previewImageElem.querySelector('.image-preview__comment-number').textContent = commentAmount;
     previewImageElem.querySelector('.image-preview__like-number').textContent = likeAmount;
+
+    previewImageElem.querySelector('.image-preview__comment-section .image-preview__designation-text')
+        .textContent = 'comment' + ((commentAmount === 1) ? '' : 's');
+    previewImageElem.querySelector('.image-preview__like-section .image-preview__designation-text')
+        .textContent = 'like' + ((likeAmount === 1) ? '' : 's');
 };
 
 Gallery.prototype.deleteImagePreview = function (id) {

@@ -1,5 +1,12 @@
-{{> pseudo-header}}
+{{#section 'title'}}
+    {{#if loggedUser}}
+        {{loggedUser.username}}'s feed
+    {{else}}
+        Feed
+    {{/if}}
+{{/section}}
 
+{{> pseudo-header}}
 <div class="feed">
     <div class="hint feed__hint">
         This is your feed. Subscribe to other users and their works would appear here.
@@ -7,7 +14,6 @@
 
     <div id="gallery" class="gallery feed__gallery">
         <div class="gallery__wrapper">
-
             {{#if feed}}
                 {{#each feed}}
                     {{> image-preview
@@ -24,7 +30,5 @@
         </div>
     </div>
 </div>
-
-
 {{> footer}}
 {{> page-header}}

@@ -96,6 +96,8 @@ CommentSection.prototype.insertNewComment = function (viewModel) {
 
     newComment.querySelector('.comment__text').textContent = viewModel.text;
     this.commentsWrapper.appendChild(newComment);
+
+    this.elem.classList.remove('comment-section_no-comments');
 };
 
 
