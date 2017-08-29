@@ -16,7 +16,7 @@
                 <span class="image-preview__comment-number">{{comments.length}}</span>
                 <div class="image-preview__designation">
                     <div class="image-preview__designation-symbol icon-bubble"></div>
-                    <div class="image-preview__designation-text">comment{{#addSIfSolitary comments.length}}{{/addSIfSolitary}}
+                    <div class="image-preview__designation-text">comment{{#addSIfPlural comments.length}}{{/addSIfPlural}}
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <span class="image-preview__like-number">{{likes.length}}</span>
                 <div class="image-preview__designation">
                     <div class="image-preview__designation-symbol icon-heart"></div>
-                    <div class="image-preview__designation-text">like{{#addSIfSolitary likes.length}}{{/addSIfSolitary}}</div>
+                    <div class="image-preview__designation-text">like{{#addSIfPlural likes.length}}{{/addSIfPlural}}</div>
                 </div>
             </div>
         </div>

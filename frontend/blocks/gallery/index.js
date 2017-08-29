@@ -3,7 +3,7 @@ let ClientError = require(LIBS + 'componentErrors').ClientError;
 let ImageNotFound = require(LIBS + 'componentErrors').ImageNotFound;
 let Modal = require(BLOCKS + 'modal');
 let SwitchButton = require(BLOCKS + 'switch-button');
-
+let getCorrectNounForm = require(LIBS + 'getCorrectNounForm');
 
 let Gallery = function (options) {
     Modal.apply(this, arguments);
@@ -298,6 +298,8 @@ Gallery.prototype.show = function (options) {
 
     document.body.style.overflow = 'hidden'; // :\
 
+
+
     let imageId;
     let noPushState;
 
@@ -319,6 +321,7 @@ Gallery.prototype.show = function (options) {
             if (!this.isElemSetted)
                 this.setElem().then(() => {
                     this.updateCurrentView(imageId);
+
                     this.elem.classList.remove('image_invisible');
                     if (!noPushState && imageId === this.currentImageId)
                         this.pushImageState();
@@ -329,6 +332,7 @@ Gallery.prototype.show = function (options) {
                 });
             else {
                 this.updateCurrentView(imageId);
+
                 this.elem.classList.remove('image_invisible');
                 if (!noPushState && imageId === this.currentImageId)
                     this.pushImageState();
@@ -337,6 +341,8 @@ Gallery.prototype.show = function (options) {
                     this.updatePreloadedImagesArray();
                 });
             }
+
+            this.onResize();
         }).catch(err => {
             reject(err);
         });
@@ -499,9 +505,9 @@ Gallery.prototype.updateImagePreviewText = function (id) {
     previewImageElem.querySelector('.image-preview__like-number').textContent = likeAmount;
 
     previewImageElem.querySelector('.image-preview__comment-section .image-preview__designation-text')
-        .textContent = 'comment' + ((commentAmount === 1) ? '' : 's');
+        .textContent = getCorrectNounForm('comment', commentAmount);
     previewImageElem.querySelector('.image-preview__like-section .image-preview__designation-text')
-        .textContent = 'like' + ((likeAmount === 1) ? '' : 's');
+        .textContent = getCorrectNounForm('like', likeAmount);
 };
 
 Gallery.prototype.deleteImagePreview = function (id) {
@@ -664,6 +670,8 @@ Gallery.prototype.updateCurrentView = function (involvedImageId) {
         this.username.textContent = this.currentViewModel.author.username;
 
         this.headerLeftSide.setAttribute('href', this.currentViewModel.author.url);
+
+
     }
 
 };

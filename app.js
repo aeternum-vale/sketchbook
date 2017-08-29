@@ -31,7 +31,7 @@ let handlebars = require('express-handlebars')
                 this._sections[name] = options.fn(this);
                 return null;
             },
-            addSIfSolitary: function(value) {
+            addSIfPlural: function(value) {
                 return (value === 1) ? '' : 's';
             }
         }
