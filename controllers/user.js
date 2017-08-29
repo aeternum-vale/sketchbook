@@ -73,13 +73,14 @@ function userProfileRequestListener(req, res, next) {
         let previewGallery = yield Promise.all(previewGalleryPromises);
 
 
+        pageUser = yield userViewModel(pageUser, res.loggedUser && res.loggedUser._id);
         return {
             pageUser,
             previewGallery
         };
 
     }).then(result => {
-        res.locals.pageUser = userViewModel(result.pageUser, res.loggedUser && res.loggedUser._id);
+        res.locals.pageUser = result.pageUser;
         res.locals.page = 'user';
 
         res.locals.pageUser.images = result.previewGallery;
@@ -368,7 +369,7 @@ function getCutaway(user, res) {
             imagesBottom.push(images[i]);
 
         return {
-            user: truncatedUserViewModel(user,
+            user: yield truncatedUserViewModel(user,
                 res.loggedUser && res.loggedUser._id),
             imagesTop,
             imagesBottom

@@ -43,7 +43,7 @@ module.exports = function(image, loggedUserId) {
             description: image.description,
             created: image.created,
             createDateStr: getDateString(image.created),
-            author: truncatedUserViewModel(yield User.findById(image.author).exec(), loggedUserId),
+            author: yield truncatedUserViewModel(yield User.findById(image.author).exec(), loggedUserId),
             comments,
             likes
         };

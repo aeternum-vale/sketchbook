@@ -1,29 +1,32 @@
 let User = require('models/user');
 let userViewModel = require('viewModels/user');
 let co = require('co');
+let debug = require('debug')('app:addLoggedUser');
 
-module.exports = function(req, res, next) {
-	if (req.session.userId)
-		co(function*() {
 
-			if (!User.indexesEnsured)
-				yield User.ensureIndexes();
+module.exports = function (req, res, next) {
+    if (req.session.userId)
+        co(function*() {
 
-			return User.findById(req.session.userId).exec();
+            if (!User.indexesEnsured)
+                yield User.ensureIndexes();
+            let rawUser = yield User.findById(req.session.userId).exec();
 
-			
-			
-		}).then(rawUser => {
+            //debug('rawUser:', rawUser);
+            return {
+                userViewModel: yield userViewModel(rawUser),
+                rawUser
+            };
 
-			let user = userViewModel(rawUser);
+        }).then(result => {
 
-			res.locals.loggedUser = user;
-			res.loggedUser = rawUser;
+            res.locals.loggedUser = result.userViewModel;
+            res.loggedUser = result.rawUser;
 
-			next();
-		}).catch(err => {
-			next(err);
-		});
-	else
-		next();
+            next();
+        }).catch(err => {
+            next(err);
+        });
+    else
+        next();
 };

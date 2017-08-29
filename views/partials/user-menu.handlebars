@@ -5,7 +5,7 @@
 	<div class="user-menu__arrow"></div>
 
 	<div class="dropdown__item-list user-menu__item-list">
-		{{> dropdown-item caption="view profile" link="/user/" linkValue=loggedUser.username }}
+		{{> dropdown-item caption="view profile" link=loggedUser.url}}
 		{{> dropdown-item caption="feed" link="/feed" }}
 		{{> dropdown-item caption="settings" link="/settings" }}
 		{{> dropdown-item caption="logout" link="/logout" }}

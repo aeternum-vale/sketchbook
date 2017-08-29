@@ -19,6 +19,8 @@ function getTemporaryLink(fileName) {
 
     return rp(options).then(response => {
         return response.link;
+    }).catch(() => {
+        return '/egg.png';
     });
 }
 
@@ -91,5 +93,6 @@ module.exports = {
     getAvatarPathsById,
     getAvatarFileNamesById,
     getImageUrl,
-    getImagePreviewUrl
+    getImagePreviewUrl,
+    getAvatarUrls
 };
