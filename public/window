@@ -14,6 +14,7 @@
 			</div>
 			<textarea name="" class="textbox__field" placeholder="description goes here…"></textarea>
 		</div>		<span class="window__error-message"></span>
+        <div class="spinner upload-image-modal-window__spinner"></div>
 		<div class="button upload-image-modal-window__button">upload</div>
 	</div>
     <div class="icon-cross modal-close-button"></div></div>

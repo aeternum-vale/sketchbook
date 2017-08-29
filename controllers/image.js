@@ -47,7 +47,7 @@ function imageRequestListener(req, res, next) {
     });
 }
 
-function uploadImageListRequestListener(req, res, next) {
+function uploadImageRequestListener(req, res, next) {
     debug('The file is ready to be uploaded');
 
     co(function*() {
@@ -111,8 +111,12 @@ function uploadImageListRequestListener(req, res, next) {
             });
         });
 
-        yield sendImageToServer(imagePath, imageFileName);
-        yield sendImageToServer(imagePreviewPath, imagePreviewFileName);
+
+        yield Promise.all([
+            sendImageToServer(imagePath, imageFileName),
+            sendImageToServer(imagePreviewPath, imagePreviewFileName)
+        ]);
+
 
         return {
             imagePreviewFileName,
@@ -343,7 +347,7 @@ function galleryRequestListener(req, res, next) {
 
 exports.registerRoutes = function (app) {
     app.post('/gallery', addLoggedUser, addRefererParams, galleryRequestListener);
-    app.post('/image', isAuth, uploadImageListRequestListener);
+    app.post('/image', isAuth, uploadImageRequestListener);
     app.delete('/image', isAuth, addLoggedUser, addRefererParams, imageDeleteListRequestListener);
     app.get('/images', imageListRequestListener);
     app.get('/image/:id', addLoggedUser, imageRequestListener);

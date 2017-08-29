@@ -50,7 +50,7 @@ function copy(path, newPath, mw, mh) {
 			throw err;
 		else
 			throw new InvalidImage();
-	});;
+	});
 }
 
 function checkSize() {

@@ -529,6 +529,13 @@ Gallery.prototype.insertNewImagePreview = function (imageId, previewUrl) {
     newImagePreview.querySelector('.image-preview__comment-number').textContent = 0;
     newImagePreview.querySelector('.image-preview__like-number').textContent = 0;
 
+    newImagePreview.querySelector('.image-preview__comment-section .image-preview__designation-text')
+        .textContent = 'comments';
+    newImagePreview.querySelector('.image-preview__like-section .image-preview__designation-text')
+        .textContent = 'likes';
+
+    newImagePreview.querySelector('.image-preview__upload-date-text').textContent = 'a few seconds ago';
+
     this.galleryWrapper.appendChild(newImagePreview);
 
     this.setPublicationNumber(1, true);

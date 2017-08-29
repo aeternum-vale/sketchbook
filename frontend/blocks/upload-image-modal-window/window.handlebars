@@ -11,6 +11,10 @@
 			parent="upload-image-modal-window"
 		}}
 		<span class="window__error-message"></span>
+        {{> spinner
+            parent='upload-image-modal-window'
+            invisible=true
+        }}
 		<div class="button upload-image-modal-window__button">upload</div>
 	</div>
     {{> modal-close-button}}

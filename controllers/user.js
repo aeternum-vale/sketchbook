@@ -25,6 +25,7 @@ let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
 let isAuth = require('middleware/isAuth');
 
+let sendImageToServer = require('libs/sendImageToServer');
 let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));
@@ -533,6 +534,11 @@ function avatarUploadRequestListener(req, res, next) {
             });
         });
 
+        yield Promise.all([
+            sendImageToServer(avatarPaths.big, avatarFileNames.big),
+            sendImageToServer(avatarPaths.medium, avatarFileNames.medium),
+            sendImageToServer(avatarPaths.small, avatarFileNames.small)
+        ]);
 
         res.loggedUser.hasAvatar = true;
         yield res.loggedUser.save();

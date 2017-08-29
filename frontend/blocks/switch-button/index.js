@@ -5,12 +5,9 @@ let SwitchButton = function (options) {
     this.data = options.data;
     this.dataStr = options.dataStr || 'imageId';
 
-    this.activeText = options.activeText;
-    this.inactiveText = options.inactiveText;
     this.textElem = options.textElem || this.elem;
 
     SwitchButton.prototype.set.call(this, {active: !!this.elem.dataset.active});
-    console.log('switch button active:', !!this.elem.dataset.active);
     this.available = true;
 
     this.elem.onclick = e => this.onClick(e);
@@ -76,11 +73,15 @@ SwitchButton.prototype.toggle = function () {
 SwitchButton.prototype._activate = function () {
     this.elem.classList.add('button_active');
     this.active = true;
+
+    this.textElem && this.activeText && (this.textElem.textContent = this.activeText);
 };
 
 SwitchButton.prototype._deactivate = function () {
     this.elem.classList.remove('button_active');
     this.active = false;
+
+    this.textElem && this.inactiveText && (this.textElem.textContent = this.inactiveText);
 };
 
 SwitchButton.prototype.setImageId = function (imageId) {

@@ -18,6 +18,7 @@ UploadImageModalWindow.prototype.setElem = function () {
         this.elem = this.renderWindow(require(`html-loader!./window`));
 
     this.uploadButton = this.elem.querySelector('.upload-image-modal-window__button');
+    this.spinner = this.elem.querySelector('.upload-image-modal-window__spinner');
 
     this.uploadImageFilePicker = new FilePicker({
         elem: this.elem.querySelector('.file-picker')
@@ -32,7 +33,12 @@ UploadImageModalWindow.prototype.setElem = function () {
         if (e.target === this.uploadButton) {
             let file = this.uploadImageFilePicker.getFile();
             if (file)
+            {
+                this.uploadButton.classList.add('button_invisible');
+                this.spinner.classList.remove('spinner_invisible');
                 this.uploadImage(file, this.imageDescription.value);
+            }
+
         }
     };
 
@@ -77,6 +83,9 @@ UploadImageModalWindow.prototype.show = function () {
         this.setElem();
 
     this.clear();
+
+    this.uploadButton.classList.remove('button_invisible');
+    this.spinner.classList.add('spinner_invisible');
 
     this.elem.classList.remove('window_invisible');
 };

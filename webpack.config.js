@@ -104,7 +104,7 @@ module.exports = {
 // KRAKEN
 //
 
-
+    //
     // module.exports.plugins.push(
     //     new HandlebarsPlugin({
     //         entry: path.join(__dirname, "frontend", "blocks", "*", "*.handlebars"),

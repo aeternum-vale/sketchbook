@@ -2,7 +2,6 @@ let SwitchButton = require(BLOCKS + 'switch-button');
 let getCorrectNounForm = require(LIBS + 'getCorrectNounForm');
 
 let SubscribeButton = function (options) {
-    SwitchButton.apply(this, arguments);
 
     this.outerStatElem = options.outerStatElem;
 
@@ -14,6 +13,10 @@ let SubscribeButton = function (options) {
         this.subscribersAmount = +this.counterElem.textContent;
 
     this.url = '/subscribe';
+    this.activeText = 'subscribed';
+    this.inactiveText = 'subscribe';
+
+    SwitchButton.apply(this, arguments);
 };
 SubscribeButton.prototype = Object.create(SwitchButton.prototype);
 SubscribeButton.prototype.constructor = SubscribeButton;
