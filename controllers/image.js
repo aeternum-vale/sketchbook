@@ -28,6 +28,9 @@ let uploadDir = path.resolve(config.get('userdata:dir'));
 let sendImageToServer = require('libs/imageServer').add;
 form.uploadDir = uploadDir;
 
+
+
+
 function imageRequestListener(req, res, next) {
     co(function*() {
         let rawImage = yield Image.findById(req.params.id).exec();
@@ -50,9 +53,17 @@ function imageRequestListener(req, res, next) {
 function uploadImageRequestListener(req, res, next) {
     debug('The file is ready to be uploaded');
 
+
     co(function*() {
 
+        const MAX_SIZE = config.get('userdata:image:maxByteSize');
+
         let formData = yield new Promise((resolve, reject) => {
+            form.on('progress', (bytesReceived, bytesExpected) => {
+                if (bytesReceived > MAX_SIZE)
+                    reject(new HttpError(400, `The file is too big (max size: ~${Math.round(MAX_SIZE / (1024 * 1024))}MB)`));
+            });
+
             form.parse(req, function (err, fields, files) {
                 if (err) reject(303);
 
@@ -258,7 +269,7 @@ function getFeed(loggedUser) {
         for (let i = 0; i < rawFeed.length; i++)
             feed.push(yield imagePreviewViewModel(rawFeed[i]));
 
-        debug('feed:', feed );
+        debug('feed:', feed);
 
         //     rawFeed.map(item => {
         //     return (yield imagePreviewViewModel(item));

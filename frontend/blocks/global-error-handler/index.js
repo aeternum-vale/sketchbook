@@ -15,7 +15,7 @@ GlobalErrorHandler.prototype.call = function (error) {
                 localStorage.setItem('redirected_url', window.location.href);
                 window.location = '/authorization';
             } else {
-                let messageModalWindow = new MessageModalWindow({message: error.message});
+                let messageModalWindow = new MessageModalWindow({message: error.message, caption: 'error'});
                 messageModalWindow.activate();
             }
 

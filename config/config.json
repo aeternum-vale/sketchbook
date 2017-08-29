@@ -28,7 +28,8 @@
       "ext": "jpg",
       "prefix": "image",
       "minWidth": 300,
-      "minHeight": 300
+      "minHeight": 300,
+      "maxByteSize": 5242880
     },
     "preview": {
       "ext": "jpg",

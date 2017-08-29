@@ -324,7 +324,6 @@ function getCutaway(user, res) {
         let images = yield Promise.all(imagesPromises);
 
 
-
         while (images.length < IMAGE_PREVIEW_COUNT) {
             let curLength = images.length;
             for (i = 0; i < curLength; i++)
