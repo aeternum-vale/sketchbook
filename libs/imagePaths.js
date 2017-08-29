@@ -2,27 +2,9 @@ let config = require('config');
 let path = require('path');
 let rp = require('request-promise');
 
-function getTemporaryLink(fileName) {
-    const accessToken = config.get('userdata:accessToken');
-    let options = {
-        method: 'POST',
-        uri: 'https://api.dropboxapi.com/2/files/get_temporary_link',
-        headers: {
-            "Authorization": `Bearer ${accessToken}`,
-            "Content-Type": "application/json"
-        },
-        body: {
-            path: `/${fileName}`
-        },
-        json: true
-    };
+let debug = require('debug')('app:imagePath');
+let getTemporaryLink = require('libs/imageServer').getTemporaryLink;
 
-    return rp(options).then(response => {
-        return response.link;
-    }).catch(() => {
-        return '/egg.png';
-    });
-}
 
 function getImageFileNameById(id) {
     return `${config.get('userdata:image:prefix')}${id}.${config.get('userdata:image:ext')}`;
@@ -66,9 +48,9 @@ function getAvatarFileNamesById(id) {
 function getAvatarUrls(id) {
     let avatarFileNames = getAvatarFileNamesById(id);
     return Promise.all([
-        getTemporaryLink(avatarFileNames.big),
-        getTemporaryLink(avatarFileNames.medium),
-        getTemporaryLink(avatarFileNames.small)
+        getTemporaryLink(avatarFileNames.big, config.get('static:anonAvatarUrl')),
+        getTemporaryLink(avatarFileNames.medium, config.get('static:anonAvatarUrl')),
+        getTemporaryLink(avatarFileNames.small, config.get('static:anonAvatarUrl'))
     ]).then(links => {
         return {
             big: links[0],

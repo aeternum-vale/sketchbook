@@ -102,7 +102,7 @@ function createGallery() {
                 isLogged: window.isLogged,
                 preloadEntityCount: PRELOAD_IMAGE_COUNT,
                 isEmbedded: true,
-                publicationNumberElem: document.getElementById('publication-number'),
+                publicationsStatElem: document.getElementById('publications-stat'),
                 userSubscribeButton: subscribeButton
             });
             resolve();

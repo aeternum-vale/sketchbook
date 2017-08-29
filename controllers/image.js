@@ -25,7 +25,7 @@ let form = new formidable.IncomingForm();
 
 let uploadDir = path.resolve(config.get('userdata:dir'));
 
-let sendImageToServer = require('libs/sendImageToServer');
+let sendImageToServer = require('libs/imageServer').add;
 form.uploadDir = uploadDir;
 
 function imageRequestListener(req, res, next) {

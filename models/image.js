@@ -10,6 +10,8 @@ let path = require('path');
 let debug = require('debug')('app:image:model');
 let imagePaths = require('libs/imagePaths');
 
+let removeImageFromServer = require('libs/imageServer').remove;
+
 let imageSchema = new Schema({
 
     description: {
@@ -186,6 +188,11 @@ imageSchema.post('remove', function (doc) {
                     resolve();
                 });
             });
+
+        yield Promise.all([
+            removeImageFromServer(imageFileName),
+            removeImageFromServer(imagePreviewFileName)
+        ]);
 
     }).then(() => {
         debug('succesful removing');

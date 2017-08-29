@@ -34,8 +34,7 @@ UploadImageModalWindow.prototype.setElem = function () {
             let file = this.uploadImageFilePicker.getFile();
             if (file)
             {
-                this.uploadButton.classList.add('button_invisible');
-                this.spinner.classList.remove('spinner_invisible');
+                this.setWaitingMode();
                 this.uploadImage(file, this.imageDescription.value);
             }
 
@@ -55,15 +54,13 @@ UploadImageModalWindow.prototype.uploadImage = function (file, description) {
         this.available = false;
         require(LIBS + 'sendFormData')("/image", formData, (err, response) => {
 
+            this.unsetWaitingMode();
+            this.available = true;
+
             if (err) {
-                if (err instanceof ClientError)
-                    this.setError(err.message);
-                else
-                    this.error(err);
+                this.error(err);
                 return;
             }
-
-            this.available = true;
 
             this.trigger('upload-image-modal-window__image-uploaded', {
                 imageId: response.imageId,
@@ -76,6 +73,16 @@ UploadImageModalWindow.prototype.uploadImage = function (file, description) {
 
 };
 
+UploadImageModalWindow.prototype.setWaitingMode = function () {
+    this.uploadButton.classList.add('button_invisible');
+    this.spinner.classList.remove('spinner_invisible');
+};
+
+UploadImageModalWindow.prototype.unsetWaitingMode = function () {
+    this.uploadButton.classList.remove('button_invisible');
+    this.spinner.classList.add('spinner_invisible');
+};
+
 UploadImageModalWindow.prototype.show = function () {
     Modal.prototype.show.apply(this);
 
@@ -84,8 +91,7 @@ UploadImageModalWindow.prototype.show = function () {
 
     this.clear();
 
-    this.uploadButton.classList.remove('button_invisible');
-    this.spinner.classList.add('spinner_invisible');
+    this.unsetWaitingMode();
 
     this.elem.classList.remove('window_invisible');
 };

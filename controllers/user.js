@@ -25,7 +25,7 @@ let addLoggedUser = require('middleware/addLoggedUser');
 let addRefererParams = require('middleware/addRefererParams');
 let isAuth = require('middleware/isAuth');
 
-let sendImageToServer = require('libs/sendImageToServer');
+let sendImageToServer = require('libs/imageServer').add;
 let formidable = require('formidable');
 let form = new formidable.IncomingForm();
 let uploadDir = path.resolve(config.get('userdata:dir'));

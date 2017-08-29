@@ -79,7 +79,7 @@ Gallery.prototype.onGalleryClick = function (e) {
 
 
 Gallery.prototype.setGallery = function (options) {
-    this.publicationNumberElem = options.publicationNumberElem;
+    this.publicationsStatElem = options.publicationsStatElem;
     this.imagePreviewGhost = this.gallery.querySelector('.image-preview');
     this.galleryWrapper = this.gallery.querySelector('.gallery__wrapper');
 
@@ -543,11 +543,14 @@ Gallery.prototype.insertNewImagePreview = function (imageId, previewUrl) {
 };
 
 Gallery.prototype.setPublicationNumber = function (value, relative) {
-    if (this.publicationNumberElem)
-        if (relative)
-            this.publicationNumberElem.textContent = +this.publicationNumberElem.textContent + value;
-        else
-            this.publicationNumberElem.textContent = value;
+    if (this.publicationsStatElem) {
+        let publicationNumberElem = this.publicationsStatElem.querySelector('.stat__number');
+        let publicationTextElem = this.publicationsStatElem.querySelector('.stat__caption');
+        let newValue = (relative && publicationNumberElem) ? (+publicationNumberElem.textContent + value) : value;
+
+        publicationNumberElem.textContent = newValue;
+        publicationTextElem.textContent = getCorrectNounForm('publication', newValue);
+    }
 };
 
 Gallery.prototype.deleteViewModel = function (id) {
