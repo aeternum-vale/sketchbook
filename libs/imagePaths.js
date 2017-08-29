@@ -61,15 +61,27 @@ function getAvatarFileNamesById(id) {
     }
 }
 
-function getImageUrl(id) {
+function getAvatarUrls(id) {
+    let avatarFileNames = getAvatarFileNamesById(id);
+    return Promise.all([
+        getTemporaryLink(avatarFileNames.big),
+        getTemporaryLink(avatarFileNames.medium),
+        getTemporaryLink(avatarFileNames.small)
+    ]).then(links => {
+        return {
+            big: links[0],
+            medium: links[1],
+            small: links[2]
+        }
+    });
+}
 
+function getImageUrl(id) {
     return getTemporaryLink(getImageFileNameById(id));
-    //return `/${getImageFileNameById(id)}`;
 }
 
 function getImagePreviewUrl(id) {
     return getTemporaryLink(getImagePreviewFileNameById(id));
-   // return `/${getImagePreviewFileNameById(id)}`;
 }
 
 module.exports = {
