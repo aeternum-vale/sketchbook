@@ -57,7 +57,7 @@ function userProfileRequestListener(req, res, next) {
     co(function*() {
 
         let pageUser = yield User.findOne({
-            username: req.params.username
+            lowerCaseUsername: req.params.username.toLowerCase()
         }).populate('images').exec();
 
         if (!pageUser)
@@ -71,7 +71,6 @@ function userProfileRequestListener(req, res, next) {
             previewGalleryPromises.push(imagePreviewViewModel(pageUser.images[i]));
 
         let previewGallery = yield Promise.all(previewGalleryPromises);
-
 
         pageUser = yield userViewModel(pageUser, res.loggedUser && res.loggedUser._id);
         return {
@@ -111,8 +110,9 @@ function joinRequestListener(req, res, next) {
                 yield User.ensureIndexes();
 
             let oldUser = yield User.findOne({
-                username: userData.username
+                lowerCaseUsername: userData.username.toLowerCase()
             }).exec();
+
             if (oldUser) throw new DuplicatingUniquePropertyError('username', 'this username is already taken');
 
             oldUser = yield User.findOne({
@@ -152,7 +152,7 @@ function loginRequestListener(req, res, next) {
     co(function*() {
 
         user = yield User.findOne({
-            username: loginUser.username
+            lowerCaseUsername: loginUser.username.toLowerCase()
         }).exec();
 
         if (!user)
@@ -282,7 +282,7 @@ function subscribeRequestListener(req, res, next) {
             user = yield User.findById(image.author).exec();
         } else if (username) {
             user = yield User.findOne({
-                username
+                lowerCaseUsername: username.toLowerCase()
             }).exec();
         }
 

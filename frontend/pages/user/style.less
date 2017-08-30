@@ -1,16 +1,11 @@
 @import "../../style/global.less";
-
-
-
 @import "../../blocks/page-header/page-header.less";
 @import "../../blocks/panel/panel.less";
 @import "../../blocks/button/button.less";
 @import "../../blocks/footer/footer.less";
 @import "../../blocks/user-menu/user-menu.less";
-
 @import "../../blocks/gallery/gallery.less";
 @import "../../blocks/image/image.less";
-
 @import '../../blocks/message-modal-window/message-modal-window';
 @import "../../blocks/upload-image-modal-window/upload-image-modal-window.less";
 @import "../../blocks/prompt-window/prompt-window.less";
@@ -26,14 +21,12 @@
 @image-preview-margin: 15px;
 @gallery-ver-margin: @global-content-padding - @image-preview-margin;
 
-
 @passport-standart-font-size: 40px;
 @passport-standart-small-font-size: 8vw;
 
 @passport-username-font-size-ratio: 1;
 @passport-description-font-size-ratio: .5;
 @passport-links-font-size-ratio: .35;
-
 
 @passport-text-gap: @passport-standart-font-size / 2;
 @passport-small-text-gap: @passport-standart-small-font-size / 2;
@@ -92,14 +85,19 @@
     white-space: nowrap;
     font-weight: bold;
 
+    max-width: 100%;
   }
 
   &__description {
     @_font-size: @passport-standart-font-size * @passport-description-font-size-ratio;
-    height: @_font-size;
+    // height: @_font-size;
     line-height: @_font-size;
     font-size: @_font-size;
     margin-top: @passport-text-gap;
+
+    max-width: 100%;
+    word-wrap: break-word;
+
   }
 
   &__links {
@@ -108,6 +106,12 @@
     line-height: @_font-size;
     font-size: @_font-size;
     margin-top: @passport-text-gap;
+
+    max-width: 100%;
+  }
+
+  &__links {
+    display: inline-block;
   }
 
   &__link:hover {
@@ -146,6 +150,7 @@
 
     &__data {
       margin-bottom: @passport-small-text-gap * 2;
+      max-width: 100%;
     }
 
     &__username {
@@ -153,14 +158,16 @@
       height: @_font-size;
       line-height: @_font-size;
       font-size: @_font-size;
+      max-width: calc(~"100% - 2 * @{global-small-screen-content-padding}");
     }
 
     &__description {
       @_font-size: @passport-standart-small-font-size * @passport-description-font-size-ratio;
-      height: @_font-size;
+      //height: @_font-size;
       line-height: @_font-size;
       font-size: @_font-size;
       margin-top: @passport-small-text-gap;
+      max-width: calc(~"100% - 3vw");
     }
 
     &__links {
@@ -169,7 +176,7 @@
       line-height: @_font-size;
       font-size: @_font-size;
       margin-top: @passport-small-text-gap;
-
+      max-width: calc(~"100% - 2 * @{global-small-screen-content-padding}");
     }
 
   }
@@ -214,8 +221,6 @@
     margin-right: 20px;
   }
 
-
-
   &__stat:last-child {
     margin-right: 0;
   }
@@ -227,7 +232,6 @@
   }
 
 }
-
 
 @stat-number-small-font-size: 5vw;
 @stat-number-icon-size-ratio: .8;

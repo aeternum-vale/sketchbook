@@ -2,12 +2,20 @@ let crypto = require('crypto');
 let mongoose = require('libs/mongoose');
 let autoIncrement = require('mongoose-auto-increment');
 let Schema = mongoose.Schema;
+let debug = require('debug')('app:model:user');
 
 let userSchema = new Schema({
     username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        set: setUsername
+    },
+
+    lowerCaseUsername: {
+        type: String,
+        required: true,
+        unique: true
     },
 
     hashedPassword: {
@@ -23,7 +31,8 @@ let userSchema = new Schema({
     email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        lowercase: true
     },
 
     name: String,
@@ -86,12 +95,23 @@ userSchema.plugin(autoIncrement.plugin, {
     startAt: 1
 });
 
+
 userSchema.methods.encryptPassword = function (password) {
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 };
 
+function setUsername(username) {
+    this.lowerCaseUsername = username.toLowerCase();
+    return username;
+}
+
 userSchema.virtual('password')
     .set(function (password) {
+
+        for (let key in userSchema)
+            console.log(`${key}=this ${userSchema[key] === this}`);
+
+
         this._plainPassword = password;
         this.salt = Math.random() + '';
         this.hashedPassword = this.encryptPassword(password);

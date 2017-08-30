@@ -243,6 +243,7 @@ function likeRequestListener(req, res, next) {
 }
 
 
+
 function getFeed(loggedUser) {
     return co(function*() {
         let rawFeed = [];
@@ -265,15 +266,10 @@ function getFeed(loggedUser) {
             return (a.created < b.created);
         });
 
-        let feed = [];
+        let feedPromises = [];
         for (let i = 0; i < rawFeed.length; i++)
-            feed.push(yield imagePreviewViewModel(rawFeed[i]));
-
-        debug('feed:', feed);
-
-        //     rawFeed.map(item => {
-        //     return (yield imagePreviewViewModel(item));
-        // });
+            feedPromises.push(imagePreviewViewModel(rawFeed[i]));
+        let feed = yield Promise.all(feedPromises);
 
         for (let i = 0; i < feed.length; i++)
             feed[i].authorUsername = (yield User.findById(feed[i].author).exec()).username;
