@@ -1,57 +1,59 @@
 :active,
- :hover,
- :focus {
-    outline: 0;
-    outline-offset: 0;
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
 }
 
 html,
 body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    .background();
-    font-family: @global-default-font-family;
-    font-size: @medium-font-size;
-    color: @global-text-color;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  .background();
+  font-family: @global-default-font-family;
+  font-size: @medium-font-size;
+  color: @global-text-color;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-    border-width: 0;
+  border-width: 0;
 }
 
 a,
 a:active,
 a:visited,
 a:hover {
-    color: @global-text-color;
-    text-decoration: none;
+  color: @global-text-color;
+  text-decoration: none;
 }
 
 .ref {
-    position: relative;
-    color: @global-attention-color;
-    cursor: pointer;
-    text-decoration: none;
-    transition: color .3s ease;
-    &:hover {
-        color: @global-text-color;
-    }
-    &::before {
-        content: "";
-        display: block;
-        position: absolute;
-        transition: all .3s ease;
-        left: 0;
-        bottom: -2px;
-        width: 100%;
-        height: 1px;
-        background-color: @global-attention-color;
-        transform: scaleX(0);
-    }
-    &:hover::before {
-        transform: scaleX(1);
-        background-color: @global-text-color;
-    }
+  position: relative;
+  color: @global-attention-color;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color .3s ease;
+  &:hover {
+    color: @global-text-color;
+  }
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    transition: all .3s ease;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: @global-attention-color;
+    transform: scaleX(0);
+  }
+  &:hover::before {
+    transform: scaleX(1);
+    background-color: @global-text-color;
+  }
 }

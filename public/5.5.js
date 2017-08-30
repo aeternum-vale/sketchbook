@@ -1,12 +1,12 @@
 webpackJsonp([5],{
 
-/***/ 40:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SwitchButton = __webpack_require__(31);
-	var getCorrectNounForm = __webpack_require__(32);
+	var SwitchButton = __webpack_require__(38);
+	var getCorrectNounForm = __webpack_require__(39);
 
 	var SubscribeButton = function SubscribeButton(options) {
 

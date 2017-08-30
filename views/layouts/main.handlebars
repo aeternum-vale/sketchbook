@@ -4,18 +4,18 @@
 	<meta charset="UTF-8">
     <link rel="shortcut icon" href="/favicon.png"/>
     <meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1' />
-
     {{#if page}}
 		<title>{{{_sections.title}}} | sketchbook</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
 		<link rel="stylesheet" href="/{{page}}.css">
 	{{/if}}
-	<script>
-		window.isLogged={{#if loggedUser}}true{{else}}false{{/if}};
-	</script>
-    <script defer src="/{{page}}.js"></script>
-	{{{_sections.scripts}}}
+    <script>window.isLogged={{#if loggedUser}}true{{else}}false{{/if}};</script>
+    <script src="/common.js" defer></script>
+    <script src="/{{page}}.js" defer></script>
+    {{{_sections.scripts}}}
 </head>
 <body>
 	{{{body}}}
+
 </body>
 </html>

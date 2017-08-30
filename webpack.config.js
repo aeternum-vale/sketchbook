@@ -25,7 +25,7 @@ module.exports = {
         filename: "[name].js"
     },
 
-    watch: NODE_ENV == 'development',
+   // watch: NODE_ENV == 'development',
 
     watchOptions: {
         aggregateTimeout: 100
@@ -64,7 +64,7 @@ module.exports = {
             exclude: [/node_modules/, /public/]
         }, {
             test: /\.(png|jpg|svg|ttf|eot|woff|woff2)$/,
-            loader: 'url?limit=4096'
+            loader: 'url?limit=1024'
             //loader: 'file?name=[path][name].[ext]&limit=4096'
         }]
     },
@@ -81,12 +81,13 @@ module.exports = {
             PRELOAD_IMAGE_COUNT: JSON.stringify(config.get('image:preloadEntityCount')),
             ANON_AVATAR_URL: JSON.stringify(config.get('static:anonAvatarUrl')),
             ANON_NAME: JSON.stringify(config.get('anonName'))
+        }),
+
+
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'common'
         })
 
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'common-user',
-        //     chunks: ['user', 'logged-user']
-        // })
 
         //new webpack.HotModuleReplacementPlugin()
     ]

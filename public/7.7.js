@@ -1,6 +1,6 @@
 webpackJsonp([7,5],{
 
-/***/ 18:
+/***/ 25:
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -34,7 +34,7 @@ webpackJsonp([7,5],{
 
 /***/ }),
 
-/***/ 28:
+/***/ 35:
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -89,14 +89,14 @@ webpackJsonp([7,5],{
 
 /***/ }),
 
-/***/ 31:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var eventMixin = __webpack_require__(18);
+	var eventMixin = __webpack_require__(25);
 
 	var SwitchButton = function SwitchButton(options) {
 	    var _this = this;
@@ -125,7 +125,7 @@ webpackJsonp([7,5],{
 	        this.available = false;
 	        this.toggle();
 
-	        __webpack_require__(25)(_defineProperty({}, this.dataStr, involvedData), 'POST', this.url, function (err, response) {
+	        __webpack_require__(32)(_defineProperty({}, this.dataStr, involvedData), 'POST', this.url, function (err, response) {
 
 	            if (!err) {
 	                var _trigger;
@@ -187,7 +187,7 @@ webpackJsonp([7,5],{
 
 /***/ }),
 
-/***/ 32:
+/***/ 39:
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -200,13 +200,13 @@ webpackJsonp([7,5],{
 
 /***/ }),
 
-/***/ 40:
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SwitchButton = __webpack_require__(31);
-	var getCorrectNounForm = __webpack_require__(32);
+	var SwitchButton = __webpack_require__(38);
+	var getCorrectNounForm = __webpack_require__(39);
 
 	var SubscribeButton = function SubscribeButton(options) {
 
