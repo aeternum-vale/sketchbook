@@ -1,8 +1,72 @@
-.footer {
-	position: relative;
-	width: 100%;
-	height: 140px;
+@import "../logotype/style.less";
 
-	background-color: rgba(255,255,255,0);
-	background-image: linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,0) 74%);
+.footer {
+  position: relative;
+  width: 100%;
+  height: 140px;
+
+  background-color: rgba(255, 255, 255, 0);
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0) 74%);
+
+  &__wrapper {
+    .screen-wrapper();
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__logotype {
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-size: @small-font-size;
+    color: #8a8a8a;
+    margin-right: 30px;
+    text-align: right;
+  }
+
+  &__no-wrap-part {
+    white-space: nowrap;
+
+  }
+
+  &__ref {
+
+    .ref-reset(#8a8a8a);
+
+    transition: color .2s linear 0s;
+  }
+
+  a&__ref:hover {
+    color: #d0d0d0;
+  }
+
+  @media (max-width: @global-small-screen-width) {
+
+    &__ref {
+      .ref-reset(#d0d0d0);
+      transition: none;
+    }
+
+    &__wrapper {
+      flex-direction: column;
+
+    }
+    &__text {
+      margin-right: 0;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    &__logotype {
+      background-size: contain;
+      width: @global-small-size-ratio * (@logotype-ratio * @logotype-height);
+    }
+
+  }
 }

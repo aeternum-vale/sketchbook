@@ -2,9 +2,10 @@
 @import "../../blocks/auth-window/style.less";
 @import "../../blocks/prompt-window/prompt-window.less";
 @import '../../blocks/message-modal-window/message-modal-window.less';
+@import '../../blocks/logotype/style.less';
 
 @authorization-vert-line-width: 300px;
-@authorization-logo-offset: 20px;
+@authorization-logotype-offset: 20px;
 @authorization-pic-offset: 40px;
 
 @authorization-ma-visible: 5;
@@ -22,8 +23,7 @@
 @authorization-ma-right-down-delay: -(@authorization-ma-fading + @authorization-ma-visible / 2 - @authorization-ma-fading / 2);
 
 @authorization-big-number: 1000;
-@authorization-logotype-height: 37px;
-@authorization-logotype-ratio: 6.97;
+
 
 .authorization {
 
@@ -105,25 +105,17 @@
 
   &__auth-window-shadow {
     width: @authorization-vert-line-width;
-    height: @authorization-logo-offset;
+    height: @authorization-logotype-offset;
     box-shadow: inset 0 15px 12px -4px rgba(0, 0, 0, 0.30);
   }
 
   &__auth-window-shadow_up {
-    margin-top: @authorization-logotype-height;
+    margin-top: @logotype-height;
     box-shadow: inset 0 -15px 12px -4px rgba(0, 0, 0, 0.30);
   }
 
-  &__logo {
+  &__logotype {
 
-    display: block;
-    height: @authorization-logotype-height;
-    width: @authorization-logotype-ratio * @authorization-logotype-height;
-
-    background-image: url('./logotype.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 
   }
 
@@ -175,11 +167,11 @@
       display: none;
     }
 
-    &__logo {
+    &__logotype {
       flex-shrink: 0;
       position: relative;
-      width: @global-small-size-ratio * (@authorization-logotype-ratio * @authorization-logotype-height);
-      margin-top: @global-small-size-ratio * @authorization-logo-offset;
+      width: @global-small-size-ratio * (@logotype-ratio * @logotype-height);
+      margin-top: @global-small-size-ratio * @authorization-logotype-offset;
       margin-right: auto;
       margin-left: auto;
       background-size: contain;

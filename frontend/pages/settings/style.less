@@ -18,17 +18,20 @@
 }
 
 @settings-small-offset: 20px;
-@settings-section-padding: 30px;
+@settings-section-margin: 70px;
 
 .settings {
   .screen-wrapper();
   flex-direction: column;
   align-items: center;
+
   padding-top: 20px;
   padding-bottom: 20px;
+
   &__caption {
     font-size: @large-font-size;
     text-align: center;
+    font-weight: bold;
   }
 
   &__section {
@@ -36,7 +39,8 @@
     flex-direction: column;
     align-items: center;
     //justify-content: center;
-    padding: @settings-section-padding 0;
+    margin-top: 15px;
+    margin-bottom: @settings-section-margin;
 
     width: @textbox-width;
     max-width: @textbox-width;
@@ -100,7 +104,7 @@
     }
 
     &__section:first-child {
-      margin-top: @settings-section-padding;
+      margin-top: @settings-section-margin;
       padding-top: 0;
     }
 

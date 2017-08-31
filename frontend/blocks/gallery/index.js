@@ -239,18 +239,18 @@ Gallery.prototype.switchFullscreen = function () {
             element.requestFullscreen();
         } else if (element.webkitRequestFullscreen) {
             element.webkitRequestFullscreen();
-        } else if (element.mozRequestFullscreen) {
-            element.mozRequestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
         }
     }
 
     function cancelFullscreen() {
         if (document.exitFullscreen) {
             document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.mozExitFullscreen) {
-            document.mozExitFullscreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
         }
     }
 

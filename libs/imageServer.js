@@ -39,7 +39,7 @@ function getTemporaryLink(fileName, defaultValue) {
 
         return response.link;
     }).catch(() => {
-        return defaultValue || '/egg.png';
+        return defaultValue || '/default.png';
     });
 }
 

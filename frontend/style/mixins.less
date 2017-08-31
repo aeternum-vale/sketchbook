@@ -57,3 +57,13 @@
   -1px 1px 2px rgba(0, 0, 0, 0.18),
   1px 1px 2px rgba(0, 0, 0, 0.18);
 }
+
+.ref-reset(@_color){
+  a&,
+  a:active&,
+  a:visited&,
+  a:hover& {
+    color: @_color;
+    text-decoration: none;
+  }
+}

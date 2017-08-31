@@ -19,17 +19,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+input,
+textarea {
+  font-family: @global-default-font-family;
+  font-size: @medium-font-size;
+}
+
 button {
   border-width: 0;
 }
 
-a,
-a:active,
-a:visited,
-a:hover {
-  color: @global-text-color;
-  text-decoration: none;
-}
+.ref-reset(@global-text-color);
 
 .ref {
   position: relative;

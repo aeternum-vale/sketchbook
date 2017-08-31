@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Creator: CorelDRAW X7 -->
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="700px" height="700px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
-viewBox="0 0 700 700"
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="500px" height="500px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 500 500"
  xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs>
   <style type="text/css">
    <![CDATA[
-    .str0 {stroke:#727271;stroke-width:9.99922;stroke-linecap:round}
-    .fil1 {fill:none}
-    .fil0 {fill:#9D9E9E}
+    .fil0 {fill:#B2B3B3}
+    .fil2 {fill:#727271}
+    .fil1 {fill:white}
    ]]>
   </style>
  </defs>
+ <rect class="fil0" width="500" height="500"/>
  <g id="Слой_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <g id="_456179368">
-   <path class="fil0 str0" d="M246 565c-43,45 -104,44 -160,49 27,-14 55,-32 47,-59 -31,36 -81,49 -104,50 115,-43 11,-287 94,-433 67,-134 191,-145 223,-140 71,-4 121,22 148,55 129,13 130,215 126,321 -10,155 -153,206 -195,214 77,-76 102,-131 113,-173 7,-29 7,-34 3,-50 -38,-35 -25,-117 -47,-130 -75,46 -138,51 -212,70 44,-30 41,-33 62,-64 -77,9 -131,127 -148,164l2 19c7,45 20,76 48,107z"/>
-   <path class="fil1 str0" d="M246 565c72,86 127,109 179,57"/>
-  </g>
+  <path class="fil1" d="M179 400c0,0 71,90 127,40 56,-54 73,-93 82,-124 4,-20 4,-24 2,-35 -27,-26 -18,-84 -34,-93 -53,33 -98,36 -151,50 31,-22 28,-24 43,-46 -55,6 -94,91 -105,117l1 13c5,33 14,56 35,78z"/>
+  <path class="fil2" d="M179 400c-32,32 -75,31 -115,35 19,-10 40,-23 33,-43 -22,26 -58,35 -74,36 82,-31 8,-206 67,-310 48,-95 137,-104 160,-101 51,-2 87,17 106,40 92,10 94,154 90,231 -7,111 -109,147 -140,152 56,-54 73,-93 82,-124 4,-20 4,-24 2,-35 -27,-26 -18,-84 -34,-93 -53,33 -98,36 -151,50 31,-22 28,-24 43,-46 -55,6 -94,91 -105,117l1 13c5,33 14,56 35,78z"/>
  </g>
 </svg>

@@ -484,7 +484,16 @@ function avatarUploadRequestListener(req, res, next) {
 
     co(function*() {
 
+        const MAX_SIZE = config.get('userdata:image:maxByteSize');
+
         let formData = yield new Promise((resolve, reject) => {
+
+            form.on('progress', (bytesReceived, bytesExpected) => {
+                if (bytesReceived > MAX_SIZE)
+                    reject(new HttpError(400, `The file is too big (max size: ~${Math.round(MAX_SIZE / (1024 * 1024))}MB)`));
+            });
+
+
             form.parse(req, function (err, fields, files) {
                 if (err) reject(303);
 
