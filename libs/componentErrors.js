@@ -20,7 +20,7 @@ ComponentError.prototype = Object.create(CustomError.prototype);
 ComponentError.prototype.constructor = ComponentError;
 
 function ClientError(message, detail, status) {
-	ComponentError.call(this, message || 'An error has occurred. Check if javascript is enabled', status);
+	ComponentError.call(this, message || 'An error has occurred. Retry later', status);
 	this.name = "ClientError";
 	this.detail = detail;
 }
@@ -36,7 +36,7 @@ ImageNotFound.prototype = Object.create(ClientError.prototype);
 ImageNotFound.prototype.constructor = ImageNotFound;
 
 function ServerError(message, status) {
-	ComponentError.call(this, message || 'There is some error on the server side', status);
+	ComponentError.call(this, message || 'There is some error on the server side. Retry later', status);
 	this.name = "ServerError";
 }
 ServerError.prototype = Object.create(ComponentError.prototype);

@@ -84,7 +84,7 @@ let validators = {
             checks.nonEmpty(),
             checks.max(16),
             checks.min(5), {
-                errorMessage: 'must only contain alphanumeric symbols',
+                errorMessage: 'must only contain alphanumeric symbols and -',
                 test: tests.regExp.bind(null, /^[A-Z0-9-]+$/i)
             }
         ]

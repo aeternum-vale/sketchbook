@@ -56,7 +56,7 @@ let Gallery = function (options) {
 Gallery.prototype = Object.create(Modal.prototype);
 Gallery.prototype.constructor = Gallery;
 
-Gallery.prototype.onResize = function() {
+Gallery.prototype.onResize = function () {
     // const GLOBAL_SMALL_SCREEN_WIDTH = 700;
     // if (document.documentElement.clientWidth <= GLOBAL_SMALL_SCREEN_WIDTH)
     //     this.elem.classList.add('image_small');
@@ -94,10 +94,13 @@ Gallery.prototype.setElem = function () {
 
     return new Promise((resolve, reject) => {
 
+
         this.isElemSetted = true;
 
         if (!this.elem)
             this.elem = this.renderWindow(require(`html-loader!./window`));
+
+        this.setListeners();
 
         this.imgElem = this.elem.querySelector('img.image__img-element');
         this.description = this.elem.querySelector('.image__description');
@@ -299,7 +302,6 @@ Gallery.prototype.show = function (options) {
     document.body.style.overflow = 'hidden'; // :\
 
 
-
     let imageId;
     let noPushState;
 
@@ -320,6 +322,10 @@ Gallery.prototype.show = function (options) {
 
             if (!this.isElemSetted)
                 this.setElem().then(() => {
+
+                    console.log(this.elem);
+                    this.trigger('gallery_shown');
+
                     this.updateCurrentView(imageId);
 
                     this.elem.classList.remove('image_invisible');
@@ -331,6 +337,7 @@ Gallery.prototype.show = function (options) {
                     });
                 });
             else {
+                this.trigger('gallery_shown');
                 this.updateCurrentView(imageId);
 
                 this.elem.classList.remove('image_invisible');
@@ -341,6 +348,7 @@ Gallery.prototype.show = function (options) {
                     this.updatePreloadedImagesArray();
                 });
             }
+
 
             this.onResize();
         }).catch(err => {
@@ -353,6 +361,7 @@ Gallery.prototype.show = function (options) {
 Gallery.prototype.hide = function (options) {
 
     document.body.style.overflow = 'auto';
+    this.trigger('gallery_hided');
 
 
     let noPushState = options && options.noPushState;

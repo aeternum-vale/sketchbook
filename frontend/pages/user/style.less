@@ -30,6 +30,8 @@
 
 @passport-text-gap: @passport-standart-font-size / 2;
 @passport-small-text-gap: @passport-standart-small-font-size / 2;
+@passport-backdrop-color: rgba(0, 0, 0, .4);
+
 
 .passport {
   position: relative;
@@ -39,7 +41,19 @@
   width: 100%;
 
   background-color: #383838;
-  box-shadow: inset 0 -40px 60px rgba(0, 0, 0, .35);
+
+  &__shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 -40px 60px rgba(0, 0, 0, .35);
+  }
+
+  &__canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 
   &__wrapper {
     .screen-wrapper();
@@ -67,13 +81,13 @@
     align-items: center;
     flex-direction: column;
 
-    background-color: @global-hint-color;
+    background-color: @passport-backdrop-color;
   }
 
   &__backdrop-side {
     height: 100%;
     width: @passport-avatar-gap;
-    background-color: @global-hint-color;
+    background-color: @passport-backdrop-color;
   }
 
   &__username {
@@ -97,9 +111,7 @@
 
     max-width: 100%;
     word-wrap: break-word;
-
   }
-
   &__links {
     @_font-size: @passport-standart-font-size * @passport-links-font-size-ratio;
     height: @_font-size;

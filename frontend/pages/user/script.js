@@ -10,6 +10,19 @@ let Dropdown = require(BLOCKS + 'dropdown');
 let Modal = require(BLOCKS + 'modal');
 let ModalSpinner = require(BLOCKS + 'modal-spinner');
 let eventMixin = require(LIBS + 'eventMixin');
+let PassportAnimation = require(BLOCKS + 'passport-animation');
+
+let canvasElem = document.getElementById('passport-canvas');
+let passportAnimation = new PassportAnimation({
+    canvasElem
+});
+
+passportAnimation.init(canvasElem.offsetWidth, canvasElem.offsetHeight);
+window.addEventListener('resize', ()=> {
+    passportAnimation.init(canvasElem.offsetWidth, canvasElem.offsetHeight);
+});
+
+
 
 
 // let linksDropdown = new Dropdown({
@@ -105,6 +118,15 @@ function createGallery() {
                 publicationsStatElem: document.getElementById('publications-stat'),
                 userSubscribeButton: subscribeButton
             });
+
+            gallery.on('gallery_shown', () => {
+                passportAnimation.pause();
+            });
+
+            gallery.on('gallery_hided', () => {
+                passportAnimation.play();
+            });
+
             resolve();
         });
 
